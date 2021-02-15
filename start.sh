@@ -7,7 +7,7 @@ pkill -f yonder
 
 # Backend
 ## Activate venv
-[ ! -d venv ] && python -m venv venv
+[ ! -d venv ] && python3 -m venv venv
 source venv/bin/activate
 ## Install backend requirements
 cd backend
