@@ -1,3 +1,8 @@
-html, body, #root {
+html, body {
+    height: 95%;
+}
+
+#root {
+    text-align: center;
     height: 100%;
 }

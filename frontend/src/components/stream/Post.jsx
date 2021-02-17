@@ -1,12 +1,14 @@
 import React from "react";
 import PropTypes from "prop-types";
 
+import { Heading } from "react-bulma-components";
+
 function Post(props) {
   return (
-    <div>
-      <h1>
+    <div className="post">
+      <Heading size={5}>
         Hello, {props.post.title}
-      </h1>
+      </Heading>
     </div>
   );
 }
