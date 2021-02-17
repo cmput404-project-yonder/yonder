@@ -3,26 +3,9 @@ import { Navbar, Heading, Button } from "react-bulma-components";
 
 import { logout } from "../login/LoginActions";
 
-const colors = {
-  Default: "",
-  primary: "primary",
-  info: "info",
-  danger: "danger",
-  warning: "warning",
-  success: "success",
-  white: "white",
-  black: "black",
-  light: "light",
-  dark: "dark",
-  link: "link",
-};
-
 function NavigationBar() {
   return (
-    <Navbar
-      color="primary"
-      fixed="top"
-    >
+    <Navbar color="primary" fixed="top">
       <Navbar.Brand>
         <Navbar.Item renderAs="a" href="/">
           <Heading>Yonder</Heading>
@@ -35,9 +18,9 @@ function NavigationBar() {
         </Navbar.Container>
         <Navbar.Container position="end">
           <Navbar.Item>
-              <Button color="danger" onClick={logout()}>
-                  Logout
-              </Button>
+            <Button color="danger" onClick={logout()}>
+              Logout
+            </Button>
           </Navbar.Item>
         </Navbar.Container>
       </Navbar.Menu>

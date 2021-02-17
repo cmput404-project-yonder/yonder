@@ -7,7 +7,7 @@ import { Container, Columns, Heading, Section } from "react-bulma-components";
 import { logout } from "../login/LoginActions";
 
 import PostList from "./PostList";
-import NavigationBar from "./NavigationBar" ;
+import NavigationBar from "./NavigationBar";
 
 class Stream extends Component {
   onLogout = () => {
@@ -30,14 +30,15 @@ class Stream extends Component {
       {
         title: "The Adventures of Huckleberry Finn",
         description: "A story set in a nineteenth-century Mississippi River town",
-        content: " A nineteenth-century boy from a Mississippi River town recounts his adventures as he travels down the river with a runaway slave, encountering a family involved in a feud, two scoundrels pretending to be royalty, and Tom Sawyer's aunt who mistakes him for Tom"
-      }
-    ]
+        content:
+          " A nineteenth-century boy from a Mississippi River town recounts his adventures as he travels down the river with a runaway slave, encountering a family involved in a feud, two scoundrels pretending to be royalty, and Tom Sawyer's aunt who mistakes him for Tom",
+      },
+    ];
     return (
       <Section>
+        <NavigationBar />
         <Heading size={3}>Welcome to your stream {author.display_name}</Heading>
         <Container fluid>
-          <NavigationBar />
           <Columns centered>
             <Columns.Column size={6}>
               <PostList posts={posts} />

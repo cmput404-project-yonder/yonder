@@ -1,9 +1,18 @@
 import React, { Component } from "react";
-import { Link } from "react-router-dom";
+import { Link, withRouter, Redirect } from "react-router-dom";
+import { connect } from "react-redux";
 import { Container, Heading, Section } from "react-bulma-components";
 
 class Home extends Component {
+  constructor(props) {
+    super(props);
+  }
+
   render() {
+    if (this.props.auth.isAuthenticated) {
+      return <Redirect to="/stream" />;
+    }
+
     return (
       <Section>
         <Container fluid>
@@ -23,4 +32,8 @@ class Home extends Component {
   }
 }
 
-export default Home;
+const mapStateToProps = (state) => ({
+  auth: state.auth,
+});
+
+export default connect(mapStateToProps, null)(withRouter(Home));
