@@ -7,15 +7,15 @@ pkill -f yonder
 
 # Backend
 ## Activate venv
-[ ! -d venv ] && python -m venv venv
+[ ! -d venv ] && python3 -m venv venv
 source venv/bin/activate
 ## Install backend requirements
 cd backend
-pip install -r requirements.txt
+pip3 install -r requirements.txt
 ## Start backend
 cd server
-python manage.py migrate
-python manage.py runserver & 
+python3 manage.py migrate
+python3 manage.py runserver & 
 
 # Frontend
 ## Install frontend packages
