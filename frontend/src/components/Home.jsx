@@ -1,12 +1,12 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
-import { Container } from "react-bootstrap";
+import { Container, Heading } from "react-bulma-components";
 
 class Home extends Component {
   render() {
     return (
-      <Container>
-        <h1>Home</h1>
+      <Container fluid>
+        <Heading>Home</Heading>
         <p>
           <Link to="/login/">Login</Link>
         </p>
@@ -14,7 +14,7 @@ class Home extends Component {
           <Link to="/signup">Sign up</Link>
         </p>
         <p>
-          <Link to="/dashboard">Dashboard</Link>
+          <Link to="/stream">Stream</Link>
         </p>
       </Container>
     );
