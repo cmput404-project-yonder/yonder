@@ -7,7 +7,6 @@ import { Container, Columns, Heading, Section } from "react-bulma-components";
 import { logout } from "../login/LoginActions";
 
 import PostList from "./PostList";
-import NavigationBar from "./NavigationBar";
 
 class Stream extends Component {
   onLogout = () => {
@@ -36,7 +35,6 @@ class Stream extends Component {
     ];
     return (
       <Section>
-        <NavigationBar />
         <Container fluid>
           <Columns centered>
             <Columns.Column>

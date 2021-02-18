@@ -1,10 +1,44 @@
-import React from "react";
-import { Navbar, Heading, Button } from "react-bulma-components";
+import React, { Component } from "react";
+import { withRouter } from "react-router-dom";
+import { connect } from "react-redux";
+import { Navbar, Heading } from "react-bulma-components";
 
 import { logout } from "../login/LoginActions";
 
-function NavigationBar() {
+function NavigationBar(props) {
   const [isActive, setisActive] = React.useState(false);
+
+  const loggedInDropdown = () => {
+    return (
+      <Navbar.Dropdown>
+        <Navbar.Item href="/author/">Profile</Navbar.Item>
+        <Navbar.Item onClick={logout()}>Log out</Navbar.Item>
+      </Navbar.Dropdown>
+    );
+  };
+
+  const loggedOutDropdown = () => {
+    return (
+      <Navbar.Dropdown>
+        <Navbar.Item href="/login">Log in</Navbar.Item>
+      </Navbar.Dropdown>
+    );
+  };
+
+  const notifcationDropdown = () => {
+    return (
+      <Navbar.Item dropdown hoverable>
+        <Navbar.Link arrowless={true}>
+          <span className="typcn typcn-bell"></span>
+        </Navbar.Link>
+        <Navbar.Dropdown>
+          <Navbar.Item>
+            <b>0</b>&nbsp;Notifications
+          </Navbar.Item>
+        </Navbar.Dropdown>
+      </Navbar.Item>
+    );
+  };
 
   return (
     <Navbar color="light" fixed="top" active={isActive}>
@@ -20,24 +54,12 @@ function NavigationBar() {
       </Navbar.Brand>
       <Navbar.Menu>
         <Navbar.Container position="end">
-          <Navbar.Item dropdown hoverable>
-            <Navbar.Link arrowless={true}>
-              <span className="typcn typcn-bell"></span>
-            </Navbar.Link>
-            <Navbar.Dropdown>
-              <Navbar.Item>
-                <b>0</b>&nbsp;Notifications
-              </Navbar.Item>
-            </Navbar.Dropdown>
-          </Navbar.Item>
+          {props.auth.isAuthenticated ? notifcationDropdown() : null}
           <Navbar.Item dropdown hoverable>
             <Navbar.Link arrowless={true}>
               <span className="typcn typcn-user-outline"></span>
             </Navbar.Link>
-            <Navbar.Dropdown>
-              <Navbar.Item href="/author/">Profile</Navbar.Item>
-              <Navbar.Item onClick={logout()}>Log out</Navbar.Item>
-            </Navbar.Dropdown>
+            {props.auth.isAuthenticated ? loggedInDropdown() : loggedOutDropdown()}
           </Navbar.Item>
         </Navbar.Container>
       </Navbar.Menu>
@@ -45,4 +67,8 @@ function NavigationBar() {
   );
 }
 
-export default NavigationBar;
+const mapStateToProps = (state) => ({
+  auth: state.auth,
+});
+
+export default connect(mapStateToProps, null)(withRouter(NavigationBar));
