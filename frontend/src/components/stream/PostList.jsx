@@ -5,13 +5,9 @@ import { Container, List } from "react-bulma-components";
 import Post from "./Post";
 
 function PostList(props) {
-  const postList = props.posts.map((post) => (
-    <List.Item>
-      <Post post={post} />
-    </List.Item>
-  ));
+  const postList = props.posts.map((post) => <Post post={post} />);
   return (
-    <div>
+    <div className="post-list">
       <List hoverable>{postList}</List>
     </div>
   );

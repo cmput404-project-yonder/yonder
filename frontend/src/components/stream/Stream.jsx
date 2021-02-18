@@ -37,10 +37,9 @@ class Stream extends Component {
     return (
       <Section>
         <NavigationBar />
-        <Heading size={3}>Welcome to your stream {author.display_name}</Heading>
         <Container fluid>
           <Columns centered>
-            <Columns.Column size={6}>
+            <Columns.Column>
               <PostList posts={posts} />
             </Columns.Column>
           </Columns>
