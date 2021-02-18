@@ -6,12 +6,14 @@ import Home from "./components/Home";
 import Signup from "./components/signup/Signup";
 import Login from "./components/login/Login";
 import Dashboard from "./components/dashboard/Dashboard";
+import Modal from "react-modal";
 
 import requireAuth from "./utils/RequireAuth";
 
 import axios from "axios";
 axios.defaults.baseURL = "http://localhost:8000";
 
+Modal.setAppElement('#root')
 class App extends Component {
   render() {
     return (

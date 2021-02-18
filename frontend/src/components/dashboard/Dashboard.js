@@ -1,23 +1,27 @@
 import React, { Component } from "react";
+import Modal from "react-modal";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { withRouter } from "react-router-dom";
 
-import { Container, Navbar, Nav } from "react-bootstrap";
+import { Container, Navbar, Nav, Button, ModalBody, ModalTitle } from "react-bootstrap";
 import { logout } from "../login/LoginActions";
-import PostForm from "../dashboard/PostForm";
-
+import PostForm from "./posts/PostForm";
+import PopupModal from "./posts/PopupModal";
 
 class Dashboard extends Component {
+
   onLogout = () => {
     this.props.logout();
   };
 
   state = { showing: false };
 
+
   render() {
     const { user } = this.props.auth;
     const { showing } = this.state;
+    
     return (
       <div>
         <Navbar variant="light" style={{backgroundColor: '#E6E6FA'}}>
@@ -32,8 +36,10 @@ class Dashboard extends Component {
         </Navbar>
         <Container style={{position: 'absolute', left: 10}}>
           <h1>Dashboard</h1>
-          <button onClick={() => this.setState({ showing: !showing })} className="btn btn-success" style={{ float:"left" }} >Create a Post</button>
-          <br></br><br></br>{ showing ? <PostForm/> : null }
+          <div>
+            <PopupModal/>
+          </div>
+          <br></br><br></br>
         </Container>
       </div>
     );
