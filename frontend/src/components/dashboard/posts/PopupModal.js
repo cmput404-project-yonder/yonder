@@ -13,7 +13,7 @@ function PopupModal(props) {
                 <h2 style={{ display:'flex', justifyContent:'center', alignItems:'center' }} >Create a Post</h2>
                 <PostForm/>
                 <div>
-                    <button onClick={() => setModalIsOpen(false)}>Cancel</button>
+                    <button onClick={() => {{ if (window.confirm('Are you sure you wish to delete this post?')) setModalIsOpen(false) } }}>Cancel</button>
                 </div>
             </Modal>
         </div>

@@ -21,22 +21,23 @@ class PostForm extends Component {
     constructor(props) {
         super(props);
 
-        this.addPost = this.addPost.bind(this);
+        this.addPostTitle = this.addPostTitle.bind(this);
         this.addPostBody = this.addPostBody.bind(this);
         this.handlePostEditorInputChange = this.handlePostEditorInputChange.bind(this);
         this.handlePostBodyInputChange = this.handlePostBodyInputChange.bind(this);
         
         
         this.state = {
-            posts: [],
-            newPost: '',
+            postTitle: [],
+            postBody: [],
+            newPostTitle: '',
             newPostBody: '',
         }
     }
 
     handlePostEditorInputChange(event) {
         this.setState({
-            newPost: event.target.value,
+            newPostTitle: event.target.value,
         })
     }
 
@@ -46,16 +47,16 @@ class PostForm extends Component {
         })
     }
 
-    addPost() {
+    addPostTitle() {
         const newState = Object.assign({}, this.state);
-        newState.posts.push(this.state.newPost);
-        newState.newPost = '';
+        newState.postTitle.push(this.state.newPostTitle);
+        newState.newPostTitle = '';
         this.setState(newState);
     }
 
     addPostBody() {
         const newState = Object.assign({}, this.state);
-        newState.posts.push(this.state.newPostBody);
+        newState.postBody.push(this.state.newPostBody);
         newState.newPostBody = '';
         this.setState(newState);
     }
@@ -63,11 +64,18 @@ class PostForm extends Component {
     render() {
         return (
             <div>
-                { this.state.posts.map((postBody, index) => {
+                { this.state.postTitle.map((postBody, index) => {
                     return (
                         <Post key={index} postBody={postBody} />
                     )
                 })}
+                <div>
+                    { this.state.postBody.map((postBody, index) => {
+                        return (
+                            <Post key={index} postBody={postBody} />
+                        )
+                    })}
+                </div>
 
                 <label style={{ fontSize:`3vh`, fontWeight:"bold"}} >
                     Title
@@ -76,7 +84,7 @@ class PostForm extends Component {
                     if(e.key === 'Enter')
                     e.preventDefault()
                 }} 
-                maxLength="30" cols={1} value={this.state.newPost} id="textHeader" 
+                maxLength="30" cols={1} value={this.state.newPostTitle} id="textHeader" 
                 style={{ overflowY:"hidden", whiteSpace:"nowrap", resize:"none", width:window.innerWidth/1.07, height:`50px`, padding:`10px`, outline:"none" }}  
                 onChange={this.handlePostEditorInputChange}/>
                 
@@ -90,7 +98,7 @@ class PostForm extends Component {
                         onChange={this.handlePostBodyInputChange} 
                         style={{ resize:"none", width:window.innerWidth/1.07, height:`500px`, padding:`20px`, outline:"none" }}/>
 
-                        <button className="btn btn-success post-editor-button" style={{ float:"right", width:100 }} onClick={this.addPostBody, this.addPost} >Post</button>
+                        <button className="btn btn-success post-editor-button" style={{ float:"right", width:100 }} onClick={() => {this.addPostBody(); this.addPostTitle(); }}>Post</button>
                     </div>
                 </div>
             </div>
