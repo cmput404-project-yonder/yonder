@@ -4,10 +4,6 @@ import { connect } from "react-redux";
 import { Container, Heading, Section } from "react-bulma-components";
 
 class Home extends Component {
-  constructor(props) {
-    super(props);
-  }
-
   render() {
     if (this.props.auth.isAuthenticated) {
       return <Redirect to="/stream" />;

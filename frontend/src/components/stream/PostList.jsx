@@ -1,6 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
-import { Container, List } from "react-bulma-components";
+import { List } from "react-bulma-components";
 
 import Post from "./Post";
 

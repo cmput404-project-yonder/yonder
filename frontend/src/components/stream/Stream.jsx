@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { withRouter } from "react-router-dom";
 
-import { Container, Columns, Heading, Section } from "react-bulma-components";
+import { Container, Columns, Section } from "react-bulma-components";
 import { logout } from "../login/LoginActions";
 
 import PostList from "./PostList";
@@ -18,13 +18,6 @@ class Stream extends Component {
 
   render() {
     // const { author } = this.props.author;
-    const author = {
-      id: "1",
-      display_name: "Mark Twain",
-      host: "localhost",
-      url: "localhost/1",
-      github: "",
-    };
     const posts = [
       {
         title: "The Adventures of Huckleberry Finn",
