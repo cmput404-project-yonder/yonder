@@ -37,3 +37,8 @@ body {
   text-align: left;
   line-height: 1.2em;
 }
+
+/* Buttons global */
+button {
+  margin: 0.5em;
+}

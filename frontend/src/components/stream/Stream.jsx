@@ -2,11 +2,11 @@ import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { withRouter } from "react-router-dom";
-
 import { Container, Columns, Section } from "react-bulma-components";
-import { logout } from "../login/LoginActions";
 
+import { logout } from "../login/LoginActions";
 import PostList from "./PostList";
+import PopupModal from "./posts/PopupModal";
 
 class Stream extends Component {
   onLogout = () => {
@@ -29,6 +29,7 @@ class Stream extends Component {
     return (
       <Section>
         <Container fluid>
+          <PopupModal />
           <Columns centered>
             <Columns.Column>
               <PostList posts={posts} />
