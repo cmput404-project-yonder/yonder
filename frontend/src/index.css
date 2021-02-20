@@ -27,15 +27,16 @@ body {
   font-size: 1.5em;
 }
 
-/* Posts */
+/* Stream page */
 .post-list {
-  max-width: 35vw;
-  min-width: 320px;
+  max-width: 28vw;
+  min-width: 240px;
   margin: auto;
 }
 .post {
   text-align: left;
   line-height: 1.2em;
+  font-size: 0.85em;
 }
 
 /* Buttons global */

@@ -13,10 +13,13 @@ function Post(props) {
         <Card.Content>
           <Media>
             <Media.Item>
-              <Heading size={6}>Mark Twain</Heading>
+              <Heading size={6} style={{ marginBottom: "-0.5em" }}>
+                @{props.post.author.display_name}
+              </Heading>
             </Media.Item>
           </Media>
           <Content>{props.post.content}</Content>
+          <p style={{ margin: "-1em 0", fontSize: "0.8em" }}>{props.post.published}</p>
         </Card.Content>
         <Card.Footer>
           <Card.Footer.Item renderAs="a">
