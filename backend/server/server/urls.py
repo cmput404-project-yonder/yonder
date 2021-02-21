@@ -1,6 +1,5 @@
 from django.contrib import admin
 from django.urls import path
-
 from apps.accounts.urls import accounts_urlpatterns
 
 urlpatterns = [

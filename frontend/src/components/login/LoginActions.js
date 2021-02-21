@@ -23,11 +23,14 @@ export const getCurrentUser = redirectTo => dispatch => {
   axios
     .get("/api/v1/users/me/")
     .then(response => {
-      const user = {
-        username: response.data.username,
-        email: response.data.email
+      const author = {
+        id: response.data.id,
+        display_name: response.data.display_name,
+        host: response.data.host,
+        url: response.data.url,
+        github: response.data.github,
       };
-      dispatch(setCurrentUser(user, redirectTo));
+      dispatch(setCurrentUser(author, redirectTo));
     })
     .catch(error => {
       dispatch(unsetCurrentUser());
