@@ -3,6 +3,7 @@ import ReactDOM from "react-dom";
 import "react-toastify/dist/ReactToastify.css";
 import "react-bulma-components/dist/react-bulma-components.min.css";
 import "typicons.font/src/font/typicons.css";
+import "react-mde/lib/styles/css/react-mde-all.css";
 import "./index.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
