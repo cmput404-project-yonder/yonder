@@ -15,19 +15,6 @@ class Author(models.Model):
     github = models.URLField()
 
 
-# @receiver(post_save, sender=User)
-# def create_user_author(sender, instance, created, **kwargs):
-#     if created:
-#         Author.objects.create(user=instance)
-#     else:
-#         instance.author.save()
-
-
-# @receiver(post_save, sender=User)
-# def save_user_author(sender, instance, **kwargs):
-#     instance.author.save()
-
-
 class Comment(models.Model):
     id = models.UUIDField(unique=True, default=uuid.uuid4,
                           editable=False, primary_key=True)

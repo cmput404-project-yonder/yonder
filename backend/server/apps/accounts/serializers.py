@@ -14,7 +14,7 @@ class PostSerializer(serializers.ModelSerializer):
 class AuthorSerializer(serializers.ModelSerializer):
     class Meta:
         model = Author
-        fields = ('id', 'host', 'displayName', 'url', 'github', 'user')
+        fields = ('id', 'host', 'displayName', 'url', 'github')
 
 
 class CommentSerializer(serializers.ModelSerializer):
@@ -23,12 +23,10 @@ class CommentSerializer(serializers.ModelSerializer):
         fields = ('id', 'author', 'comment', 'contentType', 'published')
 
 
-# Source: https://github.com/BisasterBoy32/SocialMediaApp
+# Altered from: https://github.com/BisasterBoy32/SocialMediaApp
 # Author: Belkahla Mohamed Rachid
 
 class UserSerializer(serializers.ModelSerializer):
-    author = serializers.SerializerMethodField()
-
     class Meta:
         model = User
         fields = ('id', 'username', 'password', 'author')

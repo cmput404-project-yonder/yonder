@@ -17,11 +17,14 @@ class login(generics.GenericAPIView):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         username = serializer.validated_data['username']
-        user = User.objects.get(username=username)
+        user = User.objects.select_related('author').get(username=username)
+
+        token, created = Token.objects.get_or_create(user=user)
 
         return Response({
             'user': UserSerializer(user).data,
-            'token': Token.objects.create(user)[1]
+            'author': AuthorSerializer(user.author).data,
+            'token': token.key
         })
 
 
