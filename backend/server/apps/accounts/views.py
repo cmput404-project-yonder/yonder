@@ -1,8 +1,8 @@
-from django.contrib import auth
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from rest_framework import status, generics, validators
 from rest_framework.authtoken.models import Token
+from django.contrib.sites.shortcuts import get_current_site
 
 
 from .models import Post, Author, Comment
@@ -38,15 +38,19 @@ class register(generics.GenericAPIView):
         user_serializer.is_valid(raise_exception=True)
         user = user_serializer.save()
 
-        author_data["host"] = request.scheme + \
-            "://" + request.META['HTTP_HOST']
+        if "host" not in request.data:
+            current_site = get_current_site(request=request)
+            author_data["host"] = request.scheme + \
+                "://" + current_site.name
+        else:
+            author_data["host"] = request.data["host"]
         author_data["user"] = user.id
         author_serializer = AuthorSerializer(data=author_data)
         if not author_serializer.is_valid():
             user.delete()
             raise validators.ValidationError(author_serializer.errors)
 
-        author = author_serializer.save()
+        author = author_serializer.save(user=user)
         author.url = author.host + "/author/" + str(author.id)
         author.save()
 
@@ -55,7 +59,7 @@ class register(generics.GenericAPIView):
         return Response({
             'user': UserSerializer(user).data,
             'token': token.key
-        })
+        }, status=status.HTTP_201_CREATED)
 
 
 @api_view(['GET', 'POST'])

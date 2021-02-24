@@ -6,6 +6,6 @@ accounts_urlpatterns = [
     re_path(r'^api/author/$', views.author_detail),
     re_path(r'^api/author/$/posts/$', views.post_detail),
     re_path(r'^api/author/$/posts/$/comments/$', views.comment_detail),
-    path('api/login', views.login.as_view()),
-    path('api/register', views.register.as_view()),
+    url(r'^api/login', views.login.as_view(), name='login'),
+    url(r'^api/register', views.register.as_view(), name='register'),
 ]
