@@ -33,7 +33,7 @@ class logout(generics.GenericAPIView):
         return Response(status=status.HTTP_200_OK)
 
 
-class register(generics.GenericAPIView):
+class signup(generics.GenericAPIView):
     serializer_class = RegisterSerializer
 
     def post(self, request, *args, **kwargs):
@@ -63,6 +63,7 @@ class register(generics.GenericAPIView):
 
         return Response({
             'user': UserSerializer(user).data,
+            'author': AuthorSerializer(author).data,
             'token': token.key
         }, status=status.HTTP_201_CREATED)
 

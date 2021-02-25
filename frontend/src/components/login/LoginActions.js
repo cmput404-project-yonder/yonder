@@ -11,6 +11,7 @@ export const login = (userData, redirectTo) => (dispatch) => {
       const auth_token = response.data.token;
       const author = response.data.author;
       const user = response.data.user;
+
       setAxiosAuthToken(auth_token);
       dispatch(setToken(auth_token));
       dispatch(setCurrentUser(user));

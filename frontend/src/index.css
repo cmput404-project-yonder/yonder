@@ -38,6 +38,17 @@ body {
   line-height: 1.2em;
   font-size: 0.85em;
 }
+/* Signup page */
+.login-form {
+  max-width: 320px;
+  margin: auto;
+}
+
+/* Signup page */
+.signup-form {
+  max-width: 320px;
+  margin: auto;
+}
 
 /* Buttons global */
 button {

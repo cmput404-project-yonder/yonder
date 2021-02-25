@@ -18,7 +18,7 @@ class AuthorAccountTests(APITestCase):
         user = User.objects.create_user(**self.credentials)
         Author.objects.create(**self.testAuthor, user=user)
 
-    def test_register(self):
+    def test_signup(self):
         data = {
             "username": "testUser2",
             "displayName": "testRegister",
@@ -26,7 +26,7 @@ class AuthorAccountTests(APITestCase):
             "github": "https://github.com/cmput404-project-yonder/yonder",
             "host": "http://testserver.com"
         }
-        url = reverse('register')
+        url = reverse('signup')
         response = self.client.post(
             url, data=data, format='json')
 

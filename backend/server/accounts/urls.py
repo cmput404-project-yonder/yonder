@@ -7,6 +7,6 @@ urlpatterns = [
     re_path(r'^author/$/posts/$', views.post_detail),
     re_path(r'^author/$/posts/$/comments/$', views.comment_detail),
     url(r'^login', views.login.as_view(), name='login'),
-    url(r'^register', views.register.as_view(), name='register'),
+    url(r'^signup', views.signup.as_view(), name='signup'),
     url(r'^logout', views.logout.as_view(), name='logout'),
 ]
