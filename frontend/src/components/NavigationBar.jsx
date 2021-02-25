@@ -3,7 +3,7 @@ import { withRouter } from "react-router-dom";
 import { connect } from "react-redux";
 import { Navbar, Heading } from "react-bulma-components";
 
-import { logout } from "../login/LoginActions";
+import { logout } from "./login/LoginActions";
 
 function NavigationBar(props) {
   const [isActive, setisActive] = React.useState(false);
@@ -12,7 +12,7 @@ function NavigationBar(props) {
     return (
       <Navbar.Dropdown>
         <Navbar.Item href="/author/">Profile</Navbar.Item>
-        <Navbar.Item onClick={logout()}>Log out</Navbar.Item>
+        <Navbar.Item onClick={props.logout}>Log out</Navbar.Item>
       </Navbar.Dropdown>
     );
   };
@@ -71,4 +71,6 @@ const mapStateToProps = (state) => ({
   auth: state.auth,
 });
 
-export default connect(mapStateToProps, null)(withRouter(NavigationBar));
+export default connect(mapStateToProps, {
+  logout,
+})(withRouter(NavigationBar));

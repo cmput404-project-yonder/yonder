@@ -7,7 +7,7 @@ import Home from "./components/Home";
 import Signup from "./components/signup/Signup";
 import Login from "./components/login/Login";
 import Stream from "./components/stream/Stream";
-import NavigationBar from "./components/stream/NavigationBar";
+import NavigationBar from "./components/NavigationBar";
 
 import requireAuth from "./utils/RequireAuth";
 
