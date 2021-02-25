@@ -7,7 +7,6 @@ from django.contrib.sites.shortcuts import get_current_site
 
 from .models import Post, Author, Comment
 from .serializers import *
-# Create your views here.
 
 
 class login(generics.GenericAPIView):
@@ -26,6 +25,12 @@ class login(generics.GenericAPIView):
             'author': AuthorSerializer(user.author).data,
             'token': token.key
         })
+
+
+class logout(generics.GenericAPIView):
+    def post(self, request, format=None):
+        request.user.auth_token.delete()
+        return Response(status=status.HTTP_200_OK)
 
 
 class register(generics.GenericAPIView):

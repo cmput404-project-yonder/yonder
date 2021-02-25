@@ -23,9 +23,6 @@ class CommentSerializer(serializers.ModelSerializer):
         fields = ('id', 'author', 'comment', 'contentType', 'published')
 
 
-# Altered from: https://github.com/BisasterBoy32/SocialMediaApp
-# Author: Belkahla Mohamed Rachid
-
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
