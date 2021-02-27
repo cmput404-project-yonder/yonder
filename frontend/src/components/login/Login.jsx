@@ -29,42 +29,38 @@ class Login extends Component {
     return (
       <Section>
         <Container fluid>
-          <Columns>
-            <Columns.Column size={4}>
-              <Heading>Login</Heading>
-              <Form.Field>
-                <Form.Label>User name</Form.Label>
-                <Form.Control>
-                  <Form.Input
-                    type="text"
-                    name="username"
-                    placeholder="Enter user name"
-                    value={this.state.username}
-                    onChange={this.onChange}
-                  />
-                </Form.Control>
-              </Form.Field>
+          <div className="login-form">
+            <Heading>Login</Heading>
+            <Form.Field>
+              <Form.Control>
+                <Form.Input
+                  type="text"
+                  name="username"
+                  placeholder="User name"
+                  value={this.state.username}
+                  onChange={this.onChange}
+                />
+              </Form.Control>
+            </Form.Field>
 
-              <Form.Field>
-                <Form.Label>Your password</Form.Label>
-                <Form.Control>
-                  <Form.Input
-                    type="password"
-                    name="password"
-                    placeholder="Enter password"
-                    value={this.state.password}
-                    onChange={this.onChange}
-                  />
-                </Form.Control>
-              </Form.Field>
-              <Button color="primary" onClick={this.onLoginClick}>
-                Login
-              </Button>
-              <p className="mt-2">
-                Don't have account? <Link to="/signup">Signup</Link>
-              </p>
-            </Columns.Column>
-          </Columns>
+            <Form.Field>
+              <Form.Control>
+                <Form.Input
+                  type="password"
+                  name="password"
+                  placeholder="Password"
+                  value={this.state.password}
+                  onChange={this.onChange}
+                />
+              </Form.Control>
+            </Form.Field>
+            <Button color="primary" onClick={this.onLoginClick}>
+              Login
+            </Button>
+            <p className="mt-2">
+              Don't have account? <Link to="/signup">Signup</Link>
+            </p>
+          </div>
         </Container>
       </Section>
     );

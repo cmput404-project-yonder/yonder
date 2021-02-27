@@ -3,16 +3,9 @@ import { withRouter } from "react-router-dom";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
-import {
-  Container,
-  Button,
-  Columns,
-  Form,
-  Heading,
-  Section
-} from "react-bulma-components";
+import { Container, Button, Columns, Form, Heading, Section } from "react-bulma-components";
 
-import { signupNewUser } from "./SignupActions";
+import { signup } from "./SignupActions";
 
 class Signup extends Component {
   constructor(props) {
@@ -20,6 +13,8 @@ class Signup extends Component {
     this.state = {
       username: "",
       password: "",
+      displayName: "",
+      githubURL: "",
     };
   }
   onChange = (e) => {
@@ -30,60 +25,73 @@ class Signup extends Component {
     const userData = {
       username: this.state.username,
       password: this.state.password,
+      displayName: this.state.displayName,
+      github: this.state.githubURL,
     };
-    this.props.signupNewUser(userData);
+    this.props.signup(userData);
   };
 
   render() {
     return (
       <Section>
         <Container fluid>
-          <Columns>
-            <Columns.Column size={4}>
-              <Heading>Sign up</Heading>
-              <Form.Field>
-                <Form.Field>
-                  <Form.Label>User name</Form.Label>
-                  <Form.Control>
-                    <Form.Input
-                      isInvalid={this.props.createUser.usernameError}
-                      type="text"
-                      name="username"
-                      placeholder="Enter user name"
-                      value={this.state.username}
-                      onChange={this.onChange}
-                    />
-                  </Form.Control>
-                  <Form.Help color="danger">
-                    {this.props.createUser.usernameError}
-                  </Form.Help>
-                </Form.Field>
+          <Heading>Sign up</Heading>
+          <div className="signup-form">
+            <Form.Field>
+              <Form.Control>
+                <Form.Input
+                  type="text"
+                  name="username"
+                  placeholder="User name"
+                  value={this.state.username}
+                  onChange={this.onChange}
+                />
+              </Form.Control>
+            </Form.Field>
 
-                <Form.Field>
-                  <Form.Label>Your password</Form.Label>
-                  <Form.Control>
-                    <Form.Input
-                      isInvalid={this.props.createUser.passwordError}
-                      type="password"
-                      name="password"
-                      placeholder="Enter password"
-                      value={this.password}
-                      onChange={this.onChange}
-                    />
-                  </Form.Control>
-                  <Form.Help color="danger">
-                    {this.props.createUser.passwordError}
-                  </Form.Help>
-                </Form.Field>
-              </Form.Field>
-              <Button color="primary" onClick={this.onSignupClick}>
-                Sign up
-              </Button>
-              <p className="mt-2">
-                Already have account? <Link to="/login">Login</Link>
-              </p>
-            </Columns.Column>
-          </Columns>
+            <Form.Field>
+              <Form.Control>
+                <Form.Input
+                  type="password"
+                  name="password"
+                  placeholder="Password"
+                  value={this.state.password}
+                  onChange={this.onChange}
+                />
+              </Form.Control>
+            </Form.Field>
+
+            <Form.Field>
+              <Form.Control>
+                <Form.Input
+                  type="text"
+                  name="displayName"
+                  placeholder="Display Name"
+                  value={this.state.displayName}
+                  onChange={this.onChange}
+                />
+              </Form.Control>
+            </Form.Field>
+
+            <Form.Field>
+              <Form.Control>
+                <Form.Input
+                  type="text"
+                  name="githubURL"
+                  placeholder="Github URL (optional)"
+                  value={this.state.githubURL}
+                  onChange={this.onChange}
+                />
+              </Form.Control>
+            </Form.Field>
+
+            <Button color="primary" onClick={this.onSignupClick}>
+              Sign up
+            </Button>
+            <p className="mt-2">
+              Already have account? <Link to="/login">Login</Link>
+            </p>
+          </div>
         </Container>
       </Section>
     );
@@ -91,7 +99,7 @@ class Signup extends Component {
 }
 
 Signup.propTypes = {
-  signupNewUser: PropTypes.func.isRequired,
+  signup: PropTypes.func.isRequired,
   createUser: PropTypes.object.isRequired,
 };
 
@@ -100,5 +108,5 @@ const mapStateToProps = (state) => ({
 });
 
 export default connect(mapStateToProps, {
-  signupNewUser,
+  signup,
 })(withRouter(Signup));
