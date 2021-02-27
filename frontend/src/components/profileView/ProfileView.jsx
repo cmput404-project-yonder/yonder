@@ -15,13 +15,14 @@ function ProfileStatusView(props) {
     // styles
     const nameStyle = {
         textAlign: "center",
-        fontSize: "2em",
-        fontWeight: "400",
+        fontSize: "3em",
+        fontWeight: "350",
         color: "#505050",
+        paddingBottom: "1em",
     }
 
     const statusStyle = {
-        padding: "0.5em",
+        paddingBottom: "1em",
         display: "flex",
         justifyContent: "space-between",
         textAlign: "center",
@@ -37,9 +38,14 @@ function ProfileStatusView(props) {
         fontSize: "0.9em",
     }
 
+    const profileStatusStyle = {
+        paddingTop: "3em",
+        paddingBottom: "1em",
+    }
+
     // render
     return (
-        <Container>
+        <Container style={profileStatusStyle}>
             {/* this section display the displayName from authorInfo */}
             <Content id="displayName" style={nameStyle}>
                 <p>{props.displayName}</p>
@@ -79,19 +85,22 @@ function ProfileInfoView(props) {
 
     // styles
     const bannerStyle = {
-        height: "4em",
+        display: "block",
         display: "flex",
         alignItems: "center",
         whiteSpace: "nowrap",
-        fontSize: "0.8em",
         color: "#707070",
         overflow: "hidden",
     }
 
+    const svgStyle = {
+        verticleAlign: "middle",
+    }
+
     const profileInfoStyle = {
-        paddingTop: "2em",
+        paddingTop: "4em",
         paddingBottom: "1.5em",
-        width: "20em",
+        width: "auto",
         flexDirection: "column",
         alignItems: "flex-start",
 
@@ -102,15 +111,15 @@ function ProfileInfoView(props) {
 
     const yonderBanner = (
         <div style={bannerStyle}>
-            <div><YonderLogo /></div>
+            <div style={svgStyle}><YonderLogo /></div>
             <div><p>{props.UUID}</p></div>
         </div>
     );
     
     const githubBanner = (!hasGithub) ? null : (
         <div style={bannerStyle}>
-            <div><GithubLogo /></div>
-            <div><p><a href={props.githubURL}>@{props.githubUsername}</a></p></div>
+            <div style={svgStyle}><GithubLogo /></div>
+            <div><p>@{props.githubUsername}</p></div>
         </div>
     );
 
@@ -129,12 +138,14 @@ function ProfileInfoView(props) {
 function ProfileButtons(props) {
     // style
     const buttonStyle = {
-        width: "4em",
-        height: "2.5em",
-        fontSize: "1em",
-        fontWeight: "400",
+        width: "65pt",
+        height: "22pt",
+        fontSize: "1.3em",
+        fontWeight: "300",
         border: "none",
         color: "white",
+        backgroundColor: "#aad1d2",
+        boxShadow: "1pt 1pt 2pt #B1B1B1",
     }
 
     const buttonsLayout = {
@@ -142,15 +153,16 @@ function ProfileButtons(props) {
         justifyContent: "space-between",
         paddingLeft: "1em",
         paddingRight: "1em",
-        paddingBottom: "0.5em",
+        paddingTop: "2em",
+        paddingBottom: "1em",
         margin: "0",
     }
 
     return (
         <Container style={buttonsLayout}>
-            <Button style={buttonStyle} color="primary">Edit</Button>
-            <Button style={buttonStyle} color="primary">Follow</Button>
-            <Button style={buttonStyle} color="primary">Logout</Button>
+            <Button style={buttonStyle}>Edit</Button>
+            <Button style={buttonStyle}>Follow</Button>
+            <Button style={buttonStyle}>Logout</Button>
         </Container>
     );
 }
@@ -177,12 +189,13 @@ class ProfileView extends React.Component {
 
         // style
         this.boxStyle = {
-            width: "auto",
-            fontSize: "1.0em",
-            paddingLeft: "1.5em",
-            paddingRight: "1.5em",
+            width: "325pt",
+            fontSize: "1em",
+            paddingLeft: "1.3em",
+            paddingRight: "1.3em",
             paddingTop: "1.5em",
             margin: "0",
+            fontFamily: "Segoe UI,Frutiger,Frutiger Linotype,Dejavu Sans,Helvetica Neue,Arial,sans-serif",
         }
         this.divStyle = {
             height: "1em",
