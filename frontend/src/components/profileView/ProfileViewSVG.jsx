@@ -11,6 +11,11 @@ var logoStyle = {
     fill: "#505050",
 }
 
+var buttonStyle = {
+    padding: "1em",
+    fill: "#505050",
+}
+
 function YonderLogo() {
     // notice, this is a placeholder that i made, not actual logo.
     // is used in profileView, followed by user uuid
@@ -21,6 +26,18 @@ function YonderLogo() {
             </svg>            
         </Container>
 
+    );
+}
+
+function EditButton() {
+    // https://www.flaticon.com/free-icon/pencil_181540?term=edit&page=1&position=19&page=1&position=19&related_id=181540&origin=search
+    // free license
+    return (
+        <Container style={buttonStyle}>
+            <svg id="Edit" xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32.009 32.009">
+            <path id="Path_89" data-name="Path 89" class="cls-1" d="M16.005,0A16,16,0,1,0,32.01,16,16,16,0,0,0,16.005,0Zm7.608,11.518-1.52,1.52L19,9.944l-1.174,1.174,3.094,3.094L13.33,21.8l-3.094-3.094L9.062,19.881l3.094,3.094-.756.756-.014-.014a.6.6,0,0,1-.382.275l-2.885.643a.6.6,0,0,1-.716-.716l.643-2.885a.6.6,0,0,1,.275-.382l-.015-.015L20.519,8.423a.459.459,0,0,1,.649,0l2.446,2.445A.459.459,0,0,1,23.613,11.518Z" transform="translate(-0.001)"/>
+            </svg>         
+        </Container>
     );
 }
 
@@ -42,4 +59,4 @@ function GithubLogo() {
     );
 }
 
-export { YonderLogo, GithubLogo};
+export { YonderLogo, GithubLogo, EditButton};

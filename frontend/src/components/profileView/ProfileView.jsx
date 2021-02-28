@@ -6,7 +6,7 @@ NOTE:
 */
 import React, { useState } from 'react';
 import { Box, Content, Container, Button } from "react-bulma-components";
-import { YonderLogo, GithubLogo } from "./ProfileViewSVG";
+import { YonderLogo, GithubLogo, EditButton } from "./ProfileViewSVG";
 
 function ProfileStatusView(props) {
     // displayName
@@ -27,6 +27,7 @@ function ProfileStatusView(props) {
         justifyContent: "space-between",
         textAlign: "center",
         fontWeight: "400",
+        fontSize: "1.2em",
         color: "#505050",
     }
 
@@ -40,7 +41,7 @@ function ProfileStatusView(props) {
 
     const profileStatusStyle = {
         paddingTop: "3em",
-        paddingBottom: "1em",
+        paddingBottom: "1.5em",
     }
 
     // render
@@ -98,7 +99,7 @@ function ProfileInfoView(props) {
     }
 
     const profileInfoStyle = {
-        paddingTop: "4em",
+        paddingTop: "3em",
         paddingBottom: "1.5em",
         width: "auto",
         flexDirection: "column",
@@ -138,14 +139,14 @@ function ProfileInfoView(props) {
 function ProfileButtons(props) {
     // style
     const buttonStyle = {
-        width: "65pt",
+        width: "70pt",
         height: "22pt",
         fontSize: "1.3em",
         fontWeight: "300",
         border: "none",
         color: "white",
-        backgroundColor: "#aad1d2",
-        boxShadow: "1pt 1pt 2pt #B1B1B1",
+        backgroundColor: "#505050",
+        // boxShadow: "1pt 1pt 2pt #B1B1B1",
     }
 
     const buttonsLayout = {
@@ -160,10 +161,33 @@ function ProfileButtons(props) {
 
     return (
         <Container style={buttonsLayout}>
-            <Button style={buttonStyle}>Edit</Button>
-            <Button style={buttonStyle}>Follow</Button>
-            <Button style={buttonStyle}>Logout</Button>
+            <Button style={buttonStyle}>Friends</Button>
+            <Button style={buttonStyle}>Followers</Button>
+            <Button style={buttonStyle}>Inbox</Button>
         </Container>
+    );
+}
+
+function EditProfileButton() {
+    const buttonStyle = {
+        padding: "0.2em",
+    }
+    return (
+        <Container style={buttonStyle}>
+            <a href="https://www.google.com"><EditButton/></a>
+        </Container>
+    );
+}
+
+function Dividor() {
+    const divStyle = {
+        height: "1em",
+        borderBottom: "0.1px #999999 dashed",
+        marginLeft: "1em",
+        marginRight: "1em",
+    }
+    return (
+        <div style={divStyle}/>
     );
 }
 
@@ -197,12 +221,6 @@ class ProfileView extends React.Component {
             margin: "0",
             fontFamily: "Segoe UI,Frutiger,Frutiger Linotype,Dejavu Sans,Helvetica Neue,Arial,sans-serif",
         }
-        this.divStyle = {
-            height: "1em",
-            borderBottom: "0.1px #707070 solid",
-            marginLeft: "1em",
-            marginRight: "1em",
-        }
     }
 
     render() {
@@ -214,13 +232,16 @@ class ProfileView extends React.Component {
                     followerNum={this.state.authorInfo.followerNum}
                     postNum={this.state.authorInfo.postNum}
                 />
-                <div style={this.divStyle}/>
+                <EditProfileButton />
+                <Dividor/>
                 <ProfileInfoView
                     UUID={this.state.authorMeta.UUID}
                     githubURL={this.state.githubURL}
                     githubUsername={this.githubUsername}
                 />
+                <Dividor/>
                 <ProfileButtons/>
+                
             </Container>
         );
     }
