@@ -1,75 +1,111 @@
 /*
 Profile View, navigation drop down
-NOTE:
-    this code does not use redux, because i am an idiot and knows nothing
-    will refactor it later
+
+Properties:
+    props.action - EditButton's onClick event handler
+    props.displayName - current displayName of the author
+    props.followingNum
+    props.followerNum
+    props.postNum
+    props.UUID
+    props.githubURL
+    props.githubUsername
 */
-import React, { useState } from 'react';
-import { Content, Container, Button, Form } from "react-bulma-components";
-import { YonderLogo, GithubLogo, EditButton } from "./ProfileViewSVG";
 
-function ProfileStatusView(props) {
-    // displayName
-    // followingNum, followerNum, and postNum
+import React from 'react';
+import { Content, Container, Button } from "react-bulma-components";
+import { YonderLogo, GithubLogo } from "./ProfileViewSVG";
+import EditButton from "./EditButton";
+import Dividor from "./Dividor";
 
-    // styles
-    const nameStyle = {
-        textAlign: "center",
-        fontSize: "3em",
-        fontWeight: "350",
-        color: "#505050",
-        paddingBottom: "1em",
-    }
+import { style, color } from "./styling"
 
-    const statusStyle = {
-        paddingBottom: "1em",
-        display: "flex",
-        justifyContent: "space-between",
-        textAlign: "center",
-        fontWeight: "400",
-        fontSize: "1.2em",
-        color: "#505050",
-    }
+// local styling of this component
+var buttonStyleGeneric = style.button.style.generic;
+var buttonStyleFocus = style.button.style.focus;
+var buttonsLayout = style.button.layout.horizontalBetween;
 
-    const statusBlockStyle = {
-        width: "100%",
-    }
-
-    const statusNumStyle = {
-        fontSize: "0.9em",
-    }
-
-    const profileStatusStyle = {
+var statusStyle = {
+    overall: {
         paddingTop: "3em",
         paddingBottom: "1.5em",
+    },
+    displayName: Object.assign(
+        {}, style.text.heading,
+        {
+            textAlign: "center",
+            paddingBottom: "1em",
+            fontSize: "2.8em",
+        }
+    ),
+    statusBar: {
+        overall: {
+            display: "flex",
+            justifyContent: "space-between",
+            paddingBottom: "1em",
+        },
+        block: {
+            textAlign: "center",
+            fontWeight: "400",
+            fontSize: "1.2em",
+            width: "100%",
+        },
+        counter: {
+            fontSize: "0.9em",
+        }
     }
+}
 
-    // render
+var infoStyle = {
+    overall: {
+        display: "flex",
+        flexDirection: "column",
+        paddingTop: "3em",
+        paddingBottom: "1.5em",
+        width: "auto",
+    },
+    banner: {
+        display: "flex",
+        alignItems: "center",
+        whiteSpace: "nowrap",
+        overflow: "hidden",
+    }
+}
+
+var svgIconStyle = {
+    scale: "40",
+    style: {
+        fill: color.baseBlack,
+        padding: "1.1em",
+    }
+}
+
+function ProfileStatusView(props) {
     return (
-        <Container style={profileStatusStyle}>
+        <Container style={statusStyle.overall}>
             {/* this section display the displayName from authorInfo */}
-            <Content id="displayName" style={nameStyle}>
+            <Content id="displayName" style={statusStyle.displayName}>
                 <p>{props.displayName}</p>
             </Content>
 
             {/* this section display the follower/following/post infomation from authorMeta */}
-            <Content id="profileStatus" style={statusStyle}>
-                <div style={statusBlockStyle}>
+            <Content id="profileStatus" style={statusStyle.statusBar.overall}>
+                <div style={statusStyle.statusBar.block}>
                     <p>
                         Post<br/>
-                        <span style={statusNumStyle}>{props.postNum}</span>
+                        <span style={statusStyle.statusBar.counter}>{props.postNum}</span>
                     </p>
                 </div>
-                <div style={statusBlockStyle}>
+                <div style={statusStyle.statusBar.block}>
                     <p>
                         Follower<br/>
-                        <span style={statusNumStyle}>{props.followerNum}</span>
+                        <span style={statusStyle.statusBar.counter}>{props.followerNum}</span>
                     </p>
                 </div>
-                <div style={statusBlockStyle}>
+                <div style={statusStyle.statusBar.block}>
                     <p>
                         Following<br/>
-                        <span style={statusNumStyle}>{props.followingNum}</span>
+                        <span style={statusStyle.statusBar.counter}>{props.followingNum}</span>
                     </p>
                 </div>
             </Content>
@@ -78,323 +114,59 @@ function ProfileStatusView(props) {
 }
 
 function ProfileInfoView(props) {
-    // should be able to obtain github username from github url, but i dont know how :(. so empty for now
-    // notes: since only github info is optional. I choice to hard coded 2 state of the view - with/without github info
-    //        i may rewrite it later.
-
-    // default case: github is not included
-
-    // styles
-    const bannerStyle = {
-        display: "block",
-        display: "flex",
-        alignItems: "center",
-        whiteSpace: "nowrap",
-        color: "#707070",
-        overflow: "hidden",
-    }
-
-    const svgStyle = {
-        verticleAlign: "middle",
-    }
-
-    const profileInfoStyle = {
-        paddingTop: "3em",
-        paddingBottom: "1.5em",
-        width: "auto",
-        flexDirection: "column",
-        alignItems: "flex-start",
-
-    }
-
-
     const hasGithub = (props.githubURL == "") ? false : true;
 
     const yonderBanner = (
-        <div style={bannerStyle}>
-            <div style={svgStyle}><YonderLogo svgScale="40" /></div>
+        <div style={infoStyle.banner}>
+            <div style={svgIconStyle.style}><YonderLogo svgScale={svgIconStyle.scale} /></div>
             <div><p>{props.UUID}</p></div>
         </div>
     );
     
     const githubBanner = (!hasGithub) ? null : (
-        <div style={bannerStyle}>
-            <div style={svgStyle}><GithubLogo svgScale="40" /></div>
+        <div style={infoStyle.banner}>
+            <div style={svgIconStyle.style}><GithubLogo svgScale={svgIconStyle.scale} /></div>
             <div><p>@{props.githubUsername}</p></div>
         </div>
     );
 
     return (!hasGithub) ? (
-        <Container style={profileInfoStyle}>
+        <Container style={infoStyle.overall}>
             {yonderBanner}
         </Container>
     ) : (
-        <Container style={profileInfoStyle}>
+        <Container style={infoStyle.overall}>
             {yonderBanner}
             {githubBanner}
         </Container>
     )
 }
 
-function ProfileButtons(props) {
-    // style
-    const buttonStyle = {
-        width: "70pt",
-        height: "22pt",
-        fontSize: "1.3em",
-        fontWeight: "300",
-        border: "none",
-        color: "white",
-        backgroundColor: "#505050",
-        // boxShadow: "1pt 1pt 2pt #B1B1B1",
-    }
-
-    const buttonsLayout = {
-        display: "flex",
-        justifyContent: "space-between",
-        paddingLeft: "1em",
-        paddingRight: "1em",
-        paddingTop: "2em",
-        paddingBottom: "1em",
-        margin: "0",
-    }
-
-    return (
-        <Container style={buttonsLayout}>
-            <Button style={buttonStyle}>Friends</Button>
-            <Button style={buttonStyle}>Followers</Button>
-            <Button style={buttonStyle}>Inbox</Button>
-        </Container>
-    );
-}
-
-function EditProfileButton(props) {
-    const buttonStyle = {
-        padding: "1.2em",
-        fill: "#505050",
-    }
-    return (
-        <Container style={buttonStyle}>
-            <a onClick={props.action}><EditButton svgScale="32"/></a>
-        </Container>
-    );
-}
-
-function Dividor() {
-    const divStyle = {
-        height: "1em",
-        borderBottom: "0.1px #999999 dashed",
-        marginLeft: "1em",
-        marginRight: "1em",
-    }
-    return (
-        <div style={divStyle}/>
-    );
-}
-
-class ProfileEditForm extends React.Component {
-
-    constructor(props) {
-        super(props);
-
-        // states
-        this.state = {
-            displayName: '',
-            password: '',
-            githubURL: '',
-        }
-
-        // styles
-        this.buttonStyle = {
-            width: "70pt",
-            height: "22pt",
-            fontSize: "1.3em",
-            fontWeight: "300",
-            border: "none",
-            color: "white",
-            backgroundColor: "#505050",
-            // boxShadow: "1pt 1pt 2pt #B1B1B1",
-        }
-
-        this.buttonsLayout = {
-            display: "flex",
-            justifyContent: "space-between",
-            paddingLeft: "1em",
-            paddingRight: "1em",
-            paddingTop: "2em",
-            paddingBottom: "1em",
-            margin: "0",
-        }
-
-        this.labelStyle = {
-            paddingTop: "0.5em",
-            textAlign: "left",
-            fontWeight: "400",
-            color: "#505050",
-        }
-
-        this.formStyle = {
-            paddingLeft: "1em",
-            paddingRight: "1em",
-            paddingTop: "0.5em",
-            paddingBottom: "0.75em",
-        }
-
-        this.titleStyle = {
-            fontWeight: "350",
-            fontSize: "2.5em",
-            paddingBottom: "0.2em",
-        }
-    }
-
-    onChange = (evt) => {
-        // https://couds.github.io/react-bulma-components/?path=/story/form--handle-multiple-inputs
-        const value = evt.target.type === 'checkbox' ? evt.target.checked : evt.target.value;
-        this.setState({
-            [evt.target.name]: value,
-        });
-    }
-    
+class ProfileView extends React.Component {
     render() {
-        const { displayName, password, githubURL } = this.state;
         return (
             <Container>
-                <Container style={this.titleStyle}>
-                    <YonderLogo svgScale="90"/>
-                    <p>Edit your profile</p>
-                </Container>
-                <Dividor/>
-                <Container style={this.formStyle}>
-                    <Form.Field>
-                        <Form.Label style={this.labelStyle}>Display Name</Form.Label>
-                        <Form.Control>
-                            <Form.Input 
-                                name="displayName" 
-                                onChange={this.onChange} 
-                                value={displayName} 
-                                type="text" 
-                                placeholder={this.props.displayName}
-                            ></Form.Input>
-                        </Form.Control>
-                    </Form.Field>
-                    <Form.Field>
-                        <Form.Label style={this.labelStyle}>Password</Form.Label>
-                        <Form.Control>
-                            <Form.Input 
-                                name="password" 
-                                onChange={this.onChange} 
-                                value={password} type="password" 
-                                placeholder="Enter your new password"
-                            ></Form.Input>
-                        </Form.Control>
-                    </Form.Field>
-                </Container>
-                <Dividor/>
-                <Container style={this.formStyle}>
-                    <Form.Field>
-                        <Form.Label style={this.labelStyle}>Github URL</Form.Label>
-                        <Form.Control>
-                            <Form.Input 
-                                name="githubURL" 
-                                onChange={this.onChange} 
-                                value={githubURL} 
-                                type="url" 
-                                placeholder="Enter your github URL"
-                            ></Form.Input>
-                        </Form.Control>
-                    </Form.Field>
-                </Container>
-                <Dividor/>
-                <Container style={this.buttonsLayout}>
-                    <Button onClick={this.props.onCancel} style={this.buttonStyle}>Cancel</Button>
-                    <Button style={this.buttonStyle}>Confirm</Button>
-                </Container>
-            </Container>
-        );
-    }
-}
-
-
-class ProfileView extends React.Component {
-    constructor(props) {
-        super(props);
-        
-        // binding
-        this.switchMode = this.switchMode.bind(this);
-
-        // init state
-        this.state = {          // this is the mockupdata of author info and meta data
-            authorMeta: {
-                displayName: "Mark Twain",
-                UUID: "d29e3c6c-7669-11eb-9439-0242ac130002",
-                githubURL: "https://github.com/gengyuanhuang",
-            },
-            authorInfo: {
-                followingNum: 82,
-                followerNum: 32,
-                postNum: 202,
-            },
-            isViewMode: true,
-        };
-
-        // hard coded github username -> change later
-        this.githubUsername = "joemama";
-
-        // style
-        this.boxStyle = {
-            width: "325pt",
-            fontSize: "1em",
-            paddingLeft: "1.3em",
-            paddingRight: "1.3em",
-            paddingTop: "1.5em",
-            margin: "0",
-            fontFamily: "Segoe UI,Frutiger,Frutiger Linotype,Dejavu Sans,Helvetica Neue,Arial,sans-serif",
-        }
-
-        
-    }
-
-    switchMode() {
-        // this function switch between edit and view mode
-        if (this.state.isViewMode)
-            this.setState({isViewMode: false});
-        else
-            this.setState({isViewMode: true});
-    }
-
-    renderView() {
-        return (
-            <Container style={this.boxStyle}>
                 <ProfileStatusView 
-                    displayName={this.state.authorMeta.displayName}
-                    followingNum={this.state.authorInfo.followingNum}
-                    followerNum={this.state.authorInfo.followerNum}
-                    postNum={this.state.authorInfo.postNum}
+                    displayName={this.props.displayName}
+                    followingNum={this.props.followingNum}
+                    followerNum={this.props.followerNum}
+                    postNum={this.props.postNum}
                 />
-                <EditProfileButton action={this.switchMode} />
+                <EditButton action={this.props.action} />
                 <Dividor/>
                 <ProfileInfoView
-                    UUID={this.state.authorMeta.UUID}
-                    githubURL={this.state.githubURL}
-                    githubUsername={this.githubUsername}
+                    UUID={this.props.UUID}
+                    githubURL={this.props.githubURL}
+                    githubUsername={this.props.githubUsername}
                 />
                 <Dividor/>
-                <ProfileButtons/>
-                
+                <Container style={buttonsLayout}>
+                    <Button style={buttonStyleGeneric}>Followers</Button>
+                    <Button style={buttonStyleGeneric}>Inbox</Button>
+                    <Button style={buttonStyleFocus}>Logout</Button>
+                </Container>
             </Container>
         );
-    }
-
-    renderEdit() {
-        return (
-            <Container style={this.boxStyle}>
-                <ProfileEditForm onCancel={this.switchMode} displayName={this.state.authorMeta.displayName} />
-            </Container>
-        ); 
-    }
-
-    render() {
-        return (this.state.isViewMode) ? this.renderView() : this.renderEdit();
     }
 }
 

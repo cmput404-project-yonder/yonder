@@ -6,7 +6,7 @@ import { Navbar, Heading } from "react-bulma-components";
 import { logout } from "./login/LoginActions";
 
 // testing out profile bar ***
-import ProfileView from "./profileView/ProfileView";
+import ProfileControl from "./profileView/ProfileControl";
 
 // ***
 
@@ -27,7 +27,7 @@ function NavigationBar(props) {
     return (
       <Navbar.Dropdown right={Boolean('right', false)}>
         {/* <Navbar.Item href="/login">Log in</Navbar.Item> */}
-        <ProfileView />
+        <ProfileControl />
       </Navbar.Dropdown>
     );
   };
