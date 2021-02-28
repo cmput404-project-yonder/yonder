@@ -5,6 +5,12 @@ import { Navbar, Heading } from "react-bulma-components";
 
 import { logout } from "./login/LoginActions";
 
+// testing out profile bar ***
+import ProfileControl from "./profileView/ProfileControl";
+
+// ***
+
+
 function NavigationBar(props) {
   const [isActive, setisActive] = React.useState(false);
 
@@ -19,11 +25,14 @@ function NavigationBar(props) {
 
   const loggedOutDropdown = () => {
     return (
-      <Navbar.Dropdown>
-        <Navbar.Item href="/login">Log in</Navbar.Item>
+      <Navbar.Dropdown right={Boolean('right', false)}>
+        {/* <Navbar.Item href="/login">Log in</Navbar.Item> */}
+        <ProfileControl />
       </Navbar.Dropdown>
     );
   };
+
+
 
   const notifcationDropdown = () => {
     return (
