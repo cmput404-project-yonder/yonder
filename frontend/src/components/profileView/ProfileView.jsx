@@ -334,7 +334,7 @@ class ProfileView extends React.Component {
                 followerNum: 32,
                 postNum: 202,
             },
-            isViewMode: false,
+            isViewMode: true,
         };
 
         // hard coded github username -> change later
