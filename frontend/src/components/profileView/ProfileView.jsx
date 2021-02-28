@@ -5,7 +5,7 @@ NOTE:
     will refactor it later
 */
 import React, { useState } from 'react';
-import { Box, Content, Container, Button } from "react-bulma-components";
+import { Content, Container, Button, Form } from "react-bulma-components";
 import { YonderLogo, GithubLogo, EditButton } from "./ProfileViewSVG";
 
 function ProfileStatusView(props) {
@@ -112,14 +112,14 @@ function ProfileInfoView(props) {
 
     const yonderBanner = (
         <div style={bannerStyle}>
-            <div style={svgStyle}><YonderLogo /></div>
+            <div style={svgStyle}><YonderLogo svgScale="40" /></div>
             <div><p>{props.UUID}</p></div>
         </div>
     );
     
     const githubBanner = (!hasGithub) ? null : (
         <div style={bannerStyle}>
-            <div style={svgStyle}><GithubLogo /></div>
+            <div style={svgStyle}><GithubLogo svgScale="40" /></div>
             <div><p>@{props.githubUsername}</p></div>
         </div>
     );
@@ -168,13 +168,14 @@ function ProfileButtons(props) {
     );
 }
 
-function EditProfileButton() {
+function EditProfileButton(props) {
     const buttonStyle = {
-        padding: "0.2em",
+        padding: "1.2em",
+        fill: "#505050",
     }
     return (
         <Container style={buttonStyle}>
-            <a href="https://www.google.com"><EditButton/></a>
+            <a onClick={props.action}><EditButton svgScale="32"/></a>
         </Container>
     );
 }
@@ -191,10 +192,121 @@ function Dividor() {
     );
 }
 
-class ProfileView extends React.Component {
+class ProfileEditForm extends React.Component {
+
     constructor(props) {
         super(props);
 
+        // states
+        this.state = {
+            displayName: '',
+            password: '',
+            githubURL: '',
+        }
+
+        // styles
+        this.buttonStyle = {
+            width: "70pt",
+            height: "22pt",
+            fontSize: "1.3em",
+            fontWeight: "300",
+            border: "none",
+            color: "white",
+            backgroundColor: "#505050",
+            // boxShadow: "1pt 1pt 2pt #B1B1B1",
+        }
+
+        this.buttonsLayout = {
+            display: "flex",
+            justifyContent: "space-between",
+            paddingLeft: "1em",
+            paddingRight: "1em",
+            paddingTop: "2em",
+            paddingBottom: "1em",
+            margin: "0",
+        }
+
+        this.labelStyle = {
+
+        }
+    }
+
+    onChange = (evt) => {
+        // https://couds.github.io/react-bulma-components/?path=/story/form--handle-multiple-inputs
+        const value = evt.target.type === 'checkbox' ? evt.target.checked : evt.target.value;
+        this.setState({
+            [evt.target.name]: value,
+        });
+    }
+    
+    render() {
+        const { displayName, password, githubURL } = this.state;
+        return (
+            <Container>
+                <Container>
+                    <YonderLogo svgScale="90"/>
+                    <p>Edit your profile</p>
+                </Container>
+                <Dividor/>
+                <Container>
+                    <Form.Field>
+                        <Form.Label sytle={this.labelStyle}>Display Name</Form.Label>
+                        <Form.Control>
+                            <Form.Input 
+                                name="displayName" 
+                                onChange={this.onChange} 
+                                value={displayName} 
+                                type="text" 
+                                placeholder={this.props.displayName}
+                            ></Form.Input>
+                        </Form.Control>
+                    </Form.Field>
+                    <Form.Field>
+                        <Form.Label sytle={this.labelStyle}>Password</Form.Label>
+                        <Form.Control>
+                            <Form.Input 
+                                name="password" 
+                                onChange={this.onChange} 
+                                value={password} type="password" 
+                                placeholder="Enter your new password"
+                            ></Form.Input>
+                        </Form.Control>
+                    </Form.Field>
+                </Container>
+                <Dividor/>
+                <Container>
+                    <Form.Field>
+                        <Form.Label sytle={this.labelStyle}>Github URL</Form.Label>
+                        <Form.Control>
+                            <Form.Input 
+                                name="githubURL" 
+                                onChange={this.onChange} 
+                                value={githubURL} 
+                                type="url" 
+                                placeholder="Enter your github URL"
+                            ></Form.Input>
+                        </Form.Control>
+                    </Form.Field>
+                </Container>
+                <Dividor/>
+                <Container style={this.buttonsLayout}>
+                    <Button onClick={this.props.onCancel} style={this.buttonStyle}>Cancel</Button>
+                    <Button style={this.buttonStyle}>Confirm</Button>
+                </Container>
+            </Container>
+        );
+    }
+}
+
+
+class ProfileView extends React.Component {
+    constructor(props) {
+        super(props);
+        
+        // binding
+        this.switchMode = this.switchMode.bind(this);
+
+        // init state
         this.state = {          // this is the mockupdata of author info and meta data
             authorMeta: {
                 displayName: "Mark Twain",
@@ -206,6 +318,7 @@ class ProfileView extends React.Component {
                 followerNum: 32,
                 postNum: 202,
             },
+            isViewMode: false,
         };
 
         // hard coded github username -> change later
@@ -221,9 +334,19 @@ class ProfileView extends React.Component {
             margin: "0",
             fontFamily: "Segoe UI,Frutiger,Frutiger Linotype,Dejavu Sans,Helvetica Neue,Arial,sans-serif",
         }
+
+        
     }
 
-    render() {
+    switchMode() {
+        // this function switch between edit and view mode
+        if (this.state.isViewMode)
+            this.setState({isViewMode: false});
+        else
+            this.setState({isViewMode: true});
+    }
+
+    renderView() {
         return (
             <Container style={this.boxStyle}>
                 <ProfileStatusView 
@@ -232,7 +355,7 @@ class ProfileView extends React.Component {
                     followerNum={this.state.authorInfo.followerNum}
                     postNum={this.state.authorInfo.postNum}
                 />
-                <EditProfileButton />
+                <EditProfileButton action={this.switchMode} />
                 <Dividor/>
                 <ProfileInfoView
                     UUID={this.state.authorMeta.UUID}
@@ -244,6 +367,18 @@ class ProfileView extends React.Component {
                 
             </Container>
         );
+    }
+
+    renderEdit() {
+        return (
+            <Container style={this.boxStyle}>
+                <ProfileEditForm onCancel={this.switchMode} displayName={this.state.authorMeta.displayName} />
+            </Container>
+        ); 
+    }
+
+    render() {
+        return (this.state.isViewMode) ? this.renderView() : this.renderEdit();
     }
 }
 
