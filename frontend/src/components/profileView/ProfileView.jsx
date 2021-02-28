@@ -227,7 +227,23 @@ class ProfileEditForm extends React.Component {
         }
 
         this.labelStyle = {
+            paddingTop: "0.5em",
+            textAlign: "left",
+            fontWeight: "400",
+            color: "#505050",
+        }
 
+        this.formStyle = {
+            paddingLeft: "1em",
+            paddingRight: "1em",
+            paddingTop: "0.5em",
+            paddingBottom: "0.75em",
+        }
+
+        this.titleStyle = {
+            fontWeight: "350",
+            fontSize: "2.5em",
+            paddingBottom: "0.2em",
         }
     }
 
@@ -243,14 +259,14 @@ class ProfileEditForm extends React.Component {
         const { displayName, password, githubURL } = this.state;
         return (
             <Container>
-                <Container>
+                <Container style={this.titleStyle}>
                     <YonderLogo svgScale="90"/>
                     <p>Edit your profile</p>
                 </Container>
                 <Dividor/>
-                <Container>
+                <Container style={this.formStyle}>
                     <Form.Field>
-                        <Form.Label sytle={this.labelStyle}>Display Name</Form.Label>
+                        <Form.Label style={this.labelStyle}>Display Name</Form.Label>
                         <Form.Control>
                             <Form.Input 
                                 name="displayName" 
@@ -262,7 +278,7 @@ class ProfileEditForm extends React.Component {
                         </Form.Control>
                     </Form.Field>
                     <Form.Field>
-                        <Form.Label sytle={this.labelStyle}>Password</Form.Label>
+                        <Form.Label style={this.labelStyle}>Password</Form.Label>
                         <Form.Control>
                             <Form.Input 
                                 name="password" 
@@ -274,9 +290,9 @@ class ProfileEditForm extends React.Component {
                     </Form.Field>
                 </Container>
                 <Dividor/>
-                <Container>
+                <Container style={this.formStyle}>
                     <Form.Field>
-                        <Form.Label sytle={this.labelStyle}>Github URL</Form.Label>
+                        <Form.Label style={this.labelStyle}>Github URL</Form.Label>
                         <Form.Control>
                             <Form.Input 
                                 name="githubURL" 
