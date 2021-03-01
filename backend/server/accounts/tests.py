@@ -16,7 +16,9 @@ class AuthorAccountTests(APITestCase):
             "host": "http://testserver.com"
         }
         user = User.objects.create_user(**self.credentials)
-        Author.objects.create(**self.testAuthor, user=user)
+        author = Author.objects.create(**self.testAuthor, user=user)
+        self.testAuthor["id"] = author.id
+        self.testAuthor["url"] = author.url
 
     def test_signup(self):
         data = {
@@ -46,3 +48,35 @@ class AuthorAccountTests(APITestCase):
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(author_data["displayName"], 'testLogin')
+    
+    def test_edit(self):
+        data = {
+            "id": self.testAuthor["id"],
+            "displayName": "newDisplayName",
+            "host": self.testAuthor["host"],
+            "github": "https://github.com/newGithubLink",
+            "url": self.testAuthor["url"],
+        }
+        url = reverse('author')
+        response = self.client.post(
+            url, data=data, format='json')
+        author_data = response.json()["author"]
+
+        author = Author.objects.get(displayName="newDisplayName")
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(author_data["displayName"], author.displayName)
+        self.assertEqual(author_data["github"], author.github)
+
+    def test_delete(self):
+        data = {
+            "id": self.testAuthor["id"],
+        }
+        url = reverse('author')
+        response = self.client.delete(
+            url, data=data, format='json')
+        
+        try:
+            author = Author.objects.get(displayName="newDisplayName")
+            self.fail("author not deleted")
+        except Author.DoesNotExist:
+            self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)

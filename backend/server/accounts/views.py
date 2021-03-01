@@ -68,22 +68,28 @@ class signup(generics.GenericAPIView):
         }, status=status.HTTP_201_CREATED)
 
 
-@api_view(['GET', 'POST'])
+@api_view(['GET', 'POST', 'DELETE'])
 def author_detail(request):
+
+    try:
+        author = Author.objects.get(id=request.data["id"])
+    except Author.DoesNotExist:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+
     if request.method == 'GET':
-        data = Author.objects.all()
+        author_serializer = AuthorSerializer(author)
+        return Response({'author': author_serializer.data}, status=status.HTTP_200_OK)
 
-        serializer = AuthorSerializer(
-            data, context={'request': request}, many=True)
-
-        return Response(serializer.data)
-
-    elif request.method == 'POST':
-        serializer = AuthorSerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(status=status.HTTP_201_CREATED)
-        return Response(serializer.erros, status=status.HTTP_400_BAD_REQUEST)
+    elif request.method == 'POST': 
+        author_serializer = AuthorSerializer(author, data=request.data) 
+        if author_serializer.is_valid(): 
+            author_serializer.save() 
+            return Response({'author': author_serializer.data}, status=status.HTTP_200_OK)
+        return Response(author_serializer.errors, status=status.HTTP_400_BAD_REQUEST) 
+ 
+    elif request.method == 'DELETE': 
+        author.delete() 
+        return Response(status=status.HTTP_204_NO_CONTENT)
 
 
 @api_view(['GET', 'POST'])
