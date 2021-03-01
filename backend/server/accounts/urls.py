@@ -3,7 +3,7 @@ from django.urls import path, re_path
 from . import views
 
 urlpatterns = [
-    re_path(r'^author/$', views.author_detail),
+    url(r'^author/$', views.author_detail, name="author"),
     re_path(r'^author/$/posts/$', views.post_detail),
     re_path(r'^author/$/posts/$/comments/$', views.comment_detail),
     url(r'^login', views.login.as_view(), name='login'),
