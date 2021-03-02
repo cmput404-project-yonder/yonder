@@ -19,7 +19,7 @@ class Author(models.Model):
                           editable=False, primary_key=True)
     host = models.URLField(blank=True)
     displayName = models.CharField(max_length=100)
-    github = models.URLField(null=True)
+    github = models.URLField(null=True, blank=True)
 
     def get_absolute_url(self):
         return self.host + "/author/%s" % self.id

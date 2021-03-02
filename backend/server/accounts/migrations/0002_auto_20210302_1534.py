@@ -39,7 +39,7 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='author',
             name='github',
-            field=models.URLField(null=True),
+            field=models.URLField(null=True, blank=True),
         ),
         migrations.RemoveField(
             model_name='author',

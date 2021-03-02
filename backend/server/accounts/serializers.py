@@ -52,7 +52,7 @@ class LoginSerializer(serializers.Serializer):
 
 class RegisterSerializer(serializers.ModelSerializer):
     displayName = serializers.CharField(required=True, max_length=100)
-    github = serializers.URLField()
+    github = serializers.URLField(allow_blank=True, required=False)
 
     class Meta:
         model = User
