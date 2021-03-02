@@ -101,6 +101,17 @@ class posts(generics.ListCreateAPIView):
     queryset = Post.objects.all()
     serializer_class = PostSerializer
 
+    def create(self, request, *args, **kwargs):
+        post_data = request.data
+        author = Author.objects.get(pk=post_data["author"])
+        post_data["source"] = author.host
+        post_data["origin"] = author.host
+        serializer = self.get_serializer(data=post_data)
+        serializer.is_valid(raise_exception=True)
+        self.perform_create(serializer)
+        headers = self.get_success_headers(serializer.data)
+        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+
     @swagger_auto_schema(tags=['posts'])
     def get(self, request, *args, **kwargs):
         return self.list(request, *args, **kwargs)

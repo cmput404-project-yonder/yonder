@@ -43,10 +43,11 @@ class Post(models.Model):
         default=ContentTypes.TEXT,
     )
     author = models.ForeignKey(Author, on_delete=models.CASCADE)
-    categories = ArrayField(models.CharField(max_length=80), size=5)
-    count = models.IntegerField()
-    size = models.IntegerField()
-    published = models.DateTimeField()
+    categories = ArrayField(models.CharField(
+        max_length=80), size=5, null=True, blank=True)
+    count = models.IntegerField(default=0)
+    size = models.IntegerField(default=0)
+    published = models.DateTimeField(auto_now_add=True)
     visibility = models.CharField(
         max_length=8,
         choices=Visibility.choices,
