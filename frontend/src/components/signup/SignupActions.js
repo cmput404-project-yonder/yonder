@@ -7,7 +7,7 @@ import { setAxiosAuthToken } from "../../utils/Utils";
 export const signup = (userData) => (dispatch) => {
   dispatch({ type: CREATE_USER_SUBMITTED }); // set submitted state
   axios
-    .post("/api/signup", userData)
+    .post("/signup", userData)
     .then((response) => {
       dispatch({ type: CREATE_USER_SUCCESS });
       toast.success("Account created successfully.");

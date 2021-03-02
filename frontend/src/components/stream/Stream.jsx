@@ -6,6 +6,7 @@ import { Container, Columns, Section } from "react-bulma-components";
 
 import PostList from "./posts/PostList";
 import PopupModal from "./posts/PopupModal";
+import { createPost } from "./StreamActions";
 
 class Stream extends Component {
   retreivePosts = (author) => {
@@ -29,7 +30,7 @@ class Stream extends Component {
     return (
       <Section>
         <Container fluid>
-          <PopupModal />
+          <PopupModal createPost={this.props.createPost} />
           <Columns centered>
             <Columns.Column>
               <PostList posts={posts} />
@@ -43,10 +44,11 @@ class Stream extends Component {
 
 Stream.propTypes = {
   author: PropTypes.object.isRequired,
+  createPost: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = (state) => ({
   author: state.author,
 });
 
-export default connect(mapStateToProps, null)(withRouter(Stream));
+export default connect(mapStateToProps, { createPost })(withRouter(Stream));
