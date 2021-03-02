@@ -1,8 +1,10 @@
+import re
+from django.contrib import auth
 from rest_framework.response import Response
-from rest_framework.decorators import api_view
-from rest_framework import status, generics, validators
+from rest_framework import mixins, status, generics, validators
 from rest_framework.authtoken.models import Token
 from django.contrib.sites.shortcuts import get_current_site
+from django.shortcuts import get_object_or_404
 
 
 from .models import Post, Author, Comment
@@ -56,7 +58,6 @@ class signup(generics.GenericAPIView):
             raise validators.ValidationError(author_serializer.errors)
 
         author = author_serializer.save(user=user)
-        author.url = author.host + "/author/" + str(author.id)
         author.save()
 
         token, created = Token.objects.get_or_create(user=user)
@@ -68,61 +69,57 @@ class signup(generics.GenericAPIView):
         }, status=status.HTTP_201_CREATED)
 
 
-@api_view(['GET', 'POST', 'DELETE'])
-def author_detail(request):
+class author_detail(mixins.RetrieveModelMixin, mixins.DestroyModelMixin, mixins.UpdateModelMixin, generics.GenericAPIView):
+    queryset = Author.objects.all()
+    serializer_class = AuthorSerializer
 
-    try:
-        author = Author.objects.get(id=request.data["id"])
-    except Author.DoesNotExist:
-        return Response(status=status.HTTP_404_NOT_FOUND)
-
-    if request.method == 'GET':
-        author_serializer = AuthorSerializer(author)
-        return Response({'author': author_serializer.data}, status=status.HTTP_200_OK)
-
-    elif request.method == 'POST': 
-        author_serializer = AuthorSerializer(author, data=request.data) 
-        if author_serializer.is_valid(): 
-            author_serializer.save() 
-            return Response({'author': author_serializer.data}, status=status.HTTP_200_OK)
-        return Response(author_serializer.errors, status=status.HTTP_400_BAD_REQUEST) 
- 
-    elif request.method == 'DELETE': 
-        author.delete() 
-        return Response(status=status.HTTP_204_NO_CONTENT)
-
-
-@api_view(['GET', 'POST'])
-def post_detail(request):
-    if request.method == 'GET':
-        data = Post.objects.all()
-
-        serializer = PostSerializer(
-            data, context={'request': request}, many=True)
-
+    def get(self, request, *args, **kwargs):
+        author = get_object_or_404(self.queryset, pk=kwargs["pk"])
+        serializer = self.serializer_class(author)
+        data = serializers.data
+        data["url"] = Author.get_aboslute_url()
         return Response(serializer.data)
 
-    elif request.method == 'POST':
-        serializer = PostSerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    def post(self, request, *args, **kwargs):
+        return self.update(request, *args, **kwargs)
+
+    def delete(self, request, *args, **kwargs):
+        return self.destroy(request, *args, **kwargs)
 
 
-@api_view(['GET', 'POST'])
-def comment_detail(request):
-    if request.method == 'GET':
-        data = Comment.objects.all()
+class posts(generics.ListCreateAPIView):
+    queryset = Post.objects.all()
+    serializer_class = PostSerializer
 
-        serializer = CommentSerializer(
-            data, context={'request': request}, many=True)
 
-        return Response(serializer.data)
+class post_detail(mixins.RetrieveModelMixin, mixins.DestroyModelMixin, mixins.UpdateModelMixin, generics.GenericAPIView):
+    queryset = Post.objects.all()
+    serializer_class = PostSerializer
 
-    elif request.method == 'POST':
-        serializer = CommentSerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(status=status.HTTP_201_CREATED)
-        return Response(serializer.erros, status=status.HTTP_400_BAD_REQUEST)
+    def get(self, request, *args, **kwargs):
+        return self.retrieve(request, *args, **kwargs)
+
+    def post(self, request, *args, **kwargs):
+        return self.update(request, *args, **kwargs)
+
+    def delete(self, request, *args, **kwargs):
+        return self.destroy(request, *args, **kwargs)
+
+
+class comments(generics.ListCreateAPIView):
+    queryset = Comment.objects.all()
+    serializer_class = CommentSerializer
+
+
+class comment_detail(mixins.RetrieveModelMixin, mixins.DestroyModelMixin, mixins.UpdateModelMixin, generics.GenericAPIView):
+    queryset = Comment.objects.all()
+    serializer_class = CommentSerializer
+
+    def get(self, request, *args, **kwargs):
+        return self.retrieve(request, *args, **kwargs)
+
+    def post(self, request, *args, **kwargs):
+        return self.update(request, *args, **kwargs)
+
+    def delete(self, request, *args, **kwargs):
+        return self.destroy(request, *args, **kwargs)
