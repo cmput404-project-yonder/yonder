@@ -1,8 +1,16 @@
 from django.db import models
 from django.contrib.auth.models import User
-from django.db.models.signals import post_save
-from django.dispatch import receiver
+from django.utils.translation import gettext_lazy as _
+from django.contrib.postgres.fields import ArrayField
 import uuid
+
+
+class ContentTypes(models.TextChoices):
+    TEXT = 'text/plain', _('Plaintext')
+    MARKDOWN = 'text/markdown', _('Markdown')
+    BINARY = 'application/base64', _('Binary')
+    PNG = 'image/png;base64', _('PNG')
+    JPEG = 'image/jpeg;base64', _('JPEG')
 
 
 class Author(models.Model):
@@ -12,30 +20,48 @@ class Author(models.Model):
     host = models.URLField(null=False, blank=False)
     displayName = models.CharField(max_length=100)
     url = models.URLField(blank=True)
-    github = models.URLField()
+    github = models.URLField(blank=True)
+
+
+class Post(models.Model):
+    class Visibility(models.TextChoices):
+        PUBLIC = 'PUBLIC', _('Public')
+        PRIVATE = 'PRIVATE', _('Private')
+
+    id = models.UUIDField(unique=True, default=uuid.uuid4,
+                          editable=False, primary_key=True)
+    title = models.CharField(max_length=80)
+    source = models.URLField()
+    origin = models.URLField()
+    description = models.CharField(max_length=140)
+    content = models.TextField()
+    contentType = models.CharField(
+        max_length=20,
+        choices=ContentTypes.choices,
+        default=ContentTypes.TEXT,
+    )
+    author = models.ForeignKey(Author, on_delete=models.CASCADE)
+    categories = ArrayField(models.CharField(max_length=80))
+    count = models.IntegerField()
+    size = models.IntegerField()
+    published = models.DateTimeField()
+    visibility = models.CharField(
+        max_length=8,
+        choices=Visibility.choices,
+        default=Visibility.PUBLIC,
+    )
+    unlisted = models.BooleanField()
 
 
 class Comment(models.Model):
     id = models.UUIDField(unique=True, default=uuid.uuid4,
                           editable=False, primary_key=True)
+    post = models.ForeignKey(Post, on_delete=models.CASCADE)
     author = models.ForeignKey(Author, on_delete=models.CASCADE)
-    comment = models.CharField(max_length=500)
-    contentType = models.CharField(max_length=100)
+    comment = models.CharField(max_length=400)
+    contentType = models.CharField(
+        max_length=20,
+        choices=ContentTypes.choices,
+        default=ContentTypes.TEXT,
+    )
     published = models.DateTimeField()
-
-
-class Post(models.Model):
-    id = models.UUIDField(unique=True, default=uuid.uuid4,
-                          editable=False, primary_key=True)
-    title = models.CharField(max_length=100)
-    source = models.URLField()
-    origin = models.URLField()
-    description = models.CharField(max_length=500)
-    author = models.ForeignKey(Author, on_delete=models.CASCADE)
-    categories = models.JSONField()
-    count = models.IntegerField()
-    size = models.IntegerField()
-    comments = models.URLField()
-    published = models.DateTimeField()
-    visibility = models.CharField(max_length=10)
-    unlisted = models.BooleanField()
