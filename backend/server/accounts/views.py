@@ -5,6 +5,8 @@ from rest_framework import mixins, status, generics, validators
 from rest_framework.authtoken.models import Token
 from django.contrib.sites.shortcuts import get_current_site
 from django.shortcuts import get_object_or_404
+from rest_framework.serializers import Serializer
+from drf_yasg.utils import swagger_auto_schema
 
 
 from .models import Post, Author, Comment
@@ -14,6 +16,7 @@ from .serializers import *
 class login(generics.GenericAPIView):
     serializer_class = LoginSerializer
 
+    @swagger_auto_schema(tags=['authentication'])
     def post(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
@@ -30,6 +33,9 @@ class login(generics.GenericAPIView):
 
 
 class logout(generics.GenericAPIView):
+    serializer_class = Serializer
+
+    @swagger_auto_schema(tags=['authentication'])
     def post(self, request, format=None):
         request.user.auth_token.delete()
         return Response(status=status.HTTP_200_OK)
@@ -38,6 +44,7 @@ class logout(generics.GenericAPIView):
 class signup(generics.GenericAPIView):
     serializer_class = RegisterSerializer
 
+    @swagger_auto_schema(tags=['authentication'])
     def post(self, request, *args, **kwargs):
         author_data = {
             "displayName": request.data["displayName"], "github": request.data["github"]}
@@ -73,6 +80,7 @@ class author_detail(mixins.RetrieveModelMixin, mixins.DestroyModelMixin, mixins.
     queryset = Author.objects.all()
     serializer_class = AuthorSerializer
 
+    @swagger_auto_schema(tags=['author'])
     def get(self, request, *args, **kwargs):
         author = get_object_or_404(self.queryset, pk=kwargs["pk"])
         serializer = self.serializer_class(author)
@@ -80,9 +88,11 @@ class author_detail(mixins.RetrieveModelMixin, mixins.DestroyModelMixin, mixins.
         data["url"] = Author.get_aboslute_url()
         return Response(serializer.data)
 
-    def post(self, request, *args, **kwargs):
+    @swagger_auto_schema(tags=['author'])
+    def put(self, request, *args, **kwargs):
         return self.update(request, *args, **kwargs)
 
+    @swagger_auto_schema(tags=['author'])
     def delete(self, request, *args, **kwargs):
         return self.destroy(request, *args, **kwargs)
 
@@ -91,17 +101,28 @@ class posts(generics.ListCreateAPIView):
     queryset = Post.objects.all()
     serializer_class = PostSerializer
 
+    @swagger_auto_schema(tags=['posts'])
+    def get(self, request, *args, **kwargs):
+        return self.list(request, *args, **kwargs)
+
+    @swagger_auto_schema(tags=['posts'])
+    def post(self, request, *args, **kwargs):
+        return self.create(request, *args, **kwargs)
+
 
 class post_detail(mixins.RetrieveModelMixin, mixins.DestroyModelMixin, mixins.UpdateModelMixin, generics.GenericAPIView):
     queryset = Post.objects.all()
     serializer_class = PostSerializer
 
+    @swagger_auto_schema(tags=['posts'])
     def get(self, request, *args, **kwargs):
         return self.retrieve(request, *args, **kwargs)
 
-    def post(self, request, *args, **kwargs):
+    @swagger_auto_schema(tags=['posts'])
+    def put(self, request, *args, **kwargs):
         return self.update(request, *args, **kwargs)
 
+    @swagger_auto_schema(tags=['posts'])
     def delete(self, request, *args, **kwargs):
         return self.destroy(request, *args, **kwargs)
 
@@ -110,16 +131,27 @@ class comments(generics.ListCreateAPIView):
     queryset = Comment.objects.all()
     serializer_class = CommentSerializer
 
+    @swagger_auto_schema(tags=['comments'])
+    def get(self, request, *args, **kwargs):
+        return self.list(request, *args, **kwargs)
+
+    @swagger_auto_schema(tags=['comments'])
+    def post(self, request, *args, **kwargs):
+        return self.create(request, *args, **kwargs)
+
 
 class comment_detail(mixins.RetrieveModelMixin, mixins.DestroyModelMixin, mixins.UpdateModelMixin, generics.GenericAPIView):
     queryset = Comment.objects.all()
     serializer_class = CommentSerializer
 
+    @swagger_auto_schema(tags=['comments'])
     def get(self, request, *args, **kwargs):
         return self.retrieve(request, *args, **kwargs)
 
-    def post(self, request, *args, **kwargs):
+    @swagger_auto_schema(tags=['comments'])
+    def put(self, request, *args, **kwargs):
         return self.update(request, *args, **kwargs)
 
+    @swagger_auto_schema(tags=['comments'])
     def delete(self, request, *args, **kwargs):
         return self.destroy(request, *args, **kwargs)

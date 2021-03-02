@@ -55,7 +55,7 @@ class AuthorAccountTests(APITestCase):
             "github": "https://github.com/newGithubLink",
         }
         url = reverse('author_detail', args=[self.author.id])
-        response = self.client.post(
+        response = self.client.put(
             url,
             data=data,
             format='json'
