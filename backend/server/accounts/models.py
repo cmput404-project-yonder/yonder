@@ -17,10 +17,12 @@ class Author(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, unique=True)
     id = models.UUIDField(unique=True, default=uuid.uuid4,
                           editable=False, primary_key=True)
-    host = models.URLField(null=False, blank=False)
+    host = models.URLField(blank=True)
     displayName = models.CharField(max_length=100)
-    url = models.URLField(blank=True)
-    github = models.URLField(blank=True)
+    github = models.URLField(null=True)
+
+    def get_absolute_url(self):
+        return self.host + "/author/%s" % self.id
 
 
 class Post(models.Model):
@@ -41,7 +43,7 @@ class Post(models.Model):
         default=ContentTypes.TEXT,
     )
     author = models.ForeignKey(Author, on_delete=models.CASCADE)
-    categories = ArrayField(models.CharField(max_length=80))
+    categories = ArrayField(models.CharField(max_length=80), size=5)
     count = models.IntegerField()
     size = models.IntegerField()
     published = models.DateTimeField()
@@ -51,6 +53,9 @@ class Post(models.Model):
         default=Visibility.PUBLIC,
     )
     unlisted = models.BooleanField()
+
+    def get_absolute_url(self):
+        return self.author.get_absolute_url() + "/posts/%s" % self.id
 
 
 class Comment(models.Model):
@@ -65,3 +70,6 @@ class Comment(models.Model):
         default=ContentTypes.TEXT,
     )
     published = models.DateTimeField()
+
+    def get_absolute_url(self):
+        return self.post.get_absolute_url() + "/comments/%s" % self.id

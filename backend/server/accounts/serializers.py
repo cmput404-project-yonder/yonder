@@ -7,20 +7,21 @@ from django.contrib.auth import authenticate
 class PostSerializer(serializers.ModelSerializer):
     class Meta:
         model = Post
-        fields = ('id', 'title', 'source', 'origin', 'description', 'author', 'categories',
-                  'count', 'size', 'comments', 'published', 'visibility', 'unlisted')
+        fields = ('id', 'title', 'source', 'origin', 'description', 'content', 'contentType', 'author', 'categories',
+                  'count', 'size', 'published', 'visibility', 'unlisted')
 
 
 class AuthorSerializer(serializers.ModelSerializer):
     class Meta:
         model = Author
-        fields = ('id', 'host', 'displayName', 'url', 'github')
+        fields = ('id', 'host', 'displayName', 'github')
 
 
 class CommentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Comment
-        fields = ('id', 'author', 'comment', 'contentType', 'published')
+        fields = ('id', 'author', 'post', 'comment',
+                  'contentType', 'published')
 
 
 class UserSerializer(serializers.ModelSerializer):
