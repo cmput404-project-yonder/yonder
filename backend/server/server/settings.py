@@ -110,7 +110,6 @@ WSGI_APPLICATION = 'server.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
 
-DATABASES = {'default': env.db('DATABASE_URL')}
 
 if environ.get('GITHUB_WORKFLOW'):
     DATABASES = {
@@ -123,7 +122,8 @@ if environ.get('GITHUB_WORKFLOW'):
             'PORT': '5432',
         }
     }
-
+else:
+    DATABASES = {'default': env.db('DATABASE_URL')}
 
 # Password validation
 # https://docs.djangoproject.com/en/3.1/ref/settings/#auth-password-validators
