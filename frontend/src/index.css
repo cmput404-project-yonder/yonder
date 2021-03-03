@@ -29,14 +29,19 @@ body {
 
 /* Stream page */
 .post-list {
-  max-width: 28vw;
-  min-width: 240px;
+  max-width: 600px;
+  min-width: 360px;
   margin: auto;
+}
+.list {
+  background: transparent;
+  box-shadow: none;
 }
 .post {
   text-align: left;
   line-height: 1.2em;
   font-size: 0.85em;
+  margin: 1em;
 }
 /* Signup page */
 .login-form {
