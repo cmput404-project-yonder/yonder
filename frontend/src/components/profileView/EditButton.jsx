@@ -11,7 +11,8 @@ import { color } from "./styling";
 var buttonStyle = {
     scale: "32",
     style: {
-        padding: "1.2em",
+        paddingTop: "1.5em",
+        paddingBottom: "2em",
         fill: color.baseBlack,
     }
 }

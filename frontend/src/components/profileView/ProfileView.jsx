@@ -61,7 +61,7 @@ var infoStyle = {
         display: "flex",
         flexDirection: "column",
         paddingTop: "3em",
-        paddingBottom: "1.5em",
+        paddingBottom: "2.5em",
         width: "auto",
     },
     banner: {

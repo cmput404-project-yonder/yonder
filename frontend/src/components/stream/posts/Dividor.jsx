@@ -1,6 +1,7 @@
 /*
 A horizontal line seperator.
 */
+import { Container } from "react-bulma-components";
 import { color } from "./styling";
 
 // local styling for this component
@@ -12,9 +13,11 @@ var divStyle = {
 }
 
 // component
-function Dividor() {
+function Dividor(props) {
     return (
-        <div style={divStyle}/>
+        <Container style={props.style}>
+            <div style={divStyle}/>
+        </Container>
     );
 }
 

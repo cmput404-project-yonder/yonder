@@ -22,7 +22,7 @@ var formStyle = {
         paddingLeft: "1em",
         paddingRight: "1em",
         paddingTop: "0.5em",
-        paddingBottom: "0.75em",
+        paddingBottom: "1.75em",
     },
     label: Object.assign(
         {}, style.text.body,        // overwrite the font styling set by bulma
