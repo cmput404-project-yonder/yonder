@@ -1,30 +1,57 @@
-import { NEW_POST_ERROR, NEW_POST_SUBMITTED, NEW_POST_SUCCESS } from "./StreamTypes";
+import {
+  NEW_POST_ERROR,
+  NEW_POST_SUBMITTED,
+  NEW_POST_SUCCESS,
+  RETREIVE_POSTS_ERROR,
+  RETREIVE_POSTS_SUBMITTED,
+  RETREIVE_POSTS_SUCCESS,
+} from "./StreamTypes";
 
-// define the initial state of the signup store
 const initialState = {
   newPostError: "",
-  isSubimtted: false,
-  post: [],
+  currentAuthorPosts: [],
+  loading: false,
 };
 
 export const streamReducer = (state = initialState, action) => {
   switch (action.type) {
     case NEW_POST_SUBMITTED:
       return {
+        ...state,
         newPostError: "",
-        isSubimtted: true,
+        loading: true,
       };
     case NEW_POST_ERROR:
-      const errorState = {
-        newPostError: "",
-        isSubimtted: false,
+      return {
+        ...state,
+        newPostError: action.errorData,
+        loading: false,
       };
-      errorState.newPostError = action.errorData;
-      return errorState;
     case NEW_POST_SUCCESS:
       return {
+        ...state,
         newPostError: "",
-        isSubimtted: false,
+        currentAuthorPosts: [...state.currentAuthorPosts, action.payload],
+        loading: false,
+      };
+    case RETREIVE_POSTS_SUBMITTED:
+      return {
+        ...state,
+        retreivePostsError: "",
+        loading: true,
+      };
+    case RETREIVE_POSTS_ERROR:
+      return {
+        ...state,
+        retreivePostsError: action.errorData,
+        loading: false,
+      };
+    case RETREIVE_POSTS_SUCCESS:
+      return {
+        ...state,
+        retreivePostsError: "",
+        currentAuthorPosts: action.payload,
+        loading: false,
       };
     default:
       return state;
