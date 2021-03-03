@@ -1,10 +1,7 @@
 from django.contrib import admin
-from django.urls import path
-
-from apps.accounts.urls import accounts_urlpatterns
+from django.urls import path, include
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('api/', include("accounts.urls"))
 ]
-
-urlpatterns += accounts_urlpatterns # add URLs for authentication

@@ -1,11 +1,13 @@
 import React, { Component } from "react";
-import Root from "./Root";
 import { Route, Switch } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
+
+import Root from "./Root";
 import Home from "./components/Home";
 import Signup from "./components/signup/Signup";
 import Login from "./components/login/Login";
-import Dashboard from "./components/dashboard/Dashboard";
+import Stream from "./components/stream/Stream";
+import NavigationBar from "./components/NavigationBar";
 
 import requireAuth from "./utils/RequireAuth";
 
@@ -17,11 +19,12 @@ class App extends Component {
     return (
       <div>
         <Root>
+          <NavigationBar />
           <ToastContainer hideProgressBar={true} newestOnTop={true} />
           <Switch>
             <Route path="/signup" component={Signup} />
             <Route path="/login" component={Login} />
-            <Route path="/dashboard" component={requireAuth(Dashboard)} />
+            <Route path="/stream" component={Stream} />
             <Route exact path="/" component={Home} />
           </Switch>
         </Root>

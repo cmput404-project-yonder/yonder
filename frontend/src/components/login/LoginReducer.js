@@ -1,9 +1,10 @@
-import { SET_TOKEN, SET_CURRENT_USER, UNSET_CURRENT_USER } from "./LoginTypes";
+import { SET_TOKEN, SET_CURRENT_USER, UNSET_CURRENT_USER, SET_CURRENT_AUTHOR } from "./LoginTypes";
 
 const initialState = {
   isAuthenticated: false,
   user: {},
-  token: ""
+  author: {},
+  token: "",
 };
 
 export const loginReducer = (state = initialState, action) => {
@@ -12,12 +13,17 @@ export const loginReducer = (state = initialState, action) => {
       return {
         ...state,
         isAuthenticated: true,
-        token: action.payload
+        token: action.payload,
       };
     case SET_CURRENT_USER:
       return {
         ...state,
-        user: action.payload
+        user: action.payload,
+      };
+    case SET_CURRENT_AUTHOR:
+      return {
+        ...state,
+        author: action.payload,
       };
     case UNSET_CURRENT_USER:
       return initialState;
