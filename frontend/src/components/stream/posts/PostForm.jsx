@@ -2,6 +2,8 @@ import React, { Component } from "react";
 import ReactMde from "react-mde";
 import { Form, Button, Panel, Card, Heading, Container } from "react-bulma-components";
 import Markdown from "react-markdown";
+import ReactTags from "react-tag-autocomplete";
+import "./react-tags.css";
 
 import CancelButton from "./CancelButton";
 import ConfirmButton from "./ConfirmButton";
@@ -101,9 +103,10 @@ class PostForm extends Component {
     super(props);
 
     this.addPost = this.addPost.bind(this);
+    this.onAddition = this.onAddition.bind(this);
+    this.onDelete = this.onDelete.bind(this);
 
     this.state = {
-      posts: [],
       title: "",
       content: "",
       contentType: "",
@@ -114,6 +117,8 @@ class PostForm extends Component {
       selectedTab: "text",
       markdownTab: "write",
     };
+
+    this.reactTags = React.createRef();
   }
 
   onChange = (evt) => {
@@ -124,11 +129,49 @@ class PostForm extends Component {
   };
 
   addPost() {
+    const author = JSON.parse(localStorage.getItem("author"));
+    console.log(author);
+    const contentType = () => {
+      switch (this.state.selectedTab) {
+        case "text":
+          return "text/plain";
+        case "markdown":
+          return "text/markdown";
+        case "image":
+          //TODO handle image mime type
+          break;
+        default:
+          break;
+      }
+    };
+    const categories = this.state.categories.map((cat) => cat.name);
+    const newPost = {
+      title: this.state.title,
+      description: this.state.description,
+      content: this.state.content,
+      contentType: contentType(),
+      unlisted: this.state.unlisted,
+      visiblity: this.state.visiblity,
+      categories: categories,
+      author: author.id,
+    };
+    this.props.createPost(newPost);
     this.props.setModalIsOpen(false);
   }
 
   selectTab(tab) {
     this.setState({ selectedTab: tab });
+  }
+
+  onDelete(i) {
+    const categories = this.state.categories.slice(0);
+    categories.splice(i, 1);
+    this.setState({ categories });
+  }
+
+  onAddition(cat) {
+    const categories = [].concat(this.state.categories, cat);
+    this.setState({ categories });
   }
 
   render() {
@@ -195,6 +238,29 @@ class PostForm extends Component {
                           onChange={this.onChange}
                       />
                   </Form.Control>
+                  <Form.Label style={labelStyle}>Description</Form.Label>
+                  <Form.Control>
+                      <Form.Textarea
+                          onKeyPress={(e) => {if (e.key === "Enter") e.preventDefault();}}
+                          maxLength="30"
+                          cols={1}
+                          name="description"
+                          value={this.state.description}
+                          style={formTitleStyle}
+                          onChange={this.onChange}
+                      />
+                  </Form.Control>
+                  <Form.Label style={labelStyle}>Cateories</Form.Label>
+                  <Form.Control>
+                    <ReactTags
+                      allowNew={true}
+                      ref={this.reactTags}
+                      tags={this.state.categories}
+                      onDelete={this.onDelete}
+                      onAddition={this.onAddition}
+                      style={formTitleStyle}
+                    />
+                  </Form.Control>
                   <Form.Label style={labelStyle}>Content</Form.Label>
                   <Form.Control>
                       {this.state.selectedTab === "text" ? textEditor() : null}
@@ -220,3 +286,4 @@ class PostForm extends Component {
 }
 
 export default PostForm;
+

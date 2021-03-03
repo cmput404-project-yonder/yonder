@@ -4,7 +4,7 @@ import { Modal, Button } from "react-bulma-components";
 import PostForm from "./PostForm";
 import './modal.css';
 
-function PopupModal() {
+function PopupModal(props) {
   const [modalIsOpen, setModalIsOpen] = useState(false);
   return (
     <div className="post-form-modal">
@@ -12,7 +12,7 @@ function PopupModal() {
         Create a Post
       </Button>
       <Modal show={modalIsOpen} onClose={() => setModalIsOpen(false)} closeOnBlur closeOnEsc>
-        <PostForm setModalIsOpen={setModalIsOpen} />
+        <PostForm setModalIsOpen={setModalIsOpen} createPost={props.createPost} />
       </Modal>
     </div>
   );

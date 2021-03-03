@@ -3,7 +3,7 @@ import { withRouter } from "react-router-dom";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
-import { Container, Button, Columns, Form, Heading, Section } from "react-bulma-components";
+import { Container, Button, Form, Heading, Section } from "react-bulma-components";
 
 import { signup } from "./SignupActions";
 

@@ -10,7 +10,6 @@ import ProfileControl from "./profileView/ProfileControl";
 
 // ***
 
-
 function NavigationBar(props) {
   const [isActive, setisActive] = React.useState(false);
 
@@ -25,14 +24,11 @@ function NavigationBar(props) {
 
   const loggedOutDropdown = () => {
     return (
-      <Navbar.Dropdown right={Boolean('right', false)}>
-        {/* <Navbar.Item href="/login">Log in</Navbar.Item> */}
+      <Navbar.Dropdown right={Boolean("right", false)}>
         <ProfileControl />
       </Navbar.Dropdown>
     );
   };
-
-
 
   const notifcationDropdown = () => {
     return (
