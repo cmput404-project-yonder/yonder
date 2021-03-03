@@ -12,6 +12,8 @@ on:
 jobs:
     build:
         runs-on: ubuntu-latest
+        env:
+            SECRET_KEY: "5sew5fx)(j6@u7oais6l18an*-4a+-@z2twn*q#j6in%+pdg^w"
         services:
             postgres:
                 image: postgres:12.5
