@@ -97,6 +97,9 @@ var postIconStyle = {
   }
 }
 
+var formCatStyle = {
+  backgroundColor: "white",
+}
 
 class PostForm extends Component {
   constructor(props) {
@@ -251,16 +254,17 @@ class PostForm extends Component {
                       />
                   </Form.Control>
                   <Form.Label style={labelStyle}>Cateories</Form.Label>
-                  <Form.Control>
-                    <ReactTags
-                      allowNew={true}
-                      ref={this.reactTags}
-                      tags={this.state.categories}
-                      onDelete={this.onDelete}
-                      onAddition={this.onAddition}
-                      style={formTitleStyle}
-                    />
-                  </Form.Control>
+                  <Form.Field style={formCatStyle}>
+                    <Form.Control>
+                      <ReactTags
+                        allowNew={true}
+                        ref={this.reactTags}
+                        tags={this.state.categories}
+                        onDelete={this.onDelete}
+                        onAddition={this.onAddition}
+                      />
+                    </Form.Control>
+                  </Form.Field>
                   <Form.Label style={labelStyle}>Content</Form.Label>
                   <Form.Control>
                       {this.state.selectedTab === "text" ? textEditor() : null}
