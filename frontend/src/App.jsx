@@ -7,6 +7,7 @@ import Home from "./components/Home";
 import Signup from "./components/signup/Signup";
 import Login from "./components/login/Login";
 import Stream from "./components/stream/Stream";
+import ProfilePage from "./components/profilePage/ProfilePage"
 import NavigationBar from "./components/NavigationBar";
 
 import requireAuth from "./utils/RequireAuth";
@@ -25,6 +26,7 @@ class App extends Component {
             <Route path="/signup" component={Signup} />
             <Route path="/login" component={Login} />
             <Route path="/stream" component={Stream} />
+            <Route path="/profile" component={ProfilePage} />
             <Route exact path="/" component={Home} />
           </Switch>
         </Root>

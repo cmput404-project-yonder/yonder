@@ -22,6 +22,9 @@ class Home extends Component {
           <p>
             <Link to="/stream">Stream</Link>
           </p>
+          <p>
+            <Link to="/profile">profilePage</Link>
+          </p>
         </Container>
       </Section>
     );
