@@ -253,7 +253,7 @@ class PostForm extends Component {
                           onChange={this.onChange}
                       />
                   </Form.Control>
-                  <Form.Label style={labelStyle}>Cateories</Form.Label>
+                  <Form.Label style={labelStyle}>Categories</Form.Label>
                   <Form.Field style={formCatStyle}>
                     <Form.Control>
                       <ReactTags
