@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Post, Author, Comment
+from .models import Post, Author, Comment, Like, Inbox
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate
 
@@ -16,12 +16,23 @@ class AuthorSerializer(serializers.ModelSerializer):
         model = Author
         fields = ('id', 'host', 'displayName', 'github')
 
+class InboxSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Inbox
+        fields = ('id', 'author')
+
 
 class CommentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Comment
         fields = ('id', 'author', 'post', 'comment',
                   'contentType', 'published')
+
+class LikeSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Like
+        fields = ('id', 'context', 'summary', 'type',
+                  'author', 'object')
 
 
 class UserSerializer(serializers.ModelSerializer):

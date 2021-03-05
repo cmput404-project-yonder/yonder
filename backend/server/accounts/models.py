@@ -74,3 +74,19 @@ class Comment(models.Model):
 
     def get_absolute_url(self):
         return self.post.get_absolute_url() + "/comments/%s" % self.id
+
+class Like(models.Model):
+    id = models.UUIDField(unique=True, default=uuid.uuid4,
+                          editable=False, primary_key=True)
+    context = models.CharField(max_length=400)
+    summary = models.CharField(max_length=400)
+    type = models.CharField(max_length=100)
+    author = models.ForeignKey(Author, on_delete=models.CASCADE)
+    object = models.CharField(max_length=400)
+
+class Inbox(models.Model):
+    id = models.UUIDField(unique=True, default=uuid.uuid4,
+                          editable=False, primary_key=True)
+    author = models.ForeignKey(Author, on_delete=models.CASCADE)
+    likes = models.ManyToManyField(Like, blank=True)
+    posts = models.ManyToManyField(Post, blank=True)
