@@ -10,6 +10,9 @@ import {
   EDIT_POST_SUBMITTED,
   EDIT_POST_SUCCESS,
   EDIT_POST_ERROR,
+  DELETE_POST_SUBMITTED,
+  DELETE_POST_SUCCESS,
+  DELETE_POST_ERROR,
 } from "./StreamTypes";
 import { setAxiosAuthToken } from "../../utils/Utils";
 
@@ -76,6 +79,33 @@ export const retreivePosts = () => (dispatch, getState) => {
         toast.error(JSON.stringify(error.response.data));
         dispatch({
           type: RETREIVE_POSTS_ERROR,
+          errorData: error.response.data,
+        });
+      } else if (error.message) {
+        toast.error(JSON.stringify(error.message));
+      } else {
+        toast.error(JSON.stringify(error));
+      }
+    });
+};
+
+export const deletePost = (aPost) => (dispatch, getState) => {
+  const state = getState();
+  const author = state.auth.author;
+
+  setAxiosAuthToken(getState().auth.token);
+  dispatch({ type: DELETE_POST_SUBMITTED });
+  console.log(aPost);
+  axios
+    .delete("/author/" + aPost.author + "/posts/" + aPost.id)
+    .then((response) => {
+      dispatch({ type: DELETE_POST_SUCCESS, payload: response.data });
+    })
+    .catch((error) => {
+      if (error.response) {
+        toast.error(JSON.stringify(error.response.data));
+        dispatch({
+          type: DELETE_POST_ERROR,
           errorData: error.response.data,
         });
       } else if (error.message) {

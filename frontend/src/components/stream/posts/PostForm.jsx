@@ -28,6 +28,12 @@ class PostForm extends Component {
     this.reactTags = React.createRef();
   }
 
+  handleUnlisted = () => {
+    this.setState({
+      unlisted: !this.state.unlisted,
+    });
+  };
+
   onChange = (evt) => {
     const value = evt.target.type === "checkbox" ? evt.target.checked : evt.target.value;
     this.setState({
@@ -64,6 +70,7 @@ class PostForm extends Component {
     };
     this.props.createPost(newPost);
     this.props.setModalIsOpen(false);
+    
   }
 
   selectTab(tab) {
@@ -119,6 +126,20 @@ class PostForm extends Component {
     return (
       <Card style={{ borderRadius: "10px", width: "540px" }}>
         <Form.Field style={{ margin: "0 1em", padding: "10px" }}>
+          <label className="checkbox" style={{ fontWeight: "bold", float:"right", paddingTop:10 }}>
+            <input type="checkbox" defaultChecked={this.state.unlisted} onChange={this.handleUnlisted} />
+              Unlisted
+          </label>
+          <div className="control" style={{ float: "right", paddingTop:10 }} >
+            <label className="radio" style={{ frontWeight: "bold" }} >
+              <input type="radio" name="privacy" />
+                Public
+            </label>
+            <label className="radio" style={{ frontWeight: "bold" }} >
+              <input type="radio" name="privacy" />
+                Private
+            </label>
+          </div>
           <Heading size={4}>Create a Post</Heading>
           <Form.Label>Title:</Form.Label>
           <Form.Control>

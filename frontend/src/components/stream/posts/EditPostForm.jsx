@@ -12,6 +12,7 @@ class EditPostForm extends Component {
     this.editPost = this.editPost.bind(this);
     this.onAddition = this.onAddition.bind(this);
     this.onDelete = this.onDelete.bind(this);
+    this.removePost = this.removePost.bind(this);
 
     let categoryTags = this.props.post.categories.map(function(t, i) { 
       return {id: i, name: t}
@@ -32,6 +33,12 @@ class EditPostForm extends Component {
 
     this.reactTags = React.createRef();
   }
+
+  handleUnlisted = () => {
+    this.setState({
+      unlisted: !this.state.unlisted,
+    });
+  };
 
   onChange = (evt) => {
     const value = evt.target.type === "checkbox" ? evt.target.checked : evt.target.value;
@@ -70,6 +77,11 @@ class EditPostForm extends Component {
     };
 
     this.props.updatePost(editedPost);
+    this.props.setEditModalIsOpen(false);
+  }
+
+  removePost() {
+    this.props.deletePost(this.props.post)
     this.props.setEditModalIsOpen(false);
   }
 
@@ -126,6 +138,20 @@ class EditPostForm extends Component {
     return (
       <Card style={{ borderRadius: "10px", width: "540px" }}>
         <Form.Field style={{ margin: "0 1em", padding: "10px" }}>
+          <label className="checkbox" style={{ fontWeight: "bold", float:"right", paddingTop:10 }}>
+            <input type="checkbox" defaultChecked={this.state.unlisted} onChange={this.handleUnlisted} />
+              Unlisted
+          </label>
+          <div className="control" style={{ float: "right", paddingTop:10 }} >
+            <label className="radio" style={{ frontWeight: "bold" }} >
+              <input type="radio" name="privacy" />
+                Public
+            </label>
+            <label className="radio" style={{ frontWeight: "bold" }} >
+              <input type="radio" name="privacy" />
+                Private
+            </label>
+          </div>
           <Heading size={4}>Edit a Post</Heading>
           <Form.Label>Title:</Form.Label>
           <Form.Control>
@@ -200,6 +226,9 @@ class EditPostForm extends Component {
           <Form.Control style={{ textAlign: "right" }}>
             {this.state.selectedTab === "text" ? textEditor() : null}
             {this.state.selectedTab === "markdown" ? markdownEditor() : null}
+            <Button color="danger" style={{ float:'left' }} onClick={this.removePost}>
+              Delete
+            </Button>
             <Button color="danger" onClick={() => this.props.setEditModalIsOpen(false)}>
               Cancel
             </Button>

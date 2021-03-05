@@ -7,6 +7,7 @@ import { Card, Content, Media, Heading } from "react-bulma-components";
 
 function Post(props) {
   const [editModalIsOpen, setEditModalIsOpen] = useState(false);
+  console.log(props.post);
   return (
     <div className="post">
       <Card>
@@ -15,11 +16,8 @@ function Post(props) {
             <Card.Footer.Item renderAs="a" onClick={() => setEditModalIsOpen(true)}>
               <span className="typcn typcn-edit"></span>
             </Card.Footer.Item>
-            <Card.Footer.Item renderAs="a" style={{ color:'red' }}>
-              <span className="typcn typcn-delete-outline"></span>
-            </Card.Footer.Item>
             <Modal show={editModalIsOpen} onClose={() => setEditModalIsOpen(false)} closeOnBlur closeOnEsc>
-              <EditPostForm setEditModalIsOpen={setEditModalIsOpen} post={props.post} updatePost={props.updatePost}/>
+              <EditPostForm setEditModalIsOpen={setEditModalIsOpen} post={props.post} updatePost={props.updatePost} deletePost={props.deletePost}/>
             </Modal>
         </Card.Header>
         <Card.Content>
