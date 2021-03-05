@@ -12,7 +12,12 @@ function Post(props) {
     <div className="post">
       <Card>
         <Card.Header>
-          <Card.Header.Title>{props.post.title}</Card.Header.Title>
+          <Card.Header.Title style={{ marginLeft: "1em" }}>
+            <div>
+              <p style={{ fontWeight: "lighter" }}>@{props.post.author.displayName}</p>
+              <Heading size={5}>{props.post.title}</Heading>
+            </div>
+          </Card.Header.Title>
           <Card.Footer.Item renderAs="a" onClick={() => setEditModalIsOpen(true)}>
             <span className="typcn typcn-edit"></span>
           </Card.Footer.Item>
@@ -24,12 +29,6 @@ function Post(props) {
               deletePost={props.deletePost}
             />
           </Modal>
-          <Card.Header.Title style={{ marginLeft: "1em" }}>
-            <div>
-              <p style={{ fontWeight: "lighter" }}>@{props.post.author.displayName}</p>
-              <Heading size={5}>{props.post.title}</Heading>
-            </div>
-          </Card.Header.Title>
         </Card.Header>
         <Card.Content>
           <Content>{props.post.description}</Content>

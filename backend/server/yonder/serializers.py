@@ -25,6 +25,14 @@ class PostSerializer(serializers.ModelSerializer):
 
         return post
 
+    def update(self, instance, validated_data):
+        _ = dict(validated_data.pop("author"))
+        for key, value in validated_data.items():
+            setattr(instance, key, value)
+        instance.save()
+
+        return instance
+
 
 class CommentSerializer(serializers.ModelSerializer):
     class Meta:
