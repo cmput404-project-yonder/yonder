@@ -15,7 +15,8 @@ import environ
 
 env = environ.Env(
     # set casting, default value
-    DEBUG=(bool, True)
+    DEBUG=(bool, True),
+    CI=(bool, False)
 )
 # reading .env file
 environ.Env.read_env()
@@ -48,10 +49,10 @@ INSTALLED_APPS = [
     #
     'rest_framework',
     'rest_framework.authtoken',
-    'djoser',
     'corsheaders',
+    'drf_yasg',
     #
-    'apps.accounts'
+    'yonder'
 ]
 
 # configure DRF
@@ -59,15 +60,8 @@ REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework.authentication.TokenAuthentication',
     ),
-    'DEFAULT_PERMISSION_CLASSES': [
-        'rest_framework.permissions.IsAuthenticated',
-    ]
 }
 
-# configure Djoser
-DJOSER = {
-    "USER_ID_FIELD": "username"
-}
 
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",
@@ -110,8 +104,20 @@ WSGI_APPLICATION = 'server.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
 
-DATABASES = {'default': env.db('DATABASE_URL')}
 
+if env('CI'):
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql',
+            'NAME': 'github_actions',
+            'USER': 'postgres',
+            'PASSWORD': 'postgres',
+            'HOST': '127.0.0.1',
+            'PORT': '5432',
+        }
+    }
+else:
+    DATABASES = {'default': env.db('DATABASE_URL')}
 
 # Password validation
 # https://docs.djangoproject.com/en/3.1/ref/settings/#auth-password-validators

@@ -1,0 +1,61 @@
+html,
+body {
+  background: #f5f5f5;
+}
+#root {
+  text-align: center;
+}
+
+/* Navigation bar */
+.navbar {
+  border-bottom: 1px solid grey;
+  height: fit-content;
+}
+.navbar-brand {
+  margin-left: 4rem;
+}
+.navbar-menu {
+  margin-right: 6rem;
+}
+
+/* Icons */
+.typcn {
+  font-size: 1.2em;
+}
+.typcn-user-outline,
+.typcn-bell {
+  font-size: 1.5em;
+}
+
+/* Stream page */
+.post-list {
+  max-width: 600px;
+  min-width: 360px;
+  margin: auto;
+}
+.list {
+  background: transparent;
+  box-shadow: none;
+}
+.post {
+  text-align: left;
+  line-height: 1.2em;
+  font-size: 0.85em;
+  margin: 1em;
+}
+/* Signup page */
+.login-form {
+  max-width: 320px;
+  margin: auto;
+}
+
+/* Signup page */
+.signup-form {
+  max-width: 320px;
+  margin: auto;
+}
+
+/* Buttons global */
+button {
+  margin: 0.5em;
+}
