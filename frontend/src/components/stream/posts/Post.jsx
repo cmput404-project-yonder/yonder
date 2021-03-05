@@ -14,11 +14,11 @@ function Post(props) {
           <Media>
             <Media.Item>
               <Heading size={6} style={{ marginBottom: "-0.5em" }}>
-                @{props.post.author.display_name}
+                @{props.post.author.displayName}
               </Heading>
             </Media.Item>
           </Media>
-          <Content>{props.post.content}</Content>
+          <Content>{props.post.description}</Content>
           <p style={{ margin: "-1em 0", fontSize: "0.8em" }}>{props.post.published}</p>
         </Card.Content>
         <Card.Footer>

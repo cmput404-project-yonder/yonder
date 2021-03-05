@@ -19,12 +19,6 @@ class Home extends Component {
           <p>
             <Link to="/signup">Sign up</Link>
           </p>
-          <p>
-            <Link to="/stream">Stream</Link>
-          </p>
-          <p>
-            <Link to="/profile">profilePage</Link>
-          </p>
         </Container>
       </Section>
     );

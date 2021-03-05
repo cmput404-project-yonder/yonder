@@ -15,11 +15,11 @@ pip3 install -r requirements.txt
 ## Start backend
 cd server
 python3 manage.py migrate
-python3 manage.py runserver & 
+python3 -d manage.py runserver &
 
 # Frontend
-## Install frontend packages
 cd $start_dir/frontend
+## Install frontend packages
 yarn install
 ## Start frontend
 yarn start

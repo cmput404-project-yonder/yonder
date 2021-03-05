@@ -15,8 +15,6 @@ class Stream extends Component {
   }
 
   render() {
-    const posts = this.props.currentAuthorPosts;
-
     if (this.props.loading) {
       return (
         <div class="pageloader is-active">
@@ -31,7 +29,7 @@ class Stream extends Component {
           <PopupModal createPost={this.props.createPost} />
           <Columns centered>
             <Columns.Column>
-              <PostList posts={posts} />
+              <PostList posts={this.props.currentAuthorPosts} />
             </Columns.Column>
           </Columns>
         </Container>

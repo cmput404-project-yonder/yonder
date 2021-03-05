@@ -4,17 +4,19 @@ from django.contrib.auth.models import User
 from django.contrib.auth import authenticate
 
 
-class PostSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Post
-        fields = ('id', 'title', 'source', 'origin', 'description', 'content', 'contentType', 'author', 'categories',
-                  'count', 'size', 'published', 'visibility', 'unlisted')
-
-
 class AuthorSerializer(serializers.ModelSerializer):
     class Meta:
         model = Author
         fields = ('id', 'host', 'displayName', 'github')
+
+
+class PostSerializer(serializers.ModelSerializer):
+    author = AuthorSerializer(read_only=True)
+
+    class Meta:
+        model = Post
+        fields = ('id', 'title', 'source', 'origin', 'description', 'content', 'contentType', 'author', 'categories',
+                  'count', 'size', 'published', 'visibility', 'unlisted')
 
 
 class CommentSerializer(serializers.ModelSerializer):

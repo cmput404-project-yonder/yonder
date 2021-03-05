@@ -11,10 +11,11 @@ import {
 import { setAxiosAuthToken } from "../../utils/Utils";
 
 export const createPost = (newPost) => (dispatch, getState) => {
-  setAxiosAuthToken(getState().auth.token);
+  const state = getState();
+  setAxiosAuthToken(state.auth.token);
   dispatch({ type: NEW_POST_SUBMITTED });
   axios
-    .post("/author/" + newPost.author + "/posts/", newPost)
+    .post("/author/" + state.auth.author.id + "/posts/", newPost)
     .then((response) => {
       dispatch({ type: NEW_POST_SUCCESS, payload: response.data });
     })

@@ -5,18 +5,13 @@ import { Navbar, Heading } from "react-bulma-components";
 
 import { logout } from "./login/LoginActions";
 
-// testing out profile bar ***
-import ProfileControl from "./profileView/ProfileControl";
-
-// ***
-
 function NavigationBar(props) {
   const [isActive, setisActive] = React.useState(false);
 
   const loggedInDropdown = () => {
     return (
       <Navbar.Dropdown>
-        <Navbar.Item href="/author/">Profile</Navbar.Item>
+        <Navbar.Item href={"/author/" + props.auth.author.id}>Profile</Navbar.Item>
         <Navbar.Item onClick={props.logout}>Log out</Navbar.Item>
       </Navbar.Dropdown>
     );
@@ -25,7 +20,7 @@ function NavigationBar(props) {
   const loggedOutDropdown = () => {
     return (
       <Navbar.Dropdown right={Boolean("right", false)}>
-        <ProfileControl />
+        <Navbar.Item href="/login/">Login</Navbar.Item>
       </Navbar.Dropdown>
     );
   };
