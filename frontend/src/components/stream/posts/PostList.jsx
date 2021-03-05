@@ -5,16 +5,19 @@ import { List } from "react-bulma-components";
 import Post from "./Post";
 
 function PostList(props) {
-  const postList = props.posts.map((post) => <Post post={post} />);
+  const postList = props.posts.map((post) => <Post post={post} updatePost={props.updatePost} deletePost={props.deletePost}/>);
   return (
     <div className="post-list">
       <List hoverable>{postList}</List>
     </div>
   );
+  console.log(postList);
 }
 
 PostList.propTypes = {
-  posts: PropTypes.object.isRequired,
+  posts: PropTypes.array.isRequired,
+  updatePost: PropTypes.func.isRequired,
+  deletePost: PropTypes.func.isRequired,
 };
 
 export default PostList;

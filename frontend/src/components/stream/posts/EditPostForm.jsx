@@ -5,25 +5,31 @@ import Markdown from "react-markdown";
 import ReactTags from "react-tag-autocomplete";
 import "./react-tags.css";
 
-class PostForm extends Component {
+class EditPostForm extends Component {
   constructor(props) {
     super(props);
 
-    this.addPost = this.addPost.bind(this);
+    this.editPost = this.editPost.bind(this);
     this.onAddition = this.onAddition.bind(this);
     this.onDelete = this.onDelete.bind(this);
+    this.removePost = this.removePost.bind(this);
+
+    let categoryTags = this.props.post.categories.map(function(t, i) { 
+      return {id: i, name: t}
+    })
 
     this.state = {
-      title: "",
-      content: "",
-      contentType: "",
-      description: "",
-      unlisted: false,
-      visibliity: "PUBLIC",
-      categories: [],
+      title: this.props.post.title,
+      content: this.props.post.content,
+      contentType: this.props.post.contentType,
+      description: this.props.post.description,
+      unlisted: this.props.post.unlisted,
+      visibility: this.props.post.visibility,
+      categories: categoryTags,
       selectedTab: "text",
       markdownTab: "write",
     };
+    console.log(this.state);
 
     this.reactTags = React.createRef();
   }
@@ -41,7 +47,10 @@ class PostForm extends Component {
     });
   };
 
-  addPost() {
+  editPost() {
+    console.log(this.state.unlisted);
+    const author = JSON.parse(localStorage.getItem("author"));
+    console.log(author);
     const contentType = () => {
       switch (this.state.selectedTab) {
         case "text":
@@ -55,8 +64,10 @@ class PostForm extends Component {
           break;
       }
     };
+
     const categories = this.state.categories.map((cat) => cat.name);
-    const newPost = {
+    const editedPost = {
+      ...this.props.post,
       title: this.state.title,
       description: this.state.description,
       content: this.state.content,
@@ -65,9 +76,14 @@ class PostForm extends Component {
       visibility: this.state.visibility,
       categories: categories,
     };
-    this.props.createPost(newPost);
-    this.props.setModalIsOpen(false);
-    
+
+    this.props.updatePost(editedPost);
+    this.props.setEditModalIsOpen(false);
+  }
+
+  removePost() {
+    this.props.deletePost(this.props.post)
+    this.props.setEditModalIsOpen(false);
   }
 
   selectTab(tab) {
@@ -127,7 +143,8 @@ class PostForm extends Component {
             <input type="checkbox" defaultChecked={this.state.unlisted} onChange={this.handleUnlisted} />
               Unlisted
           </label>
-          <Heading size={4}>Create a Post</Heading>
+          
+          <Heading size={4}>Edit a Post</Heading>
           <Form.Label>Title:</Form.Label>
           <Form.Control>
             <Form.Textarea
@@ -201,11 +218,14 @@ class PostForm extends Component {
           <Form.Control style={{ textAlign: "right" }}>
             {this.state.selectedTab === "text" ? textEditor() : null}
             {this.state.selectedTab === "markdown" ? markdownEditor() : null}
-            <Button color="danger" onClick={() => this.props.setModalIsOpen(false)}>
+            <Button color="danger" style={{ float:'left' }} onClick={this.removePost}>
+              Delete
+            </Button>
+            <Button color="danger" onClick={() => this.props.setEditModalIsOpen(false)}>
               Cancel
             </Button>
-            <Button color="success" onClick={this.addPost}>
-              Post
+            <Button color="success" onClick={this.editPost}>
+              Update
             </Button>
           </Form.Control>
         </Form.Field>
@@ -214,4 +234,4 @@ class PostForm extends Component {
   }
 }
 
-export default PostForm;
+export default EditPostForm;

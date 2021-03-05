@@ -7,7 +7,7 @@ import "bulma-pageloader/dist/css/bulma-pageloader.min.css";
 
 import PostList from "./posts/PostList";
 import PopupModal from "./posts/PopupModal";
-import { createPost, retrieveLoggedInAuthorPosts } from "./StreamActions";
+import { createPost, updatePost, retrieveLoggedInAuthorPosts, deletePost } from "./StreamActions";
 
 class Stream extends Component {
   componentDidMount() {
@@ -17,8 +17,8 @@ class Stream extends Component {
   render() {
     if (this.props.loading) {
       return (
-        <div class="pageloader is-active">
-          <span class="title">Loading</span>
+        <div className="pageloader is-active">
+          <span className="title">Loading</span>
         </div>
       );
     }
@@ -29,7 +29,11 @@ class Stream extends Component {
           <PopupModal createPost={this.props.createPost} />
           <Columns centered>
             <Columns.Column>
-              <PostList posts={this.props.currentAuthorPosts} />
+              <PostList
+                posts={this.props.currentAuthorPosts}
+                updatePost={this.props.updatePost}
+                deletePost={this.props.deletePost}
+              />
             </Columns.Column>
           </Columns>
         </Container>
@@ -41,7 +45,9 @@ class Stream extends Component {
 Stream.propTypes = {
   author: PropTypes.object.isRequired,
   createPost: PropTypes.func.isRequired,
+  updatePost: PropTypes.func.isRequired,
   retrieveLoggedInAuthorPosts: PropTypes.func.isRequired,
+  deletePost: PropTypes.func.isRequired,
   currentAuthorPosts: PropTypes.array.isRequired,
   loading: PropTypes.bool.isRequired,
 };
@@ -52,4 +58,6 @@ const mapStateToProps = (state) => ({
   loading: state.stream.loading,
 });
 
-export default connect(mapStateToProps, { createPost, retrieveLoggedInAuthorPosts })(withRouter(Stream));
+export default connect(mapStateToProps, { createPost, updatePost, retrieveLoggedInAuthorPosts, deletePost })(
+  withRouter(Stream)
+);

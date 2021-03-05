@@ -19,41 +19,52 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Author',
             fields=[
-                ('id', models.UUIDField(default=uuid.uuid4, editable=False, primary_key=True, serialize=False, unique=True)),
+                ('id', models.UUIDField(default=uuid.uuid4, editable=False,
+                                        primary_key=True, serialize=False, unique=True)),
                 ('host', models.URLField(blank=True)),
                 ('displayName', models.CharField(max_length=100)),
                 ('github', models.URLField(blank=True, null=True)),
-                ('user', models.OneToOneField(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL)),
+                ('user', models.OneToOneField(
+                    on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL)),
             ],
         ),
         migrations.CreateModel(
             name='Post',
             fields=[
-                ('id', models.UUIDField(default=uuid.uuid4, editable=False, primary_key=True, serialize=False, unique=True)),
+                ('id', models.UUIDField(default=uuid.uuid4, editable=False,
+                                        primary_key=True, serialize=False, unique=True)),
                 ('title', models.CharField(max_length=80)),
                 ('source', models.URLField()),
                 ('origin', models.URLField()),
                 ('description', models.CharField(max_length=140)),
                 ('content', models.TextField()),
-                ('contentType', models.CharField(choices=[('text/plain', 'Plaintext'), ('text/markdown', 'Markdown'), ('application/base64', 'Binary'), ('image/png;base64', 'PNG'), ('image/jpeg;base64', 'JPEG')], default='text/plain', max_length=20)),
-                ('categories', django.contrib.postgres.fields.ArrayField(base_field=models.CharField(max_length=80), blank=True, null=True, size=5)),
+                ('contentType', models.CharField(choices=[('text/plain', 'Plaintext'), ('text/markdown', 'Markdown'), (
+                    'application/base64', 'Binary'), ('image/png;base64', 'PNG'), ('image/jpeg;base64', 'JPEG')], default='text/plain', max_length=20)),
+                ('categories', django.contrib.postgres.fields.ArrayField(
+                    base_field=models.CharField(max_length=80), blank=True, null=True, size=5)),
                 ('count', models.IntegerField(default=0)),
                 ('size', models.IntegerField(default=0)),
                 ('published', models.DateTimeField(auto_now_add=True)),
-                ('visibility', models.CharField(choices=[('PUBLIC', 'Public'), ('PRIVATE', 'Private')], default='PUBLIC', max_length=8)),
+                ('visibility', models.CharField(choices=[
+                 ('PUBLIC', 'Public'), ('PRIVATE', 'Private')], default='PUBLIC', max_length=8)),
                 ('unlisted', models.BooleanField()),
-                ('author', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='yonder.author')),
+                ('author', models.ForeignKey(
+                    on_delete=django.db.models.deletion.CASCADE, to='yonder.author')),
             ],
         ),
         migrations.CreateModel(
             name='Comment',
             fields=[
-                ('id', models.UUIDField(default=uuid.uuid4, editable=False, primary_key=True, serialize=False, unique=True)),
+                ('id', models.UUIDField(default=uuid.uuid4, editable=False,
+                                        primary_key=True, serialize=False, unique=True)),
                 ('comment', models.CharField(max_length=400)),
-                ('contentType', models.CharField(choices=[('text/plain', 'Plaintext'), ('text/markdown', 'Markdown'), ('application/base64', 'Binary'), ('image/png;base64', 'PNG'), ('image/jpeg;base64', 'JPEG')], default='text/plain', max_length=20)),
+                ('contentType', models.CharField(choices=[('text/plain', 'Plaintext'), ('text/markdown', 'Markdown'), (
+                    'application/base64', 'Binary'), ('image/png;base64', 'PNG'), ('image/jpeg;base64', 'JPEG')], default='text/plain', max_length=20)),
                 ('published', models.DateTimeField()),
-                ('author', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='yonder.author')),
-                ('post', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='yonder.post')),
+                ('author', models.ForeignKey(
+                    on_delete=django.db.models.deletion.CASCADE, to='yonder.author')),
+                ('post', models.ForeignKey(
+                    on_delete=django.db.models.deletion.CASCADE, to='yonder.post')),
             ],
         ),
     ]

@@ -7,17 +7,17 @@ urlpatterns = [
     path('author/<uuid:pk>', views.author_detail.as_view(), name="author_detail"),
     path('author/<uuid:author_id>/posts/', views.posts.as_view(), name="posts"),
     path(
-        'author/<uuid:author_id>/posts/<int:pk>',
+        'author/<uuid:author_id>/posts/<uuid:pk>',
         views.post_detail.as_view(),
         name="post_detail"
     ),
     path(
-        'author/<uuid:author_id>/posts/<int:post_id>/comments/',
+        'author/<uuid:author_id>/posts/<uuid:post_id>/comments/',
         views.comments.as_view(),
         name="comments"
     ),
     path(
-        'author/<uuid:author_id>/posts/<int:post_id>/comments/<int:pk>',
+        'author/<uuid:author_id>/posts/<uuid:post_id>/comments/<uuid:pk>',
         views.comment_detail.as_view(),
         name="comment_detail"
     ),
