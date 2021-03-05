@@ -1,5 +1,4 @@
 import re
-import json
 from django.contrib import auth
 from rest_framework.response import Response
 from rest_framework import mixins, status, generics, validators
@@ -154,7 +153,6 @@ class posts(generics.ListCreateAPIView):
     def create(self, request, *args, **kwargs):
         post_data = request.data
         author = Author.objects.get(pk=post_data["author"])
-        post_data._mutable = True
         post_data["source"] = author.host
         post_data["origin"] = author.host
         serializer = self.get_serializer(data=post_data)
