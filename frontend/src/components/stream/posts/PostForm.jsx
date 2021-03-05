@@ -36,8 +36,6 @@ class PostForm extends Component {
   };
 
   addPost() {
-    const author = JSON.parse(localStorage.getItem("author"));
-    console.log(author);
     const contentType = () => {
       switch (this.state.selectedTab) {
         case "text":
@@ -60,7 +58,6 @@ class PostForm extends Component {
       unlisted: this.state.unlisted,
       visiblity: this.state.visiblity,
       categories: categories,
-      author: author.id,
     };
     this.props.createPost(newPost);
     this.props.setModalIsOpen(false);

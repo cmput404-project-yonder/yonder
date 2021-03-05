@@ -5,13 +5,13 @@ import { withRouter } from "react-router-dom";
 import { Card, Container, Columns } from "react-bulma-components";
 
 import PostList from "../stream/posts/PostList";
-import { ProfileStatusView } from "../profileView/ProfileView";
-import { retrieveAuthor, retrieveAuthorPosts } from "../profilePage/ProfileActions";
+import { ProfileDetail } from "./ProfileDetail";
+import { retrieveAuthor, retrieveAuthorPosts } from "./ProfileActions";
 
 // buttons
-import FollowButton from "./buttons/followButton";
-import FriendButton from "./buttons/friendButton";
-import EditProfileButton from "../profileView/EditButton";
+import FollowButton from "./buttons/FollowButton";
+import FriendButton from "./buttons/FriendButton";
+import EditProfileButton from "./buttons/EditButton";
 
 var profileShowStyle = {
   width: "25em",
@@ -50,7 +50,7 @@ function ProfileShow(props) {
   return (
     <Card style={profileShowStyle}>
       <Card.Content>
-        <ProfileStatusView
+        <ProfileDetail
           displayName={props.retrievedAuthor.displayName}
           followerNum={64}
           followingNum={32}
@@ -62,7 +62,7 @@ function ProfileShow(props) {
   );
 }
 
-class ProfilePage extends React.Component {
+class Profile extends React.Component {
   componentDidMount() {
     const {
       match: { params },
@@ -100,7 +100,7 @@ class ProfilePage extends React.Component {
   }
 }
 
-ProfilePage.propTypes = {
+Profile.propTypes = {
   loggedInAuthor: PropTypes.object.isRequired,
   retrieveAuthor: PropTypes.func.isRequired,
   retrievedAuthor: PropTypes.object.isRequired,
@@ -116,4 +116,4 @@ const mapStateToProps = (state) => ({
   retrievedAuthorPosts: state.profile.retrievedAuthorPosts,
 });
 
-export default connect(mapStateToProps, { retrieveAuthorPosts, retrieveAuthor })(withRouter(ProfilePage));
+export default connect(mapStateToProps, { retrieveAuthorPosts, retrieveAuthor })(withRouter(Profile));

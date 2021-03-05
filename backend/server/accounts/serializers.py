@@ -11,12 +11,19 @@ class AuthorSerializer(serializers.ModelSerializer):
 
 
 class PostSerializer(serializers.ModelSerializer):
-    author = AuthorSerializer()
+    author = AuthorSerializer(required=True)
 
     class Meta:
         model = Post
         fields = ('id', 'title', 'source', 'origin', 'description', 'content', 'contentType', 'author', 'categories',
                   'count', 'size', 'published', 'visibility', 'unlisted')
+
+    def create(self, validated_data):
+        author_data = dict(validated_data.pop("author"))
+        author = Author.objects.get(displayName=author_data["displayName"])
+        post = Post.objects.create(**validated_data, author=author)
+
+        return post
 
 
 class CommentSerializer(serializers.ModelSerializer):

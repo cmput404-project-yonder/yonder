@@ -106,7 +106,6 @@ class posts(generics.ListCreateAPIView):
         post_data["source"] = author.host
         post_data["origin"] = author.host
         serializer = self.get_serializer(data=post_data)
-        print(post_data)
         serializer.is_valid(raise_exception=True)
         self.perform_create(serializer)
         headers = self.get_success_headers(serializer.data)

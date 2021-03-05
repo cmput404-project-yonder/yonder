@@ -13,6 +13,9 @@ import { setAxiosAuthToken } from "../../utils/Utils";
 export const createPost = (newPost) => (dispatch, getState) => {
   const state = getState();
   setAxiosAuthToken(state.auth.token);
+
+  newPost["author"] = state.auth.author;
+
   dispatch({ type: NEW_POST_SUBMITTED });
   axios
     .post("/author/" + state.auth.author.id + "/posts/", newPost)

@@ -3,9 +3,9 @@ An edit button.
     props.action - onClick event
 */
 
-import { EditButton } from "./ProfileViewSVG";
+import { EditButton } from "../ProfileIcons";
 import { Container, Button } from "react-bulma-components";
-import { color } from "./styling";
+import { color } from "../styling";
 
 // local styling
 var buttonStyle = {

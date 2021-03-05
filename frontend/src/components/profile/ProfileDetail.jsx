@@ -1,30 +1,9 @@
-/*
-Profile View, navigation drop down
-
-Properties:
-    props.action - EditButton's onClick event handler
-    props.displayName - current displayName of the author
-    props.followingNum
-    props.followerNum
-    props.postNum
-    props.UUID
-    props.githubURL
-    props.githubUsername
-*/
-
 import React from "react";
-import { Content, Container, Button } from "react-bulma-components";
-import { YonderLogo, GithubLogo } from "./ProfileViewSVG";
-import EditButton from "./EditButton";
-import Dividor from "./Dividor";
-import { ProfileIcon } from "../profilePage/ProfileIcon";
+import { Content, Container } from "react-bulma-components";
+import { YonderLogo, GithubLogo } from "./ProfileIcons";
+import { ProfileIcon } from "../profile/ProfileIcons";
 
 import { style, color } from "./styling";
-
-// local styling of this component
-var buttonStyleGeneric = style.button.style.generic;
-var buttonStyleFocus = style.button.style.focus;
-var buttonsLayout = style.button.layout.horizontalBetween;
 
 var statusStyle = {
   overall: {},
@@ -75,10 +54,9 @@ var svgIconStyle = {
   },
 };
 
-export function ProfileStatusView(props) {
+export function ProfileDetail(props) {
   return (
     <Container style={statusStyle.overall}>
-      {/* this section display the displayName from authorInfo */}
       <div style={{ fill: color.baseRed }}>
         <ProfileIcon svgScale={80} />
       </div>
@@ -86,7 +64,6 @@ export function ProfileStatusView(props) {
         <p>{props.displayName}</p>
       </Content>
 
-      {/* this section display the follower/following/post infomation from authorMeta */}
       <Content id="profileStatus" style={statusStyle.statusBar.overall}>
         <div style={statusStyle.statusBar.block}>
           <p>
@@ -149,32 +126,4 @@ function ProfileInfoView(props) {
   );
 }
 
-class ProfileView extends React.Component {
-  render() {
-    return (
-      <Container>
-        <ProfileStatusView
-          displayName={this.props.displayName}
-          followingNum={this.props.followingNum}
-          followerNum={this.props.followerNum}
-          postNum={this.props.postNum}
-        />
-        <EditButton action={this.props.action} />
-        <Dividor />
-        <ProfileInfoView
-          UUID={this.props.UUID}
-          githubURL={this.props.githubURL}
-          githubUsername={this.props.githubUsername}
-        />
-        <Dividor />
-        <Container style={buttonsLayout}>
-          <Button style={buttonStyleGeneric}>Followers</Button>
-          <Button style={buttonStyleGeneric}>Inbox</Button>
-          <Button style={buttonStyleFocus}>Logout</Button>
-        </Container>
-      </Container>
-    );
-  }
-}
-
-export default ProfileView;
+export default ProfileDetail;
