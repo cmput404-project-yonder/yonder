@@ -19,7 +19,7 @@ class PostForm extends Component {
       contentType: "",
       description: "",
       unlisted: false,
-      visibliity: "",
+      visibliity: "PUBLIC",
       categories: [],
       selectedTab: "text",
       markdownTab: "write",
@@ -27,14 +27,6 @@ class PostForm extends Component {
 
     this.reactTags = React.createRef();
   }
-
-  handleVisibility = (evt) => {
-    const { name, value } = evt.target;
-
-    this.setState({
-      [name]: value
-    });
-  };
 
   handleUnlisted = () => {
     this.setState({
@@ -138,16 +130,6 @@ class PostForm extends Component {
             <input type="checkbox" defaultChecked={this.state.unlisted} onChange={this.handleUnlisted} />
               Unlisted
           </label>
-          <div className="control" style={{ float: "right", paddingTop:10 }} >
-            <label className="radio" style={{ frontWeight: "bold" }} >
-              <input type="radio" name="visibility" value="PUBLIC" checked onChange={this.handleVisibility} />
-                Public
-            </label>
-            <label className="radio" style={{ frontWeight: "bold" }} >
-              <input type="radio" name="visibility" value="PRIVATE" onChange={this.handleVisibility} />
-                Private
-            </label>
-          </div>
           <Heading size={4}>Create a Post</Heading>
           <Form.Label>Title:</Form.Label>
           <Form.Control>
