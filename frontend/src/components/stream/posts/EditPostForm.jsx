@@ -24,7 +24,7 @@ class EditPostForm extends Component {
       contentType: this.props.post.contentType,
       description: this.props.post.description,
       unlisted: this.props.post.unlisted,
-      visiblity: this.props.post.visiblity,
+      visibility: this.props.post.visibility,
       categories: categoryTags,
       selectedTab: "text",
       markdownTab: "write",
@@ -33,6 +33,14 @@ class EditPostForm extends Component {
 
     this.reactTags = React.createRef();
   }
+
+  handleVisibility = (evt) => {
+    const { name, value } = evt.target;
+
+    this.setState({
+      [name]: value
+    });
+  };
 
   handleUnlisted = () => {
     this.setState({
@@ -72,7 +80,7 @@ class EditPostForm extends Component {
       content: this.state.content,
       contentType: contentType(),
       unlisted: this.state.unlisted,
-      visiblity: this.state.visiblity,
+      visibility: this.state.visibility,
       categories: categories,
     };
 
@@ -144,11 +152,11 @@ class EditPostForm extends Component {
           </label>
           <div className="control" style={{ float: "right", paddingTop:10 }} >
             <label className="radio" style={{ frontWeight: "bold" }} >
-              <input type="radio" name="privacy" />
+              <input type="radio" name="visibility" value="PUBLIC" onChange={this.handleVisibility} />
                 Public
             </label>
             <label className="radio" style={{ frontWeight: "bold" }} >
-              <input type="radio" name="privacy" />
+              <input type="radio" name="visibility" value="PRIVATE" onChange={this.handleVisibility} />
                 Private
             </label>
           </div>
