@@ -2,9 +2,9 @@ import {
   NEW_POST_ERROR,
   NEW_POST_SUBMITTED,
   NEW_POST_SUCCESS,
-  RETREIVE_POSTS_ERROR,
-  RETREIVE_POSTS_SUBMITTED,
-  RETREIVE_POSTS_SUCCESS,
+  RETRIEVE_POSTS_ERROR,
+  RETRIEVE_POSTS_SUBMITTED,
+  RETRIEVE_POSTS_SUCCESS,
 } from "./StreamTypes";
 
 const initialState = {
@@ -34,22 +34,22 @@ export const streamReducer = (state = initialState, action) => {
         currentAuthorPosts: [...state.currentAuthorPosts, action.payload],
         loading: false,
       };
-    case RETREIVE_POSTS_SUBMITTED:
+    case RETRIEVE_POSTS_SUBMITTED:
       return {
         ...state,
-        retreivePostsError: "",
+        retrievePostsError: "",
         loading: true,
       };
-    case RETREIVE_POSTS_ERROR:
+    case RETRIEVE_POSTS_ERROR:
       return {
         ...state,
-        retreivePostsError: action.errorData,
+        retrievePostsError: action.errorData,
         loading: false,
       };
-    case RETREIVE_POSTS_SUCCESS:
+    case RETRIEVE_POSTS_SUCCESS:
       return {
         ...state,
-        retreivePostsError: "",
+        retrievePostsError: "",
         currentAuthorPosts: action.payload,
         loading: false,
       };

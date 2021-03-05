@@ -17,7 +17,7 @@ import { Content, Container, Button } from "react-bulma-components";
 import { YonderLogo, GithubLogo } from "./ProfileViewSVG";
 import EditButton from "./EditButton";
 import Dividor from "./Dividor";
-import { ProfileIcon } from "../profilePage/ProfileViewSVG";
+import { ProfileIcon } from "../profilePage/ProfileIcon";
 
 import { style, color } from "./styling";
 
@@ -27,10 +27,7 @@ var buttonStyleFocus = style.button.style.focus;
 var buttonsLayout = style.button.layout.horizontalBetween;
 
 var statusStyle = {
-  overall: {
-    paddingTop: "3em",
-    paddingBottom: "1.5em",
-  },
+  overall: {},
   displayName: Object.assign({}, style.text.heading, {
     textAlign: "center",
     paddingBottom: "1em",

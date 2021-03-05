@@ -7,11 +7,11 @@ import "bulma-pageloader/dist/css/bulma-pageloader.min.css";
 
 import PostList from "./posts/PostList";
 import PopupModal from "./posts/PopupModal";
-import { createPost, retreivePosts } from "./StreamActions";
+import { createPost, retrieveLoggedInAuthorPosts } from "./StreamActions";
 
 class Stream extends Component {
   componentDidMount() {
-    this.props.retreivePosts();
+    this.props.retrieveLoggedInAuthorPosts();
   }
 
   render() {
@@ -41,7 +41,7 @@ class Stream extends Component {
 Stream.propTypes = {
   author: PropTypes.object.isRequired,
   createPost: PropTypes.func.isRequired,
-  retreivePosts: PropTypes.func.isRequired,
+  retrieveLoggedInAuthorPosts: PropTypes.func.isRequired,
   currentAuthorPosts: PropTypes.array.isRequired,
   loading: PropTypes.bool.isRequired,
 };
@@ -52,4 +52,4 @@ const mapStateToProps = (state) => ({
   loading: state.stream.loading,
 });
 
-export default connect(mapStateToProps, { createPost, retreivePosts })(withRouter(Stream));
+export default connect(mapStateToProps, { createPost, retrieveLoggedInAuthorPosts })(withRouter(Stream));

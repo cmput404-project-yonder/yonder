@@ -6,19 +6,15 @@ import { Card, Container, Columns } from "react-bulma-components";
 
 import PostList from "../stream/posts/PostList";
 import { ProfileStatusView } from "../profileView/ProfileView";
-import { retreivePosts } from "../stream/StreamActions";
+import { retrieveAuthor, retrieveAuthorPosts } from "../profilePage/ProfileActions";
 
 // buttons
 import FollowButton from "./buttons/followButton";
 import FriendButton from "./buttons/friendButton";
+import EditProfileButton from "../profileView/EditButton";
 
 var profileShowStyle = {
   width: "25em",
-};
-
-var buttonLayoutStyle = {
-  paddingTop: "2em",
-  display: "flex",
 };
 
 function ProfileShow(props) {
@@ -30,27 +26,50 @@ function ProfileShow(props) {
     // onClick event handler for friend button
   };
 
+  const clickEdit = () => {
+    // onClick event handler for friend button
+  };
+
+  const otherAuthor = () => {
+    return (
+      <Card.Footer>
+        <FollowButton action={clickFollow} />
+        <FriendButton action={clickFriend} />
+      </Card.Footer>
+    );
+  };
+
+  const loggedAuthor = () => {
+    return (
+      <Card.Footer>
+        <EditProfileButton action={clickEdit} />
+      </Card.Footer>
+    );
+  };
+
   return (
     <Card style={profileShowStyle}>
       <Card.Content>
         <ProfileStatusView
-          displayName={props.author.displayName}
+          displayName={props.retrievedAuthor.displayName}
           followerNum={64}
           followingNum={32}
           postNum={props.postNum}
         />
       </Card.Content>
-      <Card.Footer style={buttonLayoutStyle}>
-        <FollowButton action={clickFollow} />
-        <FriendButton action={clickFriend} />
-      </Card.Footer>
+      {props.editable ? loggedAuthor() : otherAuthor()}
     </Card>
   );
 }
 
 class ProfilePage extends React.Component {
   componentDidMount() {
-    this.props.retreivePosts();
+    const {
+      match: { params },
+    } = this.props;
+
+    this.props.retrieveAuthor(params.id);
+    this.props.retrieveAuthorPosts(params.id);
   }
 
   render() {
@@ -66,10 +85,14 @@ class ProfilePage extends React.Component {
       <Container style={{ marginTop: "1em" }}>
         <Columns>
           <Columns.Column size={4}>
-            <ProfileShow postNum={this.props.currentAuthorPosts.length} author={this.props.author} />
+            <ProfileShow
+              postNum={this.props.retrievedAuthorPosts.length}
+              retrievedAuthor={this.props.retrievedAuthor}
+              editable={this.props.match.params.id === this.props.loggedInAuthor.id}
+            />
           </Columns.Column>
           <Columns.Column size={8}>
-            <PostList posts={this.props.currentAuthorPosts} />
+            <PostList posts={this.props.retrievedAuthorPosts} />
           </Columns.Column>
         </Columns>
       </Container>
@@ -78,16 +101,19 @@ class ProfilePage extends React.Component {
 }
 
 ProfilePage.propTypes = {
-  author: PropTypes.object.isRequired,
-  retreivePosts: PropTypes.func.isRequired,
-  currentAuthorPosts: PropTypes.array.isRequired,
+  loggedInAuthor: PropTypes.object.isRequired,
+  retrieveAuthor: PropTypes.func.isRequired,
+  retrievedAuthor: PropTypes.object.isRequired,
+  retrieveAuthorPosts: PropTypes.func.isRequired,
+  retrievedAuthorPosts: PropTypes.array.isRequired,
   loading: PropTypes.bool.isRequired,
 };
 
 const mapStateToProps = (state) => ({
-  author: state.auth.author,
-  currentAuthorPosts: state.stream.currentAuthorPosts,
-  loading: state.stream.loading,
+  loggedInAuthor: state.auth.author,
+  loading: state.profile.loading,
+  retrievedAuthor: state.profile.retrievedAuthor,
+  retrievedAuthorPosts: state.profile.retrievedAuthorPosts,
 });
 
-export default connect(mapStateToProps, { retreivePosts })(withRouter(ProfilePage));
+export default connect(mapStateToProps, { retrieveAuthorPosts, retrieveAuthor })(withRouter(ProfilePage));
