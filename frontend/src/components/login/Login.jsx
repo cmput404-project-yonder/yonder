@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { withRouter, Link } from "react-router-dom";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
-import { Container, Button, Columns, Form, Heading, Section } from "react-bulma-components";
+import { Container, Button, Form, Heading, Section } from "react-bulma-components";
 
 import { login } from "./LoginActions.js";
 

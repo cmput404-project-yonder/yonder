@@ -84,8 +84,8 @@ class author_detail(mixins.RetrieveModelMixin, mixins.DestroyModelMixin, mixins.
     def get(self, request, *args, **kwargs):
         author = get_object_or_404(self.queryset, pk=kwargs["pk"])
         serializer = self.serializer_class(author)
-        data = serializers.data
-        data["url"] = Author.get_aboslute_url()
+        data = serializer.data
+        data["url"] = author.get_absolute_url()
         return Response(serializer.data)
 
     @swagger_auto_schema(tags=['author'])
@@ -98,12 +98,11 @@ class author_detail(mixins.RetrieveModelMixin, mixins.DestroyModelMixin, mixins.
 
 
 class posts(generics.ListCreateAPIView):
-    queryset = Post.objects.all()
     serializer_class = PostSerializer
 
     def create(self, request, *args, **kwargs):
         post_data = request.data
-        author = Author.objects.get(pk=post_data["author"])
+        author = Author.objects.get(pk=kwargs["author_id"])
         post_data["source"] = author.host
         post_data["origin"] = author.host
         serializer = self.get_serializer(data=post_data)
@@ -111,6 +110,10 @@ class posts(generics.ListCreateAPIView):
         self.perform_create(serializer)
         headers = self.get_success_headers(serializer.data)
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+
+    def get_queryset(self):
+        author = self.kwargs["author_id"]
+        return Post.objects.filter(author=author)
 
     @swagger_auto_schema(tags=['posts'])
     def get(self, request, *args, **kwargs):
