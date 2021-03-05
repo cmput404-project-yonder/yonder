@@ -7,9 +7,8 @@ import Home from "./components/Home";
 import Signup from "./components/signup/Signup";
 import Login from "./components/login/Login";
 import Stream from "./components/stream/Stream";
+import Profile from "./components/profile/Profile";
 import NavigationBar from "./components/NavigationBar";
-
-import requireAuth from "./utils/RequireAuth";
 
 import axios from "axios";
 axios.defaults.baseURL = "http://localhost:8000";
@@ -25,6 +24,7 @@ class App extends Component {
             <Route path="/signup" component={Signup} />
             <Route path="/login" component={Login} />
             <Route path="/stream" component={Stream} />
+            <Route path="/author/:id" component={Profile} />
             <Route exact path="/" component={Home} />
           </Switch>
         </Root>
