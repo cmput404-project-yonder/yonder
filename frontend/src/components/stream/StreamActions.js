@@ -7,6 +7,9 @@ import {
   RETREIVE_POSTS_SUBMITTED,
   RETREIVE_POSTS_SUCCESS,
   RETREIVE_POSTS_ERROR,
+  EDIT_POST_SUBMITTED,
+  EDIT_POST_SUCCESS,
+  EDIT_POST_ERROR,
 } from "./StreamTypes";
 import { setAxiosAuthToken } from "../../utils/Utils";
 
@@ -23,6 +26,30 @@ export const createPost = (newPost) => (dispatch, getState) => {
         toast.error(JSON.stringify(error.response.data));
         dispatch({
           type: NEW_POST_ERROR,
+          errorData: error.response.data,
+        });
+      } else if (error.message) {
+        toast.error(JSON.stringify(error.message));
+      } else {
+        toast.error(JSON.stringify(error));
+      }
+    });
+};
+
+export const updatePost = (editedPost) => (dispatch, getState) => {
+  setAxiosAuthToken(getState().auth.token);
+  dispatch({ type: EDIT_POST_SUBMITTED });
+  console.log(editedPost);
+  axios
+    .put("/author/" + editedPost.author + "/posts/" + editedPost.id, editedPost)
+    .then((response) => {
+      dispatch({ type: EDIT_POST_SUCCESS, payload: response.data });
+    })
+    .catch((error) => {
+      if (error.response) {
+        toast.error(JSON.stringify(error.response.data));
+        dispatch({
+          type: EDIT_POST_ERROR,
           errorData: error.response.data,
         });
       } else if (error.message) {

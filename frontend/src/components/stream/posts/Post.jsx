@@ -1,14 +1,26 @@
-import React from "react";
+import React, { useState } from "react";
 import PropTypes from "prop-types";
+import { Modal } from "react-bulma-components";
+import EditPostForm from "./EditPostForm";
 
 import { Card, Content, Media, Heading } from "react-bulma-components";
 
 function Post(props) {
+  const [editModalIsOpen, setEditModalIsOpen] = useState(false);
   return (
     <div className="post">
       <Card>
         <Card.Header>
           <Card.Header.Title>{props.post.title}</Card.Header.Title>
+            <Card.Footer.Item renderAs="a" onClick={() => setEditModalIsOpen(true)}>
+              <span className="typcn typcn-edit"></span>
+            </Card.Footer.Item>
+            <Card.Footer.Item renderAs="a" style={{ color:'red' }}>
+              <span className="typcn typcn-delete-outline"></span>
+            </Card.Footer.Item>
+            <Modal show={editModalIsOpen} onClose={() => setEditModalIsOpen(false)} closeOnBlur closeOnEsc>
+              <EditPostForm setEditModalIsOpen={setEditModalIsOpen} post={props.post} updatePost={props.updatePost}/>
+            </Modal>
         </Card.Header>
         <Card.Content>
           <Media>
@@ -36,6 +48,7 @@ function Post(props) {
 
 Post.propTypes = {
   post: PropTypes.object.isRequired,
+  updatePost: PropTypes.func.isRequired,
 };
 
 export default Post;
