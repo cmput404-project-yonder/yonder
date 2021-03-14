@@ -24,8 +24,8 @@ def render_react(request):
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/', include("yonder.urls")),
-    url(r'^swagger/$', schema_view.with_ui('swagger',
-                                           cache_timeout=0), name='schema-swagger-ui'),
+    re_path('api/swagger/?', schema_view.with_ui('swagger',
+                                                 cache_timeout=0), name='schema-swagger-ui'),
     re_path(r"^$", render_react),
     re_path(r"^(?:.*)/?$", render_react),
 ]
