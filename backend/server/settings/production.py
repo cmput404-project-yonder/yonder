@@ -5,7 +5,7 @@ DEBUG = False
 
 DATABASES["default"]["ATOMIC_REQUESTS"] = True
 
-ALLOWED_HOSTS = ["glacial-hollows-36810.herokuapp.com",
+ALLOWED_HOSTS = ["glacial-hollows-36810.herokuapp.com", "yonder.moe",
                  "localhost", "127.0.0.1"]
 
 # Static files (CSS, JavaScript, Images)
