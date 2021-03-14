@@ -17,6 +17,5 @@ python3 manage.py migrate
 python3 -d manage.py runserver &
 
 # Frontend
-cd $start_dir/frontend
 ## Start frontend
 yarn start
