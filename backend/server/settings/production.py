@@ -27,13 +27,11 @@ TEMPLATES = [
     },
 ]
 
-FRONTEND_DIR = BASE_DIR.parent
-
 DEFAULT_FILE_STORAGE = "django.core.files.storage.FileSystemStorage"
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+STATICFILES_STORAGE = "whitenoise.storage.CompressedStaticFilesStorage"
 
 STATICFILES_DIRS = [
-    Path.joinpath(FRONTEND_DIR, 'build'),
+    Path.joinpath(BASE_DIR.parent, 'build'),
 ]
 
 STATIC_ROOT = Path.joinpath(BASE_DIR, 'staticfiles')
