@@ -26,12 +26,14 @@
       "generator": "secret"
     }
   },
-  "formation": {
-    "web": {
-      "quantity": 1,
-      "size": "free"
+  "formation": [
+    {
+      "web": {
+        "quantity": 1,
+        "size": "free"
+      }
     }
-  },
+  ],
   "addons": [
     {
       "plan": "heroku-postgresql:hobby-dev",
