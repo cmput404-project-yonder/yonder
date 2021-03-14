@@ -10,9 +10,9 @@ pkill -f yonder
 [ ! -d venv ] && python3 -m venv venv
 source venv/bin/activate
 ## Install backend requirements
-cd backend
 pip3 install -r requirements.txt
 ## Start backend
+cd backend
 python3 manage.py migrate
 python3 -d manage.py runserver &
 
