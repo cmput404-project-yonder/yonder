@@ -11,7 +11,7 @@ import Profile from "./components/profile/Profile";
 import NavigationBar from "./components/NavigationBar";
 
 import axios from "axios";
-axios.defaults.baseURL = "http://localhost:8000";
+axios.defaults.baseURL = "http://localhost:8000/api";
 
 class App extends Component {
   render() {
