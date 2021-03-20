@@ -1,7 +1,7 @@
 import re
 from django.contrib import auth
 from rest_framework.response import Response
-from rest_framework import mixins, status, generics, validators
+from rest_framework import mixins, status, generics, validators, viewsets
 from rest_framework.authtoken.models import Token
 from django.contrib.sites.shortcuts import get_current_site
 from django.shortcuts import get_object_or_404
@@ -76,7 +76,7 @@ class signup(generics.GenericAPIView):
         }, status=status.HTTP_201_CREATED)
 
 
-class author_detail(mixins.RetrieveModelMixin, mixins.DestroyModelMixin, mixins.UpdateModelMixin, generics.GenericAPIView):
+class author_detail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Author.objects.all()
     serializer_class = AuthorSerializer
 
@@ -124,7 +124,7 @@ class posts(generics.ListCreateAPIView):
         return self.create(request, *args, **kwargs)
 
 
-class post_detail(mixins.RetrieveModelMixin, mixins.DestroyModelMixin, mixins.UpdateModelMixin, generics.GenericAPIView):
+class post_detail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Post.objects.all()
     serializer_class = PostSerializer
 
@@ -154,7 +154,7 @@ class comments(generics.ListCreateAPIView):
         return self.create(request, *args, **kwargs)
 
 
-class comment_detail(mixins.RetrieveModelMixin, mixins.DestroyModelMixin, mixins.UpdateModelMixin, generics.GenericAPIView):
+class comment_detail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Comment.objects.all()
     serializer_class = CommentSerializer
 
@@ -170,31 +170,29 @@ class comment_detail(mixins.RetrieveModelMixin, mixins.DestroyModelMixin, mixins
     def delete(self, request, *args, **kwargs):
         return self.destroy(request, *args, **kwargs)
 
-# class AuthorFollower(generics.ListCreateAPIView):
-#     queryset = AuthorFollower.objects.all()
-#     serializer_class = CommentSerializer
+class author_followers(viewsets.ModelViewSet):
+    queryset = AuthorFollower.objects.all()
+    serializer_class = AuthorFollowerSerializer
 
-#     @swagger_auto_schema(tags=['comments'])
-#     def get(self, request, *args, **kwargs):
-#         return self.list(request, *args, **kwargs)
-
-#     @swagger_auto_schema(tags=['comments'])
-#     def post(self, request, *args, **kwargs):
-#         return self.create(request, *args, **kwargs)
+    @swagger_auto_schema(tags=['followers'])
+    def get(self, request, *args, **kwargs):
+        return self.list(request, *args, **kwargs)
 
 
-# class comment_detail(mixins.RetrieveModelMixin, mixins.DestroyModelMixin, mixins.UpdateModelMixin, generics.GenericAPIView):
-#     queryset = Comment.objects.all()
-#     serializer_class = CommentSerializer
+class author_followers_detail(viewsets.ModelViewSet):
+    queryset = AuthorFollower.objects.all()
+    serializer_class = AuthorFollowerSerializer
 
-#     @swagger_auto_schema(tags=['comments'])
-#     def get(self, request, *args, **kwargs):
-#         return self.retrieve(request, *args, **kwargs)
+    @swagger_auto_schema(tags=['followers'])
+    def get(self, request, *args, **kwargs):
+        return self.retrieve(request, *args, **kwargs)
 
-#     @swagger_auto_schema(tags=['comments'])
-#     def put(self, request, *args, **kwargs):
-#         return self.update(request, *args, **kwargs)
+    @swagger_auto_schema(tags=['followers'])
+    def put(self, request, *args, **kwargs):
+        return self.update(request, *args, **kwargs)
 
-#     @swagger_auto_schema(tags=['comments'])
-#     def delete(self, request, *args, **kwargs):
-#         return self.destroy(request, *args, **kwargs)
+    @swagger_auto_schema(tags=['followers'])
+    def delete(self, request, *args, **kwargs):
+        return self.destroy(request, *args, **kwargs)
+
+

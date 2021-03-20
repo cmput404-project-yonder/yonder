@@ -2,7 +2,8 @@ from django.urls import reverse
 from rest_framework import status
 from rest_framework.test import APITestCase
 from django.utils import timezone
-from .models import Author, User, Post
+from .models import Author, User, Post, AuthorFollower
+from .serializers import AuthorSerializer
 
 
 class AuthorAccountTests(APITestCase):
@@ -96,7 +97,7 @@ class PostTests(APITestCase):
             "title": "A post title about a post about web dev",
             "description": "This post discusses stuff -- brief",
             "contentType": "text/plain",
-            "content": "Þā wæs on burgum Bēowulf Scyldinga, lēof lēod-cyning, longe þrāge folcum gefrǣge (fæder ellor hwearf, aldor of earde), oð þæt him eft onwōc hēah Healfdene; hēold þenden lifde, gamol and gūð-rēow, glæde Scyldingas. Þǣm fēower bearn forð-gerīmed in worold wōcun, weoroda rǣswan, Heorogār and Hrōðgār and Hālga til; hȳrde ic, þat Elan cwēn Ongenþēowes wæs Heaðoscilfinges heals-gebedde. Þā wæs Hrōðgāre here-spēd gyfen, wīges weorð-mynd, þæt him his wine-māgas georne hȳrdon, oð þæt sēo geogoð gewēox, mago-driht micel. Him on mōd bearn, þæt heal-reced hātan wolde, medo-ærn micel men gewyrcean, þone yldo bearn ǣfre gefrūnon, and þǣr on innan eall gedǣlan geongum and ealdum, swylc him god sealde, būton folc-scare and feorum gumena. Þā ic wīde gefrægn weorc gebannan manigre mǣgðe geond þisne middan-geard, folc-stede frætwan. Him on fyrste gelomp ǣdre mid yldum, þæt hit wearð eal gearo, heal-ærna mǣst; scōp him Heort naman, sē þe his wordes geweald wīde hæfde. Hē bēot ne ālēh, bēagas dǣlde, sinc æt symle. Sele hlīfade hēah and horn-gēap: heaðo-wylma bād, lāðan līges; ne wæs hit lenge þā gēn þæt se ecg-hete āðum-swerian 85 æfter wæl-nīðe wæcnan scolde. Þā se ellen-gǣst earfoðlīce þrāge geþolode, sē þe in þȳstrum bād, þæt hē dōgora gehwām drēam gehȳrde hlūdne in healle; þǣr wæs hearpan swēg, swutol sang scopes. Sægde sē þe cūðe frum-sceaft fīra feorran reccan",
+            "content": "Þā wæs on burgum Bēowulf Scyldinga",
             "author": self.testAuthor,
             "categories": ["web", "tutorial"],
             "visibility": "PUBLIC",
@@ -123,8 +124,9 @@ class FollowerTests(APITestCase):
             "github": "https://github.com/cmput404-project-yonder/yonder",
             "host": "http://testserver.com"
         }
-        user1 = User.objects.create_user(**self.credentials)
-        self.author1 = Author.objects.create(**self.testAuthor, user=user1)
+        user1 = User.objects.create_user(**self.credentials1)
+        self.author1 = Author.objects.create(**self.testAuthor1, user=user1)
+        self.authorJSON1 = AuthorSerializer(instance=self.author1).data
 
         self.credentials2 = {
             'username': 'testUser2',
@@ -135,31 +137,32 @@ class FollowerTests(APITestCase):
             "github": "https://github.com/cmput404-project-yonder/yonder",
             "host": "http://testserver.com"
         }
-        user2 = User.objects.create_user(**self.credentials)
-        self.author2 = Author.objects.create(**self.testAuthor, user=user2)
+        user2 = User.objects.create_user(**self.credentials2)
+        self.author2 = Author.objects.create(**self.testAuthor2, user=user2)
+        self.authorJSON2 = AuthorSerializer(instance=self.author2).data
 
     def test_follow(self):
-        self.assertEqual(0, Author.objects.filter(self.author1).count())
+        self.assertEqual(0, Author.objects.get(pk=self.author1.id).followers.count())
 
         url = reverse('followers', args=[self.author1.id, self.author2.id])
-        response = self.client.put(url)
+        response = self.client.put(url, data={'author': self.authorJSON1, 'follower': self.authorJSON2}, format='json')
 
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
-        self.assertEqual(1, Author.objects.filter(self.author1).count())
+        self.assertEqual(1, AuthorFollower.objects.filter(author=self.author1.id).count())
 
     def test_get_followers(self):
-        url = reverse('followers', args=[self.author1.id])
+        url = reverse('follower_list', args=[self.author1.id])
         response = self.client.get(url)
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(1, Author.objects.filter(self.author1).count())
+        self.assertEqual(1, Author.objects.get(pk=self.author1.id).followers.count())
 
     def test_delete_follower(self):
         url = reverse('followers', args=[self.author1.id, self.author2.id])
         response = self.client.delete(url)
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(0, Author.objects.filter(self.author1).count())
+        self.assertEqual(0, Author.objects.get(pk=self.author1.id).followers.count())
 
     def test_check_not_follower(self):
         url = reverse('followers', args=[self.author1.id, self.author2.id])

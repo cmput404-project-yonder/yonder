@@ -21,6 +21,16 @@ urlpatterns = [
         views.comment_detail.as_view(),
         name="comment_detail"
     ),
+    path(
+        'author/<uuid:author_id>/followers',
+        views.author_followers.as_view({'get': 'list'}),
+        name="follower_list"
+    ),
+    path(
+        'author/<uuid:author_id>/followers/<uuid:pk>',
+        views.author_followers_detail.as_view({'get': 'retrieve', 'put': 'create', 'delete': 'destroy'}),
+        name="followers"
+    ),
     url('login', views.login.as_view(), name='login'),
     url('signup', views.signup.as_view(), name='signup'),
     url('logout', views.logout.as_view(), name='logout'),

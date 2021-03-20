@@ -95,9 +95,22 @@ class RegisterSerializer(serializers.ModelSerializer):
         return user
 
 class AuthorFollowerSerializer(serializers.ModelSerializer):
+    author = AuthorSerializer()
+    follower = AuthorSerializer()
+
     class Meta:
         model = AuthorFollower
-        fields = ('author', 'follower')
+        fields = ('author', 'follower', 'created_at')
+
+    def create(self, validated_data):
+        author_data = dict(validated_data.pop("author"))
+        author = Author.objects.get(displayName=author_data["displayName"])
+        follower_data = dict(validated_data.pop("follower"))
+        follower = Author.objects.get(displayName=follower_data["displayName"])
+
+        authorFollower = AuthorFollower.objects.create(**{'author': author, 'follower': follower})
+
+        return authorFollower
 
 class AuthorFriendSerializer(serializers.ModelSerializer):
     class Meta:
@@ -115,6 +128,9 @@ class RemoteAuthorSerializer(serializers.ModelSerializer):
         fields = ('id', 'host', 'displayName', 'github', 'remote_node')
 
 class RemoteAuthorFollowerSerializer(serializers.ModelSerializer):
+    author = AuthorSerializer(required=True)
+    remote_follower = RemoteAuthorSerializer(required=True)
+
     class Meta:
         model = RemoteAuthorFollower
         fields = ('author', 'remote_follower')
