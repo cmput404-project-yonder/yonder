@@ -169,3 +169,32 @@ class comment_detail(mixins.RetrieveModelMixin, mixins.DestroyModelMixin, mixins
     @swagger_auto_schema(tags=['comments'])
     def delete(self, request, *args, **kwargs):
         return self.destroy(request, *args, **kwargs)
+
+# class AuthorFollower(generics.ListCreateAPIView):
+#     queryset = AuthorFollower.objects.all()
+#     serializer_class = CommentSerializer
+
+#     @swagger_auto_schema(tags=['comments'])
+#     def get(self, request, *args, **kwargs):
+#         return self.list(request, *args, **kwargs)
+
+#     @swagger_auto_schema(tags=['comments'])
+#     def post(self, request, *args, **kwargs):
+#         return self.create(request, *args, **kwargs)
+
+
+# class comment_detail(mixins.RetrieveModelMixin, mixins.DestroyModelMixin, mixins.UpdateModelMixin, generics.GenericAPIView):
+#     queryset = Comment.objects.all()
+#     serializer_class = CommentSerializer
+
+#     @swagger_auto_schema(tags=['comments'])
+#     def get(self, request, *args, **kwargs):
+#         return self.retrieve(request, *args, **kwargs)
+
+#     @swagger_auto_schema(tags=['comments'])
+#     def put(self, request, *args, **kwargs):
+#         return self.update(request, *args, **kwargs)
+
+#     @swagger_auto_schema(tags=['comments'])
+#     def delete(self, request, *args, **kwargs):
+#         return self.destroy(request, *args, **kwargs)

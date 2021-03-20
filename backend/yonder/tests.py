@@ -92,11 +92,6 @@ class PostTests(APITestCase):
         user = User.objects.create_user(**self.credentials)
         self.author = Author.objects.create(**self.testAuthor, user=user)
 
-        # url = reverse('login')
-        # response = self.client.post(
-        #     url, data=self.credentials, format='json')
-        # print(response.json())
-
         self.post = {
             "title": "A post title about a post about web dev",
             "description": "This post discusses stuff -- brief",
@@ -116,3 +111,72 @@ class PostTests(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertIsNotNone(Post.objects.get(
             title=self.post["title"]))
+
+class FollowerTests(APITestCase):
+    def setUp(self):
+        self.credentials1 = {
+            'username': 'testUser1',
+            'password': 'testPassword1'
+        }
+        self.testAuthor1 = {
+            "displayName": "testAuthor1",
+            "github": "https://github.com/cmput404-project-yonder/yonder",
+            "host": "http://testserver.com"
+        }
+        user1 = User.objects.create_user(**self.credentials)
+        self.author1 = Author.objects.create(**self.testAuthor, user=user1)
+
+        self.credentials2 = {
+            'username': 'testUser2',
+            'password': 'testPassword2'
+        }
+        self.testAuthor2 = {
+            "displayName": "testAuthor2",
+            "github": "https://github.com/cmput404-project-yonder/yonder",
+            "host": "http://testserver.com"
+        }
+        user2 = User.objects.create_user(**self.credentials)
+        self.author2 = Author.objects.create(**self.testAuthor, user=user2)
+
+    def test_follow(self):
+        self.assertEqual(0, Author.objects.filter(self.author1).count())
+
+        url = reverse('followers', args=[self.author1.id, self.author2.id])
+        response = self.client.put(url)
+
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(1, Author.objects.filter(self.author1).count())
+
+    def test_get_followers(self):
+        url = reverse('followers', args=[self.author1.id])
+        response = self.client.get(url)
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(1, Author.objects.filter(self.author1).count())
+
+    def test_delete_follower(self):
+        url = reverse('followers', args=[self.author1.id, self.author2.id])
+        response = self.client.delete(url)
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(0, Author.objects.filter(self.author1).count())
+
+    def test_check_not_follower(self):
+        url = reverse('followers', args=[self.author1.id, self.author2.id])
+        response = self.client.get(url)
+
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+
+    def test_check_is_follower(self):
+        # Setup a follow
+        url = reverse('followers', args=[self.author1.id, self.author2.id])
+        response = self.client.put(url)
+
+        # Get follower
+        url = reverse('followers', args=[self.author1.id, self.author2.id])
+        response = self.client.get(url)
+        follower_data = response.json()
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(follower_data["displayName"], self.author2.displayName)
+

@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Post, Author, Comment
+from .models import Post, Author, Comment, AuthorFollower, AuthorFriend, RemoteNode, RemoteAuthor, RemoteAuthorFollower, RemoteAuthorFriend
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate
 
@@ -93,3 +93,33 @@ class RegisterSerializer(serializers.ModelSerializer):
         user.save()
 
         return user
+
+class AuthorFollowerSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = AuthorFollower
+        fields = ('author', 'follower')
+
+class AuthorFriendSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = AuthorFriend
+        fields = ('author', 'friend')
+
+class RemoteNodeSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = RemoteNode
+        fields = ('host')
+
+class RemoteAuthorSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = RemoteAuthor
+        fields = ('id', 'host', 'displayName', 'github', 'remote_node')
+
+class RemoteAuthorFollowerSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = RemoteAuthorFollower
+        fields = ('author', 'remote_follower')
+
+class RemoteAuthorFriendSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = RemoteAuthorFriend
+        fields = ('author', 'remote_friend')
