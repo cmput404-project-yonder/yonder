@@ -67,6 +67,10 @@ class signup(generics.GenericAPIView):
         author = author_serializer.save(user=user)
         author.save()
 
+        inbox_serializer = InboxSerializer(data={"author": author.id})
+        inbox_serializer.is_valid(raise_exception=True)
+        inbox_serializer.save()
+
         token, created = Token.objects.get_or_create(user=user)
 
         return Response({
@@ -169,3 +173,33 @@ class comment_detail(mixins.RetrieveModelMixin, mixins.DestroyModelMixin, mixins
     @swagger_auto_schema(tags=['comments'])
     def delete(self, request, *args, **kwargs):
         return self.destroy(request, *args, **kwargs)
+
+class inbox(generics.ListCreateAPIView):
+
+    @swagger_auto_schema(tags=['inbox'])
+    def get(self, request, *args, **kwargs):
+        # if not request.user.is_authenticated:
+            # return Response(status=status.HTTP_401_UNAUTHORIZED)
+
+        inbox = get_object_or_404(Inbox.objects.all(), author_id=kwargs["author_id"])
+        author = get_object_or_404(Author.objects.all(), id=kwargs["author_id"])
+        data = {
+            "type": "inbox",
+            "author": author.get_absolute_url(),
+            "items": inbox.items
+        }
+        return Response(data, status=status.HTTP_200_OK)
+
+    @swagger_auto_schema(tags=['inbox'])
+    def post(self, request, *args, **kwargs):
+        inbox = get_object_or_404(Inbox.objects.all(), author_id=kwargs["author_id"])
+        inbox.items.append(request.data)
+        inbox.save()            
+        return Response(status=status.HTTP_200_OK)
+
+    @swagger_auto_schema(tags=['inbox'])
+    def delete(self, request, *args, **kwargs):
+        inbox = get_object_or_404(Inbox.objects.all(), author_id=kwargs["author_id"])
+        inbox.items.clear()
+        inbox.save()
+        return Response(status=status.HTTP_204_NO_CONTENT)
