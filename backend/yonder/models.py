@@ -77,29 +77,15 @@ class Comment(models.Model):
 
 class AuthorFollower(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
-    author = models.ForeignKey(Author, on_delete=models.CASCADE, related_name="following")
-    follower = models.ForeignKey(Author, on_delete=models.CASCADE, related_name="followers")
+    author = models.ForeignKey(Author, on_delete=models.CASCADE)
+    follower = models.JSONField()
 
 class AuthorFriend(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     author = models.ForeignKey(Author, on_delete=models.CASCADE)
-    friend = models.ForeignKey(Author, on_delete=models.CASCADE, related_name="friend")
+    friend = models.JSONField()
 
 class RemoteNode(models.Model):
     id = models.UUIDField(unique=True, default=uuid.uuid4,
                           editable=False, primary_key=True)
     host = models.URLField(unique=True)
-
-class RemoteAuthor(Author):
-    user = None
-    remote_node = models.ForeignKey(RemoteNode, on_delete=models.CASCADE)
-
-class RemoteAuthorFollower(models.Model):
-    created_at = models.DateTimeField(auto_now_add=True)
-    author = models.ForeignKey(Author, on_delete=models.CASCADE, related_name="remote_following")
-    remote_follower = models.ForeignKey(RemoteAuthor, on_delete=models.CASCADE, related_name="remote_followers")
-
-class RemoteAuthorFriend(models.Model):
-    created_at = models.DateTimeField(auto_now_add=True)
-    author = models.ForeignKey(Author, on_delete=models.CASCADE)
-    remote_friend = models.ForeignKey(RemoteAuthor, on_delete=models.CASCADE, related_name="remote_friends")
