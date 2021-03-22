@@ -7,6 +7,8 @@ from django.contrib.sites.shortcuts import get_current_site
 from django.shortcuts import get_object_or_404
 from rest_framework.serializers import Serializer
 from drf_yasg.utils import swagger_auto_schema
+from django.core.paginator import Paginator
+from django.urls import reverse
 
 
 from .models import Post, Author, Comment
@@ -174,32 +176,39 @@ class comment_detail(mixins.RetrieveModelMixin, mixins.DestroyModelMixin, mixins
     def delete(self, request, *args, **kwargs):
         return self.destroy(request, *args, **kwargs)
 
-class inbox(generics.ListCreateAPIView):
+class inbox(generics.GenericAPIView):
 
     @swagger_auto_schema(tags=['inbox'])
     def get(self, request, *args, **kwargs):
         # if not request.user.is_authenticated:
             # return Response(status=status.HTTP_401_UNAUTHORIZED)
 
-        inbox = get_object_or_404(Inbox.objects.all(), author_id=kwargs["author_id"])
-        author = get_object_or_404(Author.objects.all(), id=kwargs["author_id"])
+        inbox = get_object_or_404(Inbox, author_id=kwargs["author_id"])
+        author = get_object_or_404(Author, id=kwargs["author_id"])
+
+        page_number = 1 if 'page' not in request.query_params else request.query_params.get('page')
+        page_size = 5 if 'size' not in request.query_params else request.query_params.get('size')
+        paginator = Paginator(inbox.items, page_size)
+        page = paginator.page(page_number)
+        
         data = {
             "type": "inbox",
             "author": author.get_absolute_url(),
-            "items": inbox.items
+            "items": page.object_list
         }
-        return Response(data, status=status.HTTP_200_OK)
 
+        return Response(data, status=status.HTTP_200_OK)
+    
     @swagger_auto_schema(tags=['inbox'])
     def post(self, request, *args, **kwargs):
-        inbox = get_object_or_404(Inbox.objects.all(), author_id=kwargs["author_id"])
+        inbox = get_object_or_404(Inbox, author_id=kwargs["author_id"])
         inbox.items.append(request.data)
         inbox.save()            
-        return Response(status=status.HTTP_200_OK)
+        return Response(status=status.HTTP_201_CREATED)
 
     @swagger_auto_schema(tags=['inbox'])
     def delete(self, request, *args, **kwargs):
-        inbox = get_object_or_404(Inbox.objects.all(), author_id=kwargs["author_id"])
+        inbox = get_object_or_404(Inbox, author_id=kwargs["author_id"])
         inbox.items.clear()
         inbox.save()
         return Response(status=status.HTTP_204_NO_CONTENT)

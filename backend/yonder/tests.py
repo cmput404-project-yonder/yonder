@@ -169,7 +169,7 @@ class InboxTests(APITestCase):
     def test_post_inbox(self):
         url = reverse('inbox', args=[self.author.id])
         response = self.client.post(url, content_type='application/json', data=self.data_json)
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
         author = Author.objects.get(displayName=self.testAuthor["displayName"])
         inbox = Inbox.objects.get(author_id=author.id)
@@ -179,7 +179,7 @@ class InboxTests(APITestCase):
     def test_delete_inbox(self):
         url = reverse('inbox', args=[self.author.id])
         response = self.client.post(url, content_type='application/json', data=self.data_json)
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
         author = Author.objects.get(displayName=self.testAuthor["displayName"])
         inbox = Inbox.objects.get(author_id=author.id)
