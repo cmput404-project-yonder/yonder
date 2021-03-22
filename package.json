@@ -8,6 +8,7 @@
     "@testing-library/user-event": "^12.1.10",
     "axios": "^0.21.0",
     "bulma-pageloader": "^0.3.0",
+    "bulma-switch": "^2.0.0",
     "connected-react-router": "^6.8.0",
     "react": "^17.0.1",
     "react-bulma-components": "3.4.0",

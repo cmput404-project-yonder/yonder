@@ -34,6 +34,30 @@ class EditPostForm extends Component {
     this.reactTags = React.createRef();
   }
 
+  handleVisibility = () => {
+    if (this.state.visibility === "PUBLIC") {
+      this.setState({
+        visibility: "PRIVATE",
+      });
+      console.log(this.state.visibility);
+    }
+    else if (this.state.visibility === "PRIVATE") {
+      this.setState({
+        visibility: "PUBLIC",
+      });
+      console.log(this.state.visibility);
+    }
+  }
+  
+  visibilityBool = () => {
+    if (this.state.visibility === "PUBLIC") {
+      return false;
+    }
+    else if (this.state.visibility === "PRIVATE") {
+      return true;
+    }
+  }
+
   handleUnlisted = () => {
     this.setState({
       unlisted: !this.state.unlisted,
@@ -139,11 +163,17 @@ class EditPostForm extends Component {
     return (
       <Card style={{ borderRadius: "10px", width: "540px" }}>
         <Form.Field style={{ margin: "0 1em", padding: "10px" }}>
-          <label className="checkbox" style={{ fontWeight: "bold", float:"right", paddingTop:10 }}>
-            <input type="checkbox" defaultChecked={this.state.unlisted} onChange={this.handleUnlisted} />
-              Unlisted
-          </label>
-          
+          <div style={{ fontWeight: "bold", float:"right", paddingTop:10 }}>
+            <label className="checkbox">
+              <input type="checkbox" defaultChecked={this.state.unlisted} onChange={this.handleUnlisted} />
+                Unlisted
+            </label><br></br>
+            <div style={{ fontWeight: "bold", float:"right", paddingTop:10 }} className="field" >
+              <label htmlFor="switchThinColorDefault">Public </label>
+              <input id="switchThinColorDefault" className="switch is-thin" type="checkbox" name="switchThinColorDefault" defaultChecked={this.visibilityBool()} onChange={this.handleVisibility} />
+              <label htmlFor="switchThinColorDefault">Private</label>
+            </div>
+          </div>
           <Heading size={4}>Edit a Post</Heading>
           <Form.Label>Title:</Form.Label>
           <Form.Control>
