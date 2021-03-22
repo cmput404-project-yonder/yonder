@@ -8,8 +8,6 @@ from django.shortcuts import get_object_or_404
 from rest_framework.serializers import Serializer
 from drf_yasg.utils import swagger_auto_schema
 from django.core.paginator import Paginator
-from django.urls import reverse
-
 
 from .models import Post, Author, Comment
 from .serializers import *
