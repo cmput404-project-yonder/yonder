@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import ReactMde from "react-mde";
-import { Form, Button, Panel, Card, Heading } from "react-bulma-components";
+import { Icon, Form, Button, Panel, Card, Heading } from "react-bulma-components";
 import Markdown from "react-markdown";
 import ReactTags from "react-tag-autocomplete";
 import "./react-tags.css";
@@ -26,12 +26,32 @@ class EditPostForm extends Component {
       unlisted: this.props.post.unlisted,
       visibility: this.props.post.visibility,
       categories: categoryTags,
-      selectedTab: "text",
+      selectedTab: this.props.post.selectedTab,
       markdownTab: "write",
     };
     console.log(this.state);
 
     this.reactTags = React.createRef();
+  }
+
+  handleFileSelected = event => {
+    let file = event.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = this.handleReaderLoaded.bind(this);
+      reader.readAsBinaryString(file);
+    }
+    this.setState({
+      imageObj: file,
+      image: URL.createObjectURL(event.target.files[0]),
+    })
+  }
+
+  handleReaderLoaded = (readerEvt) => {
+    let binaryString = readerEvt.target.result;
+    this.setState({
+      content: btoa(binaryString),
+    })
   }
 
   handleVisibility = () => {
@@ -81,9 +101,13 @@ class EditPostForm extends Component {
           return "text/plain";
         case "markdown":
           return "text/markdown";
-        case "image":
-          //TODO handle image mime type
-          break;
+          case "image":
+            switch (this.state.imageObj.type) {
+              case "image/png":
+                return "image/png;base64";
+              case "image/jpeg":
+                return "image/jpeg;base64";
+            }
         default:
           break;
       }
@@ -159,6 +183,15 @@ class EditPostForm extends Component {
         />
       );
     };
+
+    const imageUploader = () => {
+      return (
+        <Form.Control>
+          <Form.InputFile icon={<Icon icon="upload" />} accept={'image/*'} boxed placeholder="Textarea" style={{ left:`30%`, right:`30%`, marginBottom:`3%` }} onChange={this.handleFileSelected} />
+          <img src={ "image/png" ? `data:image/png;base64,${this.state.content}` : `data:image/jpeg;base64,${this.state.content}` } style={{ width: `200px`, display: "block", marginLeft: "auto", marginRight: "auto" }} />
+        </Form.Control>
+      )
+    }
 
     return (
       <Card style={{ borderRadius: "10px", width: "540px" }}>
@@ -248,6 +281,7 @@ class EditPostForm extends Component {
           <Form.Control style={{ textAlign: "right" }}>
             {this.state.selectedTab === "text" ? textEditor() : null}
             {this.state.selectedTab === "markdown" ? markdownEditor() : null}
+            {this.state.selectedTab === "image" ? imageUploader() : null}
             <Button color="danger" style={{ float:'left' }} onClick={this.removePost}>
               Delete
             </Button>
