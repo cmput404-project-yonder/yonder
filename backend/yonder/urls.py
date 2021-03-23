@@ -21,6 +21,11 @@ urlpatterns = [
         views.comment_detail.as_view(),
         name="comment_detail"
     ),
+    path(
+        'service/author/<uuid:author_id>/inbox',
+        views.inbox.as_view(),
+        name="inbox"
+    ),
     url('login', views.login.as_view(), name='login'),
     url('signup', views.signup.as_view(), name='signup'),
     url('logout', views.logout.as_view(), name='logout'),
