@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import ReactMde from "react-mde";
-import { Form, Button, Panel, Card, Heading } from "react-bulma-components";
+import { Icon, Form, Button, Panel, Card, Heading } from "react-bulma-components";
 import Switch from "bulma-switch";
 import Markdown from "react-markdown";
 import ReactTags from "react-tag-autocomplete";
@@ -24,9 +24,35 @@ class PostForm extends Component {
       categories: [],
       selectedTab: "text",
       markdownTab: "write",
+      imageObj: "",
     };
 
     this.reactTags = React.createRef();
+  }
+
+  handleFileSelected = event => {
+    let file = event.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = this.handleReaderLoaded.bind(this);
+      reader.readAsBinaryString(file);
+    }
+    this.setState({
+      imageObj: URL.createObjectURL(event.target.files[0]),
+    })
+  }
+
+  handleReaderLoaded = (readerEvt) => {
+    let binaryString = readerEvt.target.result;
+    this.setState({
+      content: btoa(binaryString),
+    })
+  }
+
+  getImageType = () => {
+    let imageType = this.state.imageObj.type;
+    console.log(imageType);
+    return imageType;
   }
 
   handleVisibility = () => {
@@ -66,8 +92,15 @@ class PostForm extends Component {
         case "markdown":
           return "text/markdown";
         case "image":
-          //TODO handle image mime type
-          break;
+          if (this.getImageType() === "image/png") {
+            return "image/png;base64";
+          }
+          else if (this.getImageType() === "image/jpeg") {
+            return "image/jpeg;base64";
+          }
+          else {
+            break;
+          }
         default:
           break;
       }
@@ -84,6 +117,7 @@ class PostForm extends Component {
     };
     this.props.createPost(newPost);
     this.props.setModalIsOpen(false);
+    console.log(this.state);
     
   }
 
@@ -137,11 +171,20 @@ class PostForm extends Component {
       );
     };
 
+    const imageUploader = () => {
+      return (
+        <Form.Control>
+          <Form.InputFile icon={<Icon icon="upload" />} accept={this.getImageType} boxed placeholder="Textarea" style={{ left:`30%`, right:`30%`, marginBottom:`3%` }} onChange={this.handleFileSelected} />
+          <img src={this.state.imageObj} style={{ width: `200px`, display: "block", marginLeft: "auto", marginRight: "auto" }} />
+        </Form.Control>
+      )
+    }
+
     return (
       <Card style={{ borderRadius: "10px", width: "540px" }}>
         <Form.Field style={{ margin: "0 1em", padding: "10px" }}>
           <div style={{ fontWeight: "bold", float:"right", paddingTop:10 }}>
-            <label className="checkbox" >
+            <label className="checkbox" style={{ float:"right" }}>
               <input type="checkbox" defaultChecked={this.state.unlisted} onChange={this.handleUnlisted} />
                 Unlisted
             </label><br></br>
@@ -225,6 +268,7 @@ class PostForm extends Component {
           <Form.Control style={{ textAlign: "right" }}>
             {this.state.selectedTab === "text" ? textEditor() : null}
             {this.state.selectedTab === "markdown" ? markdownEditor() : null}
+            {this.state.selectedTab === "image" ? imageUploader() : null}
             <Button color="danger" onClick={() => this.props.setModalIsOpen(false)}>
               Cancel
             </Button>
