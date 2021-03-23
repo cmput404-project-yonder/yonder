@@ -32,6 +32,11 @@ urlpatterns = [
         views.author_followers_detail.as_view({'get': 'retrieve', 'put': 'create', 'delete': 'destroy'}),
         name="followers"
     ),
+    path (
+        'service/author/<uuid:author_id>/inbox',
+        views.inbox.as_view(),
+        name="inbox"
+    ),
     url('login', views.login.as_view(), name='login'),
     url('signup', views.signup.as_view(), name='signup'),
     url('logout', views.logout.as_view(), name='logout'),

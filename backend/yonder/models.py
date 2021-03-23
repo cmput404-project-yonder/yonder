@@ -89,3 +89,9 @@ class RemoteNode(models.Model):
     id = models.UUIDField(unique=True, default=uuid.uuid4,
                           editable=False, primary_key=True)
     host = models.URLField(unique=True)
+    
+class Inbox(models.Model):
+    id = models.UUIDField(unique=True, default=uuid.uuid4,
+                          editable=False, primary_key=True)
+    author = models.ForeignKey(Author, on_delete=models.CASCADE)
+    items = ArrayField(models.JSONField(), default=list)
