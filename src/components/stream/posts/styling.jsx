@@ -6,7 +6,7 @@ var color = {
     buttonGreen:"#99D4B4",
     buttonRed: "#DD7272",
     postIcon: "#8fc9eb",
-    backgroundGrey: "#fbfbfb",
+    backgroundGrey: "#fefefe",
     backgroundCream: "#F9F5EF",
 }
 

@@ -49,7 +49,7 @@ var cardStyle = {
   width: "450pt",
   height: "auto",
   boxShadow: "0pt 0pt 12pt #AAAAAA",
-  backgroundColor: color.backgroundGrey,
+  backgroundColor: color.backgroundCream,
 }
 
 var panelStyle = {
@@ -77,15 +77,15 @@ var submittPanelStyle = {
 }
 
 var formContainerStyle = {
-  // boxShadow: "0pt 0pt 3pt #B1B1B1",
-  // borderRadius: "3pt",
-  marginLeft: "0.8em",
-  marginRight: "0.8em",
-  paddingTop: "0.1em",
-  paddingBottom: "0.1em",
+  boxShadow: "0pt 0pt 3pt #B1B1B1",
+  borderRadius: "8pt",
+  marginLeft: "-1.2em",
+  marginRight: "-1.2em",
+  paddingTop: "1em",
+  paddingBottom: "1em",
   paddingRight: "1.5em",
   paddingLeft: "1.5em",
-  // backgroundColor: "white",
+  backgroundColor: color.backgroundGrey,
 }
 
 var labelStyle = {
@@ -297,7 +297,6 @@ class PostForm extends Component {
           <Container style={postIconStyle.style}>{postIcons()}</Container>
         </Container>
         <Container style={formContainerStyle}>
-          <Dividor style={dividorStyle}/>
           <Form.Field>
             <Form.Label style={labelStyle}>Title</Form.Label>
             <Form.Control>
@@ -346,7 +345,6 @@ class PostForm extends Component {
               {this.state.selectedTab === "markdown" ? markdownEditor() : null}
             </Form.Control>
           </Form.Field>
-          
           <Dividor style={dividorStyle}/>
           <SelectionPanel/>
           <Dividor style={dividorStyle}/>
