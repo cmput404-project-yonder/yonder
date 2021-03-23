@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import { Modal, Button } from "react-bulma-components";
 
 import PostForm from "./PostForm";
+import "./modal.css";
+
 
 function PopupModal(props) {
   const [modalIsOpen, setModalIsOpen] = useState(false);

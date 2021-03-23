@@ -1,9 +1,128 @@
 import React, { Component } from "react";
 import ReactMde from "react-mde";
-import { Form, Button, Panel, Card, Heading } from "react-bulma-components";
+import { Form, Button, Panel, Card, Heading, Container } from "react-bulma-components";
 import Markdown from "react-markdown";
 import ReactTags from "react-tag-autocomplete";
 import "./react-tags.css";
+
+import CancelButton from "./CancelButton";
+import ConfirmButton from "./ConfirmButton";
+import CheckBox from "./CheckBox";
+
+
+import { TextIcon, ImageIcon, MarkdownIcon } from "./postSVG";
+import { color } from "./styling";
+import PostTab from "./PostTab";
+import Dividor from "./Dividor"
+
+
+var checkBoxLabelStyle = {
+  paddingRight: "0.5em",
+  fontWeight: "400",
+  fontSize: "1.1em",
+  color: color.baseLightGrey,
+}
+
+var checkBoxStyle = {
+  paddingTop: "1.5em",
+  paddingLeft: "1.8em",
+  display: "flex",
+  float: "left",
+  justifyContent: "flex-start"
+}
+
+var checkMarkStyle = {
+  paddingTop: "0.2em",
+  fill: color.baseRed,
+}
+
+// used for display info like @author or header
+// empty for now
+var createPostHeaderStype = {
+  display: "flex",
+  padding: "0.5em",
+}
+
+
+var cardStyle = {
+  borderRadius: "8pt",
+  width: "450pt",
+  height: "auto",
+  boxShadow: "0pt 0pt 12pt #AAAAAA",
+  backgroundColor: color.backgroundGrey,
+}
+
+var panelStyle = {
+  display: "flex",
+  justifyContent: "between",
+  textAlign: "center",
+  paddingTop: "0.2em",
+  paddingBottom: "0em",
+  fontSize: "1.35em",
+  fontWeight: "350",
+  paddingLeft: "1em",
+  paddingRight: "1em",
+}
+
+var tabStyle = {
+  width: "100%",
+}
+
+var submittPanelStyle = {
+  margin: "0.5em",
+  marginBottom: "0em",
+  marginTop: "0em",
+  paddingRight: "1.5em",
+  paddingLeft: "1.5em",
+}
+
+var formContainerStyle = {
+  // boxShadow: "0pt 0pt 3pt #B1B1B1",
+  // borderRadius: "3pt",
+  marginLeft: "0.8em",
+  marginRight: "0.8em",
+  paddingTop: "0.1em",
+  paddingBottom: "0.1em",
+  paddingRight: "1.5em",
+  paddingLeft: "1.5em",
+  // backgroundColor: "white",
+}
+
+var labelStyle = {
+  paddingTop: "0.1em",
+  paddingLeft: "0.5em",
+  textAlign: "left",
+  fontWeight: "400",
+  color: color.baseLightGrey,
+}
+
+var dividorStyle = {
+  marginTop: "1em",
+  marginBottom: "0.6em",
+}
+
+var formTitleStyle = {
+  overflowY: "hidden",
+  whiteSpace: "nowrap",
+  resize: "none",
+  height: "35pt",
+}
+
+var buttonLayoutStyle = {
+  display: "flex",
+  width: "0em",
+  float: "right",
+  marginRight: "10em",       // the width of two button.
+}
+
+var postIconStyle = {
+  scale: "70",
+  style: {
+    padding: "1em",
+    fill: color.postIcon,
+  }
+}
+
 
 class PostForm extends Component {
   constructor(props) {
@@ -120,95 +239,119 @@ class PostForm extends Component {
       );
     };
 
+    const postIcons = () => {
+      switch (this.state.selectedTab) {
+        case "text":
+          return (<TextIcon svgScale={postIconStyle.scale} />)
+        case "image":
+          return (<ImageIcon svgScale={postIconStyle.scale} />)
+        case "markdown":
+          return (<MarkdownIcon svgScale={postIconStyle.scale} />)
+      }
+    }
+
+    const SelectionPanel = () => {
+      // custom selection tab
+      // text, markdown, image
+      return (
+        <Container style={panelStyle}>
+          <PostTab style={tabStyle}text="Text" active={this.state.selectedTab === "text"} action={() => this.selectTab("text")}/>
+          <PostTab style={tabStyle} text="Markdown" active={this.state.selectedTab === "markdown"} action={() => this.selectTab("markdown")}/>
+          <PostTab style={tabStyle} text="Image"active={this.state.selectedTab === "image"} action={() => this.selectTab("image")}/>
+        </Container>  
+      )
+    }
+
+    const UnlistCheckBox = () => {
+      return (
+        <Container style={checkBoxStyle}>
+          <p style={checkBoxLabelStyle}>Unlisted</p>
+          <CheckBox style={checkMarkStyle} active={this.state.unlisted} action={this.handleUnlisted}/>
+        </Container>
+      )
+
+    }
+
+    const PostFormButtonPanel = () => {
+      // Confirm and back button used to submit form
+      return (
+        <Container style={buttonLayoutStyle}>
+          <CancelButton action={() => this.props.setModalIsOpen(false)}/>
+          <ConfirmButton action={this.addPost}/>
+        </Container>
+      )
+    }
+
+    const PostSubmitPanel = () => {
+      return (
+        <Container style={submittPanelStyle}>        
+          <UnlistCheckBox/>
+          <PostFormButtonPanel/>
+        </Container>
+      )
+    }
+
     return (
-      <Card style={{ borderRadius: "10px", width: "540px" }}>
-        <Form.Field style={{ margin: "0 1em", padding: "10px" }}>
-          <label className="checkbox" style={{ fontWeight: "bold", float:"right", paddingTop:10 }}>
-            <input type="checkbox" defaultChecked={this.state.unlisted} onChange={this.handleUnlisted} />
-              Unlisted
-          </label>
-          <Heading size={4}>Create a Post</Heading>
-          <Form.Label>Title:</Form.Label>
-          <Form.Control>
-            <Form.Textarea
-              onKeyPress={(e) => {
-                if (e.key === "Enter") e.preventDefault();
-              }}
-              maxLength="30"
-              cols={1}
-              name="title"
-              value={this.state.title}
-              style={{
-                overflowY: "hidden",
-                whiteSpace: "nowrap",
-                resize: "none",
-                height: `50px`,
-                padding: `10px`,
-              }}
-              onChange={this.onChange}
-            />
-          </Form.Control>
-        </Form.Field>
-        <Form.Field style={{ margin: "0 1em", padding: "10px" }}>
-          <Form.Label>Description:</Form.Label>
-          <Form.Control>
-            <Form.Textarea
-              onKeyPress={(e) => {
-                if (e.key === "Enter") e.preventDefault();
-              }}
-              maxLength="30"
-              cols={1}
-              name="description"
-              value={this.state.description}
-              style={{
-                overflowY: "hidden",
-                whiteSpace: "nowrap",
-                resize: "none",
-                height: `50px`,
-                padding: `10px`,
-              }}
-              onChange={this.onChange}
-            />
-          </Form.Control>
-        </Form.Field>
-
-        <Form.Field style={{ margin: "0 1em", padding: "10px" }}>
-          <Form.Label>Catgeories:</Form.Label>
-          <ReactTags
-            allowNew={true}
-            ref={this.reactTags}
-            tags={this.state.categories}
-            onDelete={this.onDelete}
-            onAddition={this.onAddition}
-          />
-        </Form.Field>
-
-        <Form.Field style={{ margin: "0 1em", padding: "10px" }}>
-          <Form.Label>Content:</Form.Label>
-          <Panel className="post-editor">
-            <Panel.Tabs style={{ marginBottom: `-1em` }}>
-              <Panel.Tabs.Tab active={this.state.selectedTab === "text"} onClick={() => this.selectTab("text")}>
-                Text
-              </Panel.Tabs.Tab>
-              <Panel.Tabs.Tab active={this.state.selectedTab === "markdown"} onClick={() => this.selectTab("markdown")}>
-                Markdown
-              </Panel.Tabs.Tab>
-              <Panel.Tabs.Tab active={this.state.selectedTab === "image"} onClick={() => this.selectTab("image")}>
-                Image
-              </Panel.Tabs.Tab>
-            </Panel.Tabs>
-          </Panel>
-          <Form.Control style={{ textAlign: "right" }}>
-            {this.state.selectedTab === "text" ? textEditor() : null}
-            {this.state.selectedTab === "markdown" ? markdownEditor() : null}
-            <Button color="danger" onClick={() => this.props.setModalIsOpen(false)}>
-              Cancel
-            </Button>
-            <Button color="success" onClick={this.addPost}>
-              Post
-            </Button>
-          </Form.Control>
-        </Form.Field>
+      <Card style={cardStyle}>
+        <Container style={createPostHeaderStype}>
+          <Container style={postIconStyle.style}>{postIcons()}</Container>
+        </Container>
+        <Container style={formContainerStyle}>
+          <Dividor style={dividorStyle}/>
+          <Form.Field>
+            <Form.Label style={labelStyle}>Title</Form.Label>
+            <Form.Control>
+              <Form.Textarea
+                  onKeyPress={(e) => {if (e.key === "Enter") e.preventDefault();}}
+                  maxLength="30"
+                  cols={1}
+                  name="title"
+                  value={this.state.title}
+                  style={formTitleStyle}
+                  onChange={this.onChange}
+              />
+            </Form.Control>
+          </Form.Field>
+          <Form.Field>
+            <Form.Label style={labelStyle}>Description</Form.Label>
+            <Form.Control>
+              <Form.Textarea
+                onKeyPress={(e) => {if (e.key === "Enter") e.preventDefault();}}
+                maxLength="30"
+                cols={1}
+                name="description"
+                value={this.state.description}
+                style={formTitleStyle}
+                onChange={this.onChange}
+              />
+            </Form.Control>
+          </Form.Field>
+          <Form.Field>
+            <Form.Label style={labelStyle}>Categories</Form.Label>
+            <Form.Control>
+              <ReactTags
+                label=""
+                allowNew={true}
+                ref={this.reactTags}
+                tags={this.state.categories}
+                onDelete={this.onDelete}
+                onAddition={this.onAddition}
+              />
+            </Form.Control>
+          </Form.Field>
+          <Form.Field>
+            <Form.Label style={labelStyle}>Content</Form.Label>
+            <Form.Control>
+              {this.state.selectedTab === "text" ? textEditor() : null}
+              {this.state.selectedTab === "markdown" ? markdownEditor() : null}
+            </Form.Control>
+          </Form.Field>
+          
+          <Dividor style={dividorStyle}/>
+          <SelectionPanel/>
+          <Dividor style={dividorStyle}/>
+        </Container>
+        <PostSubmitPanel/>
       </Card>
     );
   }
