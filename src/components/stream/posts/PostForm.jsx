@@ -25,6 +25,7 @@ class PostForm extends Component {
       selectedTab: "text",
       markdownTab: "write",
       imageObj: "",
+      image: "",
     };
 
     this.reactTags = React.createRef();
@@ -38,7 +39,8 @@ class PostForm extends Component {
       reader.readAsBinaryString(file);
     }
     this.setState({
-      imageObj: URL.createObjectURL(event.target.files[0]),
+      imageObj: file,
+      image: URL.createObjectURL(event.target.files[0]),
     })
   }
 
@@ -47,12 +49,6 @@ class PostForm extends Component {
     this.setState({
       content: btoa(binaryString),
     })
-  }
-
-  getImageType = () => {
-    let imageType = this.state.imageObj.type;
-    console.log(imageType);
-    return imageType;
   }
 
   handleVisibility = () => {
@@ -85,6 +81,7 @@ class PostForm extends Component {
   };
 
   addPost() {
+    console.log(this.state.imageObj);
     const contentType = () => {
       switch (this.state.selectedTab) {
         case "text":
@@ -92,14 +89,11 @@ class PostForm extends Component {
         case "markdown":
           return "text/markdown";
         case "image":
-          if (this.getImageType() === "image/png") {
-            return "image/png;base64";
-          }
-          else if (this.getImageType() === "image/jpeg") {
-            return "image/jpeg;base64";
-          }
-          else {
-            break;
+          switch (this.state.imageObj.type) {
+            case "image/png":
+              return "image/png;base64";
+            case "image/jpeg":
+              return "image/jpeg;base64";
           }
         default:
           break;
@@ -174,8 +168,8 @@ class PostForm extends Component {
     const imageUploader = () => {
       return (
         <Form.Control>
-          <Form.InputFile icon={<Icon icon="upload" />} accept={this.getImageType} boxed placeholder="Textarea" style={{ left:`30%`, right:`30%`, marginBottom:`3%` }} onChange={this.handleFileSelected} />
-          <img src={this.state.imageObj} style={{ width: `200px`, display: "block", marginLeft: "auto", marginRight: "auto" }} />
+          <Form.InputFile icon={<Icon icon="upload" />} accept={'image/*'} boxed placeholder="Textarea" style={{ left:`30%`, right:`30%`, marginBottom:`3%` }} onChange={this.handleFileSelected} />
+          <img src={this.state.image} style={{ width: `200px`, display: "block", marginLeft: "auto", marginRight: "auto" }} />
         </Form.Control>
       )
     }
