@@ -2,6 +2,7 @@ from rest_framework import serializers
 from .models import Post, Author, Comment, Inbox
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate
+from django.shortcuts import get_object_or_404
 
 
 class AuthorSerializer(serializers.ModelSerializer):
@@ -100,3 +101,4 @@ class InboxSerializer(serializers.ModelSerializer):
     class Meta:
         model = Inbox
         fields = ('id', 'author', 'items')
+        

@@ -1,8 +1,11 @@
 from django.db import models
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 from django.contrib.auth.models import User
 from django.utils.translation import gettext_lazy as _
 from django.contrib.postgres.fields import ArrayField
 import uuid
+import re
 
 
 class ContentTypes(models.TextChoices):
@@ -80,3 +83,33 @@ class Inbox(models.Model):
                           editable=False, primary_key=True)
     author = models.ForeignKey(Author, on_delete=models.CASCADE)
     items = ArrayField(models.JSONField(), default=list)
+
+
+@receiver(post_save, sender=Post)
+def post_to_inbox(sender, instance, **kwargs):
+    followers = Followers.objects.all()
+    for follower in followers:
+        if inbox.exists():
+            inbox = Inbox.objects.get(author_id=follower.id)
+            inbox.items.append(instance)
+            inbox.save()
+       
+
+@receiver(post_save, sender=Followers)
+def follow_to_inbox(sender, instance, **kwargs):
+    followee = instance.object
+    inbox = Inbox.objects.get(author_id=followee.id)
+    if inbox.exists():
+        inbox.items.append(instance)
+        inbox.save()
+    
+    
+@receiver(post_save, sender=Liked)
+def like_to_inbox(sender, instance, **kwargs):
+    src_author_id = re.match('(?<=/author/).*(?=/posts)', instance.object)
+    inbox = Inbox.objects.get(author_id=src_author_id)
+    if inbox.exists():
+        inbox.items.append(instance)
+        inbox.save()
+
+    

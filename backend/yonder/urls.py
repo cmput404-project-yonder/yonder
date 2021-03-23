@@ -22,7 +22,7 @@ urlpatterns = [
         name="comment_detail"
     ),
     path(
-        'service/author/<uuid:author_id>/inbox',
+        'author/<uuid:author_id>/inbox',
         views.inbox.as_view(),
         name="inbox"
     ),
