@@ -4,6 +4,7 @@ from django.dispatch import receiver
 from django.contrib.auth.models import User
 from django.utils.translation import gettext_lazy as _
 from django.contrib.postgres.fields import ArrayField
+from django.core import serializer
 import uuid
 import re
 
@@ -89,9 +90,10 @@ class Inbox(models.Model):
 def post_to_inbox(sender, instance, **kwargs):
     followers = Followers.objects.all()
     for follower in followers:
+        inbox = Inbox.objects.get(author_id=follower.id)
         if inbox.exists():
-            inbox = Inbox.objects.get(author_id=follower.id)
-            inbox.items.append(instance)
+            data = serializer.serialize('json', instance)
+            inbox.items.append(data)
             inbox.save()
        
 
@@ -100,7 +102,8 @@ def follow_to_inbox(sender, instance, **kwargs):
     followee = instance.object
     inbox = Inbox.objects.get(author_id=followee.id)
     if inbox.exists():
-        inbox.items.append(instance)
+        data = serializer.serialize('json', instance)
+        inbox.items.append(data)
         inbox.save()
     
     
@@ -109,7 +112,8 @@ def like_to_inbox(sender, instance, **kwargs):
     src_author_id = re.match('(?<=/author/).*(?=/posts)', instance.object)
     inbox = Inbox.objects.get(author_id=src_author_id)
     if inbox.exists():
-        inbox.items.append(instance)
+        data = serializer.serialize('json', instance)
+        inbox.items.append(data)
         inbox.save()
 
     
