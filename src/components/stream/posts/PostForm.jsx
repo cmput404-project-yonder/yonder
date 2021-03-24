@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import ReactMde from "react-mde";
 import { Icon, Form, Button, Panel, Card, Heading, Container } from "react-bulma-components";
-import Switch from "bulma-switch";
 import Markdown from "react-markdown";
 import ReactTags from "react-tag-autocomplete";
 import "./react-tags.css";
@@ -140,7 +139,6 @@ class PostForm extends Component {
       description: "",
       unlisted: false,
       visibility: "PUBLIC",
-      private: "false",
       categories: [],
       selectedTab: "text",
       markdownTab: "write",
@@ -175,14 +173,12 @@ class PostForm extends Component {
     if (this.state.visibility === "PUBLIC") {
       this.setState({
         visibility: "PRIVATE",
-        public: false,
       });
       console.log(this.state.visibility);
     }
     else if (this.state.visibility === "PRIVATE") {
       this.setState({
         visibility: "PUBLIC",
-        public: true,
       });
       console.log(this.state.visibility);
     }
@@ -329,12 +325,20 @@ class PostForm extends Component {
       )
     }
 
-    const VisibilitySwitch = () => {
+    const visibilityCheckBoxTranslator = (visibility) => {
+      if (visibility === "PRIVATE"){
+        return true;
+      } else {
+        return false;
+      }
+      console.log(this.state.visibility);
+    }
+
+    const VisibilityCheckBox = () => {
       return (
         <Container style={checkBoxStyle}>
-          <label htmlFor="switchThinColorDefault">Public </label>
-          <input id="switchThinColorDefault" className="switch is-thin" type="checkbox" name="switchThinColorDefault" onChange={this.handleVisibility} />
-          <label htmlFor="switchThinColorDefault">Private</label>
+          <p style={checkBoxLabelStyle}>Private Post</p>
+          <CheckBox style={checkMarkStyle} active={visibilityCheckBoxTranslator(this.state.visibility)} action={this.handleVisibility}/>
         </Container>
       )
     }
@@ -351,9 +355,9 @@ class PostForm extends Component {
 
     const PostSubmitPanel = () => {
       return (
-        <Container style={submittPanelStyle}>        
+        <Container style={submittPanelStyle}>
+          <VisibilityCheckBox />
           <UnlistCheckBox/>
-          <VisibilitySwitch />
           <PostFormButtonPanel/>
         </Container>
       )
