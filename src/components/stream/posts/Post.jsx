@@ -18,7 +18,7 @@ var dividorStyle = {
 }
 
 var postStyle = {
-  boxShadow: "0pt 0pt 8pt #CCCCCC",
+  boxShadow: "0pt 0pt 8pt rgb(0,0,0,0.5)",
   borderRadius: "6pt",
   backgroundColor: color.backgroundCreamLighter,
   marginBottom: "2em",

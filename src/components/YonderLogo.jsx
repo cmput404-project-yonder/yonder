@@ -3,9 +3,9 @@ import { Container } from "react-bulma-components";
 
 
 var logoStyling = {
-    scale: "55",
+    scale: "50",
     style: {
-      fill: "#6A6A6A",
+      fill: "#C96262",
       padding: "0.1em",
     }
   }

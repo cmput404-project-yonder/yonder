@@ -9,9 +9,8 @@ import { color } from "../styling";
 
 // local styling
 var buttonStyle = {
-  scale: "42",
+  scale: "40",
   style: {
-    padding: "1.2em",
     fill: color.buttonRed,
   },
 };

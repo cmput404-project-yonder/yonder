@@ -22,14 +22,31 @@ var pageStyle = {
 
 }
 
+var footerStyle = {
+  display: "flex",
+  width: "100%",
+}
+
+var profileInfoContainer = {
+  boxShadow: "0pt 0pt 3pt rgb(0,0,0,0.5)",
+  borderRadius: "8pt",
+  marginLeft: "-1.2em",
+  marginRight: "-1.2em",
+  paddingRight: "1.5em",
+  paddingLeft: "1.5em",
+  backgroundColor: color.backgroundCreamLighter,
+}
+
 var profileListStyle ={
+  minWidth: "380pt",
+  maxWidth: "300pt"
 }
 
 var streamPostStyle ={
 }
 
 var profileShowStyle = {
-  boxShadow: "0pt 0pt 8pt #CCCCCC",
+  boxShadow: "0pt 0pt 8pt rgb(0,0,0,0.5)",
   borderRadius: "6pt",
   backgroundColor: color.backgroundCreamLighter,
   marginBottom: "2em",
@@ -59,7 +76,7 @@ function ProfileShow(props) {
 
   const otherAuthor = () => {
     return (
-      <Card.Footer>
+      <Card.Footer style={footerStyle}>
           <Card.Footer.Item renderAs="a" onClick={clickFollow}>
             <FollowButton />
           </Card.Footer.Item>
@@ -72,7 +89,7 @@ function ProfileShow(props) {
 
   const loggedAuthor = () => {
     return (
-      <Card.Footer>
+      <Card.Footer style={footerStyle}>
           <Card.Footer.Item renderAs="a" onClick={clickEdit} >
             <EditProfileButton/>
           </Card.Footer.Item>
@@ -82,14 +99,14 @@ function ProfileShow(props) {
 
   return (
     <Card style={profileShowStyle}>
-      <Card.Header>
+      <Container style={profileInfoContainer}>
         <ProfileDetail
           displayName={props.retrievedAuthor.displayName}
           followerNum={64}
           followingNum={32}
           postNum={props.postNum}
         />
-      </Card.Header>
+      </Container>
       {props.editable ? loggedAuthor() : otherAuthor()}
     </Card>
   );

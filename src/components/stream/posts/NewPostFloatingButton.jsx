@@ -4,8 +4,6 @@
 
 import { AddIcon } from "./postSVG";
 import { Container, Button } from "react-bulma-components";
-import {color} from "./styling";
-
 
 // local styling
 var buttonStyle = {
@@ -15,7 +13,7 @@ var buttonStyle = {
             height: "3em",
             width: "3em",
             borderRadius: "100%",
-            boxShadow: "0pt 0pt 3pt #B2B2B2",
+            boxShadow: "0pt 0pt 8pt rgb(0,0,0,0.5)",
             backgroundColor: "rgb(201,98,98,0.8)",
             border: "none",
         },
