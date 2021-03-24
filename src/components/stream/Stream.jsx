@@ -9,6 +9,41 @@ import PostList from "./posts/PostList";
 import PopupModal from "./posts/PopupModal";
 import { createPost, updatePost, retrieveLoggedInAuthorPosts, deletePost } from "./StreamActions";
 
+
+
+
+var buttonLayerContainerStyle = {
+  gridColumn: "1",
+  gridRow: "1",
+  width: "100%",
+  height: "100%",
+}
+
+var streamLayerContainerStyle = {
+  gridColumn: "1",
+  gridRow: "1",
+  width: "100%",
+  height: "100%",
+  
+}
+
+
+var newPostButtonStyle = {
+  float: "right",
+  zIndex: "1000",
+  position: "fixed",
+  right: "5%",
+  bottom: "5%",
+}
+
+var pageStyle = {
+  display: "grid"
+
+}
+
+var postStreamStyle = {
+}
+
 class Stream extends Component {
   componentDidMount() {
     this.props.retrieveLoggedInAuthorPosts();
@@ -24,20 +59,25 @@ class Stream extends Component {
     }
 
     return (
-      <Section>
-        <Container fluid>
-          <PopupModal createPost={this.props.createPost} />
-          <Columns centered>
-            <Columns.Column>
-              <PostList
-                posts={this.props.currentAuthorPosts}
-                updatePost={this.props.updatePost}
-                deletePost={this.props.deletePost}
-              />
-            </Columns.Column>
-          </Columns>
-        </Container>
+      <Section style={pageStyle}>
+        <div style={buttonLayerContainerStyle}>
+          <Container style={newPostButtonStyle}><PopupModal createPost={this.props.createPost} /></Container>
+        </div>
+        <div style={streamLayerContainerStyle}>
+          <Container fluid>
+              <Columns centered>
+                <Columns.Column>
+                  <PostList
+                    posts={this.props.currentAuthorPosts}
+                    updatePost={this.props.updatePost}
+                    deletePost={this.props.deletePost}
+                  />
+                </Columns.Column>
+              </Columns>
+            </Container>
+        </div>
       </Section>
+
     );
   }
 }

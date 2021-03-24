@@ -5,9 +5,14 @@ var color = {
     baseLightGrey: "#AAAAAA",
     buttonGreen:"#99D4B4",
     buttonRed: "#DD7272",
+    buttonOrange: "#E69942",
     postIcon: "#8fc9eb",
     backgroundGrey: "#fefefe",
     backgroundCream: "#F9F5EF",
+    backgroundCreamLighter: "#FFFAF1",
 }
 
-export {color};
+var font = {
+    segoeUI: "Segoe UI,Frutiger,Frutiger Linotype,Dejavu Sans,Helvetica Neue,Arial,sans-serif",
+}
+export {color, font};

@@ -76,5 +76,51 @@ function CheckBoxUnchecked(props) {
     )
 }
 
+function AddIcon(props) {
+    return (
+        <svg xmlns="http://www.w3.org/2000/svg" width={props.svgScale} height="auto" viewBox="0 0 100 100">
+        <path id="add" d="M91.071,41.071H60.714a1.786,1.786,0,0,1-1.786-1.786V8.929a8.929,8.929,0,1,0-17.857,0V39.286a1.786,1.786,0,0,1-1.786,1.786H8.929a8.929,8.929,0,1,0,0,17.857H39.286a1.786,1.786,0,0,1,1.786,1.786V91.071a8.929,8.929,0,1,0,17.857,0V60.714a1.786,1.786,0,0,1,1.786-1.786H91.071a8.929,8.929,0,1,0,0-17.857Zm0,0"/>
+        </svg>
+    )
+}
 
-export { CancelButton, ConfirmButton, YonderMainLogo, TextIcon, ImageIcon, MarkdownIcon, CheckBoxChecked, CheckBoxUnchecked};
+function PencilIcon(props) {
+
+    return (
+        <svg xmlns="http://www.w3.org/2000/svg" width={props.svgScale} height="auto" viewBox="0 0 43.814 43.768">
+        <g id="pencil" transform="translate(0 -0.247)">
+        <path id="Path_142" data-name="Path 142" d="M27.057,82.473,2.95,106.582a.961.961,0,0,0-.251.44L.027,117.747a.949.949,0,0,0,.92,1.179.943.943,0,0,0,.23-.028L11.9,116.225a.948.948,0,0,0,.44-.25L36.452,91.867Zm0,0" transform="translate(0 -74.911)"/>
+        <path id="Path_143" data-name="Path 143" d="M347.01,4.275l-2.684-2.684a4.859,4.859,0,0,0-6.711,0l-3.287,3.287,9.394,9.394,3.287-3.287a4.747,4.747,0,0,0,0-6.711Zm0,0" transform="translate(-304.585 0)"/>
+        </g>
+        </svg>
+    )
+}
+
+function SharingIcon(props) {
+    return (
+        <svg xmlns="http://www.w3.org/2000/svg" width={props.svgScale} height="auto" viewBox="0 0 39.047 35.612">
+        <path id="_1059157" data-name="1059157" d="M39.048,18.294,22.821.5V11.116h-3.45A19.37,19.37,0,0,0,0,30.486v5.626l1.532-1.679a27.5,27.5,0,0,1,20.311-8.961h.977V36.088Zm0,0" transform="translate(-0.001 -0.5)" />
+        </svg>
+    )
+}
+
+function LikeIcon(props) {
+    return (
+        <svg xmlns="http://www.w3.org/2000/svg" width={props.svgScale} height="auto" viewBox="0 0 36.115 34.61">
+        <g id="_633991" data-name="633991" transform="translate(0 -10.667)">
+        <g id="Group_35" data-name="Group 35" transform="translate(0 25.715)">
+        <g id="Group_34" data-name="Group 34">
+        <path id="Path_100" data-name="Path 100" d="M3.762,224A3.767,3.767,0,0,0,0,227.762V239.8a3.767,3.767,0,0,0,3.762,3.762H8.276a3.735,3.735,0,0,0,2.257-.761V224Z" transform="translate(0 -224)"/>
+        </g>
+        </g>
+        <g id="Group_37" data-name="Group 37" transform="translate(12.038 10.667)">
+        <g id="Group_36" data-name="Group 36">
+        <path id="Path_101" data-name="Path 101" d="M194.744,31.358a3.337,3.337,0,0,0-.98-2.369,3.736,3.736,0,0,0,.963-2.873,3.89,3.89,0,0,0-3.924-3.411h-9.3a21.637,21.637,0,0,0,1.2-6.019c0-3.264-2.773-6.019-4.514-6.019a4.733,4.733,0,0,0-2.728.916.756.756,0,0,0-.281.588v5.1l-4.334,9.388-.181.092V42.883a9.859,9.859,0,0,0,3.762.889h13.813a3.461,3.461,0,0,0,3.41-2.629,3.385,3.385,0,0,0-.272-2.26,3.37,3.37,0,0,0,1.506-4.516A3.369,3.369,0,0,0,194.744,31.358Z" transform="translate(-170.667 -10.667)"/>
+        </g>
+        </g>
+        </g>
+        </svg>
+    )
+}
+
+export { CancelButton, ConfirmButton, YonderMainLogo, TextIcon, ImageIcon, MarkdownIcon, CheckBoxChecked, CheckBoxUnchecked, AddIcon, PencilIcon, LikeIcon, SharingIcon};
