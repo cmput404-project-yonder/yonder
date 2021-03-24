@@ -4,7 +4,7 @@ from django.dispatch import receiver
 from django.contrib.auth.models import User
 from django.utils.translation import gettext_lazy as _
 from django.contrib.postgres.fields import ArrayField
-from django.core import serializer
+from django.core import serializers
 import uuid
 import re
 
@@ -102,32 +102,32 @@ class Inbox(models.Model):
 
 @receiver(post_save, sender=Post)
 def post_to_inbox(sender, instance, **kwargs):
-    followers = Followers.objects.all()
-    for follower in followers:
-        inbox = Inbox.objects.get(author_id=follower.id)
-        if inbox.exists():
-            data = serializer.serialize('json', instance)
+    follows = AuthorFollower.objects.all()
+    for follow in follows:
+        follower = serializers.deserialize('json',follow.follower)
+        for obj in follower:
+            inbox = Inbox.objects.get(author_id=obj.object.pk)
+            data = serializers.serialize('json',[instance]) 
             inbox.items.append(data)
             inbox.save()
        
-
-@receiver(post_save, sender=Followers)
+'''
+@receiver(post_save, sender=AuthorFollower)
 def follow_to_inbox(sender, instance, **kwargs):
     followee = instance.object
     inbox = Inbox.objects.get(author_id=followee.id)
     if inbox.exists():
-        data = serializer.serialize('json', instance)
+        data = serializers.serialize('json',instance) 
         inbox.items.append(data)
         inbox.save()
     
-    
+ 
 @receiver(post_save, sender=Liked)
 def like_to_inbox(sender, instance, **kwargs):
     src_author_id = re.match('(?<=/author/).*(?=/posts)', instance.object)
     inbox = Inbox.objects.get(author_id=src_author_id)
     if inbox.exists():
-        data = serializer.serialize('json', instance)
+        data = serializers.serialize('json', instance)
         inbox.items.append(data)
         inbox.save()
-
-    
+'''
