@@ -2,7 +2,7 @@ import React from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { withRouter } from "react-router-dom";
-import { Card, Container, Columns } from "react-bulma-components";
+import { Card, Container, Columns, Section } from "react-bulma-components";
 
 import PostList from "../stream/posts/PostList";
 import { ProfileDetail } from "./ProfileDetail";
@@ -13,8 +13,35 @@ import FollowButton from "./buttons/FollowButton";
 import FriendButton from "./buttons/FriendButton";
 import EditProfileButton from "./buttons/EditButton";
 
+import { color,font } from "./styling";
+
+var pageStyle = {
+  margin: "auto",
+  maxWidth: "1000pt",
+  minWidth: "400pt",
+
+}
+
+var profileListStyle ={
+}
+
+var streamPostStyle ={
+}
+
 var profileShowStyle = {
-  width: "25em",
+  boxShadow: "0pt 0pt 8pt #CCCCCC",
+  borderRadius: "6pt",
+  backgroundColor: color.backgroundCreamLighter,
+  marginBottom: "2em",
+  marginTop: "4em",
+  fontFamily: font.segoeUI,
+  fontWeight: "350",
+  fontSize: "1.3em",
+  color: color.baseBlack,
+  minHeight: "25em",
+  display: "flex",
+  flexDirection: "column",
+  justifyContent: "space-between",
 };
 
 function ProfileShow(props) {
@@ -82,20 +109,22 @@ class Profile extends React.Component {
     }
 
     return (
-      <Container style={{ marginTop: "1em" }}>
-        <Columns>
-          <Columns.Column size={4}>
+      <Section >
+        <Columns style={pageStyle}>
+          <Columns.Column>
+            <div className="post-list" style={profileListStyle}>
             <ProfileShow
               postNum={this.props.retrievedAuthorPosts.length}
               retrievedAuthor={this.props.retrievedAuthor}
               editable={this.props.match.params.id === this.props.loggedInAuthor.id}
             />
+            </div>
           </Columns.Column>
-          <Columns.Column size={8}>
-            <PostList posts={this.props.retrievedAuthorPosts} />
+          <Columns.Column>
+            <PostList posts={this.props.retrievedAuthorPosts} style={streamPostStyle} />
           </Columns.Column>
         </Columns>
-      </Container>
+      </Section>
     );
   }
 }

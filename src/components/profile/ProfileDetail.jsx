@@ -57,9 +57,6 @@ var svgIconStyle = {
 export function ProfileDetail(props) {
   return (
     <Container style={statusStyle.overall}>
-      <div style={{ fill: color.baseRed }}>
-        <ProfileIcon svgScale={80} />
-      </div>
       <Content id="displayName" style={statusStyle.displayName}>
         <p>{props.displayName}</p>
       </Content>
