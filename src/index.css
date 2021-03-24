@@ -1,6 +1,6 @@
 html,
 body {
-  background: #f5f5f5;
+  background: #fbfbfb;
 }
 #root {
   text-align: center;
@@ -10,11 +10,19 @@ body {
 .navbar {
   border-bottom: 1px solid grey;
   height: fit-content;
+  
 }
+
+.navbar.is-fixed-top.is-light {
+  background:rgb(0,0,0,0.01);
+  border: none;
+}
+
 .navbar-brand {
-  margin-left: 4rem;
+  margin-left: 1em;
 }
 .navbar-menu {
+  
   margin-right: 6rem;
 }
 
@@ -29,8 +37,8 @@ body {
 
 /* Stream page */
 .post-list {
-  max-width: 600px;
-  min-width: 360px;
+  max-width: 480pt;
+  min-width: 400pt;
   margin: auto;
 }
 .list {

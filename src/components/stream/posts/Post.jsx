@@ -4,22 +4,88 @@ import { Modal } from "react-bulma-components";
 import EditPostForm from "./EditPostForm";
 
 import { Card, Content, Heading } from "react-bulma-components";
+import { font, color } from "./styling";
+import Dividor from "./Dividor";
+
+import EditButton from "./EditButton";
+import ShareButton from "./ShareButton";
+import LikeButton from "./LikeButton";
+
+
+var dividorStyle = {
+  marginTop: "1em",
+  marginBottom: "0.6em",
+}
+
+var postStyle = {
+  boxShadow: "0pt 0pt 8pt #CCCCCC",
+  borderRadius: "6pt",
+  backgroundColor: color.backgroundCreamLighter,
+  marginBottom: "2em",
+  marginTop: "4em",
+  fontFamily: font.segoeUI,
+  fontWeight: "350",
+  fontSize: "1.3em",
+  color: color.baseBlack,
+  minHeight: "25em",
+  display: "flex",
+  flexDirection: "column",
+  justifyContent: "space-between",
+}
+
+var textStyle = {
+  color: color.baseBlack,
+  fontFamily: font.segoeUI,
+  fontSize: "1.3em",
+}
+
+var authorStyle = {
+  color: color.baseBlack,
+  fontFamily: font.segoeUI,
+  fontSize: "1em",
+  fontWeight: "400",
+  textAlign: "right",
+  paddingRight: "0.8em",
+}
+
+var contentStyle = {
+  paddingTop: "3em",
+  paddingBottom: "2em",
+  textIndent: "2em",
+  textAlign: "justify",
+  fontSize: "1.2em",
+  paddingLeft: "2.2em",
+  paddingRight: "2.2em",
+}
+
+
 
 function Post(props) {
   const [editModalIsOpen, setEditModalIsOpen] = useState(false);
   console.log(props.post);
   return (
-    <div className="post">
-      <Card>
+      <Card style={postStyle}>
         <Card.Header>
           <Card.Header.Title style={{ marginLeft: "1em" }}>
-            <div>
-              <p style={{ fontWeight: "lighter" }}>@{props.post.author.displayName}</p>
-              <Heading size={5}>{props.post.title}</Heading>
-            </div>
+              <p style={{ fontWeight: "250" }}>@{props.post.author.displayName}</p>
           </Card.Header.Title>
-          <Card.Footer.Item renderAs="a" onClick={() => setEditModalIsOpen(true)}>
-            <span className="typcn typcn-edit"></span>
+        </Card.Header>
+        <Card.Content>
+          <Heading size={8}>{props.post.title}</Heading>
+          <Dividor style={dividorStyle}/>
+          <Content>{props.post.content}</Content>
+          <Dividor style={dividorStyle}/>
+          <p style={{ margin: "1em", fontSize: "0.7em" }}>{props.post.published}</p>
+        </Card.Content>
+        <Card.Footer>
+          <Card.Footer.Item renderAs="a">
+            <LikeButton/>
+          </Card.Footer.Item>
+          <Card.Footer.Item renderAs="a">
+            <ShareButton/>
+          </Card.Footer.Item>
+          <Card.Footer.Item renderAs="a">
+            <EditButton action={() => setEditModalIsOpen(true)}/>
           </Card.Footer.Item>
           <Modal show={editModalIsOpen} onClose={() => setEditModalIsOpen(false)} closeOnBlur closeOnEsc>
             <EditPostForm
@@ -29,21 +95,8 @@ function Post(props) {
               deletePost={props.deletePost}
             />
           </Modal>
-        </Card.Header>
-        <Card.Content>
-          <Content>{props.post.description}</Content>
-          <p style={{ margin: "-1em 0", fontSize: "0.8em" }}>{props.post.published}</p>
-        </Card.Content>
-        <Card.Footer>
-          <Card.Footer.Item renderAs="a">
-            <span className="typcn typcn-heart-outline" />
-          </Card.Footer.Item>
-          <Card.Footer.Item renderAs="a">
-            <span className="typcn typcn-arrow-loop" />
-          </Card.Footer.Item>
         </Card.Footer>
       </Card>
-    </div>
   );
 }
 

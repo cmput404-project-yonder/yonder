@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Post, Author, Comment
+from .models import Post, Author, Comment, Inbox, AuthorFollower, AuthorFriend, RemoteNode
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate
 
@@ -93,3 +93,25 @@ class RegisterSerializer(serializers.ModelSerializer):
         user.save()
 
         return user
+
+class AuthorFollowerSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = AuthorFollower
+        fields = ('author', 'follower', 'created_at')
+
+class AuthorFriendSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = AuthorFriend
+        fields = ('author', 'friend')
+
+class RemoteNodeSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = RemoteNode
+        fields = ('host')
+        
+class InboxSerializer(serializers.ModelSerializer):
+    items = serializers.ListField(child=serializers.JSONField(), default=list)
+
+    class Meta:
+        model = Inbox
+        fields = ('id', 'author', 'items')
