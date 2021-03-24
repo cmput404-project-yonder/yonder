@@ -140,6 +140,7 @@ class PostForm extends Component {
       description: "",
       unlisted: false,
       visibility: "PUBLIC",
+      private: "false",
       categories: [],
       selectedTab: "text",
       markdownTab: "write",
@@ -174,15 +175,16 @@ class PostForm extends Component {
     if (this.state.visibility === "PUBLIC") {
       this.setState({
         visibility: "PRIVATE",
+        public: false,
       });
       console.log(this.state.visibility);
     }
     else if (this.state.visibility === "PRIVATE") {
       this.setState({
         visibility: "PUBLIC",
+        public: true,
       });
       console.log(this.state.visibility);
-
     }
   }
 
@@ -190,6 +192,7 @@ class PostForm extends Component {
     this.setState({
       unlisted: !this.state.unlisted,
     });
+    console.log(this.state.unlisted);
   };
 
   onChange = (evt) => {
@@ -227,6 +230,7 @@ class PostForm extends Component {
       unlisted: this.state.unlisted,
       visibility: this.state.visibility,
       categories: categories,
+      private: this.state.private,
     };
     this.props.createPost(newPost);
     this.props.setModalIsOpen(false);
@@ -323,7 +327,16 @@ class PostForm extends Component {
           <CheckBox style={checkMarkStyle} active={this.state.unlisted} action={this.handleUnlisted}/>
         </Container>
       )
+    }
 
+    const VisibilitySwitch = () => {
+      return (
+        <Container style={checkBoxStyle}>
+          <label htmlFor="switchThinColorDefault">Public </label>
+          <input id="switchThinColorDefault" className="switch is-thin" type="checkbox" name="switchThinColorDefault" onChange={this.handleVisibility} />
+          <label htmlFor="switchThinColorDefault">Private</label>
+        </Container>
+      )
     }
 
     const PostFormButtonPanel = () => {
@@ -340,108 +353,72 @@ class PostForm extends Component {
       return (
         <Container style={submittPanelStyle}>        
           <UnlistCheckBox/>
+          <VisibilitySwitch />
           <PostFormButtonPanel/>
         </Container>
       )
     }
 
     return (
-      <Card style={{ borderRadius: "10px", width: "540px" }}>
-        <Form.Field style={{ margin: "0 1em", padding: "10px" }}>
-          <div style={{ fontWeight: "bold", float:"right", paddingTop:10 }}>
-            <label className="checkbox" style={{ float:"right" }}>
-              <input type="checkbox" defaultChecked={this.state.unlisted} onChange={this.handleUnlisted} />
-                Unlisted
-            </label><br></br>
-            <div style={{ fontWeight: "bold", float:"right", paddingTop:10 }} className="field" >
-              <label htmlFor="switchThinColorDefault">Public </label>
-              <input id="switchThinColorDefault" className="switch is-thin" type="checkbox" name="switchThinColorDefault" onChange={this.handleVisibility} />
-              <label htmlFor="switchThinColorDefault">Private</label>
-            </div>
-          </div>
-          <Heading size={4}>Create a Post</Heading>
-          <Form.Label>Title:</Form.Label>
-          <Form.Control>
-            <Form.Textarea
-              onKeyPress={(e) => {
-                if (e.key === "Enter") e.preventDefault();
-              }}
-              maxLength="30"
-              cols={1}
-              name="title"
-              value={this.state.title}
-              style={{
-                overflowY: "hidden",
-                whiteSpace: "nowrap",
-                resize: "none",
-                height: `50px`,
-                padding: `10px`,
-              }}
-              onChange={this.onChange}
-            />
-          </Form.Control>
-        </Form.Field>
-        <Form.Field style={{ margin: "0 1em", padding: "10px" }}>
-          <Form.Label>Description:</Form.Label>
-          <Form.Control>
-            <Form.Textarea
-              onKeyPress={(e) => {
-                if (e.key === "Enter") e.preventDefault();
-              }}
-              maxLength="30"
-              cols={1}
-              name="description"
-              value={this.state.description}
-              style={{
-                overflowY: "hidden",
-                whiteSpace: "nowrap",
-                resize: "none",
-                height: `50px`,
-                padding: `10px`,
-              }}
-              onChange={this.onChange}
-            />
-          </Form.Control>
-        </Form.Field>
-
-        <Form.Field style={{ margin: "0 1em", padding: "10px" }}>
-          <Form.Label>Catgeories:</Form.Label>
-          <ReactTags
-            allowNew={true}
-            ref={this.reactTags}
-            tags={this.state.categories}
-            onDelete={this.onDelete}
-            onAddition={this.onAddition}
-          />
-        </Form.Field>
-
-        <Form.Field style={{ margin: "0 1em", padding: "10px" }}>
-          <Form.Label>Content:</Form.Label>
-          <Panel className="post-editor">
-            <Panel.Tabs style={{ marginBottom: `-1em` }}>
-              <Panel.Tabs.Tab active={this.state.selectedTab === "text"} onClick={() => this.selectTab("text")}>
-                Text
-              </Panel.Tabs.Tab>
-              <Panel.Tabs.Tab active={this.state.selectedTab === "markdown"} onClick={() => this.selectTab("markdown")}>
-                Markdown
-              </Panel.Tabs.Tab>
-              <Panel.Tabs.Tab active={this.state.selectedTab === "image"} onClick={() => this.selectTab("image")}>
-                Image
-              </Panel.Tabs.Tab>
-            </Panel.Tabs>
-          </Panel>
-          <Form.Control style={{ textAlign: "right" }}>
-            {this.state.selectedTab === "text" ? textEditor() : null}
-            {this.state.selectedTab === "markdown" ? markdownEditor() : null}
-            {this.state.selectedTab === "image" ? imageUploader() : null}
-            <Button color="danger" onClick={() => this.props.setModalIsOpen(false)}>
-              Cancel
-            </Button>
-            <Button color="success" onClick={this.addPost}>
-              Post
-            </Button>
-          </Form.Control>
-        </Form.Field>
+      <Card style={cardStyle}>
+        <Container style={createPostHeaderStype}>
+          <Container style={postIconStyle.style}>{postIcons()}</Container>
+        </Container>
+        <Container style={formContainerStyle}>
+          <Form.Field>
+            <Form.Label style={labelStyle}>Title</Form.Label>
+            <Form.Control>
+              <Form.Textarea
+                  onKeyPress={(e) => {if (e.key === "Enter") e.preventDefault();}}
+                  maxLength="30"
+                  cols={1}
+                  name="title"
+                  value={this.state.title}
+                  style={formTitleStyle}
+                  onChange={this.onChange}
+              />
+            </Form.Control>
+          </Form.Field>
+          <Form.Field>
+            <Form.Label style={labelStyle}>Description</Form.Label>
+            <Form.Control>
+              <Form.Textarea
+                onKeyPress={(e) => {if (e.key === "Enter") e.preventDefault();}}
+                maxLength="30"
+                cols={1}
+                name="description"
+                value={this.state.description}
+                style={formTitleStyle}
+                onChange={this.onChange}
+              />
+            </Form.Control>
+          </Form.Field>
+          <Form.Field>
+            <Form.Label style={labelStyle}>Categories</Form.Label>
+            <Form.Control>
+              <ReactTags
+                label=""
+                allowNew={true}
+                ref={this.reactTags}
+                tags={this.state.categories}
+                onDelete={this.onDelete}
+                onAddition={this.onAddition}
+              />
+            </Form.Control>
+          </Form.Field>
+          <Form.Field>
+            <Form.Label style={labelStyle}>Content</Form.Label>
+            <Form.Control>
+              {this.state.selectedTab === "text" ? textEditor() : null}
+              {this.state.selectedTab === "markdown" ? markdownEditor() : null}
+              {this.state.selectedTab === "image" ? imageUploader() : null}
+            </Form.Control>
+          </Form.Field>
+          <Dividor style={dividorStyle}/>
+          <SelectionPanel/>
+          <Dividor style={dividorStyle}/>
+        </Container>
+        <PostSubmitPanel/>
       </Card>
     );
   }
