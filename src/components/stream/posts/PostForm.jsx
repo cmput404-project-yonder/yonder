@@ -4,17 +4,17 @@ import { Icon, Form, Button, Panel, Card, Heading, Container } from "react-bulma
 import Markdown from "react-markdown";
 import ReactTags from "react-tag-autocomplete";
 import "./react-tags.css";
+import HelpModal from "./HelpModal";
 
+import helpIcon from './helpIcon.png';
 import CancelButton from "./CancelButton";
 import ConfirmButton from "./ConfirmButton";
 import CheckBox from "./CheckBox";
-
 
 import { TextIcon, ImageIcon, MarkdownIcon } from "./postSVG";
 import { color } from "./styling";
 import PostTab from "./PostTab";
 import Dividor from "./Dividor"
-
 
 var checkBoxLabelStyle = {
   paddingRight: "0.5em",
@@ -147,6 +147,14 @@ class PostForm extends Component {
     };
 
     this.reactTags = React.createRef();
+  }
+
+  handleOnHoverHelp = () => {
+    console.log("Mouse is hovering");
+  }
+
+  handleOffHoverHelp = () => {
+    console.log("Mouse has left");
   }
 
   handleFileSelected = event => {
@@ -287,8 +295,8 @@ class PostForm extends Component {
     const imageUploader = () => {
       return (
         <Form.Control>
-          <Form.InputFile icon={<Icon icon="upload" />} accept={'image/*'} boxed placeholder="Textarea" style={{ left:`30%`, right:`30%`, marginBottom:`3%` }} onChange={this.handleFileSelected} />
-          <img src={this.state.image} style={{ width: `200px`, display: "block", marginLeft: "auto", marginRight: "auto" }} />
+          <Form.InputFile icon={<Icon icon="upload" />} type="file" inputProps={{ accept: 'image/*' }} boxed placeholder="Textarea" style={{ left:`30%`, right:`30%`, marginBottom:`3%` }} onChange={this.handleFileSelected} />
+          <img src={this.state.image} style={{ height: `150px`, display: "block", marginLeft: "auto", marginRight: "auto" }} />
         </Form.Control>
       )
     }
@@ -312,7 +320,7 @@ class PostForm extends Component {
           <PostTab style={tabStyle}text="Text" active={this.state.selectedTab === "text"} action={() => this.selectTab("text")}/>
           <PostTab style={tabStyle} text="Markdown" active={this.state.selectedTab === "markdown"} action={() => this.selectTab("markdown")}/>
           <PostTab style={tabStyle} text="Image"active={this.state.selectedTab === "image"} action={() => this.selectTab("image")}/>
-        </Container>  
+        </Container>
       )
     }
 
@@ -356,6 +364,10 @@ class PostForm extends Component {
     const PostSubmitPanel = () => {
       return (
         <Container style={submittPanelStyle}>
+          <img className="help" src={helpIcon} style={{ width:40, marginTop:20, float:"left" }}
+            onMouseEnter={this.handleOnHoverHelp}
+            onMouseLeave={this.handleOffHoverHelp}
+          />
           <VisibilityCheckBox />
           <UnlistCheckBox/>
           <PostFormButtonPanel/>
