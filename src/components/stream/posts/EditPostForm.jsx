@@ -187,7 +187,7 @@ class EditPostForm extends Component {
     const imageUploader = () => {
       return (
         <Form.Control>
-          <Form.InputFile icon={<Icon icon="upload" />} accept={'image/*'} boxed placeholder="Textarea" style={{ left:`30%`, right:`30%`, marginBottom:`3%` }} onChange={this.handleFileSelected} />
+          <Form.InputFile icon={<Icon icon="upload" />} accept={'image/png', 'image/jpeg'} boxed placeholder="Textarea" style={{ left:`30%`, right:`30%`, marginBottom:`3%` }} onChange={this.handleFileSelected} />
           <img src={ "image/png" ? `data:image/png;base64,${this.state.content}` : `data:image/jpeg;base64,${this.state.content}` } style={{ width: `200px`, display: "block", marginLeft: "auto", marginRight: "auto" }} />
         </Form.Control>
       )
