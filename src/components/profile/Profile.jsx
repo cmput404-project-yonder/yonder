@@ -5,7 +5,7 @@ import { withRouter } from "react-router-dom";
 import { Card, Container, Columns, Section } from "react-bulma-components";
 
 import PostList from "../stream/posts/PostList";
-import { ProfileDetail } from "./ProfileDetail";
+import ProfileDetail from "./ProfileDetail";
 import { retrieveAuthor, retrieveAuthorPosts } from "./ProfileActions";
 
 // buttons
@@ -33,7 +33,7 @@ var profileShowStyle = {
   borderRadius: "6pt",
   backgroundColor: color.backgroundCreamLighter,
   marginBottom: "2em",
-  marginTop: "4em",
+  marginTop: "0.5em",
   fontFamily: font.segoeUI,
   fontWeight: "350",
   fontSize: "1.3em",

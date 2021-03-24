@@ -22,7 +22,7 @@ var postStyle = {
   borderRadius: "6pt",
   backgroundColor: color.backgroundCreamLighter,
   marginBottom: "2em",
-  marginTop: "4em",
+  marginTop: "0.5em",
   fontFamily: font.segoeUI,
   fontWeight: "350",
   fontSize: "1.3em",
