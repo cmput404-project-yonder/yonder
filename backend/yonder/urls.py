@@ -4,6 +4,7 @@ from django.urls import path
 from . import views
 
 urlpatterns = [
+    path('authors', views.authors.as_view(), name="authors"),
     path('author/<uuid:pk>', views.author_detail.as_view(), name="author_detail"),
     path('author/<uuid:author_id>/posts/', views.posts.as_view(), name="posts"),
     path(
@@ -22,7 +23,17 @@ urlpatterns = [
         name="comment_detail"
     ),
     path(
-        'author/<uuid:author_id>/inbox',
+        'author/<uuid:author_id>/followers',
+        views.author_followers.as_view({'get': 'list'}),
+        name="follower_list"
+    ),
+    path(
+        'author/<uuid:author_id>/followers/<uuid:follower_id>',
+        views.author_followers_detail.as_view({'get': 'retrieve', 'put': 'create', 'delete': 'destroy'}),
+        name="followers"
+    ),
+    path (
+        'service/author/<uuid:author_id>/inbox',
         views.inbox.as_view(),
         name="inbox"
     ),

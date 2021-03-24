@@ -79,12 +79,26 @@ class Comment(models.Model):
     def get_absolute_url(self):
         return self.post.get_absolute_url() + "/comments/%s" % self.id
 
+class AuthorFollower(models.Model):
+    created_at = models.DateTimeField(auto_now_add=True)
+    author = models.ForeignKey(Author, on_delete=models.CASCADE)
+    follower = models.JSONField()
+
+class AuthorFriend(models.Model):
+    created_at = models.DateTimeField(auto_now_add=True)
+    author = models.ForeignKey(Author, on_delete=models.CASCADE)
+    friend = models.JSONField()
+
+class RemoteNode(models.Model):
+    id = models.UUIDField(unique=True, default=uuid.uuid4,
+                          editable=False, primary_key=True)
+    host = models.URLField(unique=True)
+    
 class Inbox(models.Model):
     id = models.UUIDField(unique=True, default=uuid.uuid4,
                           editable=False, primary_key=True)
     author = models.ForeignKey(Author, on_delete=models.CASCADE)
     items = ArrayField(models.JSONField(), default=list)
-
 
 @receiver(post_save, sender=Post)
 def post_to_inbox(sender, instance, **kwargs):

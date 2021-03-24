@@ -5,6 +5,13 @@ import { Navbar, Heading } from "react-bulma-components";
 
 import { logout } from "./login/LoginActions";
 
+
+import YonderLogo from "./YonderLogo";
+import ProfileIcon from "./ProfileIcon";
+import BellIcon from "./BellIcon";
+
+
+
 function NavigationBar(props) {
   const [isActive, setisActive] = React.useState(false);
 
@@ -29,7 +36,7 @@ function NavigationBar(props) {
     return (
       <Navbar.Item dropdown hoverable>
         <Navbar.Link arrowless={true}>
-          <span className="typcn typcn-bell"></span>
+          <BellIcon/>
         </Navbar.Link>
         <Navbar.Dropdown>
           <Navbar.Item>
@@ -44,7 +51,7 @@ function NavigationBar(props) {
     <Navbar color="light" fixed="top" active={isActive}>
       <Navbar.Brand>
         <Navbar.Item renderAs="a" href="/">
-          <Heading>Yonder</Heading>
+          <Heading><YonderLogo/></Heading>
         </Navbar.Item>
         <Navbar.Burger
           onClick={() => {
@@ -57,7 +64,7 @@ function NavigationBar(props) {
           {props.auth.isAuthenticated ? notifcationDropdown() : null}
           <Navbar.Item dropdown hoverable>
             <Navbar.Link arrowless={true}>
-              <span className="typcn typcn-user-outline"></span>
+              <ProfileIcon/>
             </Navbar.Link>
             {props.auth.isAuthenticated ? loggedInDropdown() : loggedOutDropdown()}
           </Navbar.Item>
