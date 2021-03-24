@@ -18,7 +18,7 @@ var buttonStyle = {
             border: "none",
         },
         icon: {
-            paddingTop: "0.2em",
+            paddingTop: "3pt",
             fill: "rgb(255,255,255,0.9)",
         }
     }
