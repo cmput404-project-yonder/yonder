@@ -58,11 +58,27 @@ var contentStyle = {
   paddingRight: "2.2em",
 }
 
-
-
 function Post(props) {
   const [editModalIsOpen, setEditModalIsOpen] = useState(false);
   console.log(props.post);
+  const IsImage = () => {
+    if (props.post.contentType === "text/plain") {
+      return false;
+    }
+    else if (props.post.contentType === "text/markdown") {
+      return false;
+    }
+    else {
+      return true;
+    }
+  }
+  const isImage = IsImage();
+  if (isImage) {
+    
+  }
+
+  console.log(isImage);
+
   return (
       <Card style={postStyle}>
         <Card.Header>
@@ -73,7 +89,11 @@ function Post(props) {
         <Card.Content>
           <Heading size={8}>{props.post.title}</Heading>
           <Dividor style={dividorStyle}/>
-          <Content>{props.post.content}</Content>
+          {isImage ? (
+            <Content>
+              <img src={`data:${props.post.contentType},${props.post.content}`} /> 
+            </Content>
+          ) : <Content>{props.post.content}</Content> }
           <Dividor style={dividorStyle}/>
           <p style={{ margin: "1em", fontSize: "0.7em" }}>{props.post.published}</p>
         </Card.Content>

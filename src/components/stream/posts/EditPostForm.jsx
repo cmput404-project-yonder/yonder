@@ -358,6 +358,7 @@ class EditPostForm extends Component {
         <Container style={buttonLayoutStyle}>
           <CancelButton action={() => this.props.setEditModalIsOpen(false)}/>
           <ConfirmButton action={this.editPost}/>
+          <Button color="danger" onClick={this.removePost}>Delete</Button>
         </Container>
       )
     }
