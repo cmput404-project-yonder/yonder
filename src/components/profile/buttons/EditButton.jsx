@@ -9,10 +9,10 @@ import { color } from "../styling";
 
 // local styling
 var buttonStyle = {
-  scale: "32",
+  scale: "42",
   style: {
     padding: "1.2em",
-    fill: color.baseBlack,
+    fill: color.buttonRed,
   },
 };
 
@@ -20,9 +20,7 @@ var buttonStyle = {
 function EditProfileButton(props) {
   return (
     <Container style={buttonStyle.style}>
-      <Button href="#" onClick={props.action}>
         <EditButton svgScale={buttonStyle.scale} />
-      </Button>
     </Container>
   );
 }

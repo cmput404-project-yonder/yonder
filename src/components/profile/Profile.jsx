@@ -60,8 +60,12 @@ function ProfileShow(props) {
   const otherAuthor = () => {
     return (
       <Card.Footer>
-        <FollowButton action={clickFollow} />
-        <FriendButton action={clickFriend} />
+          <Card.Footer.Item renderAs="a" onClick={clickFollow}>
+            <FollowButton />
+          </Card.Footer.Item>
+          <Card.Footer.Item renderAs="a" onClick={clickFriend} >
+            <FriendButton/>
+          </Card.Footer.Item>
       </Card.Footer>
     );
   };
@@ -69,21 +73,23 @@ function ProfileShow(props) {
   const loggedAuthor = () => {
     return (
       <Card.Footer>
-        <EditProfileButton action={clickEdit} />
+          <Card.Footer.Item renderAs="a" onClick={clickEdit} >
+            <EditProfileButton/>
+          </Card.Footer.Item>
       </Card.Footer>
     );
   };
 
   return (
     <Card style={profileShowStyle}>
-      <Card.Content>
+      <Card.Header>
         <ProfileDetail
           displayName={props.retrievedAuthor.displayName}
           followerNum={64}
           followingNum={32}
           postNum={props.postNum}
         />
-      </Card.Content>
+      </Card.Header>
       {props.editable ? loggedAuthor() : otherAuthor()}
     </Card>
   );
