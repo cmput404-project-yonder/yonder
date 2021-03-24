@@ -366,6 +366,11 @@ class EditPostForm extends Component {
     const PostSubmitPanel = () => {
       return (
         <Container style={submittPanelStyle}>
+          <button className="button has-tooltip-info has-tooltip-multiline"
+          data-tooltip='Checking the "Private Post" box will only allow the author to view this post. 
+                        Checking the "Unlisted" box will allow this post to only show up on the stream of this post author'
+          id="helpToolTip"
+          style={{ width:40, marginTop:20, float:"left", backgroundColor:"#FF00FF", color:"white", borderRadius:`50%` }} >?</button>
           <VisibilityCheckBox />
           <UnlistCheckBox/>
           <PostFormButtonPanel/>

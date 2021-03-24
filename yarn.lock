@@ -3097,6 +3097,11 @@
   "resolved" "https://registry.npmjs.org/bulma-switch/-/bulma-switch-2.0.0.tgz"
   "version" "2.0.0"
 
+"bulma-tooltip@^3.0.2":
+  "integrity" "sha512-CsT3APjhlZScskFg38n8HYL8oYNUHQtcu4sz6ERarxkUpBRbk9v0h/5KAvXeKapVSn2dp9l7bOGit5SECP8EWQ=="
+  "resolved" "https://registry.npmjs.org/bulma-tooltip/-/bulma-tooltip-3.0.2.tgz"
+  "version" "3.0.2"
+
 "bulma@0.8.2":
   "integrity" "sha512-vMM/ijYSxX+Sm+nD7Lmc1UgWDy2JcL2nTKqwgEqXuOMU+IGALbXd5MLt/BcjBAPLIx36TtzhzBcSnOP974gcqA=="
   "resolved" "https://registry.yarnpkg.com/bulma/-/bulma-0.8.2.tgz"

@@ -9,6 +9,7 @@ import Login from "./components/login/Login";
 import Stream from "./components/stream/Stream";
 import Profile from "./components/profile/Profile";
 import NavigationBar from "./components/NavigationBar";
+// import SelectedPost from "./components/stream/posts/SelectedPost";
 
 import axios from "axios";
 axios.defaults.baseURL = "http://localhost:8000/api";
@@ -25,6 +26,7 @@ class App extends Component {
             <Route path="/login" component={Login} />
             <Route path="/stream" component={Stream} />
             <Route path="/author/:id" component={Profile} />
+            {/* <Route path="/post/:id/:pk" component={SelectedPost} /> */}
             <Route exact path="/" component={Home} />
           </Switch>
         </Root>

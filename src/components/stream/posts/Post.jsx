@@ -11,7 +11,6 @@ import EditButton from "./EditButton";
 import ShareButton from "./ShareButton";
 import LikeButton from "./LikeButton";
 
-
 var dividorStyle = {
   marginTop: "1em",
   marginBottom: "0.6em",
@@ -61,6 +60,9 @@ var contentStyle = {
 function Post(props) {
   const [editModalIsOpen, setEditModalIsOpen] = useState(false);
   console.log(props.post);
+  
+  const postURL = "/post" + "/" + props.post.author.id + "/" + props.post.id;
+
   const IsImage = () => {
     if (props.post.contentType === "text/plain") {
       return false;
@@ -87,7 +89,9 @@ function Post(props) {
           </Card.Header.Title>
         </Card.Header>
         <Card.Content>
-          <Heading size={8}>{props.post.title}</Heading>
+          <Heading size={8}>
+            <a href={`${postURL}`} onClick={<Post />}>{props.post.title}</a>
+          </Heading>
           <Dividor style={dividorStyle}/>
           {isImage ? (
             <Content>

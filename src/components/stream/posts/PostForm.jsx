@@ -1,12 +1,12 @@
 import React, { Component } from "react";
 import ReactMde from "react-mde";
 import { Icon, Form, Button, Panel, Card, Heading, Container } from "react-bulma-components";
+import Tooltip from "bulma-tooltip";
 import Markdown from "react-markdown";
 import ReactTags from "react-tag-autocomplete";
 import "./react-tags.css";
-import HelpModal from "./HelpModal";
+import "./toolTip.css";
 
-import helpIcon from './helpIcon.png';
 import CancelButton from "./CancelButton";
 import ConfirmButton from "./ConfirmButton";
 import CheckBox from "./CheckBox";
@@ -364,10 +364,11 @@ class PostForm extends Component {
     const PostSubmitPanel = () => {
       return (
         <Container style={submittPanelStyle}>
-          <img className="help" src={helpIcon} style={{ width:40, marginTop:20, float:"left" }}
-            onMouseEnter={this.handleOnHoverHelp}
-            onMouseLeave={this.handleOffHoverHelp}
-          />
+          <button className="button has-tooltip-info has-tooltip-multiline"
+          data-tooltip='Checking the "Private Post" box will only allow the author to view this post. 
+                        Checking the "Unlisted" box will allow this post to only show up on the stream of this post author'
+          id="helpToolTip"
+          style={{ width:40, marginTop:20, float:"left", backgroundColor:"#FF00FF", color:"white", borderRadius:`50%` }} >?</button>
           <VisibilityCheckBox />
           <UnlistCheckBox/>
           <PostFormButtonPanel/>
