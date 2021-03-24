@@ -78,14 +78,14 @@ function Post(props) {
           <p style={{ margin: "1em", fontSize: "0.7em" }}>{props.post.published}</p>
         </Card.Content>
         <Card.Footer>
-          <Card.Footer.Item renderAs="a">
+          <Card.Footer.Item renderAs="a" onClick={{}}>
             <LikeButton/>
           </Card.Footer.Item>
-          <Card.Footer.Item renderAs="a">
+          <Card.Footer.Item renderAs="a" onClick={{}}>
             <ShareButton/>
           </Card.Footer.Item>
-          <Card.Footer.Item renderAs="a">
-            <EditButton action={() => setEditModalIsOpen(true)}/>
+          <Card.Footer.Item renderAs="a" onClick={() => setEditModalIsOpen(true)}>
+            <EditButton/>
           </Card.Footer.Item>
           <Modal show={editModalIsOpen} onClose={() => setEditModalIsOpen(false)} closeOnBlur closeOnEsc>
             <EditPostForm
