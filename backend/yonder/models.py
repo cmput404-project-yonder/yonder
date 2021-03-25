@@ -6,7 +6,7 @@ from django.utils.translation import gettext_lazy as _
 from django.contrib.postgres.fields import ArrayField
 from django.core import serializers
 import uuid
-import re
+import re, json
 
 
 class ContentTypes(models.TextChoices):
@@ -102,15 +102,14 @@ class Inbox(models.Model):
 
 @receiver(post_save, sender=Post)
 def post_to_inbox(sender, instance, **kwargs):
-    follows = AuthorFollower.objects.all()
+    follows = AuthorFollower.objects.all().filter(author_id=instance.author.id)
     for follow in follows:
-        follower = serializers.deserialize('json',follow.follower)
-        for obj in follower:
-            inbox = Inbox.objects.get(author_id=obj.object.pk)
-            data = serializers.serialize('json',[instance]) 
-            inbox.items.append(data)
-            inbox.save()
-       
+        follower = json.loads(follow.follower)[0]
+        inbox = Inbox.objects.get(author_id=follower["pk"])
+        data = serializers.serialize('json',[instance]) 
+        inbox.items.append(data)
+        inbox.save()
+    
 '''
 @receiver(post_save, sender=AuthorFollower)
 def follow_to_inbox(sender, instance, **kwargs):
