@@ -1,6 +1,7 @@
 html,
 body {
-  background: #fbfbfb;
+  background: #555555;
+  font-size: 0.9em;
 }
 #root {
   text-align: center;
@@ -14,7 +15,7 @@ body {
 }
 
 .navbar.is-fixed-top.is-light {
-  background:rgb(0,0,0,0.01);
+  background:rgb(0,0,0,0.2);
   border: none;
 }
 
