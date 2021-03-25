@@ -9,118 +9,13 @@ import CancelButton from "./CancelButton";
 import ConfirmButton from "./ConfirmButton";
 import CheckBox from "./CheckBox";
 
-
 import { TextIcon, ImageIcon, MarkdownIcon } from "./postSVG";
 import { color } from "./styling";
 import PostTab from "./PostTab";
 import Dividor from "./Dividor"
 
-var checkBoxLabelStyle = {
-  paddingRight: "0.5em",
-  fontWeight: "400",
-  fontSize: "1.1em",
-  color: color.baseLightGrey,
-}
-
-var checkBoxStyle = {
-  paddingTop: "1.5em",
-  paddingLeft: "1.8em",
-  display: "flex",
-  float: "left",
-  justifyContent: "flex-start"
-}
-
-var checkMarkStyle = {
-  paddingTop: "0.2em",
-  fill: color.baseRed,
-}
-
-// used for display info like @author or header
-// empty for now
-var createPostHeaderStype = {
-  display: "flex",
-  padding: "0.5em",
-}
-
-
-var cardStyle = {
-  borderRadius: "8pt",
-  width: "450pt",
-  height: "auto",
-  boxShadow: "0pt 0pt 12pt #AAAAAA",
-  backgroundColor: color.backgroundCream,
-}
-
-var panelStyle = {
-  display: "flex",
-  justifyContent: "between",
-  textAlign: "center",
-  paddingTop: "0.2em",
-  paddingBottom: "0em",
-  fontSize: "1.35em",
-  fontWeight: "350",
-  paddingLeft: "1em",
-  paddingRight: "1em",
-}
-
-var tabStyle = {
-  width: "100%",
-}
-
-var submittPanelStyle = {
-  margin: "0.5em",
-  marginBottom: "0em",
-  marginTop: "0em",
-  paddingRight: "1.5em",
-  paddingLeft: "1.5em",
-}
-
-var formContainerStyle = {
-  boxShadow: "0pt 0pt 3pt #B1B1B1",
-  borderRadius: "8pt",
-  marginLeft: "-1.2em",
-  marginRight: "-1.2em",
-  paddingTop: "1em",
-  paddingBottom: "1em",
-  paddingRight: "1.5em",
-  paddingLeft: "1.5em",
-  backgroundColor: color.backgroundGrey,
-}
-
-var labelStyle = {
-  paddingTop: "0.1em",
-  paddingLeft: "0.5em",
-  textAlign: "left",
-  fontWeight: "400",
-  color: color.baseLightGrey,
-}
-
-var dividorStyle = {
-  marginTop: "1em",
-  marginBottom: "0.6em",
-}
-
-var formTitleStyle = {
-  overflowY: "hidden",
-  whiteSpace: "nowrap",
-  resize: "none",
-  height: "35pt",
-}
-
-var buttonLayoutStyle = {
-  display: "flex",
-  width: "0em",
-  float: "right",
-  marginRight: "10em",       // the width of two button.
-}
-
-var postIconStyle = {
-  scale: "70",
-  style: {
-    padding: "1em",
-    fill: color.postIcon,
-  }
-}
+import { checkBoxLabelStyle, checkBoxStyle, checkMarkStyle, createPostHeaderStype, cardStyle, panelStyle, 
+  tabStyle, submittPanelStyle, formContainerStyle, labelStyle, dividorStyle, formTitleStyle, buttonLayoutStyle, postIconStyle } from "./StyleComponents";
 
 class EditPostForm extends Component {
   constructor(props) {

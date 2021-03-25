@@ -16,7 +16,7 @@ function FollowButton(props) {
   return (
     <Container style={buttonStyle.style}>
       <Button onClick={props.action}>
-        <svg xmlns="http://www.w3.org/2000/svg" width={buttonStyle.scale} height="auto" viewBox="0 0 45.415 45.415">
+        <svg xmlns="http://www.w3.org/2000/svg" width={buttonStyle.scale} viewBox="0 0 45.415 45.415">
           <g id="Group_56" data-name="Group 56" transform="translate(-372.995 -531.292)">
             <g id="_907873" data-name="907873" transform="translate(372.995 531.292)">
               <g id="Group_50" data-name="Group 50" transform="translate(28.503)">

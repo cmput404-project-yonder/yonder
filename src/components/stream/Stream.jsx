@@ -8,41 +8,7 @@ import "bulma-pageloader/dist/css/bulma-pageloader.min.css";
 import PostList from "./posts/PostList";
 import PopupModal from "./posts/PopupModal";
 import { createPost, updatePost, retrieveLoggedInAuthorPosts, deletePost } from "./StreamActions";
-
-
-
-
-var buttonLayerContainerStyle = {
-  gridColumn: "1",
-  gridRow: "1",
-  width: "100%",
-  height: "100%",
-}
-
-var streamLayerContainerStyle = {
-  gridColumn: "1",
-  gridRow: "1",
-  width: "100%",
-  height: "100%",
-  
-}
-
-
-var newPostButtonStyle = {
-  float: "right",
-  zIndex: "1000",
-  position: "fixed",
-  right: "5%",
-  bottom: "5%",
-}
-
-var pageStyle = {
-  display: "grid"
-
-}
-
-var postStreamStyle = {
-}
+import { buttonLayerContainerStyle, streamLayerContainerStyle, newPostButtonStyle, pageStyle, postStreamStyle } from "./posts/StyleComponents";
 
 class Stream extends Component {
   componentDidMount() {

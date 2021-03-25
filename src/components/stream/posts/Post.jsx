@@ -6,62 +6,17 @@ import EditPostForm from "./EditPostForm";
 import { Card, Content, Heading } from "react-bulma-components";
 import { font, color } from "./styling";
 import Dividor from "./Dividor";
-
+import { Link } from "react-router-dom";
 import EditButton from "./EditButton";
 import ShareButton from "./ShareButton";
 import LikeButton from "./LikeButton";
-
-var dividorStyle = {
-  marginTop: "1em",
-  marginBottom: "0.6em",
-}
-
-var postStyle = {
-  boxShadow: "0pt 0pt 8pt #CCCCCC",
-  borderRadius: "6pt",
-  backgroundColor: color.backgroundCreamLighter,
-  marginBottom: "2em",
-  marginTop: "4em",
-  fontFamily: font.segoeUI,
-  fontWeight: "350",
-  fontSize: "1.3em",
-  color: color.baseBlack,
-  minHeight: "25em",
-  display: "flex",
-  flexDirection: "column",
-  justifyContent: "space-between",
-}
-
-var textStyle = {
-  color: color.baseBlack,
-  fontFamily: font.segoeUI,
-  fontSize: "1.3em",
-}
-
-var authorStyle = {
-  color: color.baseBlack,
-  fontFamily: font.segoeUI,
-  fontSize: "1em",
-  fontWeight: "400",
-  textAlign: "right",
-  paddingRight: "0.8em",
-}
-
-var contentStyle = {
-  paddingTop: "3em",
-  paddingBottom: "2em",
-  textIndent: "2em",
-  textAlign: "justify",
-  fontSize: "1.2em",
-  paddingLeft: "2.2em",
-  paddingRight: "2.2em",
-}
+import { dividorStyle, postStyle, textStyle, authorStyle, contentStyle } from "./StyleComponents";
 
 function Post(props) {
   const [editModalIsOpen, setEditModalIsOpen] = useState(false);
   console.log(props.post);
   
-  const postURL = "/post" + "/" + props.post.author.id + "/" + props.post.id;
+  const postURL = "/author/" + props.post.author.id + "/posts/" + props.post.id;
 
   const IsImage = () => {
     if (props.post.contentType === "text/plain") {
@@ -90,7 +45,7 @@ function Post(props) {
         </Card.Header>
         <Card.Content>
           <Heading size={8}>
-            <a href={`${postURL}`} onClick={<Post />}>{props.post.title}</a>
+            <Link to={`${postURL}`}>{props.post.title}</Link>
           </Heading>
           <Dividor style={dividorStyle}/>
           {isImage ? (

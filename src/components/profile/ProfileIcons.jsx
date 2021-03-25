@@ -5,7 +5,7 @@ SVG components:
 
 function ProfileIcon(props) {
   return (
-    <svg xmlns="http://www.w3.org/2000/svg" width={props.svgScale} height="auto" viewBox="0 0 130.764 130.764">
+    <svg xmlns="http://www.w3.org/2000/svg" width={props.svgScale} viewBox="0 0 130.764 130.764">
       <g id="Group_47" data-name="Group 47" transform="translate(-804.583 -705.414)">
         <path
           id="Ellipse_23"
@@ -41,7 +41,6 @@ function YonderLogo(props) {
       data-name="Logo placeholder svg"
       xmlns="http://www.w3.org/2000/svg"
       width={props.svgScale}
-      height="auto"
       viewBox="0 0 26.288 26.277"
     >
       <path
@@ -59,7 +58,7 @@ function EditButton(props) {
   // https://www.flaticon.com/free-icon/pencil_181540?term=edit&page=1&position=19&page=1&position=19&related_id=181540&origin=search
   // free license
   return (
-    <svg id="Edit" xmlns="http://www.w3.org/2000/svg" width={props.svgScale} height="auto" viewBox="0 0 32.009 32.009">
+    <svg id="Edit" xmlns="http://www.w3.org/2000/svg" width={props.svgScale} viewBox="0 0 32.009 32.009">
       <path
         id="Path_89"
         data-name="Path 89"
@@ -78,7 +77,6 @@ function GithubLogo(props) {
       data-name="Github logo vector"
       xmlns="http://www.w3.org/2000/svg"
       width={props.svgScale}
-      height="auto"
       viewBox="0 0 26.943 26.277"
     >
       <path

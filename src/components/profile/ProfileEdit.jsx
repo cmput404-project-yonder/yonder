@@ -11,43 +11,11 @@ import Divider from "./Divider";
 import { Button, Form, Container } from "react-bulma-components";
 import { YonderLogo } from "./ProfileViewSVG";
 import { style, color } from "./styling";
+import { formStyle, headingStyle } from "../stream/posts/StyleComponents";
 
 // local styling
 var buttonStyleGeneric = style.button.style.generic;
 var buttonsLayout = style.button.layout.horizontalBetween;
-
-var formStyle = {
-  overall: {
-    paddingLeft: "1em",
-    paddingRight: "1em",
-    paddingTop: "0.5em",
-    paddingBottom: "0.75em",
-  },
-  label: Object.assign(
-    {},
-    style.text.body, // overwrite the font styling set by bulma
-    {
-      paddingTop: "0.5em",
-      textAlign: "left",
-      fontWeight: "400",
-    }
-  ),
-};
-
-var headingStyle = {
-  overall: {
-    paddingTop: "1.5em",
-    paddingBottom: "2em",
-  },
-  title: style.text.heading,
-  logo: {
-    scale: "90",
-    style: {
-      padding: "1.1em",
-      fill: color.baseBlack,
-    },
-  },
-};
 
 class ProfileEdit extends React.Component {
   constructor(props) {

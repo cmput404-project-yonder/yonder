@@ -13,9 +13,8 @@ import FollowButton from "./buttons/FollowButton";
 import FriendButton from "./buttons/FriendButton";
 import EditProfileButton from "./buttons/EditButton";
 
-var profileShowStyle = {
-  width: "25em",
-};
+import { profileShowStyle } from "../stream/posts/StyleComponents"; 
+
 
 function ProfileShow(props) {
   const clickFollow = () => {
@@ -71,7 +70,6 @@ class Profile extends React.Component {
     this.props.retrieveAuthor(params.id);
     this.props.retrieveAuthorPosts(params.id);
   }
-
   render() {
     if (this.props.loading) {
       return (
@@ -80,6 +78,7 @@ class Profile extends React.Component {
         </div>
       );
     }
+    console.log(this.props.retrievedAuthorPosts);
 
     return (
       <Container style={{ marginTop: "1em" }}>
