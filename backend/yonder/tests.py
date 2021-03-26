@@ -2,7 +2,7 @@ from django.urls import reverse
 from rest_framework import status
 from rest_framework.test import APITestCase
 from django.utils import timezone
-from .models import Author, User, Post, Inbox, AuthorFollower
+from .models import Author, User, Post, Inbox, AuthorFollower, AuthorFriend
 from .serializers import AuthorSerializer
 import json
 
@@ -197,6 +197,19 @@ class FollowerTests(APITestCase):
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(follower_data["displayName"], self.author2.displayName)
+
+    def test_are_friends(self):
+        # Setup two-way following
+        url = reverse('followers', args=[self.author1.id, self.author2.id])
+        response = self.client.put(url, data=self.authorJSON2, format='json')
+        url = reverse('followers', args=[self.author2.id, self.author1.id])
+        response = self.client.put(url, data=self.authorJSON1, format='json')
+
+        self.author1.refresh_from_db()
+        self.author2.refresh_from_db()
+
+        self.assertEqual(1, AuthorFriend.objects.filter(author=self.author1, friend=self.authorJSON2).count())
+        self.assertEqual(1, AuthorFriend.objects.filter(author=self.author2, friend=self.authorJSON1).count())
 
 
 class InboxTests(APITestCase):

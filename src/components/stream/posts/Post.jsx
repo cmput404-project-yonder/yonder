@@ -18,11 +18,11 @@ var dividorStyle = {
 }
 
 var postStyle = {
-  boxShadow: "0pt 0pt 8pt #CCCCCC",
+  boxShadow: "0pt 0pt 8pt rgb(0,0,0,0.5)",
   borderRadius: "6pt",
   backgroundColor: color.backgroundCreamLighter,
-  marginBottom: "2em",
-  marginTop: "4em",
+  marginBottom: "3em",
+  marginTop: "0.5em",
   fontFamily: font.segoeUI,
   fontWeight: "350",
   fontSize: "1.3em",
@@ -78,14 +78,14 @@ function Post(props) {
           <p style={{ margin: "1em", fontSize: "0.7em" }}>{props.post.published}</p>
         </Card.Content>
         <Card.Footer>
-          <Card.Footer.Item renderAs="a">
+          <Card.Footer.Item renderAs="a" onClick={{}}>
             <LikeButton/>
           </Card.Footer.Item>
-          <Card.Footer.Item renderAs="a">
+          <Card.Footer.Item renderAs="a" onClick={{}}>
             <ShareButton/>
           </Card.Footer.Item>
-          <Card.Footer.Item renderAs="a">
-            <EditButton action={() => setEditModalIsOpen(true)}/>
+          <Card.Footer.Item renderAs="a" onClick={() => setEditModalIsOpen(true)}>
+            <EditButton/>
           </Card.Footer.Item>
           <Modal show={editModalIsOpen} onClose={() => setEditModalIsOpen(false)} closeOnBlur closeOnEsc>
             <EditPostForm

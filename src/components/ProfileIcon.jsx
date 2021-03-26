@@ -4,7 +4,7 @@ var iconStyling = {
     scale: "25",
     style: {
         padding: "0.5em",
-        fill: "#505050",
+        fill: "#BFBFBF",
     }
 }
 

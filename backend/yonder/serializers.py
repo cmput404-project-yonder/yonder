@@ -103,7 +103,7 @@ class AuthorFollowerSerializer(serializers.ModelSerializer):
 class AuthorFriendSerializer(serializers.ModelSerializer):
     class Meta:
         model = AuthorFriend
-        fields = ('author', 'friend')
+        fields = ('author', 'friend', 'created_at')
 
 class RemoteNodeSerializer(serializers.ModelSerializer):
     class Meta:
