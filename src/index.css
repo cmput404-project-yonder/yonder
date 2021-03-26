@@ -68,3 +68,7 @@ body {
 button {
   margin: 0.5em;
 }
+
+.modal-background {
+  background-color: rgba(172, 172, 172, 0.6)
+}
