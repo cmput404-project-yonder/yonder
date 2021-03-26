@@ -110,17 +110,16 @@ def post_to_inbox(sender, instance, **kwargs):
         inbox.items.append(data)
         inbox.save()
     
-'''
+
 @receiver(post_save, sender=AuthorFollower)
 def follow_to_inbox(sender, instance, **kwargs):
-    followee = instance.object
-    inbox = Inbox.objects.get(author_id=followee.id)
-    if inbox.exists():
-        data = serializers.serialize('json',instance) 
-        inbox.items.append(data)
-        inbox.save()
+    follower = instance.follower
+    inbox = Inbox.objects.get(author_id=follower["pk"])
+    data = serializers.serialize('json',[instance]) 
+    inbox.items.append(data)
+    inbox.save()
     
- 
+'''
 @receiver(post_save, sender=Liked)
 def like_to_inbox(sender, instance, **kwargs):
     src_author_id = re.match('(?<=/author/).*(?=/posts)', instance.object)
