@@ -7,7 +7,7 @@ import "bulma-pageloader/dist/css/bulma-pageloader.min.css";
 
 import PostList from "./posts/PostList";
 import PopupModal from "./posts/PopupModal";
-import { createPost, updatePost, retrieveLoggedInAuthorPosts, deletePost } from "./StreamActions";
+import { createPost, updatePost, sharePost, retrieveLoggedInAuthorPosts, deletePost } from "./StreamActions";
 
 
 
@@ -71,6 +71,7 @@ class Stream extends Component {
                     posts={this.props.currentAuthorPosts}
                     updatePost={this.props.updatePost}
                     deletePost={this.props.deletePost}
+                    sharePost={this.props.sharePost}
                   />
                 </Columns.Column>
               </Columns>
@@ -98,6 +99,6 @@ const mapStateToProps = (state) => ({
   loading: state.stream.loading,
 });
 
-export default connect(mapStateToProps, { createPost, updatePost, retrieveLoggedInAuthorPosts, deletePost })(
+export default connect(mapStateToProps, { createPost, updatePost, sharePost, retrieveLoggedInAuthorPosts, deletePost })(
   withRouter(Stream)
 );

@@ -16,6 +16,40 @@ import {
 } from "./StreamTypes";
 import { setAxiosAuthToken } from "../../utils/Utils";
 
+
+export const sharePost = (newPost) => (dispatch, getState) => {
+  /*
+  NOTICE: change this before part2 deadline
+  for now, sharePost will treat the post as new, and do the samething as createPost.
+  source and origin, will be handled by backend
+  backend support should be ready before demo March 31st
+  */
+  const state = getState();
+  setAxiosAuthToken(state.auth.token);
+
+  newPost["author"] = state.auth.author;
+
+  dispatch({ type: NEW_POST_SUBMITTED });
+  axios
+    .post("/author/" + state.auth.author.id + "/posts/", newPost)
+    .then((response) => {
+      dispatch({ type: NEW_POST_SUCCESS, payload: response.data });
+    })
+    .catch((error) => {
+      if (error.response) {
+        toast.error(JSON.stringify(error.response.data));
+        dispatch({
+          type: NEW_POST_ERROR,
+          errorData: error.response.data,
+        });
+      } else if (error.message) {
+        toast.error(JSON.stringify(error.message));
+      } else {
+        toast.error(JSON.stringify(error));
+      }
+    });
+};
+
 export const createPost = (newPost) => (dispatch, getState) => {
   const state = getState();
   setAxiosAuthToken(state.auth.token);
