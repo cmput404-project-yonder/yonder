@@ -55,7 +55,7 @@ class signup(generics.GenericAPIView):
         if "host" not in request.data:
             current_site = get_current_site(request=request)
             author_data["host"] = request.scheme + \
-                "://" + current_site.name
+                "://" + current_site.name + "/"
         else:
             author_data["host"] = request.data["host"]
         author_data["user"] = user.id
