@@ -30,7 +30,7 @@ var buttonLayoutStyle = {
 
 var cardStyle = {
     borderRadius: "8pt",
-    width: "450pt",
+    width: "470pt",
     height: "auto",
     boxShadow: "0pt 0pt 12pt #AAAAAA",
     backgroundColor: color.backgroundCream,
@@ -47,12 +47,13 @@ var postIconStyle = {
 var postCardDisplayStyle = {
     boxShadow: "0pt 0pt 3pt #B1B1B1",
     borderRadius: "8pt",
-    marginLeft: "1.4em",
-    marginRight: "1.4em",
+    marginLeft: "1em",
+    marginRight: "1em",
     paddingTop: "1em",
     paddingBottom: "1em",
     paddingRight: "1.5em",
     paddingLeft: "1.5em",
+    fontSize: "1.3em",
     backgroundColor: color.backgroundGrey,
 }
 
@@ -68,7 +69,7 @@ var dividorStyle = {
 
 var promptTitleStyle = {
     fontSize: "2.2em",
-    fontWeight: "350",
+    fontWeight: "400",
     marginTop: "-62pt",
     marginLeft: "80pt",
     fontFamily: font.segoeUI,
@@ -105,6 +106,12 @@ class SharingPostPromptCard extends React.Component {
             this.props.setModalIsOpen(false);
         }
 
+        const confirmButtonHandler = () => {
+            // this function implement the sharing functionility
+
+            // send the entire post to backend.
+            this.props.sharePost(this.props.post)
+        }
 
         const PostSubmitPanel = () => {
             return (
@@ -120,7 +127,7 @@ class SharingPostPromptCard extends React.Component {
             return (
               <Container style={buttonLayoutStyle}>
                 <CancelButton action={cancelButtonHandler}/>
-                <ConfirmButton action={{}}/>
+                <ConfirmButton action={confirmButtonHandler}/>
               </Container>
             )
         }

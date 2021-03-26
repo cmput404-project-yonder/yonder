@@ -75,8 +75,7 @@ function Post(props) {
             <SharingPostPrompt
               setModalIsOpen={setSharingPromptIsOpen}   
               post={props.post}
-              updatePost={props.updatePost}
-              deletePost={props.deletePost}
+              sharePost={props.sharePost}
             />
           </Modal>
         </Card.Footer>
