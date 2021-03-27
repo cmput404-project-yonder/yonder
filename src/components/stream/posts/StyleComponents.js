@@ -152,7 +152,7 @@ export const streamLayerContainerStyle = {
   
 export const newPostButtonStyle = {
     float: "right",
-    zIndex: "1000",
+    zIndex: "1",
     position: "fixed",
     right: "5%",
     bottom: "5%",
