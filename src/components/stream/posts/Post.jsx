@@ -30,11 +30,8 @@ function Post(props) {
     }
   }
   const isImage = IsImage();
-  if (isImage) {
-    
-  }
 
-  console.log(isImage);
+  // console.log(isImage);
 
   return (
       <Card style={postStyle}>

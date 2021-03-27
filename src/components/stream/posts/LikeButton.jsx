@@ -4,7 +4,7 @@
 
 import { LikeIcon } from "./postSVG";
 import { Container } from "react-bulma-components";
-import {color} from "./styling";
+import { color } from "../../profile/styling";
 
 
 // local styling
@@ -20,7 +20,7 @@ function LikeButton(props) {
 
     return (
         <Container style={buttonStyle.style}>
-            <a onClick={props.action}><LikeIcon svgScale={buttonStyle.scale}/></a>
+            <a onClick={props.action}><LikeIcon svgScale={buttonStyle.scale} /></a>
         </Container>
     );
 }

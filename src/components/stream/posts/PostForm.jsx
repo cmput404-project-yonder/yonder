@@ -44,11 +44,11 @@ class PostForm extends Component {
   }
 
   handleOnHoverHelp = () => {
-    console.log("Mouse is hovering");
+    // console.log("Mouse is hovering");
   }
 
   handleOffHoverHelp = () => {
-    console.log("Mouse has left");
+    // console.log("Mouse has left");
   }
 
   handleFileSelected = event => {
@@ -76,13 +76,13 @@ class PostForm extends Component {
       this.setState({
         visibility: "PRIVATE",
       });
-      console.log(this.state.visibility);
+      // console.log(this.state.visibility);
     }
     else if (this.state.visibility === "PRIVATE") {
       this.setState({
         visibility: "PUBLIC",
       });
-      console.log(this.state.visibility);
+      // console.log(this.state.visibility);
     }
   }
 
@@ -90,7 +90,7 @@ class PostForm extends Component {
     this.setState({
       unlisted: !this.state.unlisted,
     });
-    console.log(this.state.unlisted);
+    // console.log(this.state.unlisted);
   };
 
   onChange = (evt) => {
@@ -101,7 +101,7 @@ class PostForm extends Component {
   };
 
   addPost() {
-    console.log(this.state.imageObj);
+    // console.log(this.state.imageObj);
     const contentType = () => {
       switch (this.state.selectedTab) {
         case "text":
@@ -132,7 +132,7 @@ class PostForm extends Component {
     };
     this.props.createPost(newPost);
     this.props.setModalIsOpen(false);
-    console.log(this.state);
+    // console.log(this.state);
     
   }
 
@@ -233,7 +233,7 @@ class PostForm extends Component {
       } else {
         return false;
       }
-      console.log(this.state.visibility);
+      // console.log(this.state.visibility);
     }
 
     const VisibilityCheckBox = () => {
