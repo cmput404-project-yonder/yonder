@@ -13,7 +13,7 @@ import SelectedPost from "./components/stream/posts/SelectedPost";
 import 'animate.css';
 
 import axios from "axios";
-axios.defaults.baseURL = "http://localhost:8000/api";
+axios.defaults.baseURL= process.env.NODE_ENV == "PRODUCTION" ? "https://yonder.moe/api" : "http://localhost:8000/api";
 
 class App extends Component {
   render() {

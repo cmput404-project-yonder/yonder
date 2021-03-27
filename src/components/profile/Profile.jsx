@@ -44,9 +44,6 @@ var profileListStyle ={
   maxWidth: "300pt"
 }
 
-var streamPostStyle ={
-}
-
 class Profile extends React.Component {
   constructor(props) {
     super(props);
@@ -130,17 +127,10 @@ class Profile extends React.Component {
                 </Container>
                 {this.props.match.params.id === this.props.loggedInAuthor.id ? loggedAuthor() : otherAuthor()}
               </Card>
-            {/* <ProfileShow */}
-            {/*   postNum={this.props.retrievedAuthorPosts.length} */}
-            {/*   retrievedAuthor={this.props.retrievedAuthor} */}
-            {/*   editable={this.props.match.params.id === this.props.loggedInAuthor.id} */}
-            {/*   clickFollow={clickFollow} */}
-            {/*   isFollowing={this.state.isFollowing} */}
-            {/* /> */}
             </div>
           </Columns.Column>
           <Columns.Column>
-            <PostList posts={this.props.retrievedAuthorPosts} style={streamPostStyle} />
+            <PostList posts={this.props.retrievedAuthorPosts} />
           </Columns.Column>
         </Columns>
       </Section>
