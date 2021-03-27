@@ -12,6 +12,8 @@ import { retrieveAuthor, retrieveAuthorPosts, sendFollow, checkFollowing } from 
 import FollowButton from "./buttons/FollowButton";
 import EditProfileButton from "./buttons/EditButton";
 
+
+import { profileShowStyle } from "../stream/posts/StyleComponents"; 
 import { color,font } from "./styling";
 
 
@@ -41,25 +43,6 @@ var profileListStyle ={
   minWidth: "380pt",
   maxWidth: "300pt"
 }
-
-var streamPostStyle ={
-}
-
-var profileShowStyle = {
-  boxShadow: "0pt 0pt 8pt rgb(0,0,0,0.5)",
-  borderRadius: "6pt",
-  backgroundColor: color.backgroundCreamLighter,
-  marginBottom: "2em",
-  marginTop: "0.5em",
-  fontFamily: font.segoeUI,
-  fontWeight: "350",
-  fontSize: "1.3em",
-  color: color.baseBlack,
-  minHeight: "25em",
-  display: "flex",
-  flexDirection: "column",
-  justifyContent: "space-between",
-};
 
 class Profile extends React.Component {
   constructor(props) {
@@ -97,8 +80,10 @@ class Profile extends React.Component {
       if (!isFollowing) {
         return (
           <Card.Footer style={footerStyle}>
-            <Card.Footer.Item renderAs="a" onClick={() => clickFollow()}>
+            <Card.Footer.Item onClick={() => clickFollow()}>
+              <Button color="light" >
                 <FollowButton />
+              </Button>
             </Card.Footer.Item>
           </Card.Footer>
         );
@@ -142,17 +127,10 @@ class Profile extends React.Component {
                 </Container>
                 {this.props.match.params.id === this.props.loggedInAuthor.id ? loggedAuthor() : otherAuthor()}
               </Card>
-            {/* <ProfileShow */}
-            {/*   postNum={this.props.retrievedAuthorPosts.length} */}
-            {/*   retrievedAuthor={this.props.retrievedAuthor} */}
-            {/*   editable={this.props.match.params.id === this.props.loggedInAuthor.id} */}
-            {/*   clickFollow={clickFollow} */}
-            {/*   isFollowing={this.state.isFollowing} */}
-            {/* /> */}
             </div>
           </Columns.Column>
           <Columns.Column>
-            <PostList posts={this.props.retrievedAuthorPosts} style={streamPostStyle} />
+            <PostList posts={this.props.retrievedAuthorPosts} />
           </Columns.Column>
         </Columns>
       </Section>
