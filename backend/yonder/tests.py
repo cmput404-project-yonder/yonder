@@ -183,7 +183,7 @@ class FollowerTests(APITestCase):
         url = reverse('followers', args=[self.author1.id, self.author2.id])
         response = self.client.get(url, data=self.authorJSON2, format='json')
 
-        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
 
     def test_check_is_follower(self):
         # Setup a follow
