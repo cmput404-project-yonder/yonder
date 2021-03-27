@@ -1,0 +1,75 @@
+html,
+body {
+  background: #555555;
+  font-size: 0.9em;
+}
+#root {
+  text-align: center;
+}
+
+/* Navigation bar */
+.navbar {
+  border-bottom: 1px solid grey;
+  height: fit-content;
+  
+}
+
+.navbar.is-fixed-top.is-light {
+  background:rgb(0,0,0,0.2);
+  border: none;
+}
+
+.navbar-brand {
+  margin-left: 1em;
+}
+.navbar-menu {
+  
+  margin-right: 6rem;
+}
+
+/* Icons */
+.typcn {
+  font-size: 1.2em;
+}
+.typcn-user-outline,
+.typcn-bell {
+  font-size: 1.5em;
+}
+
+/* Stream page */
+.post-list {
+  max-width: 480pt;
+  min-width: 400pt;
+  margin: auto;
+}
+.list {
+  background: transparent;
+  box-shadow: none;
+}
+.post {
+  text-align: left;
+  line-height: 1.2em;
+  font-size: 0.85em;
+  margin: 1em;
+}
+/* Signup page */
+.login-form {
+  max-width: 320px;
+  margin: auto;
+}
+
+/* Signup page */
+.signup-form {
+  max-width: 320px;
+  margin: auto;
+}
+
+/* Buttons global */
+button {
+  margin: 0.5em;
+}
+
+.modal-background {
+  background-color: rgba(168, 168, 168, 0.6);
+  filter: blur(1pt);
+}
