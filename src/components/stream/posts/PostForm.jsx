@@ -5,18 +5,20 @@ import Tooltip from "bulma-tooltip";
 import Markdown from "react-markdown";
 import ReactTags from "react-tag-autocomplete";
 import "./react-tags.css";
-import "./toolTip.css";
 
 import CancelButton from "./CancelButton";
 import ConfirmButton from "./ConfirmButton";
 import CheckBox from "./CheckBox";
 
-import { TextIcon, ImageIcon, MarkdownIcon } from "./postSVG";
-import { color } from "./styling";
+import { TextIcon, ImageIcon, MarkdownIcon, ToolTipIcon } from "./postSVG";
 import PostTab from "./PostTab";
 import Dividor from "./Dividor"
 import { checkBoxLabelStyle, checkBoxStyle, checkMarkStyle, createPostHeaderStype, cardStyle, panelStyle,
 tabStyle, submittPanelStyle, formContainerStyle, labelStyle, dividorStyle, formTitleStyle, buttonLayoutStyle, postIconStyle } from "./StyleComponents";
+import { color } from "./styling";
+
+
+
 
 class PostForm extends Component {
   constructor(props) {
@@ -233,7 +235,6 @@ class PostForm extends Component {
       } else {
         return false;
       }
-      console.log(this.state.visibility);
     }
 
     const VisibilityCheckBox = () => {
@@ -271,11 +272,13 @@ class PostForm extends Component {
     const PostSubmitPanel = () => {
       return (
         <Container style={submittPanelStyle}>
-          <button className="button has-tooltip-info has-tooltip-multiline"
-          data-tooltip='Checking the "Private Post" box will only allow the author to view this post. 
-                        Checking the "Unlisted" box will allow this post to only show up on the stream of this post author'
-          id="helpToolTip"
-          style={{ width:40, marginTop:20, float:"left", backgroundColor:"#FF00FF", color:"white", borderRadius:`50%` }} >?</button>
+          <Button
+            className="has-tooltip-info has-tooltip-multiline"
+            data-tooltip='Checking the "Private Post" box will only allow the author to view this post. Checking the "Unlisted" box will allow this post to only show up on the stream of this post author'
+            style={{backgroundColor: "transparent", border: "none", fill: color.baseRed, marginTop: "1.2em", float: "left", width: "4em", padding: "0"}}
+          >
+            <ToolTipIcon svgScale={"25"}/>
+          </Button>
           <VisibilityCheckBox />
           <UnlistCheckBox/>
           <PostFormButtonPanel/>
