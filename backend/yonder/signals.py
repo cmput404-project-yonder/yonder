@@ -1,15 +1,21 @@
-from .models import Author, AuthorFollower, AuthorFriend
-from .serializers import AuthorSerializer, AuthorFriendSerializer
+from .models import Author, AuthorFollower, AuthorFriend, Post, Inbox, RemoteNode
+from .serializers import AuthorSerializer, AuthorFriendSerializer, AuthorFollowerSerializer, PostSerializer
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.core import serializers
 import uuid
 import requests
+import json
 
 
 def check_remote_follow(theirAuthor, ourAuthor):
+    try:
+        remoteNode = RemoteNode.objects.get(host=follower["host"])
+    except RemoteNode.DoesNotExist:
+        return False
+
     url = theirAuthor["url"] + "/followers/" + ourAuthor["id"]
-    response = requests.get(url)
+    response = requests.get(url, auth=HTTPBasicAuth(remoteNode.ourUser, remoteNode.ourPassword))
     if requests.status_code == 404:
         return False
     elif requests.status_code == 200:
@@ -55,3 +61,55 @@ def create_friend(sender, instance, **kwargs):
         except AuthorFollower.DoesNotExist:
             # The relationship is only one-way, so ignore
             return
+
+@receiver(post_save, sender=AuthorFollower, dispatch_uid='signal_handler_follow_save')
+def follow_to_inbox(sender, instance, **kwargs):
+    if kwargs["created"]:
+        inbox = Inbox.objects.get(author_id=instance.author)
+        data = instance.follower
+        data["type"] = "follow"
+        inbox.items.append(data)
+        inbox.save()
+
+@receiver(post_save, sender=Post,dispatch_uid='signal_handler_post_save')
+def create_post(sender, instance, **kwargs):
+    if kwargs["created"]:
+        # Set origin & source on creation
+        instance.source = instance.get_absolute_url()
+        if instance.origin == "":
+            instance.origin = instance.source
+
+        # Send out to follower Inboxes
+        followers = AuthorFollower.objects.filter(author_id=instance.author)
+        for follower in followers:
+            data = PostSerializer(instance=instance).data
+            data["type"] = "post"
+            try:
+                    inbox = Inbox.objects.get(author_id=follower.follower["id"])
+                    inbox.items.append(data)
+                    inbox.save()
+            except Inbox.DoesNotExist:
+                # Handle follower being on remote server
+                remoteNode = RemoteNode.objects.get(host=follower["host"])
+                url = follower["url"] + "/inbox/"
+                response = requests.post(url, data=data, auth=HTTPBasicAuth(remoteNode.ourUser, remoteNode.ourPassword))
+            except RemoteNode.DoesNotExist:
+                print("Unknown Host, WHO ARE YOU???")
+            finally:
+                instance.save()
+
+@receiver(post_save, sender=Author)
+def create_inbox(sender, instance, **kwargs):
+    if kwargs["created"]:
+        Inbox.objects.create(author=instance)
+
+'''
+@receiver(post_save, sender=Liked)
+def like_to_inbox(sender, instance, **kwargs):
+    src_author_id = re.match('(?<=/author/).*(?=/posts)', instance.object)
+    inbox = Inbox.objects.get(author_id=src_author_id)
+    if inbox.exists():
+        data = serializers.serialize('json', instance)
+        inbox.items.append(data)
+        inbox.save()
+'''
