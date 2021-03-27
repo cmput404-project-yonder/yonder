@@ -15,11 +15,11 @@ export const cardStyle = {
   }
 
 export const postStyle = {
-    boxShadow: "0pt 0pt 8pt #CCCCCC",
+    boxShadow: "0pt 0pt 8pt rgb(0,0,0,0.5)",
     borderRadius: "6pt",
     backgroundColor: color.backgroundCreamLighter,
-    marginBottom: "2em",
-    marginTop: "4em",
+    marginBottom: "3em",
+    marginTop: "0.5em",
     fontFamily: font.segoeUI,
     fontWeight: "350",
     fontSize: "1.3em",
@@ -28,7 +28,7 @@ export const postStyle = {
     display: "flex",
     flexDirection: "column",
     justifyContent: "space-between",
-}
+  }
 
 export const individualPostStyle = {
     boxShadow: "0pt 0pt 8pt #CCCCCC",
