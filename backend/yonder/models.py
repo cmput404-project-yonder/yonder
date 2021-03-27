@@ -98,3 +98,4 @@ class Inbox(models.Model):
                           editable=False, primary_key=True)
     author = models.ForeignKey(Author, on_delete=models.CASCADE)
     items = ArrayField(models.JSONField(), default=list)
+    

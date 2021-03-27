@@ -66,11 +66,7 @@ class signup(generics.GenericAPIView):
             raise validators.ValidationError(author_serializer.errors)
 
         author = author_serializer.save(user=user)
-        author.save()
-
-        inbox_serializer = InboxSerializer(data={"author": author.id})
-        inbox_serializer.is_valid(raise_exception=True)
-        inbox_serializer.save()
+        #author.save()
 
         token, created = Token.objects.get_or_create(user=user)
 
@@ -117,7 +113,7 @@ class posts(generics.ListCreateAPIView):
     def create(self, request, *args, **kwargs):
         post_data = request.data
         author = Author.objects.get(pk=kwargs["author_id"])
-        post_data["source"] = author.host
+        post_data["source"] = author.host 
         post_data["origin"] = author.host
         serializer = self.get_serializer(data=post_data)
         serializer.is_valid(raise_exception=True)

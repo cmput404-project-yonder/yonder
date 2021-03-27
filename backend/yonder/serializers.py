@@ -2,12 +2,13 @@ from rest_framework import serializers
 from .models import Post, Author, Comment, Inbox, AuthorFollower, AuthorFriend, RemoteNode
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate
-
+from django.shortcuts import get_object_or_404
 
 class AuthorSerializer(serializers.ModelSerializer):
     class Meta:
         model = Author
         fields = ('id', 'host', 'displayName', 'github')
+        
 
 
 class PostSerializer(serializers.ModelSerializer):

@@ -1,10 +1,11 @@
-from .models import Author, AuthorFollower, AuthorFriend
+from .models import Author, AuthorFollower, AuthorFriend, Post, Inbox
 from .serializers import AuthorSerializer, AuthorFriendSerializer
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.core import serializers
 import uuid
 import requests
+import json
 
 
 def check_remote_follow(theirAuthor, ourAuthor):
@@ -55,3 +56,46 @@ def create_friend(sender, instance, **kwargs):
         except AuthorFollower.DoesNotExist:
             # The relationship is only one-way, so ignore
             return
+
+@receiver(post_save, sender=AuthorFollower, dispatch_uid='signal_handler_follow_save')
+def follow_to_inbox(sender, instance, **kwargs):
+    if kwargs["created"]:
+        follower = instance.follower
+        inbox = Inbox.objects.get(author_id=instance.author)
+        data = serializers.serialize('json',[instance]) 
+        inbox.items.append(data)
+        inbox.save()
+
+@receiver(post_save, sender=Post,dispatch_uid='signal_handler_post_save')
+def create_post(sender, instance, **kwargs):
+    if kwargs["created"]:
+        instance.source = instance.get_absolute_url()
+        if instance.origin:
+            instance.origin = instance.source
+        try:
+            follows = AuthorFollower.objects.all().filter(author_id=instance.author)
+            for follow in follows:
+                data = serializers.serialize('json',[instance])
+                inbox = Inbox.objects.get(author_id=follow.follower["id"])
+                inbox.items.append(data)
+                inbox.save()
+        except AuthorFollower.DoesNotExist:
+            print("No followers")
+        finally:
+            instance.save()
+
+@receiver(post_save, sender=Author)
+def create_inbox(sender, instance, **kwargs):
+    if kwargs["created"]:
+        Inbox.objects.create(author=instance)
+
+'''
+@receiver(post_save, sender=Liked)
+def like_to_inbox(sender, instance, **kwargs):
+    src_author_id = re.match('(?<=/author/).*(?=/posts)', instance.object)
+    inbox = Inbox.objects.get(author_id=src_author_id)
+    if inbox.exists():
+        data = serializers.serialize('json', instance)
+        inbox.items.append(data)
+        inbox.save()
+'''
