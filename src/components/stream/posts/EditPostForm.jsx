@@ -7,15 +7,25 @@ import "./react-tags.css";
 
 import CancelButton from "./CancelButton";
 import ConfirmButton from "./ConfirmButton";
+import DeleteButton from "./DeleteButton";
 import CheckBox from "./CheckBox";
 
-import { TextIcon, ImageIcon, MarkdownIcon } from "./postSVG";
+import { TextIcon, ImageIcon, MarkdownIcon, ToolTipIcon } from "./postSVG";
 import { color } from "./styling";
 import PostTab from "./PostTab";
 import Dividor from "./Dividor"
 
 import { checkBoxLabelStyle, checkBoxStyle, checkMarkStyle, createPostHeaderStype, cardStyle, panelStyle, 
-  tabStyle, submittPanelStyle, formContainerStyle, labelStyle, dividorStyle, formTitleStyle, buttonLayoutStyle, postIconStyle } from "./StyleComponents";
+  tabStyle, submittPanelStyle, formContainerStyle, labelStyle, dividorStyle, formTitleStyle, postIconStyle } from "./StyleComponents";
+
+
+export const buttonLayoutStyle = {
+  display: "flex",
+  width: "0em",
+  float: "right",
+  marginRight: "15em",       // the width of two button.
+}
+
 
 class EditPostForm extends Component {
   constructor(props) {
@@ -30,6 +40,13 @@ class EditPostForm extends Component {
       return {id: i, name: t}
     })
 
+    let selectedTab = () => {
+      if ((this.props.post.contentType) === "text/plain") return "text";
+      if ((this.props.post.contentType) === "text/markdown") return "text";
+      return "image";
+    }
+
+
     this.state = {
       title: this.props.post.title,
       content: this.props.post.content,
@@ -38,7 +55,7 @@ class EditPostForm extends Component {
       unlisted: this.props.post.unlisted,
       visibility: this.props.post.visibility,
       categories: categoryTags,
-      selectedTab: this.props.post.selectedTab,
+      selectedTab: selectedTab(),
       markdownTab: "write",
     };
     console.log(this.state);
@@ -235,7 +252,6 @@ class EditPostForm extends Component {
       } else {
         return false;
       }
-      console.log(this.state.visibility);
     }
 
     const VisibilityCheckBox = () => {
@@ -251,9 +267,10 @@ class EditPostForm extends Component {
       // Confirm and back button used to submit form
       return (
         <Container style={buttonLayoutStyle}>
+          
           <CancelButton action={() => this.props.setEditModalIsOpen(false)}/>
+          <DeleteButton action={this.removePost}/>
           <ConfirmButton action={this.editPost}/>
-          <Button color="danger" onClick={this.removePost}>Delete</Button>
         </Container>
       )
     }
@@ -261,11 +278,13 @@ class EditPostForm extends Component {
     const PostSubmitPanel = () => {
       return (
         <Container style={submittPanelStyle}>
-          <button className="button has-tooltip-info has-tooltip-multiline"
-          data-tooltip='Checking the "Private Post" box will only allow the author to view this post. 
-                        Checking the "Unlisted" box will allow this post to only show up on the stream of this post author'
-          id="helpToolTip"
-          style={{ width:40, marginTop:20, float:"left", backgroundColor:"#FF00FF", color:"white", borderRadius:`50%` }} >?</button>
+          <Button
+            className="has-tooltip-info has-tooltip-multiline"
+            data-tooltip='Checking the "Private Post" box will only allow the author to view this post. Checking the "Unlisted" box will allow this post to only show up on the stream of this post author'
+            style={{backgroundColor: "transparent", border: "none", fill: color.baseRed, marginTop: "1.2em", float: "left", width: "4em", padding: "0"}}
+          >
+            <ToolTipIcon svgScale={"25"}/>
+          </Button>
           <VisibilityCheckBox />
           <UnlistCheckBox/>
           <PostFormButtonPanel/>
@@ -274,7 +293,7 @@ class EditPostForm extends Component {
     }
 
     return (
-      <Card style={cardStyle}>
+      <Card style={cardStyle} className="animate__animated animate__slideInUp">
         <Container style={createPostHeaderStype}>
           <Container style={postIconStyle.style}>{postIcons()}</Container>
         </Container>

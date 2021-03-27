@@ -174,7 +174,7 @@ export const checkBoxLabelStyle = {
   }
   
 export const checkBoxStyle = {
-    paddingTop: "1.5em",
+    paddingTop: "2em",
     paddingLeft: "1.8em",
     display: "flex",
     float: "left",

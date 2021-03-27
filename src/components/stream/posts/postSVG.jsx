@@ -4,7 +4,7 @@ SVG components:
     confirmButton
 */
 
-function CancelButton(props) {
+export function CancelButton(props) {
     // https://www.flaticon.com/free-icon/
     return (
         <svg id="cancelButton" data-name="cancelButton" xmlns="http://www.w3.org/2000/svg" width={props.svgScale} viewBox="0 0 65 64.999">
@@ -13,7 +13,7 @@ function CancelButton(props) {
     );
 }
 
-function ConfirmButton(props) {
+export function ConfirmButton(props) {
     // https://www.flaticon.com/free-icon/
     return (
         <svg xmlns="http://www.w3.org/2000/svg" width={props.svgScale} viewBox="0 0 65 64.675">
@@ -22,7 +22,7 @@ function ConfirmButton(props) {
     );
 }
 
-function YonderMainLogo(props) {
+export function YonderMainLogo(props) {
     // a placeholder
     return (
         <svg id="YonderLogo" xmlns="http://www.w3.org/2000/svg" width={props.svgScale} viewBox="0 0 124.732 124.83">
@@ -33,7 +33,7 @@ function YonderMainLogo(props) {
     );
 }
 
-function TextIcon(props) {
+export function TextIcon(props) {
     // a placeholder
     return (
         <svg id="Text" xmlns="http://www.w3.org/2000/svg" width={props.svgScale} viewBox="0 0 103.001 102.993">
@@ -42,7 +42,7 @@ function TextIcon(props) {
     );
 }
 
-function ImageIcon(props) {
+export function ImageIcon(props) {
     // a placeholder
     return (
         <svg id="Image" xmlns="http://www.w3.org/2000/svg" width={props.svgScale} viewBox="0 0 103.001 102.993">
@@ -51,7 +51,7 @@ function ImageIcon(props) {
     );
 }
 
-function SharingPostIcon(props) {
+export function SharingPostIcon(props) {
     return (
         <svg xmlns="http://www.w3.org/2000/svg" width={props.svgScale} height="auto" viewBox="0 0 103 102.99">
         <path id="Ellipse_25" d="M51.98.34A51.49,51.49,0,1,0,97.251,27.677,51.491,51.491,0,0,0,51.98.34Zm3.545,20.279a3.37,3.37,0,0,1,.916.115l15.344,4.111a3.37,3.37,0,0,1,2.383,4.127L70.056,44.315a3.37,3.37,0,1,1-6.51-1.744l2.006-7.486L22.016,60.221a3.37,3.37,0,1,1-3.371-5.836L62.183,29.249,54.7,27.243a3.37,3.37,0,0,1,.828-6.625ZM83.183,46.157a3.37,3.37,0,0,1,1.77,6.26L41.414,77.552,48.9,79.558a3.37,3.37,0,1,1-1.744,6.51L31.812,81.957A3.37,3.37,0,0,1,29.43,77.83l4.111-15.343a3.37,3.37,0,1,1,6.51,1.744l-2.006,7.486L81.583,46.58a3.37,3.37,0,0,1,1.6-.424Z" transform="translate(-0.278 -0.339)"/>
@@ -60,7 +60,7 @@ function SharingPostIcon(props) {
 }
 
 
-function MarkdownIcon(props) {
+export function MarkdownIcon(props) {
     // a placeholder
     return (
         <svg id="Markdown" xmlns="http://www.w3.org/2000/svg" width={props.svgScale} viewBox="0 0 103.001 102.993">
@@ -69,7 +69,7 @@ function MarkdownIcon(props) {
     );
 }
 
-function CheckBoxChecked(props) {
+export function CheckBoxChecked(props) {
     return (
         <svg id="check-box-outline" xmlns="http://www.w3.org/2000/svg" width={props.svgScale} viewBox="0 0 100 100">
         <path id="Path_139" data-name="Path 139" d="M27.222,39.444l-7.778,7.778,25,25L100,16.667,92.222,8.889,44.444,56.667ZM88.889,88.889H11.111V11.111H66.667V0H11.111A11.144,11.144,0,0,0,0,11.111V88.889A11.144,11.144,0,0,0,11.111,100H88.889A11.144,11.144,0,0,0,100,88.889V44.444H88.889Z"/>
@@ -77,7 +77,7 @@ function CheckBoxChecked(props) {
     )
 }
 
-function CheckBoxUnchecked(props) {
+export function CheckBoxUnchecked(props) {
     return (
         <svg id="check-box-outline-blank" xmlns="http://www.w3.org/2000/svg" width={props.svgScale} viewBox="0 0 100 100">
         <path id="Path_138" data-name="Path 138" d="M88.889,11.111V88.889H11.111V11.111H88.889M88.889,0H11.111A11.144,11.144,0,0,0,0,11.111V88.889A11.144,11.144,0,0,0,11.111,100H88.889A11.144,11.144,0,0,0,100,88.889V11.111A11.144,11.144,0,0,0,88.889,0Z"/>
@@ -85,7 +85,7 @@ function CheckBoxUnchecked(props) {
     )
 }
 
-function AddIcon(props) {
+export function AddIcon(props) {
     return (
         <svg xmlns="http://www.w3.org/2000/svg" width={props.svgScale} viewBox="0 0 100 100">
         <path id="add" d="M91.071,41.071H60.714a1.786,1.786,0,0,1-1.786-1.786V8.929a8.929,8.929,0,1,0-17.857,0V39.286a1.786,1.786,0,0,1-1.786,1.786H8.929a8.929,8.929,0,1,0,0,17.857H39.286a1.786,1.786,0,0,1,1.786,1.786V91.071a8.929,8.929,0,1,0,17.857,0V60.714a1.786,1.786,0,0,1,1.786-1.786H91.071a8.929,8.929,0,1,0,0-17.857Zm0,0"/>
@@ -93,7 +93,7 @@ function AddIcon(props) {
     )
 }
 
-function PencilIcon(props) {
+export function PencilIcon(props) {
 
     return (
         <svg xmlns="http://www.w3.org/2000/svg" width={props.svgScale} viewBox="0 0 43.814 43.768">
@@ -105,7 +105,7 @@ function PencilIcon(props) {
     )
 }
 
-function SharingIcon(props) {
+export function SharingIcon(props) {
     return (
         <svg xmlns="http://www.w3.org/2000/svg" width={props.svgScale} viewBox="0 0 39.047 35.612">
         <path id="_1059157" data-name="1059157" d="M39.048,18.294,22.821.5V11.116h-3.45A19.37,19.37,0,0,0,0,30.486v5.626l1.532-1.679a27.5,27.5,0,0,1,20.311-8.961h.977V36.088Zm0,0" transform="translate(-0.001 -0.5)" />
@@ -116,7 +116,7 @@ function SharingIcon(props) {
 
 
 
-function LikeIcon(props) {
+export function LikeIcon(props) {
     return (
         <svg xmlns="http://www.w3.org/2000/svg" width={props.svgScale} viewBox="0 0 36.115 34.61">
         <g id="_633991" data-name="633991" transform="translate(0 -10.667)">
@@ -135,4 +135,24 @@ function LikeIcon(props) {
     )
 }
 
-export { CancelButton, ConfirmButton, YonderMainLogo, TextIcon, ImageIcon, MarkdownIcon, CheckBoxChecked, CheckBoxUnchecked, AddIcon, PencilIcon, LikeIcon, SharingIcon, SharingPostIcon};
+
+export function ToolTipIcon(props) {
+    return (
+        <svg xmlns="http://www.w3.org/2000/svg" width={props.svgScale} viewBox="0 0 50 50.002">
+        <g id="help-web-button" transform="translate(-0.008)">
+        <path id="Path_144" data-name="Path 144" d="M25.009,0a25,25,0,1,0,25,24.988A25,25,0,0,0,25.009,0Zm1.782,38.9a2.944,2.944,0,0,1-2.016.776,3.045,3.045,0,0,1-2.064-.766,2.685,2.685,0,0,1-.883-2.142,2.76,2.76,0,0,1,.854-2.055,2.88,2.88,0,0,1,2.093-.833,2.847,2.847,0,0,1,2.889,2.888A2.709,2.709,0,0,1,26.791,38.9Zm7.24-17.95a8.839,8.839,0,0,1-1.591,2.142q-.919.9-3.305,3.033a13.681,13.681,0,0,0-1.056,1.056,4.3,4.3,0,0,0-.591.834,4.017,4.017,0,0,0-.3.757q-.106.377-.321,1.328a2.156,2.156,0,0,1-2.306,2.016,2.362,2.362,0,0,1-1.7-.659,2.59,2.59,0,0,1-.687-1.958,7.215,7.215,0,0,1,.5-2.821,7.128,7.128,0,0,1,1.336-2.094,30.649,30.649,0,0,1,2.249-2.142q1.241-1.086,1.793-1.638a5.543,5.543,0,0,0,.93-1.231,2.964,2.964,0,0,0,.377-1.473,3.42,3.42,0,0,0-1.153-2.616,4.212,4.212,0,0,0-2.976-1.066A4.117,4.117,0,0,0,22.1,15.493a8.584,8.584,0,0,0-1.705,3.169q-.661,2.191-2.5,2.191a2.461,2.461,0,0,1-1.832-.765,2.342,2.342,0,0,1-.745-1.657A7.014,7.014,0,0,1,16.5,14.7a9.1,9.1,0,0,1,3.451-3.13,10.852,10.852,0,0,1,5.291-1.241A11.29,11.29,0,0,1,30.2,11.365a8.043,8.043,0,0,1,3.325,2.821A6.921,6.921,0,0,1,34.7,18.063,5.97,5.97,0,0,1,34.031,20.949Z"/>
+        </g>
+        </svg>
+    )
+}
+export function DeleteIcon(props) {
+    return (
+        <svg xmlns="http://www.w3.org/2000/svg" width={props.svgScale} viewBox="0 0 103 103">
+        <g id="Group_66" data-name="Group 66" transform="translate(-895.5 -73.581)">
+            <g id="Group_65" data-name="Group 65" transform="translate(645.094 -423.263)">
+            <path id="Ellipse_26" d="M51.467,0A51.517,51.517,0,1,0,51.5,0h-.033ZM46.186,21.443H56.762a3.394,3.394,0,0,1,3.389,3.392v1.926H56.523V25.072H46.477v1.689H42.848V24.836A3.4,3.4,0,0,1,46.186,21.443ZM31.574,30.391H71.428a2.307,2.307,0,0,1,2.188,1.578l1.19,3.57a1.494,1.494,0,0,1-.627,1.742,1.477,1.477,0,0,1-.793.228H29.615a1.5,1.5,0,0,1-1.422-1.971l1.193-3.57a2.307,2.307,0,0,1,2.188-1.578Zm2.895,10.748H68.531a1.6,1.6,0,0,1,1.592,1.727L67.275,78.078a3.782,3.782,0,0,1-3.768,3.48H39.492a3.782,3.782,0,0,1-3.768-3.481L32.877,42.865a1.6,1.6,0,0,1,1.592-1.727ZM40.8,45.27A1.814,1.814,0,0,0,39.008,47.2L40.793,76.1A1.814,1.814,0,0,0,42.6,77.8h.113a1.814,1.814,0,0,0,1.7-1.924L42.631,46.973a1.814,1.814,0,0,0-1.828-1.7Zm10.7,0a1.814,1.814,0,0,0-1.8,1.812V75.988a1.814,1.814,0,1,0,3.629,0V47.082A1.815,1.815,0,0,0,51.5,45.27Zm10.658,0a1.814,1.814,0,0,0-1.787,1.707l-1.7,28.908a1.814,1.814,0,0,0,1.7,1.918h.107A1.814,1.814,0,0,0,62.289,76.1l1.7-28.906,0,0a1.814,1.814,0,0,0-1.834-1.92Z" transform="translate(250.406 496.844)"/>
+            </g>
+        </g>
+        </svg>
+    )
+}
