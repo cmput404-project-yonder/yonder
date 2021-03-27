@@ -10,6 +10,7 @@ import Stream from "./components/stream/Stream";
 import Profile from "./components/profile/Profile";
 import NavigationBar from "./components/NavigationBar";
 import SelectedPost from "./components/stream/posts/SelectedPost";
+import 'animate.css';
 
 import axios from "axios";
 axios.defaults.baseURL = "http://localhost:8000/api";

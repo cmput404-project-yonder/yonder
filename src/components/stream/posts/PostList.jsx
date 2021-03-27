@@ -5,7 +5,7 @@ import { List } from "react-bulma-components";
 import Post from "./Post";
 
 function PostList(props) {
-  const postList = props.posts.map((post) => <Post post={post} updatePost={props.updatePost} deletePost={props.deletePost}/>);
+  const postList = props.posts.map((post) => <Post post={post} updatePost={props.updatePost} deletePost={props.deletePost} sharePost={props.sharePost}/>);
   return (
     <div className="post-list">
       <List hoverable>{postList}</List>

@@ -1,12 +1,15 @@
 var color = {
   baseBlack: "#505050",
   baseWhite: "white",
-  baseRed: "#D75C5C",
+  baseRed: "#D18D8D",
   baseLightGrey: "#AAAAAA",
-  buttonGreen: "#7bdaae",
-  buttonRed: "#f27b7f",
+  buttonGreen:"#99D4B4",
+  buttonRed: "#DD7272",
+  buttonOrange: "#E69942",
   postIcon: "#8fc9eb",
-  backgroundGrey: "#fbfbfb",
+  backgroundGrey: "#fefefe",
+  backgroundCream: "#F9F5EF",
+  backgroundCreamLighter: "#FFFAF1",
 };
 
 // style
@@ -58,5 +61,8 @@ var style = {
   },
 };
 
+var font = {
+  segoeUI: "Segoe UI,Frutiger,Frutiger Linotype,Dejavu Sans,Helvetica Neue,Arial,sans-serif",
+}
 
-export { color, style };
+export { color, style,font };

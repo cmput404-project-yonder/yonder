@@ -51,6 +51,15 @@ function ImageIcon(props) {
     );
 }
 
+function SharingPostIcon(props) {
+    return (
+        <svg xmlns="http://www.w3.org/2000/svg" width={props.svgScale} height="auto" viewBox="0 0 103 102.99">
+        <path id="Ellipse_25" d="M51.98.34A51.49,51.49,0,1,0,97.251,27.677,51.491,51.491,0,0,0,51.98.34Zm3.545,20.279a3.37,3.37,0,0,1,.916.115l15.344,4.111a3.37,3.37,0,0,1,2.383,4.127L70.056,44.315a3.37,3.37,0,1,1-6.51-1.744l2.006-7.486L22.016,60.221a3.37,3.37,0,1,1-3.371-5.836L62.183,29.249,54.7,27.243a3.37,3.37,0,0,1,.828-6.625ZM83.183,46.157a3.37,3.37,0,0,1,1.77,6.26L41.414,77.552,48.9,79.558a3.37,3.37,0,1,1-1.744,6.51L31.812,81.957A3.37,3.37,0,0,1,29.43,77.83l4.111-15.343a3.37,3.37,0,1,1,6.51,1.744l-2.006,7.486L81.583,46.58a3.37,3.37,0,0,1,1.6-.424Z" transform="translate(-0.278 -0.339)"/>
+        </svg>
+    )
+}
+
+
 function MarkdownIcon(props) {
     // a placeholder
     return (
@@ -104,6 +113,9 @@ function SharingIcon(props) {
     )
 }
 
+
+
+
 function LikeIcon(props) {
     return (
         <svg xmlns="http://www.w3.org/2000/svg" width={props.svgScale} viewBox="0 0 36.115 34.61">
@@ -123,4 +135,4 @@ function LikeIcon(props) {
     )
 }
 
-export { CancelButton, ConfirmButton, YonderMainLogo, TextIcon, ImageIcon, MarkdownIcon, CheckBoxChecked, CheckBoxUnchecked, AddIcon, PencilIcon, LikeIcon, SharingIcon};
+export { CancelButton, ConfirmButton, YonderMainLogo, TextIcon, ImageIcon, MarkdownIcon, CheckBoxChecked, CheckBoxUnchecked, AddIcon, PencilIcon, LikeIcon, SharingIcon, SharingPostIcon};
