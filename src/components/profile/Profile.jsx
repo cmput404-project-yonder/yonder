@@ -12,7 +12,10 @@ import { retrieveAuthor, retrieveAuthorPosts, sendFollow, checkFollowing } from 
 import FollowButton from "./buttons/FollowButton";
 import EditProfileButton from "./buttons/EditButton";
 
+
+import { profileShowStyle } from "../stream/posts/StyleComponents"; 
 import { color,font } from "./styling";
+
 
 var pageStyle = {
   margin: "auto",
@@ -78,7 +81,6 @@ class Profile extends React.Component {
     this.props.retrieveAuthorPosts(params.id);
     this.props.checkFollowing(params.id)
   }
-
   render() {
     var isFollowing = this.props.isFollowing;
 
@@ -126,6 +128,7 @@ class Profile extends React.Component {
         </div>
       );
     }
+    console.log(this.props.retrievedAuthorPosts);
 
     return (
       <Section >

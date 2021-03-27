@@ -9,6 +9,7 @@ import Login from "./components/login/Login";
 import Stream from "./components/stream/Stream";
 import Profile from "./components/profile/Profile";
 import NavigationBar from "./components/NavigationBar";
+import SelectedPost from "./components/stream/posts/SelectedPost";
 import 'animate.css';
 
 import axios from "axios";
@@ -25,7 +26,8 @@ class App extends Component {
             <Route path="/signup" component={Signup} />
             <Route path="/login" component={Login} />
             <Route path="/stream" component={Stream} />
-            <Route path="/author/:id" component={Profile} />
+            <Route exact path="/author/:id" component={Profile} />
+            <Route exact path="/author/:author_id/posts/:id" component={SelectedPost} />
             <Route exact path="/" component={Home} />
           </Switch>
         </Root>
