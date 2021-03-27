@@ -57,7 +57,7 @@ class signup(generics.GenericAPIView):
         if "host" not in request.data:
             current_site = get_current_site(request=request)
             author_data["host"] = request.scheme + \
-                "://" + current_site.name
+                "://" + current_site.name + "/"
         else:
             author_data["host"] = request.data["host"]
         author_data["user"] = user.id
@@ -86,11 +86,15 @@ class authors(generics.ListAPIView):
     queryset = Author.objects.all()
     serializer_class = AuthorSerializer
 
+    @swagger_auto_schema(tags=['authors'])
+    def get(self, request, *args, **kwargs):
+        return self.list(request, *args, **kwargs)
+
 class author_detail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Author.objects.all()
     serializer_class = AuthorSerializer
 
-    @swagger_auto_schema(tags=['author'])
+    @swagger_auto_schema(tags=['authors'])
     def get(self, request, *args, **kwargs):
         author = get_object_or_404(self.queryset, pk=kwargs["pk"])
         serializer = self.serializer_class(author)
@@ -98,11 +102,11 @@ class author_detail(generics.RetrieveUpdateDestroyAPIView):
         data["url"] = author.get_absolute_url()
         return Response(serializer.data)
 
-    @swagger_auto_schema(tags=['author'])
+    @swagger_auto_schema(tags=['authors'])
     def put(self, request, *args, **kwargs):
         return self.update(request, *args, **kwargs)
 
-    @swagger_auto_schema(tags=['author'])
+    @swagger_auto_schema(tags=['authors'])
     def delete(self, request, *args, **kwargs):
         return self.destroy(request, *args, **kwargs)
 
