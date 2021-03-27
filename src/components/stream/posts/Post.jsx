@@ -7,38 +7,36 @@ import SharingPostPrompt from "./SharingPostPrompt";
 import { Card, Content, Heading } from "react-bulma-components";
 import { font, color } from "./styling";
 import Dividor from "./Dividor";
-
+import { Link } from "react-router-dom";
 import EditButton from "./EditButton";
 import ShareButton from "./ShareButton";
 import LikeButton from "./LikeButton";
-
-var dividorStyle = {
-  marginTop: "1em",
-  marginBottom: "0.6em",
-}
-
-var postStyle = {
-  boxShadow: "0pt 0pt 8pt rgb(0,0,0,0.5)",
-  borderRadius: "6pt",
-  backgroundColor: color.backgroundCreamLighter,
-  marginBottom: "3em",
-  marginTop: "0.5em",
-  fontFamily: font.segoeUI,
-  fontWeight: "350",
-  fontSize: "1.3em",
-  color: color.baseBlack,
-  minHeight: "25em",
-  display: "flex",
-  flexDirection: "column",
-  justifyContent: "space-between",
-}
-
-
+import { dividorStyle, postStyle, textStyle, authorStyle, contentStyle } from "./StyleComponents";
 
 function Post(props) {
   const [editModalIsOpen, setEditModalIsOpen] = useState(false);
   const [sharingPromptIsOpen, setSharingPromptIsOpen] = useState(false);
   console.log(props.post);
+  
+  const postURL = "/author/" + props.post.author.id + "/posts/" + props.post.id;
+
+  const IsImage = () => {
+    if (props.post.contentType === "text/plain") {
+      return false;
+    }
+    else if (props.post.contentType === "text/markdown") {
+      return false;
+    }
+    else {
+      return true;
+    }
+  }
+  const isImage = IsImage();
+  if (isImage) {
+  }
+
+  console.log(isImage);
+
   return (
       <Card style={postStyle}>
         <Card.Header>
@@ -47,9 +45,15 @@ function Post(props) {
           </Card.Header.Title>
         </Card.Header>
         <Card.Content>
-          <Heading size={8}>{props.post.title}</Heading>
+          <Heading size={8}>
+            <Link to={`${postURL}`}>{props.post.title}</Link>
+          </Heading>
           <Dividor style={dividorStyle}/>
-          <Content>{props.post.content}</Content>
+          {isImage ? (
+            <Content>
+              <img src={`data:${props.post.contentType},${props.post.content}`} /> 
+            </Content>
+          ) : <Content>{props.post.content}</Content> }
           <Dividor style={dividorStyle}/>
           <p style={{ margin: "1em", fontSize: "0.7em" }}>{props.post.published}</p>
         </Card.Content>

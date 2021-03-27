@@ -1,9 +1,21 @@
 import React, { Component } from "react";
 import ReactMde from "react-mde";
-import { Form, Button, Panel, Card, Heading } from "react-bulma-components";
+import { Icon, Form, Button, Panel, Card, Heading, Container } from "react-bulma-components";
 import Markdown from "react-markdown";
 import ReactTags from "react-tag-autocomplete";
 import "./react-tags.css";
+
+import CancelButton from "./CancelButton";
+import ConfirmButton from "./ConfirmButton";
+import CheckBox from "./CheckBox";
+
+import { TextIcon, ImageIcon, MarkdownIcon } from "./postSVG";
+import { color } from "./styling";
+import PostTab from "./PostTab";
+import Dividor from "./Dividor"
+
+import { checkBoxLabelStyle, checkBoxStyle, checkMarkStyle, createPostHeaderStype, cardStyle, panelStyle, 
+  tabStyle, submittPanelStyle, formContainerStyle, labelStyle, dividorStyle, formTitleStyle, buttonLayoutStyle, postIconStyle } from "./StyleComponents";
 
 class EditPostForm extends Component {
   constructor(props) {
@@ -26,13 +38,49 @@ class EditPostForm extends Component {
       unlisted: this.props.post.unlisted,
       visibility: this.props.post.visibility,
       categories: categoryTags,
-      selectedTab: "text",
+      selectedTab: this.props.post.selectedTab,
       markdownTab: "write",
     };
     console.log(this.state);
 
     this.reactTags = React.createRef();
   }
+
+  handleFileSelected = event => {
+    let file = event.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = this.handleReaderLoaded.bind(this);
+      reader.readAsBinaryString(file);
+    }
+    this.setState({
+      imageObj: file,
+      image: URL.createObjectURL(event.target.files[0]),
+    })
+  }
+
+  handleReaderLoaded = (readerEvt) => {
+    let binaryString = readerEvt.target.result;
+    this.setState({
+      content: btoa(binaryString),
+    })
+  }
+
+  handleVisibility = () => {
+    if (this.state.visibility === "PUBLIC") {
+      this.setState({
+        visibility: "PRIVATE",
+      });
+      console.log(this.state.visibility);
+    }
+    else if (this.state.visibility === "PRIVATE") {
+      this.setState({
+        visibility: "PUBLIC",
+      });
+      console.log(this.state.visibility);
+    }
+  }
+  
 
   handleUnlisted = () => {
     this.setState({
@@ -57,9 +105,13 @@ class EditPostForm extends Component {
           return "text/plain";
         case "markdown":
           return "text/markdown";
-        case "image":
-          //TODO handle image mime type
-          break;
+          case "image":
+            switch (this.state.imageObj.type) {
+              case "image/png":
+                return "image/png;base64";
+              case "image/jpeg":
+                return "image/jpeg;base64";
+            }
         default:
           break;
       }
@@ -136,99 +188,151 @@ class EditPostForm extends Component {
       );
     };
 
+    const imageUploader = () => {
+      return (
+        <Form.Control>
+          <Form.InputFile icon={<Icon icon="upload" />} accept={'image/png', 'image/jpeg'} boxed placeholder="Textarea" style={{ left:`30%`, right:`30%`, marginBottom:`3%` }} onChange={this.handleFileSelected} />
+          <img src={ "image/png" ? `data:image/png;base64,${this.state.content}` : `data:image/jpeg;base64,${this.state.content}` } style={{ height: `150px`, display: "block", marginLeft: "auto", marginRight: "auto" }} />
+        </Form.Control>
+      )
+    }
+
+    const postIcons = () => {
+      switch (this.state.selectedTab) {
+        case "text":
+          return (<TextIcon svgScale={postIconStyle.scale} />)
+        case "image":
+          return (<ImageIcon svgScale={postIconStyle.scale} />)
+        case "markdown":
+          return (<MarkdownIcon svgScale={postIconStyle.scale} />)
+      }
+    }
+
+    const SelectionPanel = () => {
+      // custom selection tab
+      // text, markdown, image
+      return (
+        <Container style={panelStyle}>
+          <PostTab style={tabStyle}text="Text" active={this.state.selectedTab === "text"} action={() => this.selectTab("text")}/>
+          <PostTab style={tabStyle} text="Markdown" active={this.state.selectedTab === "markdown"} action={() => this.selectTab("markdown")}/>
+          <PostTab style={tabStyle} text="Image"active={this.state.selectedTab === "image"} action={() => this.selectTab("image")}/>
+        </Container>  
+      )
+    }
+
+    const UnlistCheckBox = () => {
+      return (
+        <Container style={checkBoxStyle}>
+          <p style={checkBoxLabelStyle}>Unlisted</p>
+          <CheckBox style={checkMarkStyle} active={this.state.unlisted} action={this.handleUnlisted}/>
+        </Container>
+      )
+    }
+
+    const visibilityCheckBoxTranslator = (visibility) => {
+      if (visibility === "PRIVATE"){
+        return true;
+      } else {
+        return false;
+      }
+      console.log(this.state.visibility);
+    }
+
+    const VisibilityCheckBox = () => {
+      return (
+        <Container style={checkBoxStyle}>
+          <p style={checkBoxLabelStyle}>Private Post</p>
+          <CheckBox style={checkMarkStyle} active={visibilityCheckBoxTranslator(this.state.visibility)} action={this.handleVisibility}/>
+        </Container>
+      )
+    }
+
+    const PostFormButtonPanel = () => {
+      // Confirm and back button used to submit form
+      return (
+        <Container style={buttonLayoutStyle}>
+          <CancelButton action={() => this.props.setEditModalIsOpen(false)}/>
+          <ConfirmButton action={this.editPost}/>
+          <Button color="danger" onClick={this.removePost}>Delete</Button>
+        </Container>
+      )
+    }
+
+    const PostSubmitPanel = () => {
+      return (
+        <Container style={submittPanelStyle}>
+          <button className="button has-tooltip-info has-tooltip-multiline"
+          data-tooltip='Checking the "Private Post" box will only allow the author to view this post. 
+                        Checking the "Unlisted" box will allow this post to only show up on the stream of this post author'
+          id="helpToolTip"
+          style={{ width:40, marginTop:20, float:"left", backgroundColor:"#FF00FF", color:"white", borderRadius:`50%` }} >?</button>
+          <VisibilityCheckBox />
+          <UnlistCheckBox/>
+          <PostFormButtonPanel/>
+        </Container>
+      )
+    }
+
     return (
-      <Card style={{ borderRadius: "10px", width: "540px" }}>
-        <Form.Field style={{ margin: "0 1em", padding: "10px" }}>
-          <label className="checkbox" style={{ fontWeight: "bold", float:"right", paddingTop:10 }}>
-            <input type="checkbox" defaultChecked={this.state.unlisted} onChange={this.handleUnlisted} />
-              Unlisted
-          </label>
-          
-          <Heading size={4}>Edit a Post</Heading>
-          <Form.Label>Title:</Form.Label>
-          <Form.Control>
-            <Form.Textarea
-              onKeyPress={(e) => {
-                if (e.key === "Enter") e.preventDefault();
-              }}
-              maxLength="30"
-              cols={1}
-              name="title"
-              value={this.state.title}
-              style={{
-                overflowY: "hidden",
-                whiteSpace: "nowrap",
-                resize: "none",
-                height: `50px`,
-                padding: `10px`,
-              }}
-              onChange={this.onChange}
-            />
-          </Form.Control>
-        </Form.Field>
-        <Form.Field style={{ margin: "0 1em", padding: "10px" }}>
-          <Form.Label>Description:</Form.Label>
-          <Form.Control>
-            <Form.Textarea
-              onKeyPress={(e) => {
-                if (e.key === "Enter") e.preventDefault();
-              }}
-              maxLength="30"
-              cols={1}
-              name="description"
-              value={this.state.description}
-              style={{
-                overflowY: "hidden",
-                whiteSpace: "nowrap",
-                resize: "none",
-                height: `50px`,
-                padding: `10px`,
-              }}
-              onChange={this.onChange}
-            />
-          </Form.Control>
-        </Form.Field>
-
-        <Form.Field style={{ margin: "0 1em", padding: "10px" }}>
-          <Form.Label>Catgeories:</Form.Label>
-          <ReactTags
-            allowNew={true}
-            ref={this.reactTags}
-            tags={this.state.categories}
-            onDelete={this.onDelete}
-            onAddition={this.onAddition}
-          />
-        </Form.Field>
-
-        <Form.Field style={{ margin: "0 1em", padding: "10px" }}>
-          <Form.Label>Content:</Form.Label>
-          <Panel className="post-editor">
-            <Panel.Tabs style={{ marginBottom: `-1em` }}>
-              <Panel.Tabs.Tab active={this.state.selectedTab === "text"} onClick={() => this.selectTab("text")}>
-                Text
-              </Panel.Tabs.Tab>
-              <Panel.Tabs.Tab active={this.state.selectedTab === "markdown"} onClick={() => this.selectTab("markdown")}>
-                Markdown
-              </Panel.Tabs.Tab>
-              <Panel.Tabs.Tab active={this.state.selectedTab === "image"} onClick={() => this.selectTab("image")}>
-                Image
-              </Panel.Tabs.Tab>
-            </Panel.Tabs>
-          </Panel>
-          <Form.Control style={{ textAlign: "right" }}>
-            {this.state.selectedTab === "text" ? textEditor() : null}
-            {this.state.selectedTab === "markdown" ? markdownEditor() : null}
-            <Button color="danger" style={{ float:'left' }} onClick={this.removePost}>
-              Delete
-            </Button>
-            <Button color="danger" onClick={() => this.props.setEditModalIsOpen(false)}>
-              Cancel
-            </Button>
-            <Button color="success" onClick={this.editPost}>
-              Update
-            </Button>
-          </Form.Control>
-        </Form.Field>
+      <Card style={cardStyle}>
+        <Container style={createPostHeaderStype}>
+          <Container style={postIconStyle.style}>{postIcons()}</Container>
+        </Container>
+        <Container style={formContainerStyle}>
+          <Form.Field>
+            <Form.Label style={labelStyle}>Title</Form.Label>
+            <Form.Control>
+              <Form.Textarea
+                  onKeyPress={(e) => {if (e.key === "Enter") e.preventDefault();}}
+                  maxLength="30"
+                  cols={1}
+                  name="title"
+                  value={this.state.title}
+                  style={formTitleStyle}
+                  onChange={this.onChange}
+              />
+            </Form.Control>
+          </Form.Field>
+          <Form.Field>
+            <Form.Label style={labelStyle}>Description</Form.Label>
+            <Form.Control>
+              <Form.Textarea
+                onKeyPress={(e) => {if (e.key === "Enter") e.preventDefault();}}
+                maxLength="30"
+                cols={1}
+                name="description"
+                value={this.state.description}
+                style={formTitleStyle}
+                onChange={this.onChange}
+              />
+            </Form.Control>
+          </Form.Field>
+          <Form.Field>
+            <Form.Label style={labelStyle}>Categories</Form.Label>
+            <Form.Control>
+              <ReactTags
+                label=""
+                allowNew={true}
+                ref={this.reactTags}
+                tags={this.state.categories}
+                onDelete={this.onDelete}
+                onAddition={this.onAddition}
+              />
+            </Form.Control>
+          </Form.Field>
+          <Form.Field>
+            <Form.Label style={labelStyle}>Content</Form.Label>
+            <Form.Control>
+              {this.state.selectedTab === "text" ? textEditor() : null}
+              {this.state.selectedTab === "markdown" ? markdownEditor() : null}
+              {this.state.selectedTab === "image" ? imageUploader() : null}
+            </Form.Control>
+          </Form.Field>
+          <Dividor style={dividorStyle}/>
+          <SelectionPanel/>
+          <Dividor style={dividorStyle}/>
+        </Container>
+        <PostSubmitPanel/>
       </Card>
     );
   }

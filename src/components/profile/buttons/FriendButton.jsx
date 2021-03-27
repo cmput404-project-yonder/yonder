@@ -15,7 +15,7 @@ var buttonStyle = {
 function FriendButton(props) {
   return (
     <Container style={buttonStyle.style}>
-        <svg xmlns="http://www.w3.org/2000/svg" width={buttonStyle.scale} height="auto" viewBox="0 0 45.415 45.415">
+        <svg xmlns="http://www.w3.org/2000/svg" width={buttonStyle.scale} viewBox="0 0 45.415 45.415">
           <g id="Group_55" data-name="Group 55" transform="translate(-563.995 -537.585)">
             <g id="_2097681" data-name="2097681" transform="translate(563.995 537.585)">
               <path
