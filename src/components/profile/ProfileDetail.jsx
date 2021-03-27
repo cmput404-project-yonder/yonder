@@ -13,57 +13,6 @@ var buttonStyleGeneric = style.button.style.generic;
 var buttonStyleFocus = style.button.style.focus;
 var buttonsLayout = style.button.layout.horizontalBetween;
 
-var statusStyle = {
-  overall: {},
-  displayName: Object.assign({}, style.text.heading, {
-    textAlign: "center",
-    paddingBottom: "0.5em",
-    paddingTop: "1em",
-    fontSize: "2.8em",
-    fontWeight: "300",
-  }),
-  statusBar: {
-    overall: {
-      display: "flex",
-      justifyContent: "space-between",
-      paddingBottom: "2.5em",
-    },
-    block: {
-      textAlign: "center",
-      fontWeight: "400",
-      fontSize: "1.2em",
-      width: "100%",
-    },
-    counter: {
-      fontSize: "0.9em",
-    },
-  },
-};
-
-var infoStyle = {
-  overall: {
-    display: "flex",
-    flexDirection: "column",
-    paddingTop: "3em",
-    paddingBottom: "1.5em",
-    width: "auto",
-  },
-  banner: {
-    display: "flex",
-    alignItems: "center",
-    whiteSpace: "nowrap",
-    overflow: "hidden",
-  },
-};
-
-var svgIconStyle = {
-  scale: "40",
-  style: {
-    fill: color.baseBlack,
-    padding: "1.1em",
-  },
-};
-
 // export function ProfileDetail(props) {
 //   return (
 //     <Container style={statusStyle.overall}>

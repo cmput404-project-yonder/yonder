@@ -55,6 +55,7 @@ function FollowButton(props) {
             </g>
           </g>
         </svg>
+        </Button>
     </Container>
   );
 }
