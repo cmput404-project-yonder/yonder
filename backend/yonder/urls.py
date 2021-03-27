@@ -5,6 +5,7 @@ from . import views
 
 urlpatterns = [
     path('authors', views.authors.as_view(), name="authors"),
+    path('authors/remote', views.remote_authors.as_view(), name="remote_authors"),
     path('author/<uuid:pk>', views.author_detail.as_view(), name="author_detail"),
     path('author/<uuid:author_id>/posts/', views.posts.as_view(), name="posts"),
     path(
@@ -33,7 +34,7 @@ urlpatterns = [
         name="followers"
     ),
     path (
-        'service/author/<uuid:author_id>/inbox',
+        'author/<uuid:author_id>/inbox',
         views.inbox.as_view(),
         name="inbox"
     ),

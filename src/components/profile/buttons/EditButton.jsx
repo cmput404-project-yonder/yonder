@@ -13,13 +13,19 @@ var buttonStyle = {
   style: {
     fill: color.buttonRed,
   },
+  override: {
+    border: "none",
+    backgroundColor: "transparent",
+  }
 };
 
 // component
 function EditProfileButton(props) {
   return (
     <Container style={buttonStyle.style}>
+      <Button onClick={props.onClick} style={buttonStyle.override}>
         <EditButton svgScale={buttonStyle.scale} />
+      </Button>
     </Container>
   );
 }

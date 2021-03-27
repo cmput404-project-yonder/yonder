@@ -9,8 +9,9 @@ from rest_framework.serializers import Serializer
 from drf_yasg.utils import swagger_auto_schema
 from django.core.paginator import Paginator
 from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
+import requests
 
-from .models import Post, Author, Comment
+from .models import Post, Author, Comment, RemoteNode
 from .serializers import *
 
 
@@ -66,11 +67,7 @@ class signup(generics.GenericAPIView):
             raise validators.ValidationError(author_serializer.errors)
 
         author = author_serializer.save(user=user)
-        author.save()
-
-        inbox_serializer = InboxSerializer(data={"author": author.id})
-        inbox_serializer.is_valid(raise_exception=True)
-        inbox_serializer.save()
+        #author.save()
 
         token, created = Token.objects.get_or_create(user=user)
 
@@ -86,6 +83,27 @@ class authors(generics.ListAPIView):
     serializer_class = AuthorSerializer
 
     @swagger_auto_schema(tags=['authors'])
+    def get(self, request, *args, **kwargs):
+        return self.list(request, *args, **kwargs)
+
+class remote_authors(generics.GenericAPIView):
+    queryset = Author.objects.all()
+    serializer_class = AuthorSerializer
+
+    def list(self, request):
+        remote_nodes = RemoteNode.objects.all()
+        authors = []
+        for node in remote_nodes:
+            url = node.host + "api/authors/"
+            response = requests.get(url, auth=HTTPBasicAuth(node.ourUser, node.ourPassword))
+            authors.append(response.json)
+
+        if len(authors) > 0:
+            return Response(authors, status=status.HTTP_200_OK)
+        else:
+            return Response(authors, status=status.HTTP_204_NO_CONTENT)
+
+    @swagger_auto_schema(tags=['remote authors'])
     def get(self, request, *args, **kwargs):
         return self.list(request, *args, **kwargs)
 
@@ -117,7 +135,7 @@ class posts(generics.ListCreateAPIView):
     def create(self, request, *args, **kwargs):
         post_data = request.data
         author = Author.objects.get(pk=kwargs["author_id"])
-        post_data["source"] = author.host
+        post_data["source"] = author.host 
         post_data["origin"] = author.host
         serializer = self.get_serializer(data=post_data)
         serializer.is_valid(raise_exception=True)
