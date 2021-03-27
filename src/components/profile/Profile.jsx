@@ -97,8 +97,8 @@ class Profile extends React.Component {
       if (!isFollowing) {
         return (
           <Card.Footer style={footerStyle}>
-            <Card.Footer.Item renderAs="a" onClick={() => clickFollow()}>
-                <FollowButton />
+            <Card.Footer.Item >
+                <FollowButton onClick={() => clickFollow()}/>
             </Card.Footer.Item>
           </Card.Footer>
         );
@@ -110,8 +110,8 @@ class Profile extends React.Component {
     const loggedAuthor = () => {
       return (
         <Card.Footer style={footerStyle}>
-          <Card.Footer.Item renderAs="a" onClick={clickEdit} >
-            <EditProfileButton/>
+          <Card.Footer.Item>
+            <EditProfileButton onClick={clickEdit}/>
           </Card.Footer.Item>
         </Card.Footer>
       );
