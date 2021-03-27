@@ -23,34 +23,35 @@ def check_remote_follow(theirAuthor, ourAuthor):
 # B follows A => call author/B/followers/A to check if A->B exists
 @receiver(post_save, sender=AuthorFollower)
 def create_friend(sender, instance, **kwargs):
-    authorB_id = instance.follower["id"]
-    authorA = instance.author
-    authorA_json = AuthorSerializer(authorA).data
-    try:
-        authorB = Author.objects.get(pk=uuid.UUID(authorB_id))
-        authorB_follow = AuthorFollower.objects.get(author=authorB, follower=authorA_json)
-        # Create the friendship both ways
-        authorA_friend_serializer = AuthorFriendSerializer(data={
-            "author": authorA.id,
-            "friend": instance.follower
-        })
-        authorB_friend_serializer = AuthorFriendSerializer(data={
-            "author": authorB.id,
-            "friend": authorA_json
-        })
-        authorA_friend_serializer.is_valid()
-        authorB_friend_serializer.is_valid()
-        authorA_friend_serializer.save()
-        authorB_friend_serializer.save()
-    except Author.DoesNotExist:
-        # Handle remote server request
-        if check_remote_follow(instance.follower, authorA_json):
-            # Save this friendship for our author
+    if kwargs["created"]:
+        authorB_id = instance.follower["id"]
+        authorA = instance.author
+        authorA_json = AuthorSerializer(authorA).data
+        try:
+            authorB = Author.objects.get(pk=uuid.UUID(authorB_id))
+            authorB_follow = AuthorFollower.objects.get(author=authorB, follower=authorA_json)
+            # Create the friendship both ways
             authorA_friend_serializer = AuthorFriendSerializer(data={
                 "author": authorA.id,
                 "friend": instance.follower
             })
+            authorB_friend_serializer = AuthorFriendSerializer(data={
+                "author": authorB.id,
+                "friend": authorA_json
+            })
+            authorA_friend_serializer.is_valid()
+            authorB_friend_serializer.is_valid()
             authorA_friend_serializer.save()
-    except AuthorFollower.DoesNotExist:
-        # The relationship is only one-way, so ignore
-        return
+            authorB_friend_serializer.save()
+        except Author.DoesNotExist:
+            # Handle remote server request
+            if check_remote_follow(instance.follower, authorA_json):
+                # Save this friendship for our author
+                authorA_friend_serializer = AuthorFriendSerializer(data={
+                    "author": authorA.id,
+                    "friend": instance.follower
+                })
+                authorA_friend_serializer.save()
+        except AuthorFollower.DoesNotExist:
+            # The relationship is only one-way, so ignore
+            return
