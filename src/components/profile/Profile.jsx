@@ -12,8 +12,6 @@ import { retrieveAuthor, retrieveAuthorPosts, sendFollow, checkFollowing } from 
 import FollowButton from "./buttons/FollowButton";
 import EditProfileButton from "./buttons/EditButton";
 
-
-import { profileShowStyle } from "../stream/posts/StyleComponents"; 
 import { color,font } from "./styling";
 
 
@@ -38,6 +36,22 @@ var profileInfoContainer = {
   paddingLeft: "1.5em",
   backgroundColor: color.backgroundCreamLighter,
 }
+
+var profileShowStyle = {
+  boxShadow: "0pt 0pt 8pt rgb(0,0,0,0.5)",
+  borderRadius: "6pt",
+  backgroundColor: color.backgroundCreamLighter,
+  marginBottom: "2em",
+  marginTop: "0.5em",
+  fontFamily: font.segoeUI,
+  fontWeight: "350",
+  fontSize: "1.3em",
+  color: color.baseBlack,
+  minHeight: "25em",
+  display: "flex",
+  flexDirection: "column",
+  justifyContent: "space-between",
+};
 
 var profileListStyle ={
   minWidth: "380pt",
@@ -80,10 +94,8 @@ class Profile extends React.Component {
       if (!isFollowing) {
         return (
           <Card.Footer style={footerStyle}>
-            <Card.Footer.Item onClick={() => clickFollow()}>
-              <Button color="light" >
-                <FollowButton />
-              </Button>
+            <Card.Footer.Item >
+                <FollowButton onClick={() => clickFollow()}/>
             </Card.Footer.Item>
           </Card.Footer>
         );
@@ -95,8 +107,8 @@ class Profile extends React.Component {
     const loggedAuthor = () => {
       return (
         <Card.Footer style={footerStyle}>
-          <Card.Footer.Item renderAs="a" onClick={clickEdit} >
-            <EditProfileButton/>
+          <Card.Footer.Item>
+            <EditProfileButton onClick={clickEdit}/>
           </Card.Footer.Item>
         </Card.Footer>
       );
