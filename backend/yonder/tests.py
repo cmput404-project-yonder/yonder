@@ -1,11 +1,12 @@
 from django.urls import reverse
 from rest_framework import status
 from rest_framework.test import APITestCase
+from rest_framework.authtoken.models import Token
 from django.utils import timezone
 from .models import Author, User, Post, Inbox, AuthorFollower, AuthorFriend
 from .serializers import AuthorSerializer
 import json
-
+import base64
 
 class AuthorAccountTests(APITestCase):
     def setUp(self):
@@ -34,7 +35,7 @@ class AuthorAccountTests(APITestCase):
         response = self.client.post(
             url, data=data, format='json')
         author = Author.objects.get(displayName=data["displayName"])
-        
+
         self.assertIsNotNone(Inbox.objects.get(author_id=author.id))
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(author.displayName, 'testRegister')
@@ -101,6 +102,9 @@ class PostTests(APITestCase):
         user = User.objects.create_user(**self.credentials)
         self.author = Author.objects.create(**self.testAuthor, user=user)
 
+        credBytes= base64.b64encode(f'{self.credentials["username"]}:{self.credentials["password"]}'.encode())
+        self.client.credentials(HTTP_AUTHORIZATION='Basic ' + credBytes.decode())
+
         self.post = {
             "title": "A post title about a post about web dev",
             "description": "This post discusses stuff -- brief",
@@ -148,6 +152,9 @@ class FollowerTests(APITestCase):
         user2 = User.objects.create_user(**self.credentials2)
         self.author2 = Author.objects.create(**self.testAuthor2, user=user2)
         self.authorJSON2 = AuthorSerializer(instance=self.author2).data
+
+        credBytes= base64.b64encode(f'{self.credentials1["username"]}:{self.credentials1["password"]}'.encode())
+        self.client.credentials(HTTP_AUTHORIZATION='Basic ' + credBytes.decode())
 
     def test_follow(self):
         self.assertEqual(0, AuthorFollower.objects.filter(author=self.author1.id).count())
@@ -225,6 +232,10 @@ class InboxTests(APITestCase):
         }
         user = User.objects.create_user(**self.credentials)
         self.author = Author.objects.create(**self.testAuthor, user=user)
+
+        credBytes= base64.b64encode(f'{self.credentials["username"]}:{self.credentials["password"]}'.encode())
+        self.client.credentials(HTTP_AUTHORIZATION='Basic ' + credBytes.decode())
+
         Inbox.objects.create(author=self.author)
 
         data = {
