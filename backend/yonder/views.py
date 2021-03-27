@@ -9,7 +9,6 @@ from rest_framework.serializers import Serializer
 from drf_yasg.utils import swagger_auto_schema
 from django.core.paginator import Paginator
 from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
-from .permissions import IsOwnerOrReadOnly
 
 from .models import Post, Author, Comment
 from .serializers import *
@@ -113,7 +112,7 @@ class author_detail(generics.RetrieveUpdateDestroyAPIView):
 
 class posts(generics.ListCreateAPIView):
     serializer_class = PostSerializer
-    permission_classes = [IsAuthenticatedOrReadOnly, IsOwnerOrReadOnly]
+    permission_classes = [IsAuthenticatedOrReadOnly]
 
     def create(self, request, *args, **kwargs):
         post_data = request.data
@@ -142,7 +141,7 @@ class posts(generics.ListCreateAPIView):
 class post_detail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Post.objects.all()
     serializer_class = PostSerializer
-    permission_classes = [IsAuthenticatedOrReadOnly, IsOwnerOrReadOnly]
+    permission_classes = [IsAuthenticatedOrReadOnly]
 
     @swagger_auto_schema(tags=['posts'])
     def get(self, request, *args, **kwargs):
@@ -174,7 +173,7 @@ class comments(generics.ListCreateAPIView):
 class comment_detail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Comment.objects.all()
     serializer_class = CommentSerializer
-    permission_classes = [IsAuthenticatedOrReadOnly, IsOwnerOrReadOnly]
+    permission_classes = [IsAuthenticatedOrReadOnly]
 
     @swagger_auto_schema(tags=['comments'])
     def get(self, request, *args, **kwargs):

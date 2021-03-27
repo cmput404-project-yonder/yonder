@@ -33,7 +33,6 @@ function Post(props) {
   }
   const isImage = IsImage();
   if (isImage) {
-    
   }
 
   console.log(isImage);
