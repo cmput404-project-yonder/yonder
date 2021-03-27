@@ -107,7 +107,7 @@ class posts(generics.ListCreateAPIView):
     def create(self, request, *args, **kwargs):
         post_data = request.data
         author = Author.objects.get(pk=kwargs["author_id"])
-        post_data["source"] = author.host
+        post_data["source"] = author.host 
         post_data["origin"] = author.host
         serializer = self.get_serializer(data=post_data)
         serializer.is_valid(raise_exception=True)

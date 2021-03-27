@@ -67,8 +67,11 @@ def follow_to_inbox(sender, instance, **kwargs):
         inbox.save()
 
 @receiver(post_save, sender=Post,dispatch_uid='signal_handler_post_save')
-def post_to_inbox(sender, instance, **kwargs):
+def create_post(sender, instance, **kwargs):
     if kwargs["created"]:
+        instance.source = instance.get_absolute_url()
+        if instance.origin:
+            instance.origin = instance.source
         try:
             follows = AuthorFollower.objects.all().filter(author_id=instance.author)
             for follow in follows:
@@ -78,6 +81,8 @@ def post_to_inbox(sender, instance, **kwargs):
                 inbox.save()
         except AuthorFollower.DoesNotExist:
             print("No followers")
+        finally:
+            instance.save()
 
 @receiver(post_save, sender=Author)
 def create_inbox(sender, instance, **kwargs):
