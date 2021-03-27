@@ -245,11 +245,24 @@ class PostForm extends Component {
       )
     }
 
+     const cancelButtonHandler = () => {
+      // exit animation attemps, commented out for now.
+      // dont know how to find .modal.is-active.modal-background
+      // maybe ill give it another try in part3
+      // --- Gengyuan
+
+      // let formCard = document.getElementById("postFormCard");
+      // formCard.addEventListener("animationend", () => {this.props.setModalIsOpen(false);})
+      // formCard.className = 'animate__animated animate__fadeOutDown'
+
+      this.props.setModalIsOpen(false);
+    }
+
     const PostFormButtonPanel = () => {
       // Confirm and back button used to submit form
       return (
         <Container style={buttonLayoutStyle}>
-          <CancelButton action={() => this.props.setModalIsOpen(false)}/>
+          <CancelButton action={cancelButtonHandler}/>
           <ConfirmButton action={this.addPost}/>
         </Container>
       )
@@ -271,7 +284,7 @@ class PostForm extends Component {
     }
 
     return (
-      <Card style={cardStyle}>
+      <Card id="postFormCard" style={cardStyle} className="animate__animated animate__slideInUp">
         <Container style={createPostHeaderStype}>
           <Container style={postIconStyle.style}>{postIcons()}</Container>
         </Container>

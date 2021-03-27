@@ -6,7 +6,7 @@ import { Container, Button } from "react-bulma-components";
 import { color } from "../styling";
 
 var buttonStyle = {
-  scale: "35",
+  scale: "40",
   style: {
     fill: color.buttonRed,
   },
@@ -55,7 +55,6 @@ function FollowButton(props) {
             </g>
           </g>
         </svg>
-      </Button>
     </Container>
   );
 }

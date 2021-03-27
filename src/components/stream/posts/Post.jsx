@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import PropTypes from "prop-types";
 import { Modal } from "react-bulma-components";
 import EditPostForm from "./EditPostForm";
+import SharingPostPrompt from "./SharingPostPrompt";
 
 import { Card, Content, Heading } from "react-bulma-components";
 import { font, color } from "./styling";
@@ -12,8 +13,31 @@ import ShareButton from "./ShareButton";
 import LikeButton from "./LikeButton";
 import { dividorStyle, postStyle, textStyle, authorStyle, contentStyle } from "./StyleComponents";
 
+
+var dividorStyle = {
+  marginTop: "1em",
+  marginBottom: "0.6em",
+}
+
+var postStyle = {
+  boxShadow: "0pt 0pt 8pt rgb(0,0,0,0.5)",
+  borderRadius: "6pt",
+  backgroundColor: color.backgroundCreamLighter,
+  marginBottom: "3em",
+  marginTop: "0.5em",
+  fontFamily: font.segoeUI,
+  fontWeight: "350",
+  fontSize: "1.3em",
+  color: color.baseBlack,
+  minHeight: "25em",
+  display: "flex",
+  flexDirection: "column",
+  justifyContent: "space-between",
+}
+
 function Post(props) {
   const [editModalIsOpen, setEditModalIsOpen] = useState(false);
+  const [sharingPromptIsOpen, setSharingPromptIsOpen] = useState(false);
   console.log(props.post);
   
   const postURL = "/author/" + props.post.author.id + "/posts/" + props.post.id;
@@ -57,14 +81,14 @@ function Post(props) {
           <p style={{ margin: "1em", fontSize: "0.7em" }}>{props.post.published}</p>
         </Card.Content>
         <Card.Footer>
-          <Card.Footer.Item renderAs="a">
+          <Card.Footer.Item renderAs="a" onClick={{}}>
             <LikeButton/>
           </Card.Footer.Item>
-          <Card.Footer.Item renderAs="a">
+          <Card.Footer.Item renderAs="a" onClick={() => setSharingPromptIsOpen(true)}>
             <ShareButton/>
           </Card.Footer.Item>
-          <Card.Footer.Item renderAs="a">
-            <EditButton action={() => setEditModalIsOpen(true)}/>
+          <Card.Footer.Item renderAs="a" onClick={() => setEditModalIsOpen(true)}>
+            <EditButton/>
           </Card.Footer.Item>
           <Modal show={editModalIsOpen} onClose={() => setEditModalIsOpen(false)} closeOnBlur closeOnEsc>
             <EditPostForm
@@ -72,6 +96,13 @@ function Post(props) {
               post={props.post}
               updatePost={props.updatePost}
               deletePost={props.deletePost}
+            />
+          </Modal>
+          <Modal show={sharingPromptIsOpen} onClose={() => setSharingPromptIsOpen(false)} closeOnBlur closeOnEsc>
+            <SharingPostPrompt
+              setModalIsOpen={setSharingPromptIsOpen}   
+              post={props.post}
+              sharePost={props.sharePost}
             />
           </Modal>
         </Card.Footer>
