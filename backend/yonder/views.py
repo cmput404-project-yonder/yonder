@@ -244,7 +244,7 @@ class author_followers_detail(viewsets.ModelViewSet):
         serializer = self.get_serializer(data=author_follower_data)
         if not serializer.is_valid():
             return Response(status=status.HTTP_400_BAD_REQUEST)
-        author_follower = serializer.save()
+        serializer.save()
 
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
@@ -252,7 +252,7 @@ class author_followers_detail(viewsets.ModelViewSet):
         if self.check_following(author_id, follower_id):
             return Response(status=status.HTTP_200_OK)
 
-        return Response(status=status.HTTP_204_NO_CONTENT)
+        return Response(status=status.HTTP_404_NOT_FOUND)
 
         # serializer = self.get_serializer(instance=author_follower)
 

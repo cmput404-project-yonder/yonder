@@ -82,7 +82,7 @@ export const updatePost = (editedPost) => (dispatch, getState) => {
   dispatch({ type: EDIT_POST_SUBMITTED });
   console.log(editedPost);
   axios
-    .put("/author/" + editedPost.author.id + "/posts/" + editedPost.id, editedPost)
+    .put("/author/" + editedPost.author.id + "/posts/" + editedPost.id + "/", editedPost)
     .then((response) => {
       dispatch({ type: EDIT_POST_SUCCESS, payload: response.data });
     })
@@ -135,7 +135,7 @@ export const deletePost = (aPost) => (dispatch, getState) => {
   dispatch({ type: DELETE_POST_SUBMITTED });
   console.log(aPost);
   axios
-    .delete("/author/" + author.id + "/posts/" + aPost.id)
+    .delete("/author/" + author.id + "/posts/" + aPost.id + "/")
     .then((response) => {
       dispatch({ type: DELETE_POST_SUCCESS, payload: response.data });
     })
