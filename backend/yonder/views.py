@@ -203,7 +203,6 @@ class author_followers_detail(viewsets.ModelViewSet):
     def check_following(self, author_id, follower_id):
         author_followers = AuthorFollower.objects.filter(author=author_id)
         for af in author_followers:
-            print("FOLLOWER:", af.follower)
             if af.follower["id"] == str(follower_id):
                 return True
 

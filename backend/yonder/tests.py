@@ -193,10 +193,8 @@ class FollowerTests(APITestCase):
         # Get follower
         url = reverse('followers', args=[self.author1.id, self.author2.id])
         response = self.client.get(url)
-        follower_data = response.json()
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(follower_data["displayName"], self.author2.displayName)
 
     def test_are_friends(self):
         # Setup two-way following
