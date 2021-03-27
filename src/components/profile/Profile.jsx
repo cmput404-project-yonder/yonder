@@ -44,25 +44,6 @@ var profileListStyle ={
   maxWidth: "300pt"
 }
 
-var streamPostStyle ={
-}
-
-var profileShowStyle = {
-  boxShadow: "0pt 0pt 8pt rgb(0,0,0,0.5)",
-  borderRadius: "6pt",
-  backgroundColor: color.backgroundCreamLighter,
-  marginBottom: "2em",
-  marginTop: "0.5em",
-  fontFamily: font.segoeUI,
-  fontWeight: "350",
-  fontSize: "1.3em",
-  color: color.baseBlack,
-  minHeight: "25em",
-  display: "flex",
-  flexDirection: "column",
-  justifyContent: "space-between",
-};
-
 class Profile extends React.Component {
   constructor(props) {
     super(props);
@@ -146,17 +127,10 @@ class Profile extends React.Component {
                 </Container>
                 {this.props.match.params.id === this.props.loggedInAuthor.id ? loggedAuthor() : otherAuthor()}
               </Card>
-            {/* <ProfileShow */}
-            {/*   postNum={this.props.retrievedAuthorPosts.length} */}
-            {/*   retrievedAuthor={this.props.retrievedAuthor} */}
-            {/*   editable={this.props.match.params.id === this.props.loggedInAuthor.id} */}
-            {/*   clickFollow={clickFollow} */}
-            {/*   isFollowing={this.state.isFollowing} */}
-            {/* /> */}
             </div>
           </Columns.Column>
           <Columns.Column>
-            <PostList posts={this.props.retrievedAuthorPosts} style={streamPostStyle} />
+            <PostList posts={this.props.retrievedAuthorPosts} />
           </Columns.Column>
         </Columns>
       </Section>

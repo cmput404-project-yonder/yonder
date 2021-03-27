@@ -10,41 +10,6 @@ import PopupModal from "./posts/PopupModal";
 import { buttonLayerContainerStyle, streamLayerContainerStyle, newPostButtonStyle, pageStyle, postStreamStyle } from "./posts/StyleComponents";
 import { createPost, updatePost, sharePost, retrieveLoggedInAuthorPosts, deletePost } from "./StreamActions";
 
-
-
-
-var buttonLayerContainerStyle = {
-  gridColumn: "1",
-  gridRow: "1",
-  width: "100%",
-  height: "100%",
-}
-
-var streamLayerContainerStyle = {
-  gridColumn: "1",
-  gridRow: "1",
-  width: "100%",
-  height: "100%",
-  
-}
-
-
-var newPostButtonStyle = {
-  float: "right",
-  zIndex: "1",
-  position: "fixed",
-  right: "5%",
-  bottom: "5%",
-}
-
-var pageStyle = {
-  display: "grid"
-
-}
-
-var postStreamStyle = {
-}
-
 class Stream extends Component {
   componentDidMount() {
     this.props.retrieveLoggedInAuthorPosts();

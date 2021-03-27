@@ -13,28 +13,6 @@ import ShareButton from "./ShareButton";
 import LikeButton from "./LikeButton";
 import { dividorStyle, postStyle, textStyle, authorStyle, contentStyle } from "./StyleComponents";
 
-
-var dividorStyle = {
-  marginTop: "1em",
-  marginBottom: "0.6em",
-}
-
-var postStyle = {
-  boxShadow: "0pt 0pt 8pt rgb(0,0,0,0.5)",
-  borderRadius: "6pt",
-  backgroundColor: color.backgroundCreamLighter,
-  marginBottom: "3em",
-  marginTop: "0.5em",
-  fontFamily: font.segoeUI,
-  fontWeight: "350",
-  fontSize: "1.3em",
-  color: color.baseBlack,
-  minHeight: "25em",
-  display: "flex",
-  flexDirection: "column",
-  justifyContent: "space-between",
-}
-
 function Post(props) {
   const [editModalIsOpen, setEditModalIsOpen] = useState(false);
   const [sharingPromptIsOpen, setSharingPromptIsOpen] = useState(false);
@@ -55,7 +33,6 @@ function Post(props) {
   }
   const isImage = IsImage();
   if (isImage) {
-    
   }
 
   console.log(isImage);
