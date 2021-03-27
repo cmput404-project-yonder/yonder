@@ -5,7 +5,6 @@ import EditButton from "./buttons/EditButton";
 import Dividor from "./Dividor";
 
 import { style, color } from "./styling";
-import { statusStyle, infoStyle, svgIconStyle } from "../stream/posts/StyleComponents";
 
 
 // local styling of this component

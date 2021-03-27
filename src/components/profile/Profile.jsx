@@ -12,8 +12,6 @@ import { retrieveAuthor, retrieveAuthorPosts, sendFollow, checkFollowing } from 
 import FollowButton from "./buttons/FollowButton";
 import EditProfileButton from "./buttons/EditButton";
 
-
-import { profileShowStyle } from "../stream/posts/StyleComponents"; 
 import { color,font } from "./styling";
 
 
@@ -99,10 +97,8 @@ class Profile extends React.Component {
       if (!isFollowing) {
         return (
           <Card.Footer style={footerStyle}>
-            <Card.Footer.Item onClick={() => clickFollow()}>
-              <Button color="light" >
+            <Card.Footer.Item renderAs="a" onClick={() => clickFollow()}>
                 <FollowButton />
-              </Button>
             </Card.Footer.Item>
           </Card.Footer>
         );
