@@ -2,15 +2,14 @@ import React from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { withRouter } from "react-router-dom";
-import { Card, Container, Columns, Section } from "react-bulma-components";
+import { Button, Card, Container, Columns, Section } from "react-bulma-components";
 
 import PostList from "../stream/posts/PostList";
 import ProfileDetail from "./ProfileDetail";
-import { retrieveAuthor, retrieveAuthorPosts } from "./ProfileActions";
+import { retrieveAuthor, retrieveAuthorPosts, sendFollow, checkFollowing } from "./ProfileActions";
 
 // buttons
 import FollowButton from "./buttons/FollowButton";
-import FriendButton from "./buttons/FriendButton";
 import EditProfileButton from "./buttons/EditButton";
 
 import { color,font } from "./styling";
@@ -61,58 +60,15 @@ var profileShowStyle = {
   justifyContent: "space-between",
 };
 
-function ProfileShow(props) {
-  const clickFollow = () => {
-    // onClick event handler for follow button
-  };
-
-  const clickFriend = () => {
-    // onClick event handler for friend button
-  };
-
-  const clickEdit = () => {
-    // onClick event handler for friend button
-  };
-
-  const otherAuthor = () => {
-    return (
-      <Card.Footer style={footerStyle}>
-          <Card.Footer.Item renderAs="a" onClick={clickFollow}>
-            <FollowButton />
-          </Card.Footer.Item>
-          <Card.Footer.Item renderAs="a" onClick={clickFriend} >
-            <FriendButton/>
-          </Card.Footer.Item>
-      </Card.Footer>
-    );
-  };
-
-  const loggedAuthor = () => {
-    return (
-      <Card.Footer style={footerStyle}>
-          <Card.Footer.Item renderAs="a" onClick={clickEdit} >
-            <EditProfileButton/>
-          </Card.Footer.Item>
-      </Card.Footer>
-    );
-  };
-
-  return (
-    <Card style={profileShowStyle}>
-      <Container style={profileInfoContainer}>
-        <ProfileDetail
-          displayName={props.retrievedAuthor.displayName}
-          followerNum={64}
-          followingNum={32}
-          postNum={props.postNum}
-        />
-      </Container>
-      {props.editable ? loggedAuthor() : otherAuthor()}
-    </Card>
-  );
-}
-
 class Profile extends React.Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      isFollowing: false
+    };
+  }
+
   componentDidMount() {
     const {
       match: { params },
@@ -120,9 +76,49 @@ class Profile extends React.Component {
 
     this.props.retrieveAuthor(params.id);
     this.props.retrieveAuthorPosts(params.id);
+    this.props.checkFollowing(params.id)
   }
 
   render() {
+    var isFollowing = this.props.isFollowing;
+
+    const clickFollow = () => {
+      const status_code = this.props.sendFollow(this.props.retrievedAuthor);
+      if (status_code == 201) {
+        var isFollowing = true;
+      }
+    };
+
+    const clickEdit = () => {
+      // onClick event handler for friend button
+    };
+
+    const otherAuthor = () => {
+      if (!isFollowing) {
+        return (
+          <Card.Footer style={footerStyle}>
+            <Card.Footer.Item onClick={() => clickFollow()}>
+              <Button color="light" >
+                <FollowButton />
+              </Button>
+            </Card.Footer.Item>
+          </Card.Footer>
+        );
+      } else {
+        return null;
+      }
+    };
+
+    const loggedAuthor = () => {
+      return (
+        <Card.Footer style={footerStyle}>
+          <Card.Footer.Item renderAs="a" onClick={clickEdit} >
+            <EditProfileButton/>
+          </Card.Footer.Item>
+        </Card.Footer>
+      );
+    };
+
     if (this.props.loading) {
       return (
         <div class="pageloader is-active">
@@ -136,11 +132,24 @@ class Profile extends React.Component {
         <Columns style={pageStyle}>
           <Columns.Column>
             <div className="post-list" style={profileListStyle}>
-            <ProfileShow
-              postNum={this.props.retrievedAuthorPosts.length}
-              retrievedAuthor={this.props.retrievedAuthor}
-              editable={this.props.match.params.id === this.props.loggedInAuthor.id}
-            />
+              <Card style={profileShowStyle}>
+                <Container style={profileInfoContainer}>
+                  <ProfileDetail
+                    displayName={this.props.retrievedAuthor.displayName}
+                    followerNum={64}
+                    followingNum={32}
+                    postNum={this.props.retrievedAuthorPosts.length}
+                  />
+                </Container>
+                {this.props.match.params.id === this.props.loggedInAuthor.id ? loggedAuthor() : otherAuthor()}
+              </Card>
+            {/* <ProfileShow */}
+            {/*   postNum={this.props.retrievedAuthorPosts.length} */}
+            {/*   retrievedAuthor={this.props.retrievedAuthor} */}
+            {/*   editable={this.props.match.params.id === this.props.loggedInAuthor.id} */}
+            {/*   clickFollow={clickFollow} */}
+            {/*   isFollowing={this.state.isFollowing} */}
+            {/* /> */}
             </div>
           </Columns.Column>
           <Columns.Column>
@@ -158,6 +167,7 @@ Profile.propTypes = {
   retrievedAuthor: PropTypes.object.isRequired,
   retrieveAuthorPosts: PropTypes.func.isRequired,
   retrievedAuthorPosts: PropTypes.array.isRequired,
+  sendFollow: PropTypes.func.isRequired,
   loading: PropTypes.bool.isRequired,
 };
 
@@ -166,6 +176,7 @@ const mapStateToProps = (state) => ({
   loading: state.profile.loading,
   retrievedAuthor: state.profile.retrievedAuthor,
   retrievedAuthorPosts: state.profile.retrievedAuthorPosts,
+  isFollowing: state.profile.isFollowing
 });
 
-export default connect(mapStateToProps, { retrieveAuthorPosts, retrieveAuthor })(withRouter(Profile));
+export default connect(mapStateToProps, { retrieveAuthorPosts, retrieveAuthor, sendFollow, checkFollowing })(withRouter(Profile));
