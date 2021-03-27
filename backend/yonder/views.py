@@ -9,7 +9,7 @@ from rest_framework.serializers import Serializer
 from drf_yasg.utils import swagger_auto_schema
 from django.core.paginator import Paginator
 from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
-import request
+import requests
 
 from .models import Post, Author, Comment, RemoteNode
 from .serializers import *
@@ -86,7 +86,7 @@ class authors(generics.ListAPIView):
     def get(self, request, *args, **kwargs):
         return self.list(request, *args, **kwargs)
 
-class remote_authors(generics.APIView):
+class remote_authors(generics.GenericAPIView):
     queryset = Author.objects.all()
     serializer_class = AuthorSerializer
 
