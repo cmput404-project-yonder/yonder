@@ -5,7 +5,7 @@ var color = {
     baseLightGrey: "#AAAAAA",
     buttonGreen:"#99D4B4",
     buttonRed: "#DD7272",
-    buttonOrange: "#E69942",
+    buttonOrange: "#F68444",
     postIcon: "#8fc9eb",
     backgroundGrey: "#fefefe",
     backgroundCream: "#F9F5EF",

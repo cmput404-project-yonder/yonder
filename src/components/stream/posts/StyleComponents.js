@@ -152,7 +152,7 @@ export const streamLayerContainerStyle = {
   
 export const newPostButtonStyle = {
     float: "right",
-    zIndex: "1000",
+    zIndex: "1",
     position: "fixed",
     right: "5%",
     bottom: "5%",
@@ -174,7 +174,7 @@ export const checkBoxLabelStyle = {
   }
   
 export const checkBoxStyle = {
-    paddingTop: "1.5em",
+    paddingTop: "2em",
     paddingLeft: "1.8em",
     display: "flex",
     float: "left",
