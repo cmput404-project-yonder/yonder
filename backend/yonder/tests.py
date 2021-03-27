@@ -1,9 +1,13 @@
 from django.urls import reverse
+from django.test import TestCase
+from django.db.models import signals
 from rest_framework import status
 from rest_framework.test import APITestCase
 from django.utils import timezone
 from .models import Author, User, Post, Inbox, AuthorFollower, AuthorFriend
+from . import signals
 from .serializers import AuthorSerializer
+from unittest.mock import patch
 import json
 
 
@@ -225,7 +229,6 @@ class InboxTests(APITestCase):
         }
         user = User.objects.create_user(**self.credentials)
         self.author = Author.objects.create(**self.testAuthor, user=user)
-        Inbox.objects.create(author=self.author)
 
         data = {
             "type": "post",
@@ -282,3 +285,56 @@ class InboxTests(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
         inbox = Inbox.objects.get(author_id=author.id)
         self.assertEqual(len(inbox.items), 0)
+
+class SignalTests(TestCase):
+    def setUp(self):
+        self.credentials1 = {
+            'username': 'testUser1',
+            'password': 'testPassword1'
+        }
+        self.testAuthor1 = {
+            "displayName": "testAuthor1",
+            "github": "https://github.com/cmput404-project-yonder/yonder",
+            "host": "http://testserver.com"
+        }
+        user1 = User.objects.create_user(**self.credentials1)
+        self.author1 = Author.objects.create(**self.testAuthor1, user=user1)
+        self.authorJSON1 = AuthorSerializer(instance=self.author1).data
+
+        self.credentials2 = {
+            'username': 'testUser2',
+            'password': 'testPassword2'
+        }
+        self.testAuthor2 = {
+            "displayName": "testAuthor2",
+            "github": "https://github.com/cmput404-project-yonder/yonder",
+            "host": "http://testserver.com"
+        }
+        user2 = User.objects.create_user(**self.credentials2)
+        self.author2 = Author.objects.create(**self.testAuthor2, user=user2)
+        self.authorJSON2 = AuthorSerializer(instance=self.author2).data
+        
+
+        self.post = {
+            "title": "A post testing post save signal",
+            "description": "This post discusses stuff -- brief",
+            "contentType": "text/plain",
+            "content": "Þā wæs on burgum Bēowulf Scyldinga",
+            "author": self.author1,
+            "categories": ["web", "tutorial"],
+            "visibility": "PUBLIC",
+            "unlisted": False
+        }
+        self.testFollow = {
+            "author": self.author1,
+            "follower": self.authorJSON2
+        }
+
+    #@patch('yonder.signals.signal_handler_post_save')
+    def test_post_to_inbox(self):
+        AuthorFollower.objects.create(**self.testFollow)
+        post = Post.objects.create(**self.post)
+
+    #@patch('yonder.signals.signal_handler_follow_save')
+    def test_follow_to_inbox(self):
+        AuthorFollower.objects.create(**self.testFollow)

@@ -99,33 +99,5 @@ class Inbox(models.Model):
                           editable=False, primary_key=True)
     author = models.ForeignKey(Author, on_delete=models.CASCADE)
     items = ArrayField(models.JSONField(), default=list)
-
-@receiver(post_save, sender=Post)
-def post_to_inbox(sender, instance, **kwargs):
-    follows = AuthorFollower.objects.all().filter(author_id=instance.author.id)
-    for follow in follows:
-        follower = json.loads(follow.follower)[0]
-        inbox = Inbox.objects.get(author_id=follower["pk"])
-        data = serializers.serialize('json',[instance]) 
-        inbox.items.append(data)
-        inbox.save()
     
 
-@receiver(post_save, sender=AuthorFollower)
-def follow_to_inbox(sender, instance, **kwargs):
-    follower = instance.follower
-    inbox = Inbox.objects.get(author_id=follower["pk"])
-    data = serializers.serialize('json',[instance]) 
-    inbox.items.append(data)
-    inbox.save()
-    
-'''
-@receiver(post_save, sender=Liked)
-def like_to_inbox(sender, instance, **kwargs):
-    src_author_id = re.match('(?<=/author/).*(?=/posts)', instance.object)
-    inbox = Inbox.objects.get(author_id=src_author_id)
-    if inbox.exists():
-        data = serializers.serialize('json', instance)
-        inbox.items.append(data)
-        inbox.save()
-'''

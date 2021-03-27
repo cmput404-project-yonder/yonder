@@ -65,11 +65,7 @@ class signup(generics.GenericAPIView):
             raise validators.ValidationError(author_serializer.errors)
 
         author = author_serializer.save(user=user)
-        author.save()
-
-        inbox_serializer = InboxSerializer(data={"author": author.id})
-        inbox_serializer.is_valid(raise_exception=True)
-        inbox_serializer.save()
+        #author.save()
 
         token, created = Token.objects.get_or_create(user=user)
 
