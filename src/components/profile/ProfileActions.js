@@ -22,7 +22,7 @@ export const retrieveAuthor = (authorId) => (dispatch, getState) => {
   setAxiosAuthToken(state.auth.token);
   dispatch({ type: RETRIEVE_AUTHOR_SUBMITTED });
   axios
-    .get("/author/" + authorId)
+    .get("/author/" + authorId + "/")
     .then((response) => {
       dispatch({ type: RETRIEVE_AUTHOR_SUCCESS, payload: response.data });
     })
@@ -73,7 +73,7 @@ export const sendFollow = (otherAuthor) => (dispatch, getState) => {
   setAxiosAuthToken(state.auth.token);
   dispatch({ type: SEND_FOLLOW_SUBMITTED });
   axios
-    .put("/author/" + otherAuthor.id + "/followers/" + author.id, author)
+    .put("/author/" + otherAuthor.id + "/followers/" + author.id + "/", author)
     .then((response) => {
       dispatch({ type: SEND_FOLLOW_SUCCESS });
       toast.success("You are now following " + otherAuthor.displayName);
@@ -104,7 +104,7 @@ export const checkFollowing = (otherAuthorId) => (dispatch, getState) => {
   setAxiosAuthToken(state.auth.token);
   dispatch({ type: CHECK_FOLLOW_SUBMITTED });
   axios
-    .get("/author/" + otherAuthorId + "/followers/" + author.id)
+    .get("/author/" + otherAuthorId + "/followers/" + author.id + "/")
     .then((response) => {
       if (response.status == 200) {
         dispatch({ type: CHECK_FOLLOW_SUCCESS, payload: true });
