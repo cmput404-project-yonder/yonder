@@ -1,7 +1,6 @@
 import React from "react";
-import { Content, Container, Button } from "react-bulma-components";
+import { Content, Container } from "react-bulma-components";
 import { YonderLogo, GithubLogo } from "./ProfileIcons";
-import EditButton from "./buttons/EditButton";
 import Dividor from "./Dividor";
 
 import { style, color } from "./styling";
@@ -95,7 +94,7 @@ function ProfileStatusView(props) {
 }
 
 function ProfileInfoView(props) {
-  const hasGithub = (props.githubURL == "") ? false : true;
+  const hasGithub = (props.githubURL === "") ? false : true;
 
   const yonderBanner = (
       <div style={infoStyle.banner}>

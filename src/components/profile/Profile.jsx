@@ -2,7 +2,7 @@ import React from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { withRouter } from "react-router-dom";
-import { Button, Card, Container, Columns, Section } from "react-bulma-components";
+import { Card, Container, Columns, Section } from "react-bulma-components";
 
 import PostList from "../stream/posts/PostList";
 import ProfileDetail from "./ProfileDetail";
@@ -61,10 +61,6 @@ var profileListStyle ={
 class Profile extends React.Component {
   constructor(props) {
     super(props);
-
-    this.state = {
-      isFollowing: false
-    };
   }
 
   componentDidMount() {
@@ -81,8 +77,8 @@ class Profile extends React.Component {
 
     const clickFollow = () => {
       const status_code = this.props.sendFollow(this.props.retrievedAuthor);
-      if (status_code == 201) {
-        var isFollowing = true;
+      if (status_code === 201) {
+        isFollowing = true;
       }
     };
 
