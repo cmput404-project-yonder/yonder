@@ -98,4 +98,9 @@ class Inbox(models.Model):
                           editable=False, primary_key=True)
     author = models.ForeignKey(Author, on_delete=models.CASCADE)
     items = ArrayField(models.JSONField(), default=list)
-    
+
+class Like(models.Model):
+    id = models.UUIDField(unique=True, default=uuid.uuid4,
+                          editable=False, primary_key=True)
+    author = models.ForeignKey(Author, on_delete=models.CASCADE)
+    object_url = models.CharField(max_length=200)
