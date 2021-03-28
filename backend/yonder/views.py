@@ -353,5 +353,9 @@ class likes(generics.GenericAPIView):
     def get(self, request, *args, **kwargs):
         author = get_object_or_404(Author, id=kwargs["author_id"])
         likes = Like.objects.all().filter(author_id=author.id) 
-        serialized_data = [LikeSerializer(like).data for like in likes]
-        return Response(data=serialized_data, status=status.HTTP_200_OK)
+        serialized_likes = [LikeSerializer(like).data for like in likes]
+        data = {
+            "type": "liked",
+            "items": serialized_likes
+        }
+        return Response(data=data, status=status.HTTP_200_OK)
