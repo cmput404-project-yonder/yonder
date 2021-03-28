@@ -106,10 +106,10 @@ export const checkFollowing = (otherAuthorId) => (dispatch, getState) => {
   axios
     .get("/author/" + otherAuthorId + "/followers/" + author.id + "/")
     .then((response) => {
-      if (response.status == 200) {
+      if (response.status === 200) {
         dispatch({ type: CHECK_FOLLOW_SUCCESS, payload: true });
       }
-      else if (response.status == 204) {
+      else if (response.status === 204) {
         dispatch({ type: CHECK_FOLLOW_SUCCESS, payload: true });
       }
     })

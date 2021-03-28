@@ -5,13 +5,12 @@ import EditPostForm from "./EditPostForm";
 import SharingPostPrompt from "./SharingPostPrompt";
 
 import { Card, Content, Heading } from "react-bulma-components";
-import { font, color } from "./styling";
 import Dividor from "./Dividor";
 import { Link } from "react-router-dom";
 import EditButton from "./EditButton";
 import ShareButton from "./ShareButton";
 import LikeButton from "./LikeButton";
-import { dividorStyle, postStyle, textStyle, authorStyle, contentStyle } from "./StyleComponents";
+import { dividorStyle, postStyle } from "./StyleComponents";
 
 function Post(props) {
   const [editModalIsOpen, setEditModalIsOpen] = useState(false);

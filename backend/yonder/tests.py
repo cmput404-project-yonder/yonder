@@ -7,7 +7,7 @@ from rest_framework.authtoken.models import Token
 from django.utils import timezone
 from .models import Author, User, Post, Inbox, AuthorFollower, AuthorFriend
 from . import signals
-from .serializers import AuthorSerializer
+from .serializers import AuthorSerializer, InboxSerializer
 from unittest.mock import patch
 import json
 import base64

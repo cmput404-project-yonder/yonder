@@ -10,9 +10,9 @@ import {
   DELETE_POST_SUBMITTED,
   DELETE_POST_SUCCESS,
   DELETE_POST_ERROR,
-  RETRIEVE_POSTS_SUBMITTED,
-  RETRIEVE_POSTS_SUCCESS,
-  RETRIEVE_POSTS_ERROR,
+  RETRIEVE_INBOX_SUBMITTED,
+  RETRIEVE_INBOX_ERROR,
+  RETRIEVE_INBOX_SUCCESS
 } from "./StreamTypes";
 import { setAxiosAuthToken } from "../../utils/Utils";
 
@@ -101,22 +101,22 @@ export const updatePost = (editedPost) => (dispatch, getState) => {
     });
 };
 
-export const retrieveLoggedInAuthorPosts = () => (dispatch, getState) => {
+export const retrieveInbox = (authorId) => (dispatch, getState) => {
   const state = getState();
-  const author = state.auth.author;
 
   setAxiosAuthToken(state.auth.token);
-  dispatch({ type: RETRIEVE_POSTS_SUBMITTED });
+  dispatch({ type: RETRIEVE_INBOX_SUBMITTED });
   axios
-    .get("/author/" + author.id + "/posts/")
+    .get("/author/" + authorId + "/inbox/")
     .then((response) => {
-      dispatch({ type: RETRIEVE_POSTS_SUCCESS, payload: response.data });
+      dispatch({ type: RETRIEVE_INBOX_SUCCESS, payload: response.data });
+      console.log(response.data);
     })
     .catch((error) => {
       if (error.response) {
         toast.error(JSON.stringify(error.response.data));
         dispatch({
-          type: RETRIEVE_POSTS_ERROR,
+          type: RETRIEVE_INBOX_ERROR,
           errorData: error.response.data,
         });
       } else if (error.message) {
