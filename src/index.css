@@ -73,3 +73,7 @@ button {
   background-color: rgba(168, 168, 168, 0.6);
   filter: blur(1pt);
 }
+
+.pageloader {
+  background: #555555 !important;
+}
