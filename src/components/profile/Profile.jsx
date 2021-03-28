@@ -2,7 +2,7 @@ import React from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { withRouter } from "react-router-dom";
-import { Button, Card, Container, Columns, Section } from "react-bulma-components";
+import { Modal, Card, Container, Columns, Section } from "react-bulma-components";
 
 import PostList from "../stream/posts/PostList";
 import ProfileDetail from "./ProfileDetail";
@@ -11,6 +11,7 @@ import { retrieveAuthor, retrieveAuthorPosts, sendFollow, checkFollowing } from 
 // buttons
 import FollowButton from "./buttons/FollowButton";
 import EditProfileButton from "./buttons/EditButton";
+import ProfileEdit from "./ProfileEdit";
 
 import { color,font } from "./styling";
 
@@ -63,7 +64,8 @@ class Profile extends React.Component {
     super(props);
 
     this.state = {
-      isFollowing: false
+      isFollowing: false,
+      editProfileModalIsOpen: false
     };
   }
 
@@ -86,8 +88,8 @@ class Profile extends React.Component {
       }
     };
 
-    const clickEdit = () => {
-      // onClick event handler for friend button
+    const showEditModal = (modalState) => {
+      this.setState({editProfileModalIsOpen: modalState})
     };
 
     const otherAuthor = () => {
@@ -104,16 +106,6 @@ class Profile extends React.Component {
       }
     };
 
-    const loggedAuthor = () => {
-      return (
-        <Card.Footer style={footerStyle}>
-          <Card.Footer.Item>
-            <EditProfileButton onClick={clickEdit}/>
-          </Card.Footer.Item>
-        </Card.Footer>
-      );
-    };
-
     if (this.props.loading) {
       return (
         <div class="pageloader is-active">
@@ -122,6 +114,25 @@ class Profile extends React.Component {
       );
     }
     console.log(this.props.retrievedAuthorPosts);
+
+    const loggedAuthor = () => {
+      return (
+        <Card.Footer style={footerStyle}>
+          <Card.Footer.Item>
+            <EditProfileButton onClick={()=>showEditModal(true)}/>
+            <Modal show={this.state.editProfileModalIsOpen} onClose={()=>showEditModal(false)} closeOnBlur closeOnEsc>
+              <ProfileEdit
+                onCancel={()=>showEditModal(false)}   
+                displayName={this.props.retrievedAuthor.displayName}
+                githubURL={""}
+              />
+            </Modal>
+          </Card.Footer.Item>
+        </Card.Footer>
+      );
+    };
+
+
 
     return (
       <Section >
@@ -132,6 +143,7 @@ class Profile extends React.Component {
                 <Container style={profileInfoContainer}>
                   <ProfileDetail
                     displayName={this.props.retrievedAuthor.displayName}
+                    githubURL={""}
                     followerNum={64}
                     followingNum={32}
                     postNum={this.props.retrievedAuthorPosts.length}

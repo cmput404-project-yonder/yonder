@@ -100,39 +100,8 @@ export const statusStyle = {
       padding: "1.1em",
     },
   };
-
-export const formStyle = {
-    overall: {
-      paddingLeft: "1em",
-      paddingRight: "1em",
-      paddingTop: "0.5em",
-      paddingBottom: "0.75em",
-    },
-    label: Object.assign(
-      {},
-      style.text.body, // overwrite the font styling set by bulma
-      {
-        paddingTop: "0.5em",
-        textAlign: "left",
-        fontWeight: "400",
-      }
-    ),
-  };
   
-export const headingStyle = {
-    overall: {
-      paddingTop: "1.5em",
-      paddingBottom: "2em",
-    },
-    title: style.text.heading,
-    logo: {
-      scale: "90",
-      style: {
-        padding: "1.1em",
-        fill: color.baseBlack,
-      },
-    },
-  };
+
 
 export const buttonLayerContainerStyle = {
     gridColumn: "1",

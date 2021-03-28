@@ -69,11 +69,11 @@ var dividorStyle = {
 
 var promptTitleStyle = {
     fontSize: "2.2em",
-    fontWeight: "400",
+    fontWeight: "300",
     marginTop: "-62pt",
     marginLeft: "80pt",
     fontFamily: font.segoeUI,
-    color: color.baseLightGrey,
+    color: color.baseBlack,
     float: "left",
 }
 
