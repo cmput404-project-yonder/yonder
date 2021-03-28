@@ -29,7 +29,7 @@ var pageStyle = {
 var profileInfoContainer = {
   boxShadow: "0pt 0pt 3pt rgb(0,0,0,0.5)",
   borderRadius: "8pt",
-  marginTop: "1.2em",
+  marginTop: "1em",
   marginBottom: "2em",
   paddingRight: "1.5em",
   paddingLeft: "1.5em",
@@ -111,7 +111,6 @@ class Profile extends React.Component {
               <ProfileEdit
                 onCancel={()=>showEditModal(false)}
                 editProfile={this.props.editProfile} 
-                updateAuthorPosts={() => this.props.retrieveAuthorPosts(this.props.retrievedAuthor.id)}
                 displayName={this.props.retrievedAuthor.displayName}
                 githubURL={""}
               />
