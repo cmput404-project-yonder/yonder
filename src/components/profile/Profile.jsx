@@ -14,50 +14,42 @@ import EditProfileButton from "./buttons/EditButton";
 import ProfileEdit from "./ProfileEdit";
 
 import { color,font } from "./styling";
+import { EditButton } from "./ProfileIcons";
+import Dividor from "./Dividor";
+import { dividorStyle } from "../stream/posts/StyleComponents";
+import FriendButton from "./buttons/FriendButton";
 
 
 var pageStyle = {
   margin: "auto",
-  maxWidth: "1000pt",
+  maxWidth: "800pt",
   minWidth: "400pt",
 
-}
-
-var footerStyle = {
-  display: "flex",
-  width: "100%",
 }
 
 var profileInfoContainer = {
   boxShadow: "0pt 0pt 3pt rgb(0,0,0,0.5)",
   borderRadius: "8pt",
-  marginLeft: "-1.2em",
-  marginRight: "-1.2em",
+  marginTop: "1.2em",
+  marginBottom: "2em",
   paddingRight: "1.5em",
   paddingLeft: "1.5em",
   backgroundColor: color.backgroundCreamLighter,
 }
 
-var profileShowStyle = {
-  boxShadow: "0pt 0pt 8pt rgb(0,0,0,0.5)",
-  borderRadius: "6pt",
-  backgroundColor: color.backgroundCreamLighter,
-  marginBottom: "2em",
-  marginTop: "0.5em",
-  fontFamily: font.segoeUI,
-  fontWeight: "350",
-  fontSize: "1.3em",
-  color: color.baseBlack,
-  minHeight: "25em",
-  display: "flex",
-  flexDirection: "column",
-  justifyContent: "space-between",
-};
-
 var profileListStyle ={
-  minWidth: "380pt",
-  maxWidth: "300pt"
+  minWidth: "300pt",
+  maxWidth: "340pt"
 }
+
+const buttonLayoutSingleStyle = {
+  display: "flex",
+  width: "0em",
+  marginRight: "5em",       // the width of two button.
+  paddingTop: "1em",
+  paddingBottom: "1.2em",
+}
+
 
 class Profile extends React.Component {
   constructor(props) {
@@ -92,20 +84,6 @@ class Profile extends React.Component {
       this.setState({editProfileModalIsOpen: modalState})
     };
 
-    const otherAuthor = () => {
-      if (!isFollowing) {
-        return (
-          <Card.Footer style={footerStyle}>
-            <Card.Footer.Item >
-                <FollowButton onClick={() => clickFollow()}/>
-            </Card.Footer.Item>
-          </Card.Footer>
-        );
-      } else {
-        return null;
-      }
-    };
-
     if (this.props.loading) {
       return (
         <div class="pageloader is-active">
@@ -113,12 +91,22 @@ class Profile extends React.Component {
         </div>
       );
     }
-    console.log(this.props.retrievedAuthorPosts);
+
+    const otherAuthor = () => {
+      if (!isFollowing) {
+        return (
+          <Container style={buttonLayoutSingleStyle}>
+                <FollowButton onClick={() => clickFollow()}/>
+          </Container>
+        );
+      } else {
+        return null;
+      }
+    };
 
     const loggedAuthor = () => {
       return (
-        <Card.Footer style={footerStyle}>
-          <Card.Footer.Item>
+          <Container style={buttonLayoutSingleStyle}>
             <EditProfileButton onClick={()=>showEditModal(true)}/>
             <Modal show={this.state.editProfileModalIsOpen} onClose={()=>showEditModal(false)} closeOnBlur closeOnEsc>
               <ProfileEdit
@@ -127,30 +115,28 @@ class Profile extends React.Component {
                 githubURL={""}
               />
             </Modal>
-          </Card.Footer.Item>
-        </Card.Footer>
+          </Container>
       );
     };
-
-
 
     return (
       <Section >
         <Columns style={pageStyle}>
           <Columns.Column>
             <div className="post-list" style={profileListStyle}>
-              <Card style={profileShowStyle}>
                 <Container style={profileInfoContainer}>
                   <ProfileDetail
                     displayName={this.props.retrievedAuthor.displayName}
-                    githubURL={""}
+                    UUID={this.props.retrievedAuthor.id}
+                    githubURL={this.props.retrievedAuthor.github}
                     followerNum={64}
                     followingNum={32}
                     postNum={this.props.retrievedAuthorPosts.length}
                   />
+                  <Dividor style={dividorStyle}/>
+                  {this.props.match.params.id === this.props.loggedInAuthor.id ? loggedAuthor() : otherAuthor()}
+
                 </Container>
-                {this.props.match.params.id === this.props.loggedInAuthor.id ? loggedAuthor() : otherAuthor()}
-              </Card>
             </div>
           </Columns.Column>
           <Columns.Column>

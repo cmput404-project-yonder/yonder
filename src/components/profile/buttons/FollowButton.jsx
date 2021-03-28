@@ -5,21 +5,28 @@ props.action - onClick event handler
 import { Container, Button } from "react-bulma-components";
 import { color } from "../styling";
 
+// local styling
 var buttonStyle = {
-  scale: "40",
+  scale: "20",
   style: {
-    fill: color.buttonRed,
+    fill: "white",
+    paddingTop: "3pt",
+    paddingLeft: "2pt",
   },
-  override: {
+  button: {
+    height: "2.9em",
+    width: "2.9em",
+    borderRadius: "100%",
+    backgroundColor: color.baseRed,
     border: "none",
-    backgroundColor: "transparent",
   }
 };
 
 function FollowButton(props) {
   return (
-    <Container style={buttonStyle.style}>
-      <Button onClick={props.onClick} style={buttonStyle.override}>
+    <Container style={props.style}>
+      <Button onClick={props.onClick} style={buttonStyle.button}>
+        <Container style={buttonStyle.style}>
         <svg xmlns="http://www.w3.org/2000/svg" width={buttonStyle.scale} viewBox="0 0 45.415 45.415">
           <g id="Group_56" data-name="Group 56" transform="translate(-372.995 -531.292)">
             <g id="_907873" data-name="907873" transform="translate(372.995 531.292)">
@@ -59,6 +66,7 @@ function FollowButton(props) {
             </g>
           </g>
         </svg>
+        </Container>
         </Button>
     </Container>
   );

@@ -79,7 +79,11 @@ const submittPanelStyle = {
   paddingRight: "1.5em",
   paddingLeft: "1.5em",
 }
-
+const buttonLayoutStyle = {
+  display: "flex",
+  width: "0em",
+  marginRight: "10em",       // the width of two button.
+}
 var editProfileStyle = {
   borderRadius: "8pt",
   width: "400pt",
@@ -88,12 +92,7 @@ var editProfileStyle = {
   backgroundColor: color.backgroundCream,
 }
 
-const buttonLayoutStyle = {
-  display: "flex",
-  width: "0em",
-  float: "right",
-  marginRight: "10em",       // the width of two button.
-}
+
 
 class ProfileEdit extends React.Component {
   constructor(props) {
