@@ -10,13 +10,13 @@ import { style, color } from "./styling";
 
 var statusStyle = {
     overall: {},
-    displayName: Object.assign({}, style.text.heading, {
+    displayName: {
       textAlign: "center",
       paddingBottom: "0.5em",
       paddingTop: "1em",
-      fontSize: "2.8em",
+      fontSize: "3em",
       fontWeight: "300",
-    }),
+    },
     statusBar: {
       overall: {
         display: "flex",
@@ -39,12 +39,13 @@ var statusStyle = {
     overall: {
       display: "flex",
       flexDirection: "column",
-      paddingTop: "3em",
-      paddingBottom: "1.5em",
+      paddingTop: "1em",
+      paddingBottom: "0.5em",
       width: "auto",
     },
     banner: {
       display: "flex",
+      fontSize: "1.2em",
       alignItems: "center",
       whiteSpace: "nowrap",
       overflow: "hidden",

@@ -12,7 +12,10 @@ import {
   SEND_FOLLOW_SUCCESS,
   CHECK_FOLLOW_SUBMITTED,
   CHECK_FOLLOW_ERROR,
-  CHECK_FOLLOW_SUCCESS
+  CHECK_FOLLOW_SUCCESS,
+  CHANGE_PROFILE_SUBMITTED,
+  CHANGE_PROFILE_ERROR,
+  CHANGE_PROFILE_SUCCESS
 } from "./ProfileTypes";
 import { setAxiosAuthToken } from "../../utils/Utils";
 
@@ -118,6 +121,33 @@ export const checkFollowing = (otherAuthorId) => (dispatch, getState) => {
         toast.error(JSON.stringify(error.response.data));
         dispatch({
           type: CHECK_FOLLOW_ERROR,
+          errorData: error.response.data,
+        });
+      } else if (error.message) {
+        toast.error(JSON.stringify(error.message));
+      } else {
+        toast.error(JSON.stringify(error));
+      }
+    });
+};
+
+export const editProfile = (newProfile) => (dispatch, getState) => {
+  const state = getState();
+  const author = state.auth.author;
+
+  setAxiosAuthToken(state.auth.token);
+  dispatch({ type: CHANGE_PROFILE_SUBMITTED });
+  axios
+    .put("/author/" + author.id + "/", newProfile)
+    .then((response) => {
+      dispatch({ type: CHANGE_PROFILE_SUCCESS , payload: response.data});
+      toast.success("You profile is changed");
+    })
+    .catch((error) => {
+      if (error.response) {
+        toast.error(JSON.stringify(error.response.data));
+        dispatch({
+          type: CHANGE_PROFILE_ERROR,
           errorData: error.response.data,
         });
       } else if (error.message) {
