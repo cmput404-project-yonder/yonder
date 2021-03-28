@@ -16,7 +16,7 @@ import { dividorStyle, postStyle, textStyle, authorStyle, contentStyle } from ".
 function Post(props) {
   const [editModalIsOpen, setEditModalIsOpen] = useState(false);
   const [sharingPromptIsOpen, setSharingPromptIsOpen] = useState(false);
-  console.log(props.post);
+  // console.log(props.post);
   
   const postURL = "/author/" + props.post.author.id + "/posts/" + props.post.id;
 
@@ -35,7 +35,7 @@ function Post(props) {
   if (isImage) {
   }
 
-  console.log(isImage);
+  // console.log(isImage);
 
   return (
       <Card style={postStyle}>

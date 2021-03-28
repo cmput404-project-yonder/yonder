@@ -2,22 +2,21 @@ import React from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { withRouter } from "react-router-dom";
-import { Modal, Card, Container, Columns, Section } from "react-bulma-components";
+import { Modal, Container, Columns, Section } from "react-bulma-components";
 
 import PostList from "../stream/posts/PostList";
 import ProfileDetail from "./ProfileDetail";
-import { retrieveAuthor, retrieveAuthorPosts, sendFollow, checkFollowing } from "./ProfileActions";
+import { retrieveAuthor, retrieveAuthorPosts, sendFollow, checkFollowing, editProfile } from "./ProfileActions";
 
 // buttons
 import FollowButton from "./buttons/FollowButton";
 import EditProfileButton from "./buttons/EditButton";
 import ProfileEdit from "./ProfileEdit";
 
-import { color,font } from "./styling";
-import { EditButton } from "./ProfileIcons";
+import { color } from "./styling";
 import Dividor from "./Dividor";
 import { dividorStyle } from "../stream/posts/StyleComponents";
-import FriendButton from "./buttons/FriendButton";
+// import FriendButton from "./buttons/FriendButton";
 
 
 var pageStyle = {
@@ -110,7 +109,8 @@ class Profile extends React.Component {
             <EditProfileButton onClick={()=>showEditModal(true)}/>
             <Modal show={this.state.editProfileModalIsOpen} onClose={()=>showEditModal(false)} closeOnBlur closeOnEsc>
               <ProfileEdit
-                onCancel={()=>showEditModal(false)}   
+                onCancel={()=>showEditModal(false)}
+                editProfile={this.props.editProfile} 
                 displayName={this.props.retrievedAuthor.displayName}
                 githubURL={""}
               />
@@ -166,4 +166,4 @@ const mapStateToProps = (state) => ({
   isFollowing: state.profile.isFollowing
 });
 
-export default connect(mapStateToProps, { retrieveAuthorPosts, retrieveAuthor, sendFollow, checkFollowing })(withRouter(Profile));
+export default connect(mapStateToProps, { retrieveAuthorPosts, retrieveAuthor, sendFollow, checkFollowing, editProfile })(withRouter(Profile));

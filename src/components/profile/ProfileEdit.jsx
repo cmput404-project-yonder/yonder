@@ -7,22 +7,17 @@ Properties:
 */
 
 import React from "react";
-import Divider from "./Dividor";
-import { Button, Form, Container, Card } from "react-bulma-components";
+import { Form, Container, Card } from "react-bulma-components";
 import { ProfileIcon } from "./ProfileIcons";
-import { style, color, font } from "./styling";
+import { color, font } from "./styling";
 
 import CancelButton from "../stream/posts/CancelButton";
 import ConfirmButton from "../stream/posts/ConfirmButton";
 import Dividor from "./Dividor";
 import { dividorStyle } from "../stream/posts/StyleComponents";
 
-// local styling
-var buttonStyleGeneric = style.button.style.generic;
-var buttonsLayout = style.button.layout.horizontalBetween;
 
-
-export const formContainerStyle = {
+const formContainerStyle = {
   boxShadow: "0pt 0pt 3pt #B1B1B1",
   borderRadius: "8pt",
   marginLeft: "-1.2em",
@@ -114,13 +109,24 @@ class ProfileEdit extends React.Component {
     });
   };
 
+  confirmEdit = () => {
+    // not complete
+    // missing password, currently, api doest support it
+    const newProfile = {
+      displayName: this.state.displayName,
+      githubURL: this.state.githubURL,
+    }
+    this.props.editProfile(newProfile);
+    this.props.onCancel();
+  }
+
   render() {
     const PostFormButtonPanel = () => {
       // Confirm and back button used to submit form
       return (
         <Container style={buttonLayoutStyle}>
           <CancelButton action={this.props.onCancel}/>
-          <ConfirmButton action={{}}/>
+          <ConfirmButton action={this.confirmEdit}/>
         </Container>
       )
     }
