@@ -2,9 +2,9 @@ import React from "react";
 import { withRouter } from "react-router-dom";
 import { connect } from "react-redux";
 import { Navbar, Heading } from "react-bulma-components";
+import SearchField from 'react-search-field';
 
 import { logout } from "./login/LoginActions";
-
 
 import YonderLogo from "./YonderLogo";
 import ProfileIcon from "./ProfileIcon";
@@ -61,6 +61,10 @@ function NavigationBar(props) {
       </Navbar.Brand>
       <Navbar.Menu>
         <Navbar.Container position="end">
+          <SearchField
+            placeholder='Search for author'
+            onChange={onChange}
+          />
           {props.auth.isAuthenticated ? notifcationDropdown() : null}
           <Navbar.Item dropdown hoverable>
             <Navbar.Link arrowless={true}>
@@ -78,6 +82,4 @@ const mapStateToProps = (state) => ({
   auth: state.auth,
 });
 
-export default connect(mapStateToProps, {
-  logout,
-})(withRouter(NavigationBar));
+export default connect(mapStateToProps, { logout, getAllAuthors })(withRouter(NavigationBar));
