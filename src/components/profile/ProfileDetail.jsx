@@ -107,7 +107,7 @@ function ProfileInfoView(props) {
   const githubBanner = (!hasGithub) ? null : (
       <div style={infoStyle.banner}>
           <div style={svgIconStyle.style}><GithubLogo svgScale={svgIconStyle.scale} /></div>
-          <div><p>@{props.githubUsername}</p></div>
+          <div><p>@{props.githubURL}</p></div>
       </div>
   );
 

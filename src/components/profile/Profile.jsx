@@ -111,7 +111,7 @@ class Profile extends React.Component {
                 onCancel={()=>showEditModal(false)}
                 editProfile={this.props.editProfile} 
                 displayName={this.props.retrievedAuthor.displayName}
-                githubURL={""}
+                githubURL={this.props.retrievedAuthor.github}
               />
             </Modal>
           </Container>

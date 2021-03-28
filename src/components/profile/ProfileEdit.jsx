@@ -114,7 +114,7 @@ class ProfileEdit extends React.Component {
     // missing password, currently, api doest support it
     const newProfile = {
       displayName: this.state.displayName,
-      githubURL: this.state.githubURL,
+      github: this.state.githubURL,
     }
     this.props.editProfile(newProfile);
     this.props.onCancel();
