@@ -11,7 +11,6 @@ function PostList(props) {
       <List hoverable>{postList}</List>
     </div>
   );
-  console.log(postList);
 }
 
 PostList.propTypes = {

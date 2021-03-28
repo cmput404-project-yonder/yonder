@@ -13,7 +13,9 @@ import {
   CHECK_FOLLOW_SUBMITTED,
   CHECK_FOLLOW_ERROR,
   CHECK_FOLLOW_SUCCESS,
-  CHANGE_AUTHOR_PROFILE
+  CHANGE_PROFILE_SUBMITTED,
+  CHANGE_PROFILE_ERROR,
+  CHANGE_PROFILE_SUCCESS
 } from "./ProfileTypes";
 import { setAxiosAuthToken } from "../../utils/Utils";
 
@@ -134,20 +136,18 @@ export const editProfile = (newProfile) => (dispatch, getState) => {
   const author = state.auth.author;
 
   setAxiosAuthToken(state.auth.token);
-  dispatch({ type: CHANGE_AUTHOR_PROFILE });
+  dispatch({ type: CHANGE_PROFILE_SUBMITTED });
   axios
     .put("/author/" + author.id + "/", newProfile)
     .then((response) => {
-      dispatch({ type: CHANGE_AUTHOR_PROFILE });
+      dispatch({ type: CHANGE_PROFILE_SUCCESS , payload: response.data});
       toast.success("You profile is changed");
-
-      return response;
     })
     .catch((error) => {
       if (error.response) {
         toast.error(JSON.stringify(error.response.data));
         dispatch({
-          type: CHANGE_AUTHOR_PROFILE,
+          type: CHANGE_PROFILE_ERROR,
           errorData: error.response.data,
         });
       } else if (error.message) {
@@ -155,7 +155,5 @@ export const editProfile = (newProfile) => (dispatch, getState) => {
       } else {
         toast.error(JSON.stringify(error));
       }
-
-      return error;
     });
 };

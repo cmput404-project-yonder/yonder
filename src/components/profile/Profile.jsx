@@ -111,6 +111,7 @@ class Profile extends React.Component {
               <ProfileEdit
                 onCancel={()=>showEditModal(false)}
                 editProfile={this.props.editProfile} 
+                updateAuthorPosts={() => this.props.retrieveAuthorPosts(this.props.retrievedAuthor.id)}
                 displayName={this.props.retrievedAuthor.displayName}
                 githubURL={""}
               />

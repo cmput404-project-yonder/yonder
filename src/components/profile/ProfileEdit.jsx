@@ -117,6 +117,7 @@ class ProfileEdit extends React.Component {
       githubURL: this.state.githubURL,
     }
     this.props.editProfile(newProfile);
+    this.props.updateAuthorPosts();
     this.props.onCancel();
   }
 
