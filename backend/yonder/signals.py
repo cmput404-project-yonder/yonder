@@ -87,7 +87,7 @@ def create_post(sender, instance, **kwargs):
 @receiver(post_save, sender=Author)
 def create_inbox(sender, instance, **kwargs):
     if kwargs["created"]:
-        Inbox.objects.create(author=instance)
+        Inbox.objects.create(author=instancew)
 
 '''
 @receiver(post_save, sender=Liked)
