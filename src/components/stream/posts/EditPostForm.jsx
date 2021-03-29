@@ -10,7 +10,8 @@ import ConfirmButton from "./ConfirmButton";
 import DeleteButton from "./DeleteButton";
 import CheckBox from "./CheckBox";
 
-import { TextIcon, ImageIcon, MarkdownIcon, ToolTipIcon, ImageUploadIcon } from "./postSVG";
+import { TextIcon, ImageIcon, MarkdownIcon, ToolTipIcon,  } from "./postSVG";
+import { ImageUploadIcon } from "../../../styling/svgIcons";
 import { color } from "./styling";
 import PostTab from "./PostTab";
 import Dividor from "./Dividor"
@@ -42,14 +43,14 @@ class EditPostForm extends Component {
 
     let selectedTab = () => {
       if ((this.props.post.contentType) === "text/plain") return "text";
-      if ((this.props.post.contentType) === "text/markdown") return "text";
+      if ((this.props.post.contentType) === "text/markdown") return "markdown";
       return "image";
     }
 
 
     this.state = {
       title: this.props.post.title,
-      content: this.props.post.content,
+      content: "",
       contentType: this.props.post.contentType,
       description: this.props.post.description,
       unlisted: this.props.post.unlisted,
@@ -57,8 +58,14 @@ class EditPostForm extends Component {
       categories: categoryTags,
       selectedTab: selectedTab(),
       markdownTab: "write",
+      imageObj: "",
+      image: "",
+
+      // following state are kept local, used for seperate different content
+      imageContent: selectedTab() === "image" ? this.props.post.content : "",
+      markDownContent: selectedTab() === "markdown"? this.props.post.content : "",
+      textContent: selectedTab() === "text"? this.props.post.content : "",
     };
-    console.log(this.state);
 
     this.reactTags = React.createRef();
   }
@@ -79,7 +86,7 @@ class EditPostForm extends Component {
   handleReaderLoaded = (readerEvt) => {
     let binaryString = readerEvt.target.result;
     this.setState({
-      content: btoa(binaryString),
+      imageContent: btoa(binaryString),
     })
   }
 
@@ -134,12 +141,24 @@ class EditPostForm extends Component {
       }
     };
 
+    const getContent = () => {
+      switch (this.state.selectedTab) {
+        case "text":
+          return this.state.textContent;
+        case "markdown":
+          return this.state.markDownContent;
+        case "image":
+          return this.state.imageContent;
+        default:
+          break;
+      }
+    };
     const categories = this.state.categories.map((cat) => cat.name);
     const editedPost = {
       ...this.props.post,
       title: this.state.title,
       description: this.state.description,
-      content: this.state.content,
+      content: getContent(),
       contentType: contentType(),
       unlisted: this.state.unlisted,
       visibility: this.state.visibility,
@@ -178,8 +197,8 @@ class EditPostForm extends Component {
     const textEditor = () => {
       return (
         <Form.Textarea
-          name="content"
-          value={this.state.content}
+          name="textContent"
+          value={this.state.textContent}
           onChange={this.onChange}
           style={{
             height: `245px`,
@@ -191,8 +210,8 @@ class EditPostForm extends Component {
     const markdownEditor = () => {
       return (
         <ReactMde
-          value={this.state.content}
-          onChange={(m) => this.setState({ content: m })}
+          value={this.state.markDownContent}
+          onChange={(m) => this.setState({ markDownContent: m })}
           selectedTab={this.state.markdownTab}
           onTabChange={(t) => this.setState({ markdownTab: t })}
           generateMarkdownPreview={(markdown) => Promise.resolve(converter(markdown))}
@@ -208,10 +227,10 @@ class EditPostForm extends Component {
     const FileUploadForm = () => {
       return (
         <div class="file is-centered is-boxed">
-          <label class="file-label"style={{width: "100%"}}>
+          <label class="file-label"style={{width: "100%", height: "38pt"}}>
             <input class="file-input" type="file" name="resume" onChange={this.handleFileSelected}/>
             <span class="file-cta">
-              <div style={{margin: "auto"}}>
+              <div style={{margin: "auto", marginTop: "-6pt"}}>
               <ImageUploadIcon svgScale={"35"} fill={color.baseBlack}/>
               </div>
             </span>
@@ -220,16 +239,24 @@ class EditPostForm extends Component {
       );
     }
 
+    const imagePreview = () => {
+      if (this.state.imageContent !== "") {
+        return (
+          <img 
+            src={ "image/png" ? `data:image/png;base64,${this.state.imageContent}` : `data:image/jpeg;base64,${this.state.content}` } 
+            style={{borderRadius: "6pt", margin: "auto", maxHeight: "15em", minHeight: "15em", objectFit: "cover"}} 
+          />
+        )
+      }
+    }
+
     const imageUploader = () => {
       return (
         <Form.Control>
-          <Container style={{display: "flex", flexDirection: "column", border: "1px solid #d1d1d1", borderRadius: "4px", minHeight: "18em", maxHeight: "22em"}}>
+          <Container style={{display: "flex", flexDirection: "column", border: "1px solid #d1d1d1", borderRadius: "4px", minHeight: "17em", maxHeight: "22em"}}>
           <FileUploadForm/>
           <Container style={{display: "flex", padding: "1em", width: "100%"}}>
-          <img 
-            src={ "image/png" ? `data:image/png;base64,${this.state.content}` : `data:image/jpeg;base64,${this.state.content}` } 
-            style={{borderRadius: "6pt", margin: "auto", maxHeight: "15em", minHeight: "15em", objectFit: "cover"}} 
-          />
+          {imagePreview()}
           </Container>
           </Container>
           
