@@ -1,19 +1,16 @@
-
 import { Container } from "react-bulma-components";
-import YonderIcon from "./YonderIcon.gif";
 
-var logoStyling = {
-    scale: "55",
-    style: {
-      padding: "0.1em",
-    },
-    primaryColor: "#686863",
-    secondaryColor: "white",
 
-  }
+function YonderMainLogo(props) {
+    var logoStyling = {
+        scale: props.svgScale, 
+        style: {
+        padding: "0.1em",
+        },
+        primaryColor: "#686863",
+        secondaryColor: "white",
+    }
 
-function YonderMainLogo() {
-    // a placeholder
     return (
         <Container style={logoStyling.style}>
             <svg xmlns="http://www.w3.org/2000/svg" width={logoStyling.scale} viewBox="0 0 314.71 314.71">

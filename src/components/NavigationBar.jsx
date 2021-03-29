@@ -51,7 +51,7 @@ function NavigationBar(props) {
     <Navbar color="light" fixed="top" active={isActive}>
       <Navbar.Brand>
         <Navbar.Item renderAs="a" href="/">
-          <Heading><YonderLogo/></Heading>
+          <Heading><YonderLogo svgScale="55"/></Heading>
         </Navbar.Item>
         <Navbar.Burger
           onClick={() => {
