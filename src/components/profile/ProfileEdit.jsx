@@ -14,7 +14,7 @@ import { color, font } from "./styling";
 import CancelButton from "../stream/posts/CancelButton";
 import ConfirmButton from "../stream/posts/ConfirmButton";
 import Dividor from "./Dividor";
-import { dividorStyle } from "../stream/posts/StyleComponents";
+import { dividorStyle } from "../../styling/StyleComponents";
 
 
 const formContainerStyle = {

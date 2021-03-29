@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import ReactMde from "react-mde";
-import { Icon, Form, Button, Card, Container } from "react-bulma-components";
+import { Form, Button, Card, Container } from "react-bulma-components";
 import Markdown from "react-markdown";
 import ReactTags from "react-tag-autocomplete";
 import "./react-tags.css";
@@ -14,7 +14,7 @@ import { ImageUploadIcon } from "../../../styling/svgIcons";
 import PostTab from "./PostTab";
 import Dividor from "./Dividor"
 import { checkBoxLabelStyle, checkBoxStyle, checkMarkStyle, createPostHeaderStype, cardStyle, panelStyle,
-tabStyle, submittPanelStyle, formContainerStyle, labelStyle, dividorStyle, formTitleStyle, buttonLayoutStyle, postIconStyle } from "./StyleComponents";
+tabStyle, submittPanelStyle, formContainerStyle, labelStyle, dividorStyle, formTitleStyle, buttonLayoutStyle, postIconStyle } from "../../../styling/StyleComponents";
 import { color } from "./styling";
 
 class PostForm extends Component {

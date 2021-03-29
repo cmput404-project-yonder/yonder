@@ -15,7 +15,7 @@ import ProfileEdit from "./ProfileEdit";
 
 import { color } from "./styling";
 import Dividor from "./Dividor";
-import { cardStyle, dividorStyle } from "../stream/posts/StyleComponents";
+import { cardStyle, dividorStyle } from "../../styling/StyleComponents";
 // import FriendButton from "./buttons/FriendButton";
 
 

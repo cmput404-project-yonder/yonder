@@ -9,7 +9,7 @@ import PopupModal from "./posts/PopupModal";
 import PostList from "./posts/PostList";
 import Follow from "./Follow";
 import Like from "./Like";
-import { buttonLayerContainerStyle, streamLayerContainerStyle, newPostButtonStyle, pageStyle } from "./posts/StyleComponents";
+import { buttonLayerContainerStyle, streamLayerContainerStyle, newPostButtonStyle, pageStyle } from "../../styling/StyleComponents";
 import { createPost, updatePost, sharePost, deletePost, retrieveInbox} from "./StreamActions";
 
 import InboxModalPopUp from "../inbox/InboxModalPopUp";

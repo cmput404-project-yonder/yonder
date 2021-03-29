@@ -2,7 +2,7 @@ import React from "react";
 import PropTypes from "prop-types";
 import { Card, Heading } from "react-bulma-components";
 
-import { postStyle } from "./posts/StyleComponents";
+import { postStyle } from "../../styling/StyleComponents";
 
 function Like(props) {
   return (

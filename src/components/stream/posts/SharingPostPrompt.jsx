@@ -127,7 +127,8 @@ class SharingPostPromptCard extends React.Component {
             // this function implement the sharing functionility
 
             // send the entire post to backend.
-            this.props.sharePost(this.props.post)
+            this.props.sharePost(this.props.post);
+            this.props.setModalIsOpen(false);
         }
 
         const PostSubmitPanel = () => {

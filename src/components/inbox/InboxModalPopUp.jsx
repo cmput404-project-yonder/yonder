@@ -3,15 +3,17 @@ import { Modal } from "react-bulma-components";
 
 import PostForm from "../stream/posts/PostForm";
 
-import AddButton from "../stream/posts/NewPostFloatingButton";
+import InboxButton from "./InboxFloatingButton";
+import InboxModal from "./InboxModal";
+
 
 function PopupModal(props) {
   const [modalIsOpen, setModalIsOpen] = useState(false);
   return (
     <div className="post-form-modal">
-      <AddButton action={() => setModalIsOpen(true)}/>
+      <InboxButton action={() => setModalIsOpen(true)}/>
       <Modal show={modalIsOpen} onClose={() => setModalIsOpen(false)} closeOnBlur closeOnEsc>
-        <PostForm setModalIsOpen={setModalIsOpen} createPost={props.createPost} />
+        <InboxModal setModalIsOpen={setModalIsOpen}/>
       </Modal>
     </div>
   );

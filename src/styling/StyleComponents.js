@@ -1,5 +1,5 @@
-import { font, color } from "./styling";
-import { style } from "../../profile/styling";
+import { font, color } from "../components/stream/posts/styling";
+import { style } from "../components/profile/styling";
 
 export const dividorStyle = {
     marginTop: "0.5em",

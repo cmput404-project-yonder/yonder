@@ -10,7 +10,7 @@ import { Link } from "react-router-dom";
 import EditButton from "./EditButton";
 import ShareButton from "./ShareButton";
 import LikeButton from "./LikeButton";
-import { dividorStyle, formContainerStyle, postStyle } from "./StyleComponents";
+import { dividorStyle, formContainerStyle, postStyle } from "../../../styling/StyleComponents";
 import { color } from "./styling";
 
 
