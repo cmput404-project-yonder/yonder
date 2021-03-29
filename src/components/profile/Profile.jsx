@@ -12,11 +12,14 @@ import { retrieveAuthor, retrieveAuthorPosts, sendFollow, checkFollowing, editPr
 import FollowButton from "./buttons/FollowButton";
 import EditProfileButton from "./buttons/EditButton";
 import ProfileEdit from "./ProfileEdit";
+// import FriendButton from "./buttons/FriendButton";
 
 import { color } from "./styling";
 import Dividor from "./Dividor";
 import { dividorStyle } from "../../styling/StyleComponents";
-// import FriendButton from "./buttons/FriendButton";
+
+import NavigationBar from "../NavigationBar";
+
 
 
 var pageStyle = {
@@ -132,12 +135,13 @@ class Profile extends React.Component {
 
     return (
       <Section >
+        <NavigationBar/>
         <Columns style={pageStyle}>
           <Columns.Column>
             <div className="post-list" style={profileListStyle}>
                 <Container style={profileInfoContainer}>
                   <Container style={profileDetailContainerStyle}>
-                  <ProfileDetail
+                  <ProfileDetail 
                     displayName={this.props.retrievedAuthor.displayName}
                     UUID={this.props.retrievedAuthor.id}
                     githubURL={this.props.retrievedAuthor.github}
@@ -152,7 +156,7 @@ class Profile extends React.Component {
             </div>
           </Columns.Column>
           <Columns.Column>
-            <PostList posts={this.props.retrievedAuthorPosts} />
+            <PostList posts={this.props.retrievedAuthorPosts} interactive={false}/>
           </Columns.Column>
         </Columns>
       </Section>

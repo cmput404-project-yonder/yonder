@@ -8,7 +8,6 @@ import Signup from "./components/signup/Signup";
 import Login from "./components/login/Login";
 import Stream from "./components/stream/Stream";
 import Profile from "./components/profile/Profile";
-import NavigationBar from "./components/NavigationBar";
 import SelectedPost from "./components/stream/posts/SelectedPost";
 import 'animate.css';
 
@@ -20,7 +19,6 @@ class App extends Component {
     return (
       <div>
         <Root>
-          <NavigationBar />
           <ToastContainer hideProgressBar={true} newestOnTop={true} />
           <Switch>
             <Route path="/signup" component={Signup} />
