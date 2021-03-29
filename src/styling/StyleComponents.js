@@ -1,5 +1,5 @@
-import { font, color } from "./styling";
-import { style } from "../../profile/styling";
+import { font, color } from "../components/stream/posts/styling";
+import { style } from "../components/profile/styling";
 
 export const dividorStyle = {
     marginTop: "0.5em",
@@ -10,7 +10,7 @@ export const cardStyle = {
     borderRadius: "8pt",
     width: "450pt",
     height: "auto",
-    boxShadow: "0pt 0pt 12pt #AAAAAA",
+    boxShadow: "0pt 0pt 8pt rgb(0,0,0,0.5)",
     backgroundColor: color.backgroundCream,
   }
 

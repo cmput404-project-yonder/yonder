@@ -7,7 +7,8 @@ import "bulma-pageloader/dist/css/bulma-pageloader.min.css";
 
 import PostList from "./posts/PostList";
 import PopupModal from "./posts/PopupModal";
-import { buttonLayerContainerStyle, streamLayerContainerStyle, newPostButtonStyle, pageStyle, postStreamStyle } from "./posts/StyleComponents";
+import InboxModalPopUp from "../inbox/InboxModalPopUp";
+import { buttonLayerContainerStyle, streamLayerContainerStyle, newPostButtonStyle, pageStyle, postStreamStyle } from "../../styling/StyleComponents";
 import { createPost, updatePost, sharePost, retrieveLoggedInAuthorPosts, deletePost } from "./StreamActions";
 
 class Stream extends Component {
@@ -18,7 +19,7 @@ class Stream extends Component {
   render() {
     if (this.props.loading) {
       return (
-        <div className="pageloader is-active">
+        <div className="pageloader is-active animate__animated animate__fadeIn animate__faster">
           <span className="title">Loading</span>
         </div>
       );
@@ -27,7 +28,7 @@ class Stream extends Component {
     return (
       <Section style={pageStyle}>
         <div style={buttonLayerContainerStyle}>
-          <Container style={newPostButtonStyle}><PopupModal createPost={this.props.createPost} /></Container>
+          <Container style={newPostButtonStyle}><InboxModalPopUp/><PopupModal createPost={this.props.createPost} /></Container>
         </div>
         <div style={streamLayerContainerStyle}>
           <Container fluid>

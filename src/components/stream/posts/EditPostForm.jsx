@@ -17,7 +17,7 @@ import PostTab from "./PostTab";
 import Dividor from "./Dividor"
 
 import { checkBoxLabelStyle, checkBoxStyle, checkMarkStyle, createPostHeaderStype, cardStyle, panelStyle, 
-  tabStyle, submittPanelStyle, formContainerStyle, labelStyle, dividorStyle, formTitleStyle, postIconStyle } from "./StyleComponents";
+  tabStyle, submittPanelStyle, formContainerStyle, labelStyle, dividorStyle, formTitleStyle, postIconStyle } from "../../../styling/StyleComponents";
 
 
 export const buttonLayoutStyle = {

@@ -2,7 +2,7 @@ import React from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { withRouter } from "react-router-dom";
-import { Card, Modal, Container, Columns, Section } from "react-bulma-components";
+import { Modal, Container, Columns, Section } from "react-bulma-components";
 
 import PostList from "../stream/posts/PostList";
 import ProfileDetail from "./ProfileDetail";
@@ -15,13 +15,13 @@ import ProfileEdit from "./ProfileEdit";
 
 import { color } from "./styling";
 import Dividor from "./Dividor";
-import { cardStyle, dividorStyle } from "../stream/posts/StyleComponents";
+import { dividorStyle } from "../../styling/StyleComponents";
 // import FriendButton from "./buttons/FriendButton";
 
 
 var pageStyle = {
   margin: "auto",
-  maxWidth: "800pt",
+  maxWidth: "820pt",
   minWidth: "400pt",
 
 }
@@ -90,7 +90,7 @@ class Profile extends React.Component {
 
     if (this.props.loading) {
       return (
-        <div class="pageloader is-active">
+        <div class="pageloader is-active animate__animated animate__fadeIn animate__faster">
           <span class="title">Loading</span>
         </div>
       );
@@ -117,7 +117,7 @@ class Profile extends React.Component {
             <Dividor style={dividorStyle}/>
           <Container style={buttonLayoutStyle}>
             <EditProfileButton onClick={()=>showEditModal(true)}/>
-            <Modal show={this.state.editProfileModalIsOpen} onClose={()=>showEditModal(false)} closeOnBlur closeOnEsc>
+            <Modal className="animate__animated animate__fadeIn animate__faster" show={this.state.editProfileModalIsOpen} onClose={()=>showEditModal(false)} closeOnBlur closeOnEsc>
               <ProfileEdit
                 onCancel={()=>showEditModal(false)}
                 editProfile={this.props.editProfile} 
