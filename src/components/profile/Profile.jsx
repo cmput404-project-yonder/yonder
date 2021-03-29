@@ -21,7 +21,7 @@ import { cardStyle, dividorStyle } from "../stream/posts/StyleComponents";
 
 var pageStyle = {
   margin: "auto",
-  maxWidth: "800pt",
+  maxWidth: "820pt",
   minWidth: "400pt",
 
 }
