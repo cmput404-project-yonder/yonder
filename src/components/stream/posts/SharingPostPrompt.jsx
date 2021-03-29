@@ -51,8 +51,8 @@ var postCardDisplayStyle = {
     marginRight: "1em",
     paddingTop: "1em",
     paddingBottom: "1em",
-    paddingRight: "1.5em",
-    paddingLeft: "1.5em",
+    paddingRight: "1em",
+    paddingLeft: "1em",
     fontSize: "1.3em",
     backgroundColor: color.backgroundGrey,
 }

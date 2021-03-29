@@ -5,6 +5,7 @@ import { List } from "react-bulma-components";
 import Post from "./Post";
 
 function PostList(props) {
+  props.posts.sort((postA,postB) => Date.parse(postB["published"])-Date.parse(postA["published"]));
   const postList = props.posts.map((post) => <Post post={post} updatePost={props.updatePost} deletePost={props.deletePost} sharePost={props.sharePost}/>);
   return (
     <div className="post-list">
