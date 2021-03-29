@@ -10,6 +10,7 @@ import Dividor from "./Dividor";
 import CancelButton from "./CancelButton";
 import ConfirmButton from "./ConfirmButton";
 
+import { cardStyle } from "../../../styling/StyleComponents";
 
 var submittPanelStyle = {
     margin: "0.5em",
@@ -26,14 +27,6 @@ var buttonLayoutStyle = {
     width: "0em",
     float: "right",
     marginRight: "10em",       // the width of two button.
-}
-
-var cardStyle = {
-    borderRadius: "8pt",
-    width: "450pt",
-    height: "auto",
-    boxShadow: "0pt 0pt 12pt #AAAAAA",
-    backgroundColor: color.backgroundCream,
 }
 
 var postIconStyle = {

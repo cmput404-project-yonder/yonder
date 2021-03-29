@@ -3,8 +3,10 @@ import { Card } from "react-bulma-components";
 import {color} from "./styling";
 const inboxPageStyle = {
     borderRadius: "8pt",
-    width: "60%",
-    height: "80%",
+    maxWidth: "1000pt",
+    minWidth: "700pt",
+    maxHeight: "800pt",
+    minHeight: "500pt",
     boxShadow: "0pt 0pt 8pt rgb(0,0,0,0.5)",
     backgroundColor: color.backgroundCream,
 }

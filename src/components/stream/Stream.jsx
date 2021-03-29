@@ -11,6 +11,8 @@ import InboxModalPopUp from "../inbox/InboxModalPopUp";
 import { buttonLayerContainerStyle, streamLayerContainerStyle, newPostButtonStyle, pageStyle, postStreamStyle } from "../../styling/StyleComponents";
 import { createPost, updatePost, sharePost, retrieveLoggedInAuthorPosts, deletePost } from "./StreamActions";
 
+import NavigationBar from "../NavigationBar";
+
 class Stream extends Component {
   componentDidMount() {
     this.props.retrieveLoggedInAuthorPosts();
@@ -27,6 +29,7 @@ class Stream extends Component {
 
     return (
       <Section style={pageStyle}>
+        <NavigationBar/>
         <div style={buttonLayerContainerStyle}>
           <Container style={newPostButtonStyle}><InboxModalPopUp/><PopupModal createPost={this.props.createPost} /></Container>
         </div>
@@ -39,6 +42,7 @@ class Stream extends Component {
                     updatePost={this.props.updatePost}
                     deletePost={this.props.deletePost}
                     sharePost={this.props.sharePost}
+                    interactive={true}
                   />
                 </Columns.Column>
               </Columns>

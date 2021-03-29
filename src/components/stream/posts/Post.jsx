@@ -51,7 +51,7 @@ var footerButtonLayoutStyle = {
 var buttonOverrideStyle = {
   backgroundColor: "transparent",
   border: "none",
-  marginTop: "-10pt",
+  marginTop: "-3pt",
   height: "20pt",
 }
 
@@ -84,7 +84,41 @@ function Post(props) {
   if (isImage) {
   }
 
-  // console.log(isImage);
+  const displayFooterButtons = () => {
+    if (props.interactive ){
+      return (
+        <div>
+        <Dividor style={dividorStyle}/>
+        <Container style={footerButtonLayoutStyle}>
+        <Button style={buttonOverrideStyle} onClick={{}}>
+          <LikeButton/>
+        </Button>
+        <Button style={buttonOverrideStyle} onClick={() => setSharingPromptIsOpen(true)}>
+          <ShareButton/>
+        </Button>
+        <Button style={buttonOverrideStyle} onClick={() => setEditModalIsOpen(true)}>
+          <EditButton/>
+        </Button>
+        <Modal className="animate__animated animate__fadeIn animate__faster" show={editModalIsOpen} onClose={() => setEditModalIsOpen(false)} closeOnBlur closeOnEsc>
+          <EditPostForm
+            setEditModalIsOpen={setEditModalIsOpen}
+            post={props.post}
+            updatePost={props.updatePost}
+            deletePost={props.deletePost}
+          />
+        </Modal>
+        <Modal className="animate__animated animate__fadeIn animate__faster" show={sharingPromptIsOpen} onClose={() => setSharingPromptIsOpen(false)} closeOnBlur closeOnEsc>
+          <SharingPostPrompt
+            setModalIsOpen={setSharingPromptIsOpen}   
+            post={props.post}
+            sharePost={props.sharePost}
+          />
+        </Modal>
+      </Container>
+      </div>
+      );
+    }
+  }
 
   return (
       <Card style={postStyle}>
@@ -109,35 +143,10 @@ function Post(props) {
             </Content>
           ) : <Content>{props.post.content}</Content> }
           </Container>
-          <Dividor style={dividorStyle}/>
-
+          
+          {displayFooterButtons()}
         </Card.Content>
-        <Container style={footerButtonLayoutStyle}>
-          <Button style={buttonOverrideStyle} onClick={{}}>
-            <LikeButton/>
-          </Button>
-          <Button style={buttonOverrideStyle} onClick={() => setSharingPromptIsOpen(true)}>
-            <ShareButton/>
-          </Button>
-          <Button style={buttonOverrideStyle} onClick={() => setEditModalIsOpen(true)}>
-            <EditButton/>
-          </Button>
-          <Modal className="animate__animated animate__fadeIn animate__faster" show={editModalIsOpen} onClose={() => setEditModalIsOpen(false)} closeOnBlur closeOnEsc>
-            <EditPostForm
-              setEditModalIsOpen={setEditModalIsOpen}
-              post={props.post}
-              updatePost={props.updatePost}
-              deletePost={props.deletePost}
-            />
-          </Modal>
-          <Modal className="animate__animated animate__fadeIn animate__faster" show={sharingPromptIsOpen} onClose={() => setSharingPromptIsOpen(false)} closeOnBlur closeOnEsc>
-            <SharingPostPrompt
-              setModalIsOpen={setSharingPromptIsOpen}   
-              post={props.post}
-              sharePost={props.sharePost}
-            />
-          </Modal>
-        </Container>
+
       </Card>
   );
 }

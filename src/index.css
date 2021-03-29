@@ -49,17 +49,6 @@ body {
   font-size: 0.85em;
   margin: 1em;
 }
-/* Signup page */
-.login-form {
-  max-width: 320px;
-  margin: auto;
-}
-
-/* Signup page */
-.signup-form {
-  max-width: 320px;
-  margin: auto;
-}
 
 /* Buttons global */
 button {
