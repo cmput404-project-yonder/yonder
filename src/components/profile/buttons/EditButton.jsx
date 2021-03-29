@@ -16,8 +16,8 @@ var buttonStyle = {
     paddingLeft: "2pt",
   },
   button: {
-    height: "2.9em",
-    width: "2.9em",
+    height: "2.5em",
+    width: "2.5em",
     borderRadius: "100%",
     backgroundColor: color.baseRed,
     border: "none",

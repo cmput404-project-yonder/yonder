@@ -24,7 +24,6 @@ export const postStyle = {
     fontWeight: "350",
     fontSize: "1.3em",
     color: color.baseBlack,
-    minHeight: "25em",
     display: "flex",
     flexDirection: "column",
     justifyContent: "space-between",
