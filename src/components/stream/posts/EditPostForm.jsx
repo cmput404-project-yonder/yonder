@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import ReactMde from "react-mde";
-import { Icon, Form, Button, Card, Container } from "react-bulma-components";
+import { Form, Button, Card, Container } from "react-bulma-components";
 import Markdown from "react-markdown";
 import ReactTags from "react-tag-autocomplete";
 import "./react-tags.css";
@@ -10,7 +10,7 @@ import ConfirmButton from "./ConfirmButton";
 import DeleteButton from "./DeleteButton";
 import CheckBox from "./CheckBox";
 
-import { TextIcon, ImageIcon, MarkdownIcon, ToolTipIcon } from "./postSVG";
+import { TextIcon, ImageIcon, MarkdownIcon, ToolTipIcon, ImageUploadIcon } from "./postSVG";
 import { color } from "./styling";
 import PostTab from "./PostTab";
 import Dividor from "./Dividor"
@@ -205,11 +205,34 @@ class EditPostForm extends Component {
       );
     };
 
+    const FileUploadForm = () => {
+      return (
+        <div class="file is-centered is-boxed">
+          <label class="file-label"style={{width: "100%"}}>
+            <input class="file-input" type="file" name="resume" onChange={this.handleFileSelected}/>
+            <span class="file-cta">
+              <div style={{margin: "auto"}}>
+              <ImageUploadIcon svgScale={"35"} fill={color.baseBlack}/>
+              </div>
+            </span>
+          </label>
+        </div>
+      );
+    }
+
     const imageUploader = () => {
       return (
         <Form.Control>
-          <Form.InputFile icon={<Icon icon="upload" />} accept={'image/png', 'image/jpeg'} boxed placeholder="Textarea" style={{ left:`30%`, right:`30%`, marginBottom:`3%` }} onChange={this.handleFileSelected} />
-          <img src={ "image/png" ? `data:image/png;base64,${this.state.content}` : `data:image/jpeg;base64,${this.state.content}` } style={{ height: `150px`, display: "block", marginLeft: "auto", marginRight: "auto" }} />
+          <Container style={{display: "flex", flexDirection: "column", border: "1px solid #d1d1d1", borderRadius: "4px", minHeight: "18em", maxHeight: "22em"}}>
+          <FileUploadForm/>
+          <Container style={{display: "flex", padding: "1em", width: "100%"}}>
+          <img 
+            src={ "image/png" ? `data:image/png;base64,${this.state.content}` : `data:image/jpeg;base64,${this.state.content}` } 
+            style={{borderRadius: "6pt", margin: "auto", maxHeight: "15em", minHeight: "15em", objectFit: "cover"}} 
+          />
+          </Container>
+          </Container>
+          
         </Form.Control>
       )
     }

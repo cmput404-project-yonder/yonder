@@ -104,8 +104,8 @@ function Post(props) {
           <Container style = {ContentStyle}>
           <Dividor style={dividorStyle}/>
           {isImage ? (
-            <Content>
-              <img src={`data:${props.post.contentType},${props.post.content}`} /> 
+            <Content style={{textAlign: "center"}}>
+              <img style={{borderRadius: "6pt"}}src={`data:${props.post.contentType},${props.post.content}`} /> 
             </Content>
           ) : <Content>{props.post.content}</Content> }
           </Container>

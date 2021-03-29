@@ -190,7 +190,7 @@ class PostForm extends Component {
       return (
         <Form.Control>
           <Form.InputFile icon={<Icon icon="upload" />} type="file" inputProps={{ accept: 'image/*' }} boxed placeholder="Textarea" style={{ left:`30%`, right:`30%`, marginBottom:`3%` }} onChange={this.handleFileSelected} />
-          <img src={this.state.image} style={{ height: `150px`, display: "block", marginLeft: "auto", marginRight: "auto" }} />
+          <img src={this.state.image} style={{borderRadius: "6pt"}} />
         </Form.Control>
       )
     }
