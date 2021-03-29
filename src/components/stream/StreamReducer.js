@@ -8,6 +8,9 @@ import {
   RETRIEVE_POSTS_ERROR,
   RETRIEVE_POSTS_SUBMITTED,
   RETRIEVE_POSTS_SUCCESS,
+  SHARE_POST_ERROR,
+  SHARE_POST_SUBMITTED,
+  SHARE_POST_SUCCESS,
 } from "./StreamTypes";
 
 const initialState = {
@@ -90,6 +93,25 @@ export const streamReducer = (state = initialState, action) => {
           loading: false,
         };
 
+
+        case SHARE_POST_SUBMITTED:
+          return {
+            ...state,
+            newPostError: "",
+            loading: true,
+          };
+        case SHARE_POST_ERROR:
+          return {
+            ...state,
+            newPostError: action.errorData,
+            loading: false,
+          };
+        case SHARE_POST_SUCCESS:
+          return {
+            ...state,
+            newPostError: "",
+            loading: false,
+          };
     default:
       return state;
   }

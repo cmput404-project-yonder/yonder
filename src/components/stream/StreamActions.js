@@ -16,6 +16,12 @@ import {
   RETRIEVE_POSTS_SUBMITTED,
   RETRIEVE_POSTS_SUCCESS,
   RETRIEVE_POSTS_ERROR,
+
+  SHARE_POST_ERROR,
+  SHARE_POST_SUBMITTED,
+  SHARE_POST_SUCCESS,
+
+
 } from "./StreamTypes";
 import { setAxiosAuthToken } from "../../utils/Utils";
 
@@ -32,17 +38,17 @@ export const sharePost = (newPost) => (dispatch, getState) => {
 
   newPost["author"] = state.auth.author;
 
-  dispatch({ type: NEW_POST_SUBMITTED });
+  dispatch({ type: SHARE_POST_SUBMITTED });
   axios
     .post("/author/" + state.auth.author.id + "/posts/", newPost)
     .then((response) => {
-      dispatch({ type: NEW_POST_SUCCESS, payload: response.data });
+      dispatch({ type: SHARE_POST_SUCCESS, payload: response.data });
     })
     .catch((error) => {
       if (error.response) {
         toast.error(JSON.stringify(error.response.data));
         dispatch({
-          type: NEW_POST_ERROR,
+          type: SHARE_POST_ERROR,
           errorData: error.response.data,
         });
       } else if (error.message) {
