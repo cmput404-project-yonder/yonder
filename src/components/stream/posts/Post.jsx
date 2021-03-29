@@ -4,13 +4,43 @@ import { Modal } from "react-bulma-components";
 import EditPostForm from "./EditPostForm";
 import SharingPostPrompt from "./SharingPostPrompt";
 
-import { Card, Content, Heading } from "react-bulma-components";
+import { Card, Content, Container } from "react-bulma-components";
 import Dividor from "./Dividor";
 import { Link } from "react-router-dom";
 import EditButton from "./EditButton";
 import ShareButton from "./ShareButton";
 import LikeButton from "./LikeButton";
-import { dividorStyle, postStyle } from "./StyleComponents";
+import { dividorStyle, formContainerStyle, postStyle } from "./StyleComponents";
+import { color } from "./styling";
+
+
+var signatureStyle = {
+  display: "flex",
+  float: "right",
+  gap: "4pt",
+  color: color.baseLightGrey,
+  marginRight: "0.5em",
+}
+
+var titleStyle = {
+  fontSize: "1.2em",
+  fontWeight: "400",
+  marginLeft: "0.5em",
+}
+
+var ContentStyle = {
+  marginLeft: "0.5em",
+  marginRight: "0.5em",
+}
+
+var postContainerStyle = {
+  padding: "0.8em",
+}
+
+function getDateString(ms) {
+  let date = new Date(ms);
+  return date.toLocaleDateString();
+}
 
 function Post(props) {
   const [editModalIsOpen, setEditModalIsOpen] = useState(false);
@@ -38,25 +68,30 @@ function Post(props) {
 
   return (
       <Card style={postStyle}>
-        <Card.Header>
-          <Card.Header.Title style={{ marginLeft: "1em" }}>
-              <p style={{ fontWeight: "250" }}>@{props.post.author.displayName}</p>
-          </Card.Header.Title>
-        </Card.Header>
-        <Card.Content>
-          <Heading size={8}>
-            <Link to={`${postURL}`}>{props.post.title}</Link>
-          </Heading>
+        <Card.Content style={postContainerStyle}>
+
+          {/* Title */}
+          <Container style={signatureStyle}>
+          <p style={{ fontWeight: "250" }}>@{props.post.author.displayName}</p>
+          <p>·</p>
+          <p>{getDateString(Date.parse(props.post.published))}</p>
+          </Container>
+          <Container style={titleStyle}>
+          <Link to={`${postURL}`} style={{textDecoration: "none", color: color.baseBlack}}>{props.post.title}</Link>
+          </Container>
+
+          {/* Content */}
+          <Container style = {ContentStyle}>
           <Dividor style={dividorStyle}/>
           {isImage ? (
             <Content>
               <img src={`data:${props.post.contentType},${props.post.content}`} /> 
             </Content>
           ) : <Content>{props.post.content}</Content> }
-          <Dividor style={dividorStyle}/>
-          <p style={{ margin: "1em", fontSize: "0.7em" }}>{props.post.published}</p>
+          </Container>
+
         </Card.Content>
-        <Card.Footer>
+        <Card.Footer style={{textAlign: "center", height: "28pt"}}>
           <Card.Footer.Item renderAs="a" onClick={{}}>
             <LikeButton/>
           </Card.Footer.Item>

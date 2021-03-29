@@ -53,7 +53,7 @@ var statusStyle = {
   };
   
   var svgIconStyle = {
-    scale: "40",
+    scale: "38",
     style: {
       fill: color.baseBlack,
       padding: "1.1em",

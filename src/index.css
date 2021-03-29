@@ -3,9 +3,6 @@ body {
   background: #555555;
   font-size: 0.9em;
 }
-#root {
-  text-align: center;
-}
 
 /* Navigation bar */
 .navbar {
@@ -15,7 +12,7 @@ body {
 }
 
 .navbar.is-fixed-top.is-light {
-  background:rgb(0,0,0,0.3);
+  background:transparent;
   border: none;
 }
 

@@ -2,7 +2,7 @@ import React from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { withRouter } from "react-router-dom";
-import { Modal, Container, Columns, Section } from "react-bulma-components";
+import { Card, Modal, Container, Columns, Section } from "react-bulma-components";
 
 import PostList from "../stream/posts/PostList";
 import ProfileDetail from "./ProfileDetail";
@@ -15,7 +15,7 @@ import ProfileEdit from "./ProfileEdit";
 
 import { color } from "./styling";
 import Dividor from "./Dividor";
-import { dividorStyle } from "../stream/posts/StyleComponents";
+import { cardStyle, dividorStyle } from "../stream/posts/StyleComponents";
 // import FriendButton from "./buttons/FriendButton";
 
 
@@ -26,13 +26,20 @@ var pageStyle = {
 
 }
 
+var profileDetailContainerStyle = {
+  paddingBottom: "0em",
+  paddingLeft: "1.5em",
+  paddingRight: "1.5em",
+
+}
+
 var profileInfoContainer = {
   boxShadow: "0pt 0pt 3pt rgb(0,0,0,0.5)",
   borderRadius: "8pt",
   marginTop: "1em",
   marginBottom: "2em",
-  paddingRight: "1.5em",
-  paddingLeft: "1.5em",
+  marginRight: "1.5em",
+  marginLeft: "1.5em",
   backgroundColor: color.backgroundCreamLighter,
 }
 
@@ -41,12 +48,11 @@ var profileListStyle ={
   maxWidth: "340pt"
 }
 
-const buttonLayoutSingleStyle = {
+const buttonLayoutStyle = {
   display: "flex",
-  width: "0em",
-  marginRight: "5em",       // the width of two button.
-  paddingTop: "1em",
-  paddingBottom: "1.2em",
+  textAlign: "center",
+  paddingTop: "6pt",
+  paddingBottom: "12pt",
 }
 
 
@@ -93,8 +99,11 @@ class Profile extends React.Component {
     const otherAuthor = () => {
       if (!isFollowing) {
         return (
-          <Container style={buttonLayoutSingleStyle}>
+          <Container>
+          <Dividor style={dividorStyle}/>
+          <Container style={buttonLayoutStyle}>
                 <FollowButton onClick={() => clickFollow()}/>
+          </Container>
           </Container>
         );
       } else {
@@ -104,7 +113,9 @@ class Profile extends React.Component {
 
     const loggedAuthor = () => {
       return (
-          <Container style={buttonLayoutSingleStyle}>
+          <Container>
+            <Dividor style={dividorStyle}/>
+          <Container style={buttonLayoutStyle}>
             <EditProfileButton onClick={()=>showEditModal(true)}/>
             <Modal show={this.state.editProfileModalIsOpen} onClose={()=>showEditModal(false)} closeOnBlur closeOnEsc>
               <ProfileEdit
@@ -115,6 +126,7 @@ class Profile extends React.Component {
               />
             </Modal>
           </Container>
+          </Container>
       );
     };
 
@@ -124,6 +136,7 @@ class Profile extends React.Component {
           <Columns.Column>
             <div className="post-list" style={profileListStyle}>
                 <Container style={profileInfoContainer}>
+                  <Container style={profileDetailContainerStyle}>
                   <ProfileDetail
                     displayName={this.props.retrievedAuthor.displayName}
                     UUID={this.props.retrievedAuthor.id}
@@ -132,7 +145,7 @@ class Profile extends React.Component {
                     followingNum={32}
                     postNum={this.props.retrievedAuthorPosts.length}
                   />
-                  <Dividor style={dividorStyle}/>
+                  </Container>
                   {this.props.match.params.id === this.props.loggedInAuthor.id ? loggedAuthor() : otherAuthor()}
 
                 </Container>
