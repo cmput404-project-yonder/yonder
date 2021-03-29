@@ -3,7 +3,7 @@ import { withRouter, Link } from "react-router-dom";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
 import { Container, Button, Form, Heading, Section } from "react-bulma-components";
-
+import { Redirect } from "react-router-dom";
 import { login } from "./LoginActions.js";
 import { color } from "./styling";
 
@@ -72,7 +72,9 @@ class Login extends Component {
     this.props.login(userData, "/dashboard");
   };
   render() {
-    return (
+    if (this.props.auth.isAuthenticated) {
+      return <Redirect to="/stream" />;
+    } else return (
       <Section>
         <Container style={loginCardStyle}>
           <Container style={loginContentContainer}>

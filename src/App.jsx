@@ -11,6 +11,7 @@ import SelectedPost from "./components/stream/posts/SelectedPost";
 import 'animate.css';
 
 import axios from "axios";
+import Home from "./components/Home";
 axios.defaults.baseURL= process.env.NODE_ENV === "production" ? "https://yonder.moe/api" : "http://localhost:8000/api";
 
 class App extends Component {
@@ -25,7 +26,7 @@ class App extends Component {
             <Route path="/stream" component={Stream} />
             <Route exact path="/author/:id" component={Profile} />
             <Route exact path="/author/:author_id/posts/:id" component={SelectedPost} />
-            <Route exact path="/" component={Login} />
+            <Route exact path="/" component={Home} />
           </Switch>
         </Root>
       </div>

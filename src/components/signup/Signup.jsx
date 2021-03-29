@@ -4,6 +4,7 @@ import { connect } from "react-redux";
 import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
 import { Container, Button, Form, Section } from "react-bulma-components";
+import { Redirect } from "react-router-dom";
 
 import { color } from "./styling";
 import { signup } from "./SignupActions";
