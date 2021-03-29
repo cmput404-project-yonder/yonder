@@ -34,9 +34,9 @@ var profileDetailContainerStyle = {
 }
 
 var profileInfoContainer = {
-  boxShadow: "0pt 0pt 3pt rgb(0,0,0,0.5)",
+  boxShadow: "0pt 0pt 8pt rgb(0,0,0,0.5)",
   borderRadius: "8pt",
-  marginTop: "1em",
+  marginTop: "0.5em",
   marginBottom: "2em",
   marginRight: "1.5em",
   marginLeft: "1.5em",
