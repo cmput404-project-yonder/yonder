@@ -80,7 +80,7 @@ class Signup extends Component {
   render() {
     return (
       <Section>
-        <Container style={loginCardStyle}>
+        <Container className="animate__animated animate__pulse animate_faster" style={loginCardStyle}>
           <Container style={loginContentContainer}>
             <Container style={logoStyle}>
               <YonderLogo svgScale="160"/>
