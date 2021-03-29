@@ -1,8 +1,6 @@
 import React, { useState } from "react";
 import { Modal } from "react-bulma-components";
 
-import PostForm from "../stream/posts/PostForm";
-
 import InboxButton from "./InboxFloatingButton";
 import InboxModal from "./InboxModal";
 

@@ -14,7 +14,7 @@ import { color, font } from "./styling";
 import CancelButton from "../stream/posts/CancelButton";
 import ConfirmButton from "../stream/posts/ConfirmButton";
 import Dividor from "./Dividor";
-import { dividorStyle } from "../../styling/StyleComponents";
+import { dividorStyle, cardStyle } from "../../styling/StyleComponents";
 
 
 const formContainerStyle = {
@@ -79,13 +79,6 @@ const buttonLayoutStyle = {
   width: "0em",
   marginRight: "10em",       // the width of two button.
 }
-var editProfileStyle = {
-  borderRadius: "8pt",
-  width: "400pt",
-  height: "auto",
-  boxShadow: "0pt 0pt 12pt #AAAAAA",
-  backgroundColor: color.backgroundCream,
-}
 
 
 
@@ -141,7 +134,7 @@ class ProfileEdit extends React.Component {
 
     const { displayName, password, githubURL } = this.state;
     return (
-      <Card style={editProfileStyle} className="animate__animated animate__slideInUp">
+      <Card style={cardStyle} className="animate__animated animate__slideInUp">
         <Container style={headingStyle.overall}>
           <div style={headingStyle.logo.style}>
             <ProfileIcon svgScale={headingStyle.logo.scale} />
