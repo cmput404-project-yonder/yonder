@@ -5,11 +5,15 @@ import {
   RETRIEVE_INBOX_ERROR,
   RETRIEVE_INBOX_SUBMITTED,
   RETRIEVE_INBOX_SUCCESS,
+  RETRIEVE_POSTS_ERROR,
+  RETRIEVE_POSTS_SUBMITTED,
+  RETRIEVE_POSTS_SUCCESS,
 } from "./StreamTypes";
 
 const initialState = {
   newPostError: "",
   currentAuthorInbox: {},
+  currentAuthorPosts: [],
   currentInboxPosts: [],
   currentInboxLikes: [],
   currentInboxFollows: [],
@@ -65,6 +69,27 @@ export const streamReducer = (state = initialState, action) => {
         currentInboxComments: comments,
         loading: false,
       };
+
+      case RETRIEVE_POSTS_SUBMITTED:
+        return {
+          ...state,
+          retrievePostsError: "",
+          loading: true,
+        };
+      case RETRIEVE_POSTS_ERROR:
+        return {
+          ...state,
+          retrievePostsError: action.errorData,
+          loading: false,
+        };
+      case RETRIEVE_POSTS_SUCCESS:
+        return {
+          ...state,
+          retrievePostsError: "",
+          currentAuthorPosts: action.payload,
+          loading: false,
+        };
+
     default:
       return state;
   }

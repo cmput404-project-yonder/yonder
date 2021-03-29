@@ -124,6 +124,9 @@ export const newPostButtonStyle = {
     position: "fixed",
     right: "5%",
     bottom: "5%",
+    display: "flex",
+    gap: "2em",
+    flexDirection: "column",
   }
   
 export const pageStyle = {

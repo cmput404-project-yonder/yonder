@@ -2,19 +2,17 @@ import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { withRouter } from "react-router-dom";
-import { Container, Columns, Section, List } from "react-bulma-components";
+import { Container, Columns, Section } from "react-bulma-components";
 import "bulma-pageloader/dist/css/bulma-pageloader.min.css";
 
-import PopupModal from "./posts/PopupModal";
 import PostList from "./posts/PostList";
-import Follow from "./Follow";
-import Like from "./Like";
-import { buttonLayerContainerStyle, streamLayerContainerStyle, newPostButtonStyle, pageStyle } from "./posts/StyleComponents";
-import { createPost, updatePost, sharePost, deletePost, retrieveInbox} from "./StreamActions";
+import PopupModal from "./posts/PopupModal";
+import { buttonLayerContainerStyle, streamLayerContainerStyle, newPostButtonStyle, pageStyle, postStreamStyle } from "./posts/StyleComponents";
+import { createPost, updatePost, sharePost, retrieveLoggedInAuthorPosts, deletePost } from "./StreamActions";
 
 class Stream extends Component {
   componentDidMount() {
-    this.props.retrieveInbox(this.props.author.id);
+    this.props.retrieveLoggedInAuthorPosts();
   }
 
   render() {
@@ -22,24 +20,6 @@ class Stream extends Component {
       return (
         <div className="pageloader is-active">
           <span className="title">Loading</span>
-        </div>
-      );
-    }
-
-    const follows = this.props.inboxFollows.map((follow) => <Follow follower={follow}/>);
-    const followList = () => {
-      return (
-        <div className="post-list">
-          <List hoverable>{follows}</List>
-        </div>
-      );
-    }
-
-    const likes = this.props.inboxLikes.map((like) => <Like like={like}/>);
-    const likeList = () => {
-      return (
-        <div className="post-list">
-          <List hoverable>{likes}</List>
         </div>
       );
     }
@@ -54,18 +34,17 @@ class Stream extends Component {
               <Columns centered>
                 <Columns.Column>
                   <PostList
-                    posts={this.props.inboxPosts}
+                    posts={this.props.currentAuthorPosts}
                     updatePost={this.props.updatePost}
                     deletePost={this.props.deletePost}
                     sharePost={this.props.sharePost}
                   />
-                  { followList() }
-                  { likeList() }
                 </Columns.Column>
               </Columns>
             </Container>
         </div>
       </Section>
+
     );
   }
 }
@@ -74,24 +53,18 @@ Stream.propTypes = {
   author: PropTypes.object.isRequired,
   createPost: PropTypes.func.isRequired,
   updatePost: PropTypes.func.isRequired,
+  retrieveLoggedInAuthorPosts: PropTypes.func.isRequired,
   deletePost: PropTypes.func.isRequired,
-  retrieveInbox: PropTypes.func.isRequired,
-  inboxPosts: PropTypes.array.isRequired,
-  inboxFollows: PropTypes.array.isRequired,
-  inboxLikes: PropTypes.array.isRequired,
-  inboxComments: PropTypes.array.isRequired,
+  currentAuthorPosts: PropTypes.array.isRequired,
   loading: PropTypes.bool.isRequired,
 };
 
 const mapStateToProps = (state) => ({
   author: state.auth.author,
-  inboxPosts: state.stream.currentInboxPosts,
-  inboxFollows: state.stream.currentInboxFollows,
-  inboxLikes: state.stream.currentInboxLikes,
-  inboxComments: state.stream.currentInboxComment,
+  currentAuthorPosts: state.stream.currentAuthorPosts,
   loading: state.stream.loading,
 });
 
-export default connect(mapStateToProps, { createPost, updatePost, sharePost, deletePost, retrieveInbox })(
+export default connect(mapStateToProps, { createPost, updatePost, sharePost, retrieveLoggedInAuthorPosts, deletePost })(
   withRouter(Stream)
 );

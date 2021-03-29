@@ -12,7 +12,10 @@ import {
   DELETE_POST_ERROR,
   RETRIEVE_INBOX_SUBMITTED,
   RETRIEVE_INBOX_ERROR,
-  RETRIEVE_INBOX_SUCCESS
+  RETRIEVE_INBOX_SUCCESS,
+  RETRIEVE_POSTS_SUBMITTED,
+  RETRIEVE_POSTS_SUCCESS,
+  RETRIEVE_POSTS_ERROR,
 } from "./StreamTypes";
 import { setAxiosAuthToken } from "../../utils/Utils";
 
@@ -153,3 +156,31 @@ export const deletePost = (aPost) => (dispatch, getState) => {
       }
     });
 };
+
+
+export const retrieveLoggedInAuthorPosts = () => (dispatch, getState) => {
+  const state = getState();
+  const author = state.auth.author;
+
+  setAxiosAuthToken(state.auth.token);
+  dispatch({ type: RETRIEVE_POSTS_SUBMITTED });
+  axios
+    .get("/author/" + author.id + "/posts/")
+    .then((response) => {
+      dispatch({ type: RETRIEVE_POSTS_SUCCESS, payload: response.data });
+    })
+    .catch((error) => {
+      if (error.response) {
+        toast.error(JSON.stringify(error.response.data));
+        dispatch({
+          type: RETRIEVE_POSTS_ERROR,
+          errorData: error.response.data,
+        });
+      } else if (error.message) {
+        toast.error(JSON.stringify(error.message));
+      } else {
+        toast.error(JSON.stringify(error));
+      }
+    });
+};
+
