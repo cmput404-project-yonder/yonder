@@ -10,7 +10,7 @@ export const cardStyle = {
     borderRadius: "8pt",
     width: "450pt",
     height: "auto",
-    boxShadow: "0pt 0pt 12pt #AAAAAA",
+    boxShadow: "0pt 0pt 8pt rgb(0,0,0,0.5)",
     backgroundColor: color.backgroundCream,
   }
 

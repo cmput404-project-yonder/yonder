@@ -67,8 +67,9 @@ button {
 }
 
 .modal-background {
-  background-color: rgba(168, 168, 168, 0.6);
-  filter: blur(1pt);
+  /* background-color: rgba(168, 168, 168, 0.6); */
+  background-color: rgba(0, 0, 0, 0.5);
+  filter: blur(2pt);
 }
 
 .pageloader {

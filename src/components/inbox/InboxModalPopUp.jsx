@@ -12,7 +12,7 @@ function PopupModal(props) {
   return (
     <div className="post-form-modal">
       <InboxButton action={() => setModalIsOpen(true)}/>
-      <Modal show={modalIsOpen} onClose={() => setModalIsOpen(false)} closeOnBlur closeOnEsc>
+      <Modal className="animate__animated animate__fadeIn animate__faster" show={modalIsOpen} onClose={() => setModalIsOpen(false)} closeOnBlur closeOnEsc>
         <InboxModal setModalIsOpen={setModalIsOpen}/>
       </Modal>
     </div>

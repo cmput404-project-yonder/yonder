@@ -19,7 +19,7 @@ class Stream extends Component {
   render() {
     if (this.props.loading) {
       return (
-        <div className="pageloader is-active">
+        <div className="pageloader is-active animate__animated animate__fadeIn animate__faster">
           <span className="title">Loading</span>
         </div>
       );
