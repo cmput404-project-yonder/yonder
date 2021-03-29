@@ -7,42 +7,11 @@ import "bulma-pageloader/dist/css/bulma-pageloader.min.css";
 
 import PostList from "./posts/PostList";
 import PopupModal from "./posts/PopupModal";
-import { createPost, updatePost, retrieveLoggedInAuthorPosts, deletePost } from "./StreamActions";
+import InboxModalPopUp from "../inbox/InboxModalPopUp";
+import { buttonLayerContainerStyle, streamLayerContainerStyle, newPostButtonStyle, pageStyle, postStreamStyle } from "../../styling/StyleComponents";
+import { createPost, updatePost, sharePost, retrieveLoggedInAuthorPosts, deletePost } from "./StreamActions";
 
-
-
-
-var buttonLayerContainerStyle = {
-  gridColumn: "1",
-  gridRow: "1",
-  width: "100%",
-  height: "100%",
-}
-
-var streamLayerContainerStyle = {
-  gridColumn: "1",
-  gridRow: "1",
-  width: "100%",
-  height: "100%",
-  
-}
-
-
-var newPostButtonStyle = {
-  float: "right",
-  zIndex: "1",
-  position: "fixed",
-  right: "5%",
-  bottom: "5%",
-}
-
-var pageStyle = {
-  display: "grid"
-
-}
-
-var postStreamStyle = {
-}
+import NavigationBar from "../NavigationBar";
 
 class Stream extends Component {
   componentDidMount() {
@@ -52,7 +21,7 @@ class Stream extends Component {
   render() {
     if (this.props.loading) {
       return (
-        <div className="pageloader is-active">
+        <div className="pageloader is-active animate__animated animate__fadeIn animate__faster">
           <span className="title">Loading</span>
         </div>
       );
@@ -60,8 +29,9 @@ class Stream extends Component {
 
     return (
       <Section style={pageStyle}>
+        <NavigationBar/>
         <div style={buttonLayerContainerStyle}>
-          <Container style={newPostButtonStyle}><PopupModal createPost={this.props.createPost} /></Container>
+          <Container style={newPostButtonStyle}><InboxModalPopUp/><PopupModal createPost={this.props.createPost} /></Container>
         </div>
         <div style={streamLayerContainerStyle}>
           <Container fluid>
@@ -71,6 +41,8 @@ class Stream extends Component {
                     posts={this.props.currentAuthorPosts}
                     updatePost={this.props.updatePost}
                     deletePost={this.props.deletePost}
+                    sharePost={this.props.sharePost}
+                    interactive={true}
                   />
                 </Columns.Column>
               </Columns>
@@ -86,6 +58,7 @@ Stream.propTypes = {
   author: PropTypes.object.isRequired,
   createPost: PropTypes.func.isRequired,
   updatePost: PropTypes.func.isRequired,
+  sharePost: PropTypes.func.isRequired,
   retrieveLoggedInAuthorPosts: PropTypes.func.isRequired,
   deletePost: PropTypes.func.isRequired,
   currentAuthorPosts: PropTypes.array.isRequired,
@@ -98,6 +71,6 @@ const mapStateToProps = (state) => ({
   loading: state.stream.loading,
 });
 
-export default connect(mapStateToProps, { createPost, updatePost, retrieveLoggedInAuthorPosts, deletePost })(
+export default connect(mapStateToProps, { createPost, updatePost, sharePost, retrieveLoggedInAuthorPosts, deletePost })(
   withRouter(Stream)
 );

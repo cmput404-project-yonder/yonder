@@ -8,8 +8,10 @@ from django.shortcuts import get_object_or_404, get_list_or_404
 from rest_framework.serializers import Serializer
 from drf_yasg.utils import swagger_auto_schema
 from django.core.paginator import Paginator
+from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
+import requests
 
-from .models import Post, Author, Comment
+from .models import Post, Author, Comment, RemoteNode
 from .serializers import *
 
 
@@ -55,7 +57,7 @@ class signup(generics.GenericAPIView):
         if "host" not in request.data:
             current_site = get_current_site(request=request)
             author_data["host"] = request.scheme + \
-                "://" + current_site.name
+                "://" + current_site.name + "/"
         else:
             author_data["host"] = request.data["host"]
         author_data["user"] = user.id
@@ -80,11 +82,36 @@ class authors(generics.ListAPIView):
     queryset = Author.objects.all()
     serializer_class = AuthorSerializer
 
+    @swagger_auto_schema(tags=['authors'])
+    def get(self, request, *args, **kwargs):
+        return self.list(request, *args, **kwargs)
+
+class remote_authors(generics.GenericAPIView):
+    queryset = Author.objects.all()
+    serializer_class = AuthorSerializer
+
+    def list(self, request):
+        remote_nodes = RemoteNode.objects.all()
+        authors = []
+        for node in remote_nodes:
+            url = node.host + "api/authors/"
+            response = requests.get(url, auth=HTTPBasicAuth(node.ourUser, node.ourPassword))
+            authors.append(response.json)
+
+        if len(authors) > 0:
+            return Response(authors, status=status.HTTP_200_OK)
+        else:
+            return Response(authors, status=status.HTTP_204_NO_CONTENT)
+
+    @swagger_auto_schema(tags=['remote authors'])
+    def get(self, request, *args, **kwargs):
+        return self.list(request, *args, **kwargs)
+
 class author_detail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Author.objects.all()
     serializer_class = AuthorSerializer
 
-    @swagger_auto_schema(tags=['author'])
+    @swagger_auto_schema(tags=['authors'])
     def get(self, request, *args, **kwargs):
         author = get_object_or_404(self.queryset, pk=kwargs["pk"])
         serializer = self.serializer_class(author)
@@ -92,17 +119,18 @@ class author_detail(generics.RetrieveUpdateDestroyAPIView):
         data["url"] = author.get_absolute_url()
         return Response(serializer.data)
 
-    @swagger_auto_schema(tags=['author'])
+    @swagger_auto_schema(tags=['authors'])
     def put(self, request, *args, **kwargs):
         return self.update(request, *args, **kwargs)
 
-    @swagger_auto_schema(tags=['author'])
+    @swagger_auto_schema(tags=['authors'])
     def delete(self, request, *args, **kwargs):
         return self.destroy(request, *args, **kwargs)
 
 
 class posts(generics.ListCreateAPIView):
     serializer_class = PostSerializer
+    permission_classes = [IsAuthenticatedOrReadOnly]
 
     def create(self, request, *args, **kwargs):
         post_data = request.data
@@ -131,6 +159,7 @@ class posts(generics.ListCreateAPIView):
 class post_detail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Post.objects.all()
     serializer_class = PostSerializer
+    permission_classes = [IsAuthenticatedOrReadOnly]
 
     @swagger_auto_schema(tags=['posts'])
     def get(self, request, *args, **kwargs):
@@ -148,6 +177,7 @@ class post_detail(generics.RetrieveUpdateDestroyAPIView):
 class comments(generics.ListCreateAPIView):
     queryset = Comment.objects.all()
     serializer_class = CommentSerializer
+    permission_classes = [IsAuthenticatedOrReadOnly]
 
     @swagger_auto_schema(tags=['comments'])
     def get(self, request, *args, **kwargs):
@@ -161,6 +191,7 @@ class comments(generics.ListCreateAPIView):
 class comment_detail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Comment.objects.all()
     serializer_class = CommentSerializer
+    permission_classes = [IsAuthenticatedOrReadOnly]
 
     @swagger_auto_schema(tags=['comments'])
     def get(self, request, *args, **kwargs):
@@ -195,29 +226,37 @@ class author_followers(viewsets.ModelViewSet):
 class author_followers_detail(viewsets.ModelViewSet):
     queryset = AuthorFollower.objects.all()
     serializer_class = AuthorFollowerSerializer
+    permission_classes = [IsAuthenticatedOrReadOnly]
+
+    def check_following(self, author_id, follower_id):
+        author_followers = AuthorFollower.objects.filter(author=author_id)
+        for af in author_followers:
+            if af.follower["id"] == str(follower_id):
+                return True
+
+        return False
 
     def create(self, request, author_id, follower_id):
+        if self.check_following(author_id, follower_id):
+            return Response("Already following", status=status.HTTP_409_CONFLICT)
+
         author_follower_data = {"author": author_id, "follower": request.data}
         serializer = self.get_serializer(data=author_follower_data)
         if not serializer.is_valid():
             return Response(status=status.HTTP_400_BAD_REQUEST)
-        author_follower = serializer.save()
+        serializer.save()
 
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
     def retrieve(self, request, author_id, follower_id):
-        author_followers = get_list_or_404(AuthorFollower, author=str(author_id))
-        author_follower = None
-        for af in author_followers:
-            if af.follower["id"] == str(follower_id):
-                author_follower = af
+        if self.check_following(author_id, follower_id):
+            return Response(status=status.HTTP_200_OK)
 
-        if author_follower == None:
-            return Response(status=status.HTTP_404_NOT_FOUND)
+        return Response(status=status.HTTP_404_NOT_FOUND)
 
-        serializer = self.get_serializer(instance=author_follower)
+        # serializer = self.get_serializer(instance=author_follower)
 
-        return Response(serializer.data["follower"], status=status.HTTP_200_OK)
+        # return Response(serializer.data["follower"], status=status.HTTP_200_OK)
 
     def destroy(self, request, author_id, follower_id):
         author_follower = get_object_or_404(AuthorFollower, author=author_id, follower=request.data)
@@ -239,12 +278,10 @@ class author_followers_detail(viewsets.ModelViewSet):
 
 
 class inbox(generics.GenericAPIView):
+    permission_classes = [IsAuthenticated]
 
     @swagger_auto_schema(tags=['inbox'])
     def get(self, request, *args, **kwargs):
-        # if not request.user.is_authenticated:
-            # return Response(status=status.HTTP_401_UNAUTHORIZED)
-
         inbox = get_object_or_404(Inbox, author_id=kwargs["author_id"])
         author = get_object_or_404(Author, id=kwargs["author_id"])
 
@@ -252,7 +289,7 @@ class inbox(generics.GenericAPIView):
         page_size = 5 if 'size' not in request.query_params else request.query_params.get('size')
         paginator = Paginator(inbox.items, page_size)
         page = paginator.page(page_number)
-        
+
         data = {
             "type": "inbox",
             "author": author.get_absolute_url(),

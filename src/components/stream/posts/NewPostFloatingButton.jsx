@@ -13,12 +13,13 @@ var buttonStyle = {
             height: "3em",
             width: "3em",
             borderRadius: "100%",
-            boxShadow: "0pt 0pt 8pt rgb(0,0,0,0.5)",
-            backgroundColor: "rgb(201,98,98,0.8)",
+            boxShadow: "0pt 0pt 6pt rgb(0,0,0,0.5)",
+            backgroundColor: "rgb(234,132,132,0.8)",
             border: "none",
         },
         icon: {
             paddingTop: "3pt",
+            paddingLeft: "1pt",
             fill: "rgb(255,255,255,0.9)",
         }
     }

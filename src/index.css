@@ -3,9 +3,6 @@ body {
   background: #555555;
   font-size: 0.9em;
 }
-#root {
-  text-align: center;
-}
 
 /* Navigation bar */
 .navbar {
@@ -15,7 +12,7 @@ body {
 }
 
 .navbar.is-fixed-top.is-light {
-  background:rgb(0,0,0,0.2);
+  background:transparent;
   border: none;
 }
 
@@ -38,8 +35,8 @@ body {
 
 /* Stream page */
 .post-list {
-  max-width: 480pt;
-  min-width: 400pt;
+  max-width: 470pt;
+  min-width: 340pt;
   margin: auto;
 }
 .list {
@@ -52,19 +49,17 @@ body {
   font-size: 0.85em;
   margin: 1em;
 }
-/* Signup page */
-.login-form {
-  max-width: 320px;
-  margin: auto;
-}
-
-/* Signup page */
-.signup-form {
-  max-width: 320px;
-  margin: auto;
-}
 
 /* Buttons global */
 button {
   margin: 0.5em;
+}
+
+.modal-background {
+  /* background-color: rgba(168, 168, 168, 0.6); */
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+.pageloader {
+  background: #555555 !important;
 }

@@ -12,7 +12,7 @@ var buttonStyle = {
     scale: "40",
     style: {
         padding: "1.2em",
-        fill: color.buttonRed,
+        fill: color.buttonOrange,
     }
 }
 

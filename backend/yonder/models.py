@@ -1,12 +1,8 @@
 from django.db import models
-from django.db.models.signals import post_save
-from django.dispatch import receiver
 from django.contrib.auth.models import User
 from django.utils.translation import gettext_lazy as _
 from django.contrib.postgres.fields import ArrayField
-from django.core import serializers
 import uuid
-import re, json
 
 
 class ContentTypes(models.TextChoices):
@@ -92,7 +88,10 @@ class AuthorFriend(models.Model):
 class RemoteNode(models.Model):
     id = models.UUIDField(unique=True, default=uuid.uuid4,
                           editable=False, primary_key=True)
-    host = models.URLField(unique=True)
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    host = models.URLField(unique=True, null=True, blank=True)
+    our_user = models.TextField(null=True, blank=True)
+    our_password = models.TextField(null=True, blank=True)
 
 class Inbox(models.Model):
     id = models.UUIDField(unique=True, default=uuid.uuid4,
@@ -100,4 +99,3 @@ class Inbox(models.Model):
     author = models.ForeignKey(Author, on_delete=models.CASCADE)
     items = ArrayField(models.JSONField(), default=list)
     
-

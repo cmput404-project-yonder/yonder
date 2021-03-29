@@ -6,7 +6,7 @@ import { setAxiosAuthToken, toastOnError } from "../../utils/Utils";
 
 export const login = (userData, redirectTo) => (dispatch) => {
   axios
-    .post("/login", userData)
+    .post("/login/", userData)
     .then((response) => {
       const auth_token = response.data.token;
       const author = response.data.author;
@@ -64,7 +64,7 @@ export const unsetCurrentUser = () => (dispatch) => {
 
 export const logout = () => (dispatch) => {
   axios
-    .post("api/logout")
+    .post("api/logout/")
     .then((response) => {
       dispatch(unsetCurrentUser());
       dispatch(push("/"));
