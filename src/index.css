@@ -35,8 +35,8 @@ body {
 
 /* Stream page */
 .post-list {
-  max-width: 480pt;
-  min-width: 400pt;
+  max-width: 470pt;
+  min-width: 340pt;
   margin: auto;
 }
 .list {
