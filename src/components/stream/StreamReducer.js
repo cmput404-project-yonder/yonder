@@ -42,6 +42,7 @@ export const streamReducer = (state = initialState, action) => {
       return {
         ...state,
         newPostError: "",
+        currentAuthorPosts: [...state.currentAuthorPosts, action.payload],
         loading: false,
       };
     case RETRIEVE_INBOX_SUBMITTED:
@@ -110,6 +111,7 @@ export const streamReducer = (state = initialState, action) => {
           return {
             ...state,
             newPostError: "",
+            currentAuthorPosts: [...state.currentAuthorPosts, action.payload],
             loading: false,
           };
     default:

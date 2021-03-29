@@ -4,7 +4,7 @@ import { Modal } from "react-bulma-components";
 import EditPostForm from "./EditPostForm";
 import SharingPostPrompt from "./SharingPostPrompt";
 
-import { Card, Content, Container } from "react-bulma-components";
+import { Card, Content, Container, Button } from "react-bulma-components";
 import Dividor from "./Dividor";
 import { Link } from "react-router-dom";
 import EditButton from "./EditButton";
@@ -31,16 +31,36 @@ var titleStyle = {
 var ContentStyle = {
   marginLeft: "0.5em",
   marginRight: "0.5em",
+  paddingBottom: "0.2em",
 }
 
 var postContainerStyle = {
-  padding: "0.8em",
+  padding: "0.6em",
+}
+
+
+var footerButtonLayoutStyle = {
+  width: "100%",
+  display: "flex",
+  justifyContent: "space-between",
+  height: "12pt",
+  paddingLeft: "3em",
+  paddingRight: "3em",
+}
+
+var buttonOverrideStyle = {
+  backgroundColor: "transparent",
+  border: "none",
+  marginTop: "-10pt",
+  height: "20pt",
 }
 
 function getDateString(ms) {
   let date = new Date(ms);
   return date.toLocaleDateString();
 }
+
+
 
 function Post(props) {
   const [editModalIsOpen, setEditModalIsOpen] = useState(false);
@@ -89,18 +109,19 @@ function Post(props) {
             </Content>
           ) : <Content>{props.post.content}</Content> }
           </Container>
+          <Dividor style={dividorStyle}/>
 
         </Card.Content>
-        <Card.Footer style={{textAlign: "center", height: "28pt"}}>
-          <Card.Footer.Item renderAs="a" onClick={{}}>
+        <Container style={footerButtonLayoutStyle}>
+          <Button style={buttonOverrideStyle} onClick={{}}>
             <LikeButton/>
-          </Card.Footer.Item>
-          <Card.Footer.Item renderAs="a" onClick={() => setSharingPromptIsOpen(true)}>
+          </Button>
+          <Button style={buttonOverrideStyle} onClick={() => setSharingPromptIsOpen(true)}>
             <ShareButton/>
-          </Card.Footer.Item>
-          <Card.Footer.Item renderAs="a" onClick={() => setEditModalIsOpen(true)}>
+          </Button>
+          <Button style={buttonOverrideStyle} onClick={() => setEditModalIsOpen(true)}>
             <EditButton/>
-          </Card.Footer.Item>
+          </Button>
           <Modal show={editModalIsOpen} onClose={() => setEditModalIsOpen(false)} closeOnBlur closeOnEsc>
             <EditPostForm
               setEditModalIsOpen={setEditModalIsOpen}
@@ -116,7 +137,7 @@ function Post(props) {
               sharePost={props.sharePost}
             />
           </Modal>
-        </Card.Footer>
+        </Container>
       </Card>
   );
 }

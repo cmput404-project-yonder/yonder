@@ -2,8 +2,8 @@ import { font, color } from "./styling";
 import { style } from "../../profile/styling";
 
 export const dividorStyle = {
-    marginTop: "1em",
-    marginBottom: "0.6em",
+    marginTop: "0.5em",
+    marginBottom: "0.5em",
   }
 
 export const cardStyle = {
