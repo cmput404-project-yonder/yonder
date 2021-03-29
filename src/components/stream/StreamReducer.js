@@ -5,6 +5,9 @@ import {
   RETRIEVE_POSTS_ERROR,
   RETRIEVE_POSTS_SUBMITTED,
   RETRIEVE_POSTS_SUCCESS,
+  LIKE_POST_ERROR,
+  LIKE_POST_SUBMITTED,
+  LIKE_POST_SUCCESS,
 } from "./StreamTypes";
 
 const initialState = {
@@ -50,6 +53,25 @@ export const streamReducer = (state = initialState, action) => {
       return {
         ...state,
         retrievePostsError: "",
+        currentAuthorPosts: action.payload,
+        loading: false,
+      };
+    case LIKE_POST_SUBMITTED:
+      return {
+        ...state,
+        likePostError: "",
+        loading: true,
+      };
+    case LIKE_POST_ERROR:
+      return {
+        ...state,
+        likePostError: action.errorData,
+        loading: false,
+      };
+    case LIKE_POST_SUCCESS:
+      return {
+        ...state,
+        likePostError: "",
         currentAuthorPosts: action.payload,
         loading: false,
       };

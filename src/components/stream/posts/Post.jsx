@@ -11,10 +11,12 @@ import { Link } from "react-router-dom";
 import EditButton from "./EditButton";
 import ShareButton from "./ShareButton";
 import LikeButton from "./LikeButton";
+import LikedButton from "./LikedButton";
 import { dividorStyle, postStyle, textStyle, authorStyle, contentStyle } from "./StyleComponents";
 
 function Post(props) {
   const [editModalIsOpen, setEditModalIsOpen] = useState(false);
+  const [isLiked, setIsLiked] = useState(false);
   const [sharingPromptIsOpen, setSharingPromptIsOpen] = useState(false);
   console.log(props.post);
   
@@ -56,9 +58,15 @@ function Post(props) {
           <p style={{ margin: "1em", fontSize: "0.7em" }}>{props.post.published}</p>
         </Card.Content>
         <Card.Footer>
-          <Card.Footer.Item renderAs="a" onClick={{}}>
-            <LikeButton/>
-          </Card.Footer.Item>
+          
+          {isLiked ? (
+            <Card.Footer.Item renderAs="a" onClick={() => setIsLiked(false)}>
+              <LikedButton/>
+            </Card.Footer.Item>
+          ) : <Card.Footer.Item renderAs="a" onClick={() => setIsLiked(true)}>
+              <LikeButton/>
+            </Card.Footer.Item>}
+
           <Card.Footer.Item renderAs="a" onClick={() => setSharingPromptIsOpen(true)}>
             <ShareButton/>
           </Card.Footer.Item>

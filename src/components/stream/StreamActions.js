@@ -13,6 +13,9 @@ import {
   RETRIEVE_POSTS_SUBMITTED,
   RETRIEVE_POSTS_SUCCESS,
   RETRIEVE_POSTS_ERROR,
+  LIKE_POST_SUBMITTED,
+  LIKE_POST_SUCCESS,
+  LIKE_POST_ERROR,
 } from "./StreamTypes";
 import { setAxiosAuthToken } from "../../utils/Utils";
 
@@ -144,6 +147,33 @@ export const deletePost = (aPost) => (dispatch, getState) => {
         toast.error(JSON.stringify(error.response.data));
         dispatch({
           type: DELETE_POST_ERROR,
+          errorData: error.response.data,
+        });
+      } else if (error.message) {
+        toast.error(JSON.stringify(error.message));
+      } else {
+        toast.error(JSON.stringify(error));
+      }
+    });
+};
+
+export const likePost = (likedPost) => (dispatch, getState) => {
+  const state = getState();
+  setAxiosAuthToken(state.auth.token);
+
+  likedPost["author"] = state.auth.author;
+
+  dispatch({ type: LIKE_POST_SUBMITTED });
+  axios
+    .post("/author/" + state.auth.author.id + "/inbox/")
+    .then((response) => {
+      dispatch({ type: LIKE_POST_SUCCESS, payload: response.data });
+    })
+    .catch((error) => {
+      if (error.response) {
+        toast.error(JSON.stringify(error.response.data));
+        dispatch({
+          type: LIKE_POST_ERROR,
           errorData: error.response.data,
         });
       } else if (error.message) {
