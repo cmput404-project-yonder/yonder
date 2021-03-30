@@ -8,7 +8,6 @@ from drf_yasg.utils import swagger_auto_schema
 from django.core.paginator import Paginator
 from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
 import requests
-import json
 
 from .models import Post, Author, Comment, RemoteNode
 from .serializers import *
@@ -258,9 +257,10 @@ class author_followers_detail(viewsets.ModelViewSet):
             # handle remote author
             authorToFollow = request.data["object"]
             node = RemoteNode.objects.get(host=authorToFollow["host"])
-            url = node.host + "api/authors/" + authorToFollow["id"] + "/followers/" + str(follower_id)
-            json_data = json.dumps(request.data)
-            response = requests.post(url, auth=requests.models.HTTPBasicAuth(node.our_user, node.our_password), data=json_data)
+            url = node.host + "api/author/" + str(authorToFollow["id"]) + "/followers/" + str(follower_id) + "/"
+            response = requests.put(url, auth=requests.models.HTTPBasicAuth(node.our_user, node.our_password), data=request.data)
+            print(response.text)
+            print(response.url)
             return Response(status=response.status_code)
         except RemoteNode.DoesNotExist:
             return Response("You are not allowed in the cool club", status=status.HTTP_401_UNAUTHORIZED)
