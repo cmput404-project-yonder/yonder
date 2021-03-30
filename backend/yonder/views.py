@@ -78,7 +78,7 @@ class signup(generics.GenericAPIView):
         }, status=status.HTTP_201_CREATED)
 
 
-class authors(generics.ListAPIView):
+class local_authors(generics.ListAPIView):
     queryset = Author.objects.all()
     serializer_class = AuthorSerializer
 
@@ -86,7 +86,7 @@ class authors(generics.ListAPIView):
     def get(self, request, *args, **kwargs):
         return self.list(request, *args, **kwargs)
 
-class remote_authors(generics.GenericAPIView):
+class local_remote_authors(generics.GenericAPIView):
     queryset = Author.objects.all()
     serializer_class = AuthorSerializer
 
@@ -95,13 +95,20 @@ class remote_authors(generics.GenericAPIView):
         authors = []
         for node in remote_nodes:
             url = node.host + "api/authors/"
-            response = requests.get(url, auth=HTTPBasicAuth(node.ourUser, node.ourPassword))
-            authors.append(response.json)
+            response = requests.get(url, auth=requests.models.HTTPBasicAuth(node.our_user, node.our_password))
+            authors.extend(response.json())
+        
+        local_authors = self.get_queryset()
+        for a in local_authors:
+            local_authors_data = AuthorSerializer(instance=a).data;
+            authors.append(local_authors_data)
+
+        print(authors)
 
         if len(authors) > 0:
             return Response(authors, status=status.HTTP_200_OK)
         else:
-            return Response(authors, status=status.HTTP_204_NO_CONTENT)
+            return Response(status=status.HTTP_204_NO_CONTENT)
 
     @swagger_auto_schema(tags=['remote authors'])
     def get(self, request, *args, **kwargs):

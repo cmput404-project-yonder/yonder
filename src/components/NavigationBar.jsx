@@ -1,19 +1,17 @@
-import React from "react";
+import React, { useState } from "react";
 import { withRouter } from "react-router-dom";
 import { connect } from "react-redux";
 import { Navbar, Heading } from "react-bulma-components";
-import SearchField from 'react-search-field';
 
 import { logout } from "./login/LoginActions";
+import SearchBar from "./SearchBar";
 
 import YonderLogo from "./YonderLogo";
 import ProfileIcon from "./ProfileIcon";
 import BellIcon from "./BellIcon";
 
-
-
 function NavigationBar(props) {
-  const [isActive, setisActive] = React.useState(false);
+  const [isActive, setisActive] = useState(false);
 
   const loggedInDropdown = () => {
     return (
@@ -59,12 +57,11 @@ function NavigationBar(props) {
           }}
         />
       </Navbar.Brand>
-      <Navbar.Menu>
-        <Navbar.Container position="end">
-          <SearchField
-            placeholder='Search for author'
-            onChange={onChange}
-          />
+      <Navbar.Container position="end">
+        <Navbar.Item>
+          <SearchBar authors={props.allAuthors}/>
+        </Navbar.Item>
+        <Navbar.Menu>
           {props.auth.isAuthenticated ? notifcationDropdown() : null}
           <Navbar.Item dropdown hoverable>
             <Navbar.Link arrowless={true}>
@@ -72,14 +69,15 @@ function NavigationBar(props) {
             </Navbar.Link>
             {props.auth.isAuthenticated ? loggedInDropdown() : loggedOutDropdown()}
           </Navbar.Item>
-        </Navbar.Container>
-      </Navbar.Menu>
+        </Navbar.Menu>
+      </Navbar.Container>
     </Navbar>
   );
 }
 
 const mapStateToProps = (state) => ({
   auth: state.auth,
+  allAuthors: state.stream.allAuthors,
 });
 
-export default connect(mapStateToProps, { logout, getAllAuthors })(withRouter(NavigationBar));
+export default connect(mapStateToProps, { logout })(withRouter(NavigationBar));

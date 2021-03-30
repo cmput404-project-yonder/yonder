@@ -7,12 +7,15 @@ import "bulma-pageloader/dist/css/bulma-pageloader.min.css";
 
 import PostList from "./posts/PostList";
 import PopupModal from "./posts/PopupModal";
-import { buttonLayerContainerStyle, streamLayerContainerStyle, newPostButtonStyle, pageStyle, postStreamStyle } from "./posts/StyleComponents";
-import { createPost, updatePost, sharePost, retrieveLoggedInAuthorPosts, deletePost } from "./StreamActions";
+import { buttonLayerContainerStyle, streamLayerContainerStyle, newPostButtonStyle, pageStyle } from "./posts/StyleComponents";
+import { createPost, updatePost, sharePost, retrieveLoggedInAuthorPosts, deletePost, retrieveAllAuthors } from "./StreamActions";
 
 class Stream extends Component {
   componentDidMount() {
     this.props.retrieveLoggedInAuthorPosts();
+    if (!this.props.allAuthors) {
+      this.props.retrieveAllAuthors();
+    }
   }
 
   render() {
@@ -56,6 +59,7 @@ Stream.propTypes = {
   retrieveLoggedInAuthorPosts: PropTypes.func.isRequired,
   deletePost: PropTypes.func.isRequired,
   currentAuthorPosts: PropTypes.array.isRequired,
+  allAuthors: PropTypes.array.isRequired,
   loading: PropTypes.bool.isRequired,
 };
 
@@ -63,8 +67,14 @@ const mapStateToProps = (state) => ({
   author: state.auth.author,
   currentAuthorPosts: state.stream.currentAuthorPosts,
   loading: state.stream.loading,
+  allAuthors: state.allAuthors,
 });
 
-export default connect(mapStateToProps, { createPost, updatePost, sharePost, retrieveLoggedInAuthorPosts, deletePost })(
-  withRouter(Stream)
-);
+export default connect(mapStateToProps, {
+  createPost,
+  updatePost,
+  sharePost,
+  retrieveLoggedInAuthorPosts,
+  deletePost,
+  retrieveAllAuthors,
+})(withRouter(Stream));
