@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import ReactMde from "react-mde";
-import { Icon, Form, Button, Panel, Card, Heading, Container } from "react-bulma-components";
-import Tooltip from "bulma-tooltip";
+import { Form, Button, Card, Container } from "react-bulma-components";
 import Markdown from "react-markdown";
 import ReactTags from "react-tag-autocomplete";
 import "./react-tags.css";
@@ -11,14 +10,12 @@ import ConfirmButton from "./ConfirmButton";
 import CheckBox from "./CheckBox";
 
 import { TextIcon, ImageIcon, MarkdownIcon, ToolTipIcon } from "./postSVG";
+import { ImageUploadIcon } from "../../../styling/svgIcons";
 import PostTab from "./PostTab";
 import Dividor from "./Dividor"
 import { checkBoxLabelStyle, checkBoxStyle, checkMarkStyle, createPostHeaderStype, cardStyle, panelStyle,
-tabStyle, submittPanelStyle, formContainerStyle, labelStyle, dividorStyle, formTitleStyle, buttonLayoutStyle, postIconStyle } from "./StyleComponents";
+tabStyle, submittPanelStyle, formContainerStyle, labelStyle, dividorStyle, formTitleStyle, buttonLayoutStyle, postIconStyle } from "../../../styling/StyleComponents";
 import { color } from "./styling";
-
-
-
 
 class PostForm extends Component {
   constructor(props) {
@@ -40,17 +37,22 @@ class PostForm extends Component {
       markdownTab: "write",
       imageObj: "",
       image: "",
+
+      // following state are kept local, used for seperate different content
+      imageContent: "",
+      markDownContent: "",
+      textContent: "",
     };
 
     this.reactTags = React.createRef();
   }
 
   handleOnHoverHelp = () => {
-    // console.log("Mouse is hovering");
+    console.log("Mouse is hovering");
   }
 
   handleOffHoverHelp = () => {
-    // console.log("Mouse has left");
+    console.log("Mouse has left");
   }
 
   handleFileSelected = event => {
@@ -69,7 +71,7 @@ class PostForm extends Component {
   handleReaderLoaded = (readerEvt) => {
     let binaryString = readerEvt.target.result;
     this.setState({
-      content: btoa(binaryString),
+      imageContent: btoa(binaryString),
     })
   }
 
@@ -78,13 +80,13 @@ class PostForm extends Component {
       this.setState({
         visibility: "PRIVATE",
       });
-      // console.log(this.state.visibility);
+      console.log(this.state.visibility);
     }
     else if (this.state.visibility === "PRIVATE") {
       this.setState({
         visibility: "PUBLIC",
       });
-      // console.log(this.state.visibility);
+      console.log(this.state.visibility);
     }
   }
 
@@ -92,7 +94,7 @@ class PostForm extends Component {
     this.setState({
       unlisted: !this.state.unlisted,
     });
-    // console.log(this.state.unlisted);
+    console.log(this.state.unlisted);
   };
 
   onChange = (evt) => {
@@ -103,7 +105,7 @@ class PostForm extends Component {
   };
 
   addPost() {
-    // console.log(this.state.imageObj);
+    console.log(this.state.imageObj);
     const contentType = () => {
       switch (this.state.selectedTab) {
         case "text":
@@ -116,16 +118,32 @@ class PostForm extends Component {
               return "image/png;base64";
             case "image/jpeg":
               return "image/jpeg;base64";
+            default:
+              break;
           }
         default:
           break;
       }
     };
+
+    const getContent = () => {
+      switch (this.state.selectedTab) {
+        case "text":
+          return this.state.textContent;
+        case "markdown":
+          return this.state.markDownContent;
+        case "image":
+          return this.state.imageContent;
+        default:
+          break;
+      }
+    };
+
     const categories = this.state.categories.map((cat) => cat.name);
     const newPost = {
       title: this.state.title,
       description: this.state.description,
-      content: this.state.content,
+      content: getContent(),
       contentType: contentType(),
       unlisted: this.state.unlisted,
       visibility: this.state.visibility,
@@ -134,7 +152,7 @@ class PostForm extends Component {
     };
     this.props.createPost(newPost);
     this.props.setModalIsOpen(false);
-    // console.log(this.state);
+    console.log(this.state);
     
   }
 
@@ -161,8 +179,8 @@ class PostForm extends Component {
     const textEditor = () => {
       return (
         <Form.Textarea
-          name="content"
-          value={this.state.content}
+        name="textContent"
+          value={this.state.textContent}
           onChange={this.onChange}
           style={{
             height: `245px`,
@@ -174,8 +192,8 @@ class PostForm extends Component {
     const markdownEditor = () => {
       return (
         <ReactMde
-          value={this.state.content}
-          onChange={(m) => this.setState({ content: m })}
+          value={this.state.markDownContent}
+          onChange={(m) => this.setState({ markDownContent: m })}
           selectedTab={this.state.markdownTab}
           onTabChange={(t) => this.setState({ markdownTab: t })}
           generateMarkdownPreview={(markdown) => Promise.resolve(converter(markdown))}
@@ -187,12 +205,42 @@ class PostForm extends Component {
         />
       );
     };
+    const FileUploadForm = () => {
+      return (
+        <div class="file is-centered is-boxed">
+          <label class="file-label"style={{width: "100%", height: "38pt"}}>
+            <input class="file-input" type="file" name="resume" onChange={this.handleFileSelected}/>
+            <span class="file-cta">
+              <div style={{margin: "auto", marginTop: "-6pt"}}>
+              <ImageUploadIcon svgScale={"35"} fill={color.baseBlack}/>
+              </div>
+            </span>
+          </label>
+        </div>
+      );
+    }
+
+    const imagePreview = () => {
+      if (this.state.imageContent !== "") {
+        return (
+          <img 
+            src={ "image/png" ? `data:image/png;base64,${this.state.imageContent}` : `data:image/jpeg;base64,${this.state.content}` } 
+            style={{borderRadius: "6pt", margin: "auto", maxHeight: "15em", minHeight: "15em", objectFit: "cover"}} 
+          />
+        )
+      }
+    }
 
     const imageUploader = () => {
       return (
         <Form.Control>
-          <Form.InputFile icon={<Icon icon="upload" />} type="file" inputProps={{ accept: 'image/*' }} boxed placeholder="Textarea" style={{ left:`30%`, right:`30%`, marginBottom:`3%` }} onChange={this.handleFileSelected} />
-          <img src={this.state.image} style={{ height: `150px`, display: "block", marginLeft: "auto", marginRight: "auto" }} />
+          <Container style={{display: "flex", flexDirection: "column", border: "1px solid #d1d1d1", borderRadius: "4px", minHeight: "17em", maxHeight: "22em"}}>
+          <FileUploadForm/>
+          <Container style={{display: "flex", padding: "1em", width: "100%"}}>
+          {imagePreview()}
+          </Container>
+          </Container>
+          
         </Form.Control>
       )
     }

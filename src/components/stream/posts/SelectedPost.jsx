@@ -7,7 +7,7 @@ import Dividor from "./Dividor";
 import EditButton from "./EditButton";
 import ShareButton from "./ShareButton";
 import LikeButton from "./LikeButton";
-import { dividorStyle, individualPostStyle } from "./StyleComponents";
+import { dividorStyle, individualPostStyle } from "../../../styling/StyleComponents";
 import EditPostForm from "./EditPostForm";
 import { updatePost, deletePost } from '../StreamActions';
 

@@ -90,8 +90,8 @@ def create_post(sender, instance, **kwargs):
                     inbox.save()
             except Inbox.DoesNotExist:
                 # Handle follower being on remote server
-                remoteNode = RemoteNode.objects.get(host=follower["host"])
-                url = follower["url"] + "/inbox/"
+                remoteNode = RemoteNode.objects.get(host=follower.follower["host"])
+                url = follower.follower["url"] + "/inbox/"
                 response = requests.post(url, data=data, auth=HTTPBasicAuth(remoteNode.ourUser, remoteNode.ourPassword))
             except RemoteNode.DoesNotExist:
                 print("Unknown Host, WHO ARE YOU???")

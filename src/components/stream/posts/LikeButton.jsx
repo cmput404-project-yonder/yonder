@@ -9,7 +9,7 @@ import { color } from "../../profile/styling";
 
 // local styling
 var buttonStyle = {
-    scale: "25",
+    scale: "20",
     style: {
         fill: color.buttonRed,
     }
