@@ -1,7 +1,5 @@
-import re
-from django.contrib import auth
 from rest_framework.response import Response
-from rest_framework import mixins, status, generics, validators, viewsets
+from rest_framework import status, generics, validators, viewsets
 from rest_framework.authtoken.models import Token
 from django.contrib.sites.shortcuts import get_current_site
 from django.shortcuts import get_object_or_404, get_list_or_404
@@ -10,6 +8,7 @@ from drf_yasg.utils import swagger_auto_schema
 from django.core.paginator import Paginator
 from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
 import requests
+import json
 
 from .models import Post, Author, Comment, RemoteNode
 from .serializers import *
@@ -102,8 +101,6 @@ class local_remote_authors(generics.GenericAPIView):
         for a in local_authors:
             local_authors_data = AuthorSerializer(instance=a).data;
             authors.append(local_authors_data)
-
-        print(authors)
 
         if len(authors) > 0:
             return Response(authors, status=status.HTTP_200_OK)
@@ -244,14 +241,29 @@ class author_followers_detail(viewsets.ModelViewSet):
         return False
 
     def create(self, request, author_id, follower_id):
+        if author_id == follower_id:
+            return Response("You can't follow yourself :/", status=status.HTTP_400_BAD_REQUEST)
+
         if self.check_following(author_id, follower_id):
             return Response("Already following", status=status.HTTP_409_CONFLICT)
 
-        author_follower_data = {"author": author_id, "follower": request.data}
-        serializer = self.get_serializer(data=author_follower_data)
-        if not serializer.is_valid():
-            return Response(status=status.HTTP_400_BAD_REQUEST)
-        serializer.save()
+        try:
+            Author.objects.get(pk=author_id)
+            author_follower_data = {"author": author_id, "follower": request.data["actor"]}
+            serializer = self.get_serializer(data=author_follower_data)
+            if not serializer.is_valid():
+                return Response(status=status.HTTP_400_BAD_REQUEST)
+            serializer.save()
+        except Author.DoesNotExist:
+            # handle remote author
+            authorToFollow = request.data["object"]
+            node = RemoteNode.objects.get(host=authorToFollow["host"])
+            url = node.host + "api/authors/" + authorToFollow["id"] + "/followers/" + follower_id
+            json_data = json.dumps(request.data)
+            response = requests.post(url, auth=requests.models.HTTPBasicAuth(node.our_user, node.our_password), data=json_data)
+            return Response(status=response.status_code)
+        except RemoteNode.DoesNotExist:
+            return Response("You are not allowed in the cool club", status=status.HTTP_401_UNAUTHORIZED)
 
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
@@ -261,12 +273,8 @@ class author_followers_detail(viewsets.ModelViewSet):
 
         return Response(status=status.HTTP_404_NOT_FOUND)
 
-        # serializer = self.get_serializer(instance=author_follower)
-
-        # return Response(serializer.data["follower"], status=status.HTTP_200_OK)
-
     def destroy(self, request, author_id, follower_id):
-        author_follower = get_object_or_404(AuthorFollower, author=author_id, follower=request.data)
+        author_follower = get_object_or_404(AuthorFollower, author=author_id, follower=request.data["actor"])
         author_follower.delete()
 
         return Response(status=status.HTTP_200_OK)
