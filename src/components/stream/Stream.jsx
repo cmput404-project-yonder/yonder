@@ -3,14 +3,13 @@ import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { withRouter } from "react-router-dom";
 import { Container, Columns, Section } from "react-bulma-components";
-import "bulma-pageloader/dist/css/bulma-pageloader.min.css";
 
 import PostList from "./posts/PostList";
 import PopupModal from "./posts/PopupModal";
 
 import InboxModalPopUp from "../inbox/InboxModalPopUp";
-import { buttonLayerContainerStyle, streamLayerContainerStyle, newPostButtonStyle, pageStyle, postStreamStyle } from "../../styling/StyleComponents";
-import { createPost, updatePost, sharePost,likePost, retrieveLoggedInAuthorPosts, deletePost } from "./StreamActions";
+import { buttonLayerContainerStyle, streamLayerContainerStyle, newPostButtonStyle, pageStyle } from "../../styling/StyleComponents";
+import { createPost, updatePost, sharePost, likePost, retrieveLoggedInAuthorPosts, deletePost, retrieveInbox } from "./StreamActions";
 
 
 import NavigationBar from "../NavigationBar";
@@ -18,6 +17,7 @@ import NavigationBar from "../NavigationBar";
 class Stream extends Component {
   componentDidMount() {
     this.props.retrieveLoggedInAuthorPosts();
+    this.props.retrieveInbox();
   }
 
   render() {
@@ -33,7 +33,10 @@ class Stream extends Component {
       <Section style={pageStyle}>
         <NavigationBar/>
         <div style={buttonLayerContainerStyle}>
-          <Container style={newPostButtonStyle}><InboxModalPopUp/><PopupModal createPost={this.props.createPost} /></Container>
+          <Container style={newPostButtonStyle}>
+            <InboxModalPopUp />
+            <PopupModal createPost={this.props.createPost} />
+          </Container>
         </div>
         <div style={streamLayerContainerStyle}>
           <Container fluid>
@@ -75,6 +78,12 @@ const mapStateToProps = (state) => ({
   loading: state.stream.loading,
 });
 
-export default connect(mapStateToProps, { createPost, updatePost, sharePost, likePost, retrieveLoggedInAuthorPosts, deletePost })(
-  withRouter(Stream)
-);
+export default connect(mapStateToProps, {
+  createPost,
+  updatePost,
+  sharePost,
+  likePost,
+  retrieveLoggedInAuthorPosts,
+  deletePost,
+  retrieveInbox,
+})(withRouter(Stream));

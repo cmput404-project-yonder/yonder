@@ -13,7 +13,7 @@ export const retrievePost = (postId) => (dispatch, getState) => {
   setAxiosAuthToken(state.auth.token);
   dispatch({ type: RETRIEVE_POST_SUBMITTED });
   axios
-    .get("/author/" + state.auth.author.id + "/posts/" + postId)
+    .get("/author/" + state.auth.author.id + "/posts/" + postId + "/")
     .then((response) => {
       dispatch({ type: RETRIEVE_POST_SUCCESS, payload: response.data });
       // console.log("1");

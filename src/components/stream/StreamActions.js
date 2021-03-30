@@ -113,8 +113,9 @@ export const updatePost = (editedPost) => (dispatch, getState) => {
     });
 };
 
-export const retrieveInbox = (authorId) => (dispatch, getState) => {
+export const retrieveInbox = () => (dispatch, getState) => {
   const state = getState();
+  const authorId = state.auth.author.id;
 
   setAxiosAuthToken(state.auth.token);
   dispatch({ type: RETRIEVE_INBOX_SUBMITTED });
