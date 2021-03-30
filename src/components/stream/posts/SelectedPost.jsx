@@ -93,7 +93,7 @@ function DetailedPostList(props) {
   // 1. title, description, author, timestamp
   const TitleCard = () => {
     return (
-      <Card style={{...postStyle, marginTop: "80pt"}}>
+      <Card style={{...postStyle, marginTop: "80pt", marginBottom: "25pt"}}>
         <Card.Content style={postContainerStyle}>
           {/* Title */}
           <Container style={signatureStyle}>
@@ -174,6 +174,7 @@ function DetailedPostList(props) {
     )
   }
 
+  // do not delete these lines, will be used in part3 for display comments
   // const CommentCard = () => {
   //   // render template of one comment
   //   // this function is not planned for part2
@@ -199,8 +200,6 @@ function DetailedPostList(props) {
   //     </Card>
   //   )
   // }
-
-
 
   // const CommentList = []                                 // add comment to this list
   const listItems = [TitleCard(), ContentCard()]    // add component to this list for displaying
@@ -247,35 +246,6 @@ class SelectedPost extends React.Component {
         );
     }
 
-    const IsOwnPost = () => {
-      const currentUserId = JSON.parse(window.localStorage.getItem("user")).author;
-      if (currentUserId === this.props.retrievedPost.author.id) {
-        console.log("This is your own post");
-        return true;
-      }
-      else {
-        console.log("This is a shared post");
-        return false;
-      }
-    }
-
-    const IsImage = () => {
-        if (this.props.retrievedPost.contentType === "text/plain") {
-          return false;
-        }
-        else if (this.props.retrievedPost.contentType === "text/markdown") {
-          return false;
-        }
-        else {
-          return true;
-        }
-      }
-
-    const isOwnPost = IsOwnPost();
-    const isImage = IsImage();
-
-    const datePublished = new Date(this.props.retrievedPost.published);
-
     return (
         <Section style={pageStyle}>
           <div style={buttonLayerContainerStyle}>
@@ -291,47 +261,6 @@ class SelectedPost extends React.Component {
             </Container>
           </div>
         </Section>
-        // <Card style={individualPostStyle}>
-        //     <Card.Header>
-        //         <Card.Header.Title style={{ display: "block" }}>
-        //           <Heading size={2}>
-        //             {this.props.retrievedPost.title}
-        //           </Heading>
-        //           <p style={{ fontWeight: "300" }}>
-        //             @{this.props.retrievedPost.author.displayName}<br/>
-        //             <i>published {datePublished.toLocaleDateString()}</i>
-        //           </p>
-        //         </Card.Header.Title>
-        //     </Card.Header>
-        //     <Card.Content style={{ flexGrow: "1" }}>
-        //         {this.props.retrievedPost.description}
-        //         {isImage ?(
-        //             <Content>
-        //                 <img src={`data:${this.props.retrievedPost.contentType},${this.props.retrievedPost.content}`} />
-        //             </Content>
-        //         ) : <Content>{this.props.retrievedPost.content}</Content> }
-        //     </Card.Content>
-        //     <Card.Footer>
-        //         <Card.Footer.Item renderAs="a">
-        //             <LikeButton/>
-        //         </Card.Footer.Item>
-        //         <Card.Footer.Item renderAs="a">
-        //             <ShareButton/>
-        //         </Card.Footer.Item>
-        //         {isOwnPost ?(
-        //           <Card.Footer.Item renderAs="a">
-        //             <EditButton action={this.handleModal} />
-        //           </Card.Footer.Item>
-        //         ) :  (null)}
-        //         <Modal show={this.state.isOpen} onClose={() => this.handleModal} closeOnBlur closeOnEsc>
-        //           <EditPostForm
-        //           setEditModalIsOpen={this.handleModal}
-        //           post={this.props.retrievedPost}
-        //           updatePost={this.props.updatePost}
-        //           deletePost={this.props.deletePost} />
-        //         </Modal>
-        //     </Card.Footer>
-        // </Card>
     );
   }
 }
