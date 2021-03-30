@@ -12,6 +12,7 @@
     "bulma-switch": "^2.0.0",
     "bulma-tooltip": "^3.0.2",
     "connected-react-router": "^6.8.0",
+    "framer-motion": "^4.0.3",
     "image-to-base64": "^2.1.1",
     "react": "^17.0.1",
     "react-bulma-components": "3.4.0",

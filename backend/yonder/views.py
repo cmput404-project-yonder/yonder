@@ -289,9 +289,6 @@ class inbox(generics.GenericAPIView):
 
     @swagger_auto_schema(tags=['inbox'])
     def get(self, request, *args, **kwargs):
-        # if not request.user.is_authenticated:
-            # return Response(status=status.HTTP_401_UNAUTHORIZED)
-
         inbox = get_object_or_404(Inbox, author_id=kwargs["author_id"])
         author = get_object_or_404(Author, id=kwargs["author_id"])
 
@@ -299,7 +296,7 @@ class inbox(generics.GenericAPIView):
         page_size = 5 if 'size' not in request.query_params else request.query_params.get('size')
         paginator = Paginator(inbox.items, page_size)
         page = paginator.page(page_number)
-        
+
         data = {
             "type": "inbox",
             "author": author.get_absolute_url(),

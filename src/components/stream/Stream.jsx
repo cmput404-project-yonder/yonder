@@ -3,16 +3,21 @@ import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { withRouter } from "react-router-dom";
 import { Container, Columns, Section } from "react-bulma-components";
-import "bulma-pageloader/dist/css/bulma-pageloader.min.css";
 
 import PostList from "./posts/PostList";
 import PopupModal from "./posts/PopupModal";
-import { buttonLayerContainerStyle, streamLayerContainerStyle, newPostButtonStyle, pageStyle } from "./posts/StyleComponents";
-import { createPost, updatePost, sharePost, retrieveLoggedInAuthorPosts, deletePost, retrieveAllAuthors } from "./StreamActions";
+
+import InboxModalPopUp from "../inbox/InboxModalPopUp";
+import { buttonLayerContainerStyle, streamLayerContainerStyle, newPostButtonStyle, pageStyle } from "../../styling/StyleComponents";
+import { createPost, updatePost, sharePost, likePost, retrieveLoggedInAuthorPosts, deletePost, retrieveInbox, retrieveAllAuthors } from "./StreamActions";
+
+
+import NavigationBar from "../NavigationBar";
 
 class Stream extends Component {
   componentDidMount() {
     this.props.retrieveLoggedInAuthorPosts();
+    this.props.retrieveInbox();
     if (!this.props.allAuthors) {
       this.props.retrieveAllAuthors();
     }
@@ -21,7 +26,7 @@ class Stream extends Component {
   render() {
     if (this.props.loading) {
       return (
-        <div className="pageloader is-active">
+        <div className="pageloader is-active animate__animated animate__fadeIn animate__faster">
           <span className="title">Loading</span>
         </div>
       );
@@ -29,8 +34,12 @@ class Stream extends Component {
 
     return (
       <Section style={pageStyle}>
+        <NavigationBar/>
         <div style={buttonLayerContainerStyle}>
-          <Container style={newPostButtonStyle}><PopupModal createPost={this.props.createPost} /></Container>
+          <Container style={newPostButtonStyle}>
+            <InboxModalPopUp />
+            <PopupModal createPost={this.props.createPost} />
+          </Container>
         </div>
         <div style={streamLayerContainerStyle}>
           <Container fluid>
@@ -41,6 +50,8 @@ class Stream extends Component {
                     updatePost={this.props.updatePost}
                     deletePost={this.props.deletePost}
                     sharePost={this.props.sharePost}
+                    likePost={this.props.likePost}
+                    interactive={true}
                   />
                 </Columns.Column>
               </Columns>
@@ -56,6 +67,8 @@ Stream.propTypes = {
   author: PropTypes.object.isRequired,
   createPost: PropTypes.func.isRequired,
   updatePost: PropTypes.func.isRequired,
+  likePost: PropTypes.func.isRequired,
+  sharePost: PropTypes.func.isRequired,
   retrieveLoggedInAuthorPosts: PropTypes.func.isRequired,
   deletePost: PropTypes.func.isRequired,
   currentAuthorPosts: PropTypes.array.isRequired,
@@ -74,7 +87,9 @@ export default connect(mapStateToProps, {
   createPost,
   updatePost,
   sharePost,
-  retrieveLoggedInAuthorPosts,
   deletePost,
+  likePost,
+  retrieveLoggedInAuthorPosts,
   retrieveAllAuthors,
+  retrieveInbox,
 })(withRouter(Stream));

@@ -1,7 +1,6 @@
 import React from "react";
-import { Content, Container, Button } from "react-bulma-components";
+import { Content, Container } from "react-bulma-components";
 import { YonderLogo, GithubLogo } from "./ProfileIcons";
-import EditButton from "./buttons/EditButton";
 import Dividor from "./Dividor";
 
 import { style, color } from "./styling";
@@ -11,13 +10,13 @@ import { style, color } from "./styling";
 
 var statusStyle = {
     overall: {},
-    displayName: Object.assign({}, style.text.heading, {
+    displayName: {
       textAlign: "center",
       paddingBottom: "0.5em",
       paddingTop: "1em",
-      fontSize: "2.8em",
+      fontSize: "3em",
       fontWeight: "300",
-    }),
+    },
     statusBar: {
       overall: {
         display: "flex",
@@ -40,12 +39,13 @@ var statusStyle = {
     overall: {
       display: "flex",
       flexDirection: "column",
-      paddingTop: "3em",
-      paddingBottom: "1.5em",
+      paddingTop: "1em",
+      paddingBottom: "0.5em",
       width: "auto",
     },
     banner: {
       display: "flex",
+      fontSize: "1.2em",
       alignItems: "center",
       whiteSpace: "nowrap",
       overflow: "hidden",
@@ -53,7 +53,7 @@ var statusStyle = {
   };
   
   var svgIconStyle = {
-    scale: "40",
+    scale: "38",
     style: {
       fill: color.baseBlack,
       padding: "1.1em",
@@ -95,7 +95,7 @@ function ProfileStatusView(props) {
 }
 
 function ProfileInfoView(props) {
-  const hasGithub = (props.githubURL == "") ? false : true;
+  const hasGithub = (props.githubURL === "") ? false : true;
 
   const yonderBanner = (
       <div style={infoStyle.banner}>
@@ -107,7 +107,7 @@ function ProfileInfoView(props) {
   const githubBanner = (!hasGithub) ? null : (
       <div style={infoStyle.banner}>
           <div style={svgIconStyle.style}><GithubLogo svgScale={svgIconStyle.scale} /></div>
-          <div><p>@{props.githubUsername}</p></div>
+          <div><p>@{props.githubURL}</p></div>
       </div>
   );
 
