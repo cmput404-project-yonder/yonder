@@ -37,4 +37,4 @@ STATICFILES_DIRS = [
 STATIC_ROOT = Path.joinpath(BASE_DIR, 'staticfiles')
 STATIC_URL = "/static/"
 
-CORS_ALLOW_ALL_ORIGINS = True
+CORS_ORIGIN_ALLOW_ALL = True
