@@ -92,7 +92,11 @@ def create_post(sender, instance, **kwargs):
                 # Handle follower being on remote server
                 remoteNode = RemoteNode.objects.get(host=follower.follower["host"])
                 url = follower.follower["host"] + "api/author/" + str(follower.follower["id"]) + "/inbox/"
-                response = requests.post(url, data=data, auth=requests.models.HTTPBasicAuth(remoteNode.our_user, remoteNode.our_password))
+                response = requests.post(url, 
+                    json=data, 
+                    headers={"content-type": "application/json"}, 
+                    auth=requests.models.HTTPBasicAuth(remoteNode.our_user, remoteNode.our_password)
+                )
                 print(response.text)
             except RemoteNode.DoesNotExist:
                 print("Unknown Host, WHO ARE YOU???")
