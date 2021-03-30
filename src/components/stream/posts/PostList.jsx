@@ -5,19 +5,21 @@ import { List } from "react-bulma-components";
 import Post from "./Post";
 
 function PostList(props) {
-  const postList = props.posts.map((post) => <Post post={post} updatePost={props.updatePost} deletePost={props.deletePost} sharePost={props.sharePost}/>);
+
+  props.posts.sort((postA,postB) => Date.parse(postB["published"])-Date.parse(postA["published"]));
+  const postList = props.posts.map((post) => <Post interactive={props.interactive} post={post} updatePost={props.updatePost} deletePost={props.deletePost} likePost={props.likePost} sharePost={props.sharePost}/>);
   return (
-    <div className="post-list">
+    <div className="post-list animate__animated animate__fadeInUp">
       <List hoverable>{postList}</List>
     </div>
   );
-  console.log(postList);
 }
 
 PostList.propTypes = {
   posts: PropTypes.array.isRequired,
   updatePost: PropTypes.func.isRequired,
   deletePost: PropTypes.func.isRequired,
+  likePost: PropTypes.func.isRequired,
 };
 
 export default PostList;

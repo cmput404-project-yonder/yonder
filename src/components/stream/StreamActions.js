@@ -10,11 +10,22 @@ import {
   DELETE_POST_SUBMITTED,
   DELETE_POST_SUCCESS,
   DELETE_POST_ERROR,
+  RETRIEVE_INBOX_SUBMITTED,
+  RETRIEVE_INBOX_ERROR,
+  RETRIEVE_INBOX_SUCCESS,
   RETRIEVE_POSTS_SUBMITTED,
   RETRIEVE_POSTS_SUCCESS,
   RETRIEVE_POSTS_ERROR,
+  RETRIEVE_ALL_AUTHORS_SUCCESS,
+  RETRIEVE_ALL_AUTHORS_ERROR,
+  LIKE_POST_SUBMITTED,
+  LIKE_POST_SUCCESS,
+  LIKE_POST_ERROR,
+  SHARE_POST_ERROR,
+  SHARE_POST_SUBMITTED,
+  SHARE_POST_SUCCESS,
 } from "./StreamTypes";
-import { setAxiosAuthToken } from "../../utils/Utils";
+import { setAxiosAuthToken, isEmpty } from "../../utils/Utils";
 
 
 export const sharePost = (newPost) => (dispatch, getState) => {
@@ -29,17 +40,17 @@ export const sharePost = (newPost) => (dispatch, getState) => {
 
   newPost["author"] = state.auth.author;
 
-  dispatch({ type: NEW_POST_SUBMITTED });
+  dispatch({ type: SHARE_POST_SUBMITTED });
   axios
     .post("/author/" + state.auth.author.id + "/posts/", newPost)
     .then((response) => {
-      dispatch({ type: NEW_POST_SUCCESS, payload: response.data });
+      dispatch({ type: SHARE_POST_SUCCESS, payload: response.data });
     })
     .catch((error) => {
       if (error.response) {
         toast.error(JSON.stringify(error.response.data));
         dispatch({
-          type: NEW_POST_ERROR,
+          type: SHARE_POST_ERROR,
           errorData: error.response.data,
         });
       } else if (error.message) {
@@ -101,22 +112,23 @@ export const updatePost = (editedPost) => (dispatch, getState) => {
     });
 };
 
-export const retrieveLoggedInAuthorPosts = () => (dispatch, getState) => {
+export const retrieveInbox = () => (dispatch, getState) => {
   const state = getState();
-  const author = state.auth.author;
+  const authorId = state.auth.author.id;
 
   setAxiosAuthToken(state.auth.token);
-  dispatch({ type: RETRIEVE_POSTS_SUBMITTED });
+  dispatch({ type: RETRIEVE_INBOX_SUBMITTED });
   axios
-    .get("/author/" + author.id + "/posts/")
+    .get("/author/" + authorId + "/inbox/")
     .then((response) => {
-      dispatch({ type: RETRIEVE_POSTS_SUCCESS, payload: response.data });
+      dispatch({ type: RETRIEVE_INBOX_SUCCESS, payload: response.data });
+      console.log(response.data);
     })
     .catch((error) => {
       if (error.response) {
         toast.error(JSON.stringify(error.response.data));
         dispatch({
-          type: RETRIEVE_POSTS_ERROR,
+          type: RETRIEVE_INBOX_ERROR,
           errorData: error.response.data,
         });
       } else if (error.message) {
@@ -153,3 +165,89 @@ export const deletePost = (aPost) => (dispatch, getState) => {
       }
     });
 };
+
+export const retrieveAllAuthors = () => (dispatch, getState) => {
+  const state = getState();
+  const cachedAuthors = JSON.parse(sessionStorage.getItem("allAuthors")); 
+
+  if (isEmpty(cachedAuthors)) {
+    setAxiosAuthToken(state.auth.token);
+    // No SUMBITTED dispatch, cause retrieving from other servers can take a while;
+    axios
+      .get("/authors/" + "all/")
+      .then((response) => {
+        dispatch({ type: RETRIEVE_ALL_AUTHORS_SUCCESS, payload: response.data });
+        sessionStorage.setItem("allAuthors", JSON.stringify(response.data));
+      })
+      .catch((error) => {
+        if (error.response) {
+          toast.error(JSON.stringify(error.response.data));
+          dispatch({
+            type: RETRIEVE_ALL_AUTHORS_ERROR,
+            errorData: error.response.data,
+          });
+        } else if (error.message) {
+          toast.error(JSON.stringify(error.message));
+        } else {
+          toast.error(JSON.stringify(error));
+        }
+      });
+    } else {
+      dispatch({ type: RETRIEVE_ALL_AUTHORS_SUCCESS, payload: cachedAuthors });
+    }
+};
+
+
+export const likePost = (likedPost) => (dispatch, getState) => {
+  const state = getState();
+  setAxiosAuthToken(state.auth.token);
+
+  likedPost["author"] = state.auth.author;
+
+  dispatch({ type: LIKE_POST_SUBMITTED });
+  axios
+    .post("/author/" + state.auth.author.id + "/inbox/")
+    .then((response) => {
+      dispatch({ type: LIKE_POST_SUCCESS, payload: response.data });
+    })
+    .catch((error) => {
+      if (error.response) {
+        toast.error(JSON.stringify(error.response.data));
+        dispatch({
+          type: LIKE_POST_ERROR,
+          errorData: error.response.data,
+        });
+      } else if (error.message) {
+        toast.error(JSON.stringify(error.message));
+      } else {
+        toast.error(JSON.stringify(error));
+      }
+    });
+  };
+
+export const retrieveLoggedInAuthorPosts = () => (dispatch, getState) => {
+  const state = getState();
+  const author = state.auth.author;
+
+  setAxiosAuthToken(state.auth.token);
+  dispatch({ type: RETRIEVE_POSTS_SUBMITTED });
+  axios
+    .get("/author/" + author.id + "/posts/")
+    .then((response) => {
+      dispatch({ type: RETRIEVE_POSTS_SUCCESS, payload: response.data });
+    })
+    .catch((error) => {
+      if (error.response) {
+        toast.error(JSON.stringify(error.response.data));
+        dispatch({
+          type: RETRIEVE_POSTS_ERROR,
+          errorData: error.response.data,
+        });
+      } else if (error.message) {
+        toast.error(JSON.stringify(error.message));
+      } else {
+        toast.error(JSON.stringify(error));
+      }
+    });
+};
+

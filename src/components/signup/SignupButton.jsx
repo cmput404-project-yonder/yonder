@@ -1,23 +1,18 @@
-/*
-An edit button.
-    props.action - onClick event
-*/
-
-import { EditButton } from "../ProfileIcons";
+import { SignupIcon } from "../../styling/svgIcons";
 import { Container, Button } from "react-bulma-components";
-import { color } from "../styling";
+import { color } from "./styling";
 
 // local styling
 var buttonStyle = {
-  scale: "20",
+  scale: "24",
   style: {
     fill: "white",
     paddingTop: "3pt",
     paddingLeft: "2pt",
   },
   button: {
-    height: "2.5em",
-    width: "2.5em",
+    height: "3em",
+    width: "3em",
     borderRadius: "100%",
     backgroundColor: color.baseRed,
     border: "none",
@@ -25,16 +20,16 @@ var buttonStyle = {
 };
 
 // component
-function EditProfileButton(props) {
+function SignupButton(props) {
   return (
     <Container style={props.style}>
       <Button onClick={props.onClick} style={buttonStyle.button}>
         <Container style={buttonStyle.style}>
-          <EditButton svgScale={buttonStyle.scale} />
+          <SignupIcon svgScale={buttonStyle.scale} />
         </Container>
       </Button>
     </Container>
   );
 }
 
-export default EditProfileButton;
+export default SignupButton;

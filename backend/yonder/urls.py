@@ -4,8 +4,8 @@ from django.urls import path
 from . import views
 
 urlpatterns = [
-    path('authors/', views.authors.as_view(), name="authors"),
-    path('authors/remote/', views.remote_authors.as_view(), name="remote_authors"),
+    path('authors/', views.local_authors.as_view(), name="authors"),
+    path('authors/all/', views.local_remote_authors.as_view(), name="all_authors"),
     path('author/<uuid:pk>/', views.author_detail.as_view(), name="author_detail"),
     path('author/<uuid:author_id>/posts/', views.posts.as_view(), name="posts"),
     path(
