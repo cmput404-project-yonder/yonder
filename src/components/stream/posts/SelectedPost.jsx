@@ -204,7 +204,7 @@ function DetailedPostList(props) {
   // const CommentList = []                                 // add comment to this list
   const listItems = [TitleCard(), ContentCard()]    // add component to this list for displaying
   return (
-    <div className="post-list animate__animated animate__fadeInUp">
+    <div className="post-list animate__animated animate__fadeInDown">
       <List hoverable>{listItems}</List>
     </div>
   )
