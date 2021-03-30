@@ -13,6 +13,7 @@ import "bulma-pageloader/dist/css/bulma-pageloader.min.css";
 
 import axios from "axios";
 import Home from "./components/Home";
+import NavigationBar from "./components/NavigationBar";
 axios.defaults.baseURL= process.env.NODE_ENV === "production" ? "https://yonder.moe/api" : "http://localhost:8000/api";
 
 class App extends Component {
@@ -21,6 +22,7 @@ class App extends Component {
       <div>
         <Root>
           <ToastContainer hideProgressBar={true} newestOnTop={true} />
+          <NavigationBar/>
           <Switch>
             <Route path="/signup" component={Signup} />
             <Route path="/login" component={Login} />

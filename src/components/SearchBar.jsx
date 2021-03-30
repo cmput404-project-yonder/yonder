@@ -18,7 +18,6 @@ function SearchBar(props) {
         <ReactSearchAutocomplete
           items={items}
           onSelect={handleOnSelect}
-          autoFocus
         />
       </div>
     </div>

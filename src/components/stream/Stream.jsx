@@ -11,9 +11,6 @@ import InboxModalPopUp from "../inbox/InboxModalPopUp";
 import { buttonLayerContainerStyle, streamLayerContainerStyle, newPostButtonStyle, pageStyle } from "../../styling/StyleComponents";
 import { createPost, updatePost, sharePost, likePost, retrieveLoggedInAuthorPosts, deletePost, retrieveInbox, retrieveAllAuthors } from "./StreamActions";
 
-
-import NavigationBar from "../NavigationBar";
-
 class Stream extends Component {
   componentDidMount() {
     this.props.retrieveLoggedInAuthorPosts();
@@ -32,9 +29,10 @@ class Stream extends Component {
       );
     }
 
+    const posts = [].concat(this.props.currentAuthorPosts, this.props.inboxPosts);
+
     return (
       <Section style={pageStyle}>
-        <NavigationBar/>
         <div style={buttonLayerContainerStyle}>
           <Container style={newPostButtonStyle}>
             <InboxModalPopUp />
@@ -46,7 +44,7 @@ class Stream extends Component {
               <Columns centered>
                 <Columns.Column>
                   <PostList
-                    posts={this.props.currentAuthorPosts}
+                    posts={posts}
                     updatePost={this.props.updatePost}
                     deletePost={this.props.deletePost}
                     sharePost={this.props.sharePost}
@@ -72,6 +70,7 @@ Stream.propTypes = {
   retrieveLoggedInAuthorPosts: PropTypes.func.isRequired,
   deletePost: PropTypes.func.isRequired,
   currentAuthorPosts: PropTypes.array.isRequired,
+  inboxPosts: PropTypes.array.isRequired,
   allAuthors: PropTypes.array.isRequired,
   loading: PropTypes.bool.isRequired,
 };
@@ -79,6 +78,7 @@ Stream.propTypes = {
 const mapStateToProps = (state) => ({
   author: state.auth.author,
   currentAuthorPosts: state.stream.currentAuthorPosts,
+  inboxPosts: state.stream.currentInboxPosts,
   loading: state.stream.loading,
   allAuthors: state.allAuthors,
 });

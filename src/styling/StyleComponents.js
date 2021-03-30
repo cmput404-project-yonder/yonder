@@ -33,18 +33,15 @@ export const individualPostStyle = {
     boxShadow: "0pt 0pt 8pt #CCCCCC",
     borderRadius: "6pt",
     backgroundColor: color.backgroundCreamLighter,
-    marginBottom: "2em",
-    marginTop: "4em",
     fontFamily: font.segoeUI,
-    fontWeight: "350",
     fontSize: "1.3em",
     color: color.baseBlack,
-    minHeight: "25em",
+    margin: "4em auto",
+    minHeight: "65vh",
+    width: "65vw",
     display: "flex",
     flexDirection: "column",
     justifyContent: "space-between",
-    margin: "auto",
-    width: "50%",
 }
 
 export const profileShowStyle = {

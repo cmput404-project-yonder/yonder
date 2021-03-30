@@ -140,18 +140,13 @@ function Post(props) {
           <Link to={`${postURL}`} style={{textDecoration: "none", color: color.baseBlack}}>{props.post.title}</Link>
           </Container>
 
-          {/* Content */}
+          {/* Description */}
           <Container style = {ContentStyle}>
-          <Dividor style={dividorStyle}/>
-          {isImage ? (
-            <Content style={{textAlign: "center"}}>
-              <img style={{borderRadius: "6pt"}}src={`data:${props.post.contentType},${props.post.content}`} /> 
-            </Content>
-          ) : <Content>{props.post.content}</Content> }
+          <Dividor style={dividorStyle}/> 
+            <Content>{ props.post.description }</Content>
           </Container>
           
           {displayFooterButtons()}
-
 
         </Card.Content>
       </Card>
