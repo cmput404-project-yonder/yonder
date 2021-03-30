@@ -278,7 +278,7 @@ class author_followers_detail(viewsets.ModelViewSet):
         return Response(status=status.HTTP_404_NOT_FOUND)
 
     def destroy(self, request, author_id, follower_id):
-        author_follower = get_object_or_404(AuthorFollower, author=author_id, follower=request.data["actor"])
+        author_follower = get_object_or_404(AuthorFollower, author=author_id, follower__id=follower_id)
         author_follower.delete()
 
         return Response(status=status.HTTP_200_OK)
