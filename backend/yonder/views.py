@@ -102,8 +102,6 @@ class local_remote_authors(generics.GenericAPIView):
             local_authors_data = AuthorSerializer(instance=a).data;
             authors.append(local_authors_data)
 
-        print(authors)
-
         if len(authors) > 0:
             return Response(authors, status=status.HTTP_200_OK)
         else:
@@ -274,10 +272,6 @@ class author_followers_detail(viewsets.ModelViewSet):
             return Response(status=status.HTTP_200_OK)
 
         return Response(status=status.HTTP_404_NOT_FOUND)
-
-        # serializer = self.get_serializer(instance=author_follower)
-
-        # return Response(serializer.data["follower"], status=status.HTTP_200_OK)
 
     def destroy(self, request, author_id, follower_id):
         author_follower = get_object_or_404(AuthorFollower, author=author_id, follower=request.data["actor"])

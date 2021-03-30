@@ -72,11 +72,12 @@ export const retrieveAuthorPosts = (authorId) => (dispatch, getState) => {
 export const sendFollow = (otherAuthor) => (dispatch, getState) => {
   const state = getState();
   const author = state.auth.author;
+  const data = {"actor": author, "object": otherAuthor, "type": "follow"}
 
   setAxiosAuthToken(state.auth.token);
   dispatch({ type: SEND_FOLLOW_SUBMITTED });
   axios
-    .put("/author/" + otherAuthor.id + "/followers/" + author.id + "/", author)
+    .put("/author/" + otherAuthor.id + "/followers/" + author.id + "/", data)
     .then((response) => {
       dispatch({ type: SEND_FOLLOW_SUCCESS });
       toast.success("You are now following " + otherAuthor.displayName);
