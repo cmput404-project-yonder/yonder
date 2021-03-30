@@ -6,15 +6,10 @@ function SearchBar(props) {
       return {id: i, name: p.displayName}
   });
 
-  const handleOnSearch = (string, results) => {
-    // onSearch will have as the first callback parameter
-    // the string searched and for the second the results.
-    console.log(string, results);
-  }
-
   const handleOnSelect = (item) => {
     // the item selected
-    console.log(item);
+    const author = props.authors[item.id];
+    props.follow(author);
   }
 
   return (
@@ -22,7 +17,6 @@ function SearchBar(props) {
       <div style={{ width: 400 }}>
         <ReactSearchAutocomplete
           items={items}
-          onSearch={handleOnSearch}
           onSelect={handleOnSelect}
           autoFocus
         />

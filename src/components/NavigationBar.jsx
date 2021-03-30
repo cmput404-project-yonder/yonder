@@ -4,6 +4,7 @@ import { connect } from "react-redux";
 import { Navbar, Heading } from "react-bulma-components";
 
 import { logout } from "./login/LoginActions";
+import { sendFollow } from "../components/profile/ProfileActions";
 import SearchBar from "./SearchBar";
 
 import YonderLogo from "./YonderLogo";
@@ -59,7 +60,7 @@ function NavigationBar(props) {
       </Navbar.Brand>
       <Navbar.Container position="end">
         <Navbar.Item>
-          <SearchBar authors={props.allAuthors}/>
+          <SearchBar authors={props.allAuthors} follow={props.sendFollow}/>
         </Navbar.Item>
         <Navbar.Menu>
           {props.auth.isAuthenticated ? notifcationDropdown() : null}
@@ -80,4 +81,4 @@ const mapStateToProps = (state) => ({
   allAuthors: state.stream.allAuthors,
 });
 
-export default connect(mapStateToProps, { logout })(withRouter(NavigationBar));
+export default connect(mapStateToProps, { logout, sendFollow })(withRouter(NavigationBar));
