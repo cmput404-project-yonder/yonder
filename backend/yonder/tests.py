@@ -157,6 +157,9 @@ class FollowerTests(APITestCase):
         self.author2 = Author.objects.create(**self.testAuthor2, user=user2)
         self.authorJSON2 = AuthorSerializer(instance=self.author2).data
 
+        self.followJSON1 = {"actor": self.authorJSON2, "object": self.authorJSON1}
+        self.followJSON2 = {"actor": self.authorJSON1, "object": self.authorJSON2}
+
         credBytes= base64.b64encode(f'{self.credentials1["username"]}:{self.credentials1["password"]}'.encode())
         self.client.credentials(HTTP_AUTHORIZATION='Basic ' + credBytes.decode())
 
@@ -164,14 +167,14 @@ class FollowerTests(APITestCase):
         self.assertEqual(0, AuthorFollower.objects.filter(author=self.author1.id).count())
 
         url = reverse('followers', args=[self.author1.id, self.author2.id])
-        response = self.client.put(url, data=self.authorJSON2, format='json')
+        response = self.client.put(url, data=self.followJSON1, format='json')
 
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(1, AuthorFollower.objects.filter(author=self.author1.id).count())
 
     def test_get_followers(self):
         url = reverse('followers', args=[self.author1.id, self.author2.id])
-        response = self.client.put(url, data=self.authorJSON2, format='json')
+        response = self.client.put(url, data=self.followJSON1, format='json')
 
         url = reverse('follower_list', args=[self.author1.id])
         response = self.client.get(url)
@@ -182,24 +185,24 @@ class FollowerTests(APITestCase):
 
     def test_delete_follower(self):
         url = reverse('followers', args=[self.author1.id, self.author2.id])
-        response = self.client.put(url, data=self.authorJSON2, format='json')
+        response = self.client.put(url, data=self.followJSON1, format='json')
 
         url = reverse('followers', args=[self.author1.id, self.author2.id])
-        response = self.client.delete(url, data=self.authorJSON2, format='json')
+        response = self.client.delete(url, data=self.followJSON1, format='json')
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(0, AuthorFollower.objects.filter(author=self.author1.id).count())
 
     def test_check_not_follower(self):
         url = reverse('followers', args=[self.author1.id, self.author2.id])
-        response = self.client.get(url, data=self.authorJSON2, format='json')
+        response = self.client.get(url, data=self.followJSON1, format='json')
 
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
     def test_check_is_follower(self):
         # Setup a follow
         url = reverse('followers', args=[self.author1.id, self.author2.id])
-        response = self.client.put(url, data=self.authorJSON2, format='json')
+        response = self.client.put(url, self.followJSON1, format='json')
 
         # Get follower
         url = reverse('followers', args=[self.author1.id, self.author2.id])
@@ -210,9 +213,9 @@ class FollowerTests(APITestCase):
     def test_are_friends(self):
         # Setup two-way following
         url = reverse('followers', args=[self.author1.id, self.author2.id])
-        response = self.client.put(url, data=self.authorJSON2, format='json')
+        response = self.client.put(url, data=self.followJSON1, format='json')
         url = reverse('followers', args=[self.author2.id, self.author1.id])
-        response = self.client.put(url, data=self.authorJSON1, format='json')
+        response = self.client.put(url, data=self.followJSON2, format='json')
 
         self.author1.refresh_from_db()
         self.author2.refresh_from_db()
