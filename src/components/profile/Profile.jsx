@@ -18,10 +18,6 @@ import { color } from "./styling";
 import Dividor from "./Dividor";
 import { dividorStyle } from "../../styling/StyleComponents";
 
-import NavigationBar from "../NavigationBar";
-
-
-
 var pageStyle = {
   margin: "auto",
   maxWidth: "820pt",
@@ -135,7 +131,6 @@ class Profile extends React.Component {
 
     return (
       <Section >
-        <NavigationBar/>
         <Columns style={pageStyle}>
           <Columns.Column>
             <div className="post-list" style={profileListStyle}>

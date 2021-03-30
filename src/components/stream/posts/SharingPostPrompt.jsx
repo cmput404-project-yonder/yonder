@@ -21,7 +21,6 @@ var submittPanelStyle = {
 }
 
 
-
 var buttonLayoutStyle = {
     display: "flex",
     width: "0em",
@@ -72,30 +71,11 @@ var promptTitleStyle = {
 
 class SharingPostPromptCard extends React.Component {
     render() {
-
-        const postContentDisplay = () => {
-            switch (this.props.post.contentType) {
-                case "text/plain":
-                    return (<p>{this.props.post.title}</p>)
-                case "text/markdown":
-                    return (<p>{this.props.post.title}</p>)
-                default:
-                    // image
-                    return (
-                        <Container style={{textAlign: "center"}}>
-                        <img style={{borderRadius: "6pt"}}src={`data:${this.props.post.contentType},${this.props.post.content}`} /> 
-                        </Container>
-                    )            
-            }
-        }
-
-
         const PostCard = () => {
             return (
                 <Card style={postCardDisplayStyle}>
-                    <p>{this.props.post.title}</p>
-                    <Dividor style={dividorStyle}/>
-                    {postContentDisplay()}
+                    <p style={{fontSize: "1.5em"}}>{this.props.post.title}</p>
+                    <p style={{fontWeight: "300"}}>{this.props.post.description}</p>
                     <Dividor style={dividorStyle}/>
                     <p>@{this.props.post.author.displayName}</p>
                 </Card>

@@ -1,19 +1,18 @@
-import React from "react";
+import React, { useState } from "react";
 import { withRouter } from "react-router-dom";
 import { connect } from "react-redux";
 import { Navbar, Heading } from "react-bulma-components";
 
 import { logout } from "./login/LoginActions";
-
+import { sendFollow } from "../components/profile/ProfileActions";
+import SearchBar from "./SearchBar";
 
 import YonderLogo from "./YonderLogo";
 import ProfileIcon from "./ProfileIcon";
 import BellIcon from "./BellIcon";
 
-
-
 function NavigationBar(props) {
-  const [isActive, setisActive] = React.useState(false);
+  const [isActive, setisActive] = useState(false);
 
 
   // do not delete these lines
@@ -128,8 +127,11 @@ function NavigationBar(props) {
           }}
         />
       </Navbar.Brand>
-      <Navbar.Menu>
-        <Navbar.Container position="end">
+      <Navbar.Container position="end">
+        <Navbar.Item>
+          <SearchBar authors={props.allAuthors} follow={props.sendFollow}/>
+        </Navbar.Item>
+        <Navbar.Menu>
           {props.auth.isAuthenticated ? notifcationDropdown() : null}
           <Navbar.Item dropdown hoverable>
             <Navbar.Link arrowless={true}>
@@ -137,8 +139,8 @@ function NavigationBar(props) {
             </Navbar.Link>
             {props.auth.isAuthenticated ? loggedInDropdown() : loggedOutDropdown()}
           </Navbar.Item>
-        </Navbar.Container>
-      </Navbar.Menu>
+        </Navbar.Menu>
+      </Navbar.Container>
     </Navbar>
   );
 
@@ -151,8 +153,7 @@ function NavigationBar(props) {
 
 const mapStateToProps = (state) => ({
   auth: state.auth,
+  allAuthors: state.stream.allAuthors,
 });
 
-export default connect(mapStateToProps, {
-  logout,
-})(withRouter(NavigationBar));
+export default connect(mapStateToProps, { logout, sendFollow })(withRouter(NavigationBar));
