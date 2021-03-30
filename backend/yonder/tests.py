@@ -190,7 +190,7 @@ class FollowerTests(APITestCase):
         url = reverse('followers', args=[self.author1.id, self.author2.id])
         response = self.client.delete(url)
 
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
         self.assertEqual(0, AuthorFollower.objects.filter(author=self.author1.id).count())
 
     def test_check_not_follower(self):

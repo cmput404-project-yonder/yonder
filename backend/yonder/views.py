@@ -281,7 +281,7 @@ class author_followers_detail(viewsets.ModelViewSet):
         author_follower = get_object_or_404(AuthorFollower, author=author_id, follower__id=follower_id)
         author_follower.delete()
 
-        return Response(status=status.HTTP_200_OK)
+        return Response(status=status.HTTP_204_NO_CONTENT)
 
     @swagger_auto_schema(tags=['followers'])
     def get(self, request, *args, **kwargs):
