@@ -112,22 +112,10 @@ export const checkFollowing = (otherAuthorId) => (dispatch, getState) => {
       if (response.status === 200) {
         dispatch({ type: CHECK_FOLLOW_SUCCESS, payload: true });
       }
-      else if (response.status === 204) {
-        dispatch({ type: CHECK_FOLLOW_SUCCESS, payload: true });
-      }
     })
     .catch((error) => {
-      if (error.response) {
-        toast.error(JSON.stringify(error.response.data));
-        dispatch({
-          type: CHECK_FOLLOW_ERROR,
-          errorData: error.response.data,
-        });
-      } else if (error.message) {
-        toast.error(JSON.stringify(error.message));
-      } else {
-        toast.error(JSON.stringify(error));
-      }
+      dispatch({ type: CHECK_FOLLOW_SUCCESS, payload: false });
+      console.log(error.message);
     });
 };
 

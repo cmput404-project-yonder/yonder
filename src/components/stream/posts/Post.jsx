@@ -69,7 +69,7 @@ function Post(props) {
   const [sharingPromptIsOpen, setSharingPromptIsOpen] = useState(false);
   // console.log(props.post);
   
-  const postURL = "/author/" + props.post.author.id + "/posts/" + props.post.id;
+  const postURL = "/author/" + props.post.author.id + "/posts/" + props.post.id + "/";
 
   const IsImage = () => {
     if (props.post.contentType === "text/plain") {

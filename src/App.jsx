@@ -9,6 +9,7 @@ import Stream from "./components/stream/Stream";
 import Profile from "./components/profile/Profile";
 import SelectedPost from "./components/stream/posts/SelectedPost";
 import 'animate.css';
+import "bulma-pageloader/dist/css/bulma-pageloader.min.css";
 
 import axios from "axios";
 import Home from "./components/Home";

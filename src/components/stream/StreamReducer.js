@@ -96,46 +96,44 @@ export const streamReducer = (state = initialState, action) => {
         loading: false,
       };
 
-      case RETRIEVE_POSTS_SUBMITTED:
-        return {
-          ...state,
-          retrievePostsError: "",
-          loading: true,
-        };
-      case RETRIEVE_POSTS_ERROR:
-        return {
-          ...state,
-          retrievePostsError: action.errorData,
-          loading: false,
-        };
-      case RETRIEVE_POSTS_SUCCESS:
-        return {
-          ...state,
-          retrievePostsError: "",
-          currentAuthorPosts: action.payload,
-          loading: false,
-        };
-
-
-        case SHARE_POST_SUBMITTED:
-          return {
-            ...state,
-            newPostError: "",
-            loading: true,
-          };
-        case SHARE_POST_ERROR:
-          return {
-            ...state,
-            newPostError: action.errorData,
-            loading: false,
-          };
-        case SHARE_POST_SUCCESS:
-          return {
-            ...state,
-            newPostError: "",
-            currentAuthorPosts: [...state.currentAuthorPosts, action.payload],
-            loading: false,
-          };
+    case RETRIEVE_POSTS_SUBMITTED:
+      return {
+        ...state,
+        retrievePostsError: "",
+        loading: true,
+      };
+    case RETRIEVE_POSTS_ERROR:
+      return {
+        ...state,
+        retrievePostsError: action.errorData,
+        loading: false,
+      };
+    case RETRIEVE_POSTS_SUCCESS:
+      return {
+        ...state,
+        retrievePostsError: "",
+        currentAuthorPosts: action.payload,
+        loading: false,
+      };
+    case SHARE_POST_SUBMITTED:
+      return {
+        ...state,
+        newPostError: "",
+        loading: true,
+      };
+    case SHARE_POST_ERROR:
+      return {
+        ...state,
+        newPostError: action.errorData,
+        loading: false,
+      };
+    case SHARE_POST_SUCCESS:
+      return {
+        ...state,
+        newPostError: "",
+        currentAuthorPosts: [...state.currentAuthorPosts, action.payload],
+        loading: false,
+      };
     default:
       return state;
   }
