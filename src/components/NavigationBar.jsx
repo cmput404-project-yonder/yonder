@@ -129,7 +129,7 @@ function NavigationBar(props) {
       </Navbar.Brand>
       <Navbar.Container position="end">
         <Navbar.Item>
-          <SearchBar authors={props.allAuthors} follow={props.sendFollow}/>
+          {/* <SearchBar authors={props.allAuthors} follow={props.sendFollow}/> */}
         </Navbar.Item>
         <Navbar.Menu>
           {props.auth.isAuthenticated ? notifcationDropdown() : null}

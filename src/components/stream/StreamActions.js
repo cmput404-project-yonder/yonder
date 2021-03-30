@@ -145,11 +145,11 @@ export const deletePost = (aPost) => (dispatch, getState) => {
 
   setAxiosAuthToken(getState().auth.token);
   dispatch({ type: DELETE_POST_SUBMITTED });
-  console.log(aPost);
+  
   axios
     .delete("/author/" + author.id + "/posts/" + aPost.id + "/")
     .then((response) => {
-      dispatch({ type: DELETE_POST_SUCCESS, payload: response.data });
+      dispatch({ type: DELETE_POST_SUCCESS, payload: aPost.id});
     })
     .catch((error) => {
       if (error.response) {
