@@ -11,8 +11,9 @@ import EditButton from "./EditButton";
 import ShareButton from "./ShareButton";
 import LikeButton from "./LikeButton";
 import LikedButton from "./LikedButton";
-import { dividorStyle, formContainerStyle, postStyle } from "../../../styling/StyleComponents";
+import { dividorStyle, postStyle, categoriesStyle } from "../../../styling/StyleComponents";
 import { color } from "./styling";
+import { connectAdvanced } from "react-redux";
 
 
 var signatureStyle = {
@@ -67,7 +68,7 @@ function Post(props) {
   const [editModalIsOpen, setEditModalIsOpen] = useState(false);
   const [isLiked, setIsLiked] = useState(false);
   const [sharingPromptIsOpen, setSharingPromptIsOpen] = useState(false);
-  // console.log(props.post);
+  console.log(props.post);
   
   const postURL = "/author/" + props.post.author.id + "/posts/" + props.post.id + "/";
 
@@ -89,6 +90,16 @@ function Post(props) {
     isLiked ? setIsLiked(false) : setIsLiked(true)
   }
 
+
+
+  const getCategories = (cat) => {
+    let categories =  cat.map((c) => <p>#{c}</p>)
+    return (
+      <Container style={categoriesStyle}>
+        {categories}
+      </Container>
+    )
+  }
 
   const displayFooterButtons = () => {
     if (props.interactive ){
@@ -139,11 +150,16 @@ function Post(props) {
           <Container style={titleStyle}>
           <Link to={`${postURL}`} style={{textDecoration: "none", color: color.baseBlack}}>{props.post.title}</Link>
           </Container>
-
-          {/* Description */}
-          <Container style = {ContentStyle}>
           <Dividor style={dividorStyle}/> 
+          
+          {/* Description */}
+          <Container style = {ContentStyle}>  
             <Content>{ props.post.description }</Content>
+          </Container>
+          
+          {/* categories */}
+          <Container style={ContentStyle}>
+            {getCategories(props.post.categories)}
           </Container>
           
           {displayFooterButtons()}

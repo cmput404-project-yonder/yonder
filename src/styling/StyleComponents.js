@@ -1,6 +1,12 @@
 import { font, color } from "../components/stream/posts/styling";
 import { style } from "../components/profile/styling";
 
+export const categoriesStyle = {
+  display: "flex",
+  gap: "0.5em",
+  color: color.baseLightGrey,
+}
+
 export const dividorStyle = {
     marginTop: "0.5em",
     marginBottom: "0.5em",
