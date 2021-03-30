@@ -14,11 +14,11 @@ def check_remote_follow(theirAuthor, ourAuthor):
     except RemoteNode.DoesNotExist:
         return False
 
-    url = theirAuthor["url"] + "/followers/" + ourAuthor["id"]
+    url = theirAuthor["host"] + "/api/authors" + theirAuthor["id"] + "/followers/" + ourAuthor["id"]
     response = requests.get(url, auth=requests.models.HTTPBasicAuth(remoteNode.our_user, remoteNode.our_password))
-    if requests.status_code == 404:
+    if response.status_code == 404:
         return False
-    elif requests.status_code == 200:
+    elif response.status_code == 200:
         return True
 
 # Our Server:

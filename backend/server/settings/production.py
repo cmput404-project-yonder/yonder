@@ -1,7 +1,7 @@
 from pathlib import Path
 from .base import *
 
-DEBUG = False
+DEBUG = True
 
 DATABASES["default"]["ATOMIC_REQUESTS"] = True
 

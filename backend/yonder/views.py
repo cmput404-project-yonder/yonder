@@ -258,7 +258,7 @@ class author_followers_detail(viewsets.ModelViewSet):
             # handle remote author
             authorToFollow = request.data["object"]
             node = RemoteNode.objects.get(host=authorToFollow["host"])
-            url = node.host + "api/authors/" + authorToFollow["id"] + "/followers/" + follower_id
+            url = node.host + "api/authors/" + authorToFollow["id"] + "/followers/" + str(follower_id)
             json_data = json.dumps(request.data)
             response = requests.post(url, auth=requests.models.HTTPBasicAuth(node.our_user, node.our_password), data=json_data)
             return Response(status=response.status_code)
