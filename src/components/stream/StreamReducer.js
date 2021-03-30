@@ -1,3 +1,4 @@
+import EditPostForm from "./posts/EditPostForm";
 import {
   NEW_POST_ERROR,
   NEW_POST_SUBMITTED,
@@ -16,6 +17,13 @@ import {
   SHARE_POST_ERROR,
   SHARE_POST_SUBMITTED,
   SHARE_POST_SUCCESS,
+  EDIT_POST_SUBMITTED,
+  EDIT_POST_SUCCESS,
+  EDIT_POST_ERROR,
+  DELETE_POST_SUBMITTED,
+  DELETE_POST_SUCCESS,
+  DELETE_POST_ERROR,
+
 } from "./StreamTypes";
 
 const initialState = {
@@ -33,6 +41,8 @@ const initialState = {
 
 export const streamReducer = (state = initialState, action) => {
   switch (action.type) {
+    case EDIT_POST_SUBMITTED:
+    case DELETE_POST_SUBMITTED:
     case NEW_POST_SUBMITTED:
     case RETRIEVE_POSTS_SUBMITTED:
     case RETRIEVE_INBOX_SUBMITTED:
@@ -43,6 +53,8 @@ export const streamReducer = (state = initialState, action) => {
       error: "",
       loading: true,
     };
+    case EDIT_POST_ERROR:
+    case DELETE_POST_ERROR:
     case NEW_POST_ERROR:
     case RETRIEVE_ALL_AUTHORS_ERROR:
     case RETRIEVE_POSTS_ERROR:
@@ -104,6 +116,21 @@ export const streamReducer = (state = initialState, action) => {
         currentAuthorPosts: [...state.currentAuthorPosts, action.payload],
         loading: false,
       };
+    case DELETE_POST_SUCCESS:
+      return {
+        ...state,
+        error: "",
+        loading: false,
+        currentAuthorPosts: state.currentAuthorPosts.filter((post)=>post.id!=action.payload),
+      };
+    case EDIT_POST_SUCCESS:
+      return {
+        ...state,
+        currentAuthorPosts: state.currentAuthorPosts.map((post)=> post.id==action.payload.id?{...post,...action.payload}:post),
+        loading: false,
+        error: "",
+      }
+  
     default:
       return state;
   }
