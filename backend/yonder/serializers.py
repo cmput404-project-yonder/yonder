@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Post, Author, Comment, Inbox, AuthorFollower, AuthorFriend, RemoteNode
+from .models import Post, Author, Comment, Inbox, AuthorFollower, AuthorFriend, RemoteNode, Like
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate
 from django.shortcuts import get_object_or_404
@@ -116,3 +116,8 @@ class InboxSerializer(serializers.ModelSerializer):
     class Meta:
         model = Inbox
         fields = ('id', 'author', 'items')
+
+class LikeSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Like
+        fields = ('id', 'author', 'object_url')
