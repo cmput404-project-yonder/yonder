@@ -3,6 +3,8 @@ import PropTypes from "prop-types";
 import { Modal } from "react-bulma-components";
 import EditPostForm from "./EditPostForm";
 import SharingPostPrompt from "./SharingPostPrompt";
+import { connect } from "react-redux";
+import { withRouter } from "react-router-dom";
 
 import { Card, Content, Container, Button } from "react-bulma-components";
 import Dividor from "./Dividor";
@@ -59,7 +61,7 @@ function Post(props) {
 
   const likedToggle = () => {
     isLiked ? setIsLiked(false) : setIsLiked(true)
-    likePost();
+    props.likePost(props.post.id);
   }
 
   const getCategories = (cat) => {
@@ -155,4 +157,9 @@ Post.propTypes = {
   likePost: PropTypes.func.isRequired,
 };
 
-export default Post;
+const mapStateToProps = (state) => ({
+});
+
+export default connect(mapStateToProps, {
+  likePost,
+})(withRouter(Post));

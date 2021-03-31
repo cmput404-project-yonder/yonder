@@ -198,13 +198,21 @@ export const retrieveAllAuthors = () => (dispatch, getState) => {
 };
 
 
-export const likePost = (likedPost) => (dispatch, getState) => {
+export const likePost = (postId) => (dispatch, getState) => {
+  const likedPost = {};
   const state = getState();
   setAxiosAuthToken(state.auth.token);
 
   likedPost["type"] = "like";
-  likedPost["author"] = state.auth.author;
-  console.log(state.auth);
+  likedPost["author"] = 
+  {...state.auth.author,
+    "type": "author",
+    "id": state.auth.author.host + "/author/" + state.auth.author.id,
+    "url": state.auth.author.host + "/author/" + state.auth.author.id,
+  };
+  likedPost["post"] = state.auth.author.host + "/author/" + postId;
+
+  console.log(likedPost);
   //likedPost["post"] = state.auth.post.
 
   dispatch({ type: LIKE_POST_SUBMITTED });
