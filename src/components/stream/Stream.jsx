@@ -35,7 +35,6 @@ class Stream extends Component {
       <Section style={pageStyle}>
         <div style={buttonLayerContainerStyle}>
           <Container style={newPostButtonStyle}>
-            <InboxModalPopUp />
             <PopupModal createPost={this.props.createPost} />
           </Container>
         </div>

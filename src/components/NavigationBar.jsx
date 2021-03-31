@@ -1,25 +1,21 @@
 import React, { useState } from "react";
 import { withRouter } from "react-router-dom";
 import { connect } from "react-redux";
-import { Navbar, Container} from "react-bulma-components";
+import { Container,Modal} from "react-bulma-components";
 
 import { logout } from "./login/LoginActions";
 import { sendFollow } from "../components/profile/ProfileActions";
-import SearchBar from "./SearchBar";
-
-import { Redirect } from "react-router-dom";
 import YonderLogo from "./YonderLogo";
-import BellIcon from "./BellIcon";
 import MenuButton from "./MenuButton";
 import SearchButton from "./SearchButton";
 import LoginStateButton from "./loginStateButton";
 import ProfileButton from "./ProfileButton";
 import InboxButton from "./InboxButton";
+import InboxModal from "./inbox/InboxModal";
+import SearchModalView from "./search/SearchModalView";
 
-import { postStyle } from "../styling/StyleComponents";
+
 import { color } from "../styling/ColorFontConfig";
-
-
 
 // local stylings
 // do not move to ./styling
@@ -62,7 +58,17 @@ var meunButtonStyle = {
 }
 
 function NavigationBar(props) {
-  const [isActive, setisActive] = useState(false);
+
+  // set the list of path that you dont want navigation bar to render
+
+  switch (window.location.pathname) {
+    case "/login":
+    case "/signup":
+      return (<div></div>)
+    default:
+      break;
+  }
+
 
   const loginStateButtonClickHandler=() => {
     if (props.auth.isAuthenticated) {
@@ -75,19 +81,24 @@ function NavigationBar(props) {
   const DropDownContent =()=> {
     // add new entry and logic in this component
 
+    // modal state
+    const [inboxModalIsOpen, setInboxModalIsOpen] = useState(false);
+    const [searchModalIsOpen, setSearchModalIsOpen] = useState(false);
+
+
     let entryList = [];
 
     if (props.auth.isAuthenticated) {
       // add entry that require authentication here
       entryList.push(<ProfileButton action={() => window.location.href = "/author/" + props.auth.author.id}/>)
-      entryList.push(<InboxButton/>)
+      entryList.push(<InboxButton action={() => setInboxModalIsOpen(true)}/>)
     } 
 
     // add entry that only avalible to stranger here, if needed
     // else {}
 
     // add entry that will always exist here
-    entryList.push(<SearchButton/>)
+    entryList.push(<SearchButton action={() => setSearchModalIsOpen(true)}/>)
     entryList.push(<LoginStateButton 
       islogin={props.auth.isAuthenticated} 
       action={loginStateButtonClickHandler}
@@ -96,6 +107,14 @@ function NavigationBar(props) {
     return (
       <Container style={menuDropDownContentStyle}>
         {entryList}
+      
+      {/* add modal here */}
+      <Modal className="animate__animated animate__fadeIn animate__faster" show={inboxModalIsOpen} onClose={() => setInboxModalIsOpen(false)} closeOnBlur closeOnEsc>
+        <InboxModal setModalIsOpen={setInboxModalIsOpen}/>
+      </Modal>
+      <Modal className="animate__animated animate__fadeIn animate__faster" show={searchModalIsOpen} onClose={() => setSearchModalIsOpen(false)} closeOnBlur closeOnEsc>
+        <SearchModalView setModalIsOpen={setSearchModalIsOpen}/>
+      </Modal>
       </Container>
     )
   }

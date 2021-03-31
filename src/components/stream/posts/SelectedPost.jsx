@@ -234,7 +234,7 @@ class SelectedPost extends React.Component {
         <Section style={pageStyle}>
           <div style={buttonLayerContainerStyle}>
             <Container style={newPostButtonStyle}>
-              <InboxModalPopUp />
+              {/* add floating buttons here, if needed */}
             </Container>
           </div>
           <div style={streamLayerContainerStyle}>
