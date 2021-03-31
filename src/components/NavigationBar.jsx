@@ -121,7 +121,7 @@ function NavigationBar(props) {
 
   const DropDown = () => {
     return (
-      <div class="dropdown is-hoverable is-right is-active">
+      <div class="dropdown is-hoverable is-right">
         <div class="dropdown-trigger" >
           <MenuButton/>
         </div>
