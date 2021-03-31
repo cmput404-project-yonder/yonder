@@ -346,7 +346,7 @@ class SignalTests(TestCase):
     #@patch('yonder.signals.signal_handler_follow_save')
     def test_follow_to_inbox(self):
         AuthorFollower.objects.create(**self.testFollow)
-    
+ 
 class LikeTests(APITestCase):
     def setUp(self):
         self.credentials1 = {
