@@ -1,158 +1,156 @@
-import React from "react";
+import React, { useState } from "react";
 import { withRouter } from "react-router-dom";
 import { connect } from "react-redux";
-import { Navbar, Heading } from "react-bulma-components";
+import { Container,Modal} from "react-bulma-components";
 
 import { logout } from "./login/LoginActions";
-
-
+import { sendFollow } from "../components/profile/ProfileActions";
 import YonderLogo from "./YonderLogo";
-import ProfileIcon from "./ProfileIcon";
-import BellIcon from "./BellIcon";
+import MenuButton from "./MenuButton";
+import SearchButton from "./SearchButton";
+import LoginStateButton from "./loginStateButton";
+import ProfileButton from "./ProfileButton";
+import InboxButton from "./InboxButton";
+import InboxModal from "./inbox/InboxModal";
+import SearchModalView from "./search/SearchModalView";
 
 
+import { color } from "../styling/ColorFontConfig";
+
+// local stylings
+// do not move to ./styling
+var naviBarStyle = {
+  position: "fixed",
+  // display: "flex",
+  // justifyContent: "space-between",
+  width: "100%",
+  height: "auto",
+  backgroundColor: "transparent",
+  zIndex: "5",
+  paddingLeft: "1em",
+  paddingRight: "1em",
+  paddingTop: "0.5em",
+  paddingBottom: "0.5em",
+}
+
+var menuDropDownStyle = {
+  borderRadius: "6pt",
+  textAlign: "center",
+  backgroundColor: color.backgroundCreamLighter,
+}
+
+var menuDropDownContentStyle = {
+  display: "flex",
+  flexDirection: "column",
+  marginTop: "1em",
+  marginBottom: "1em",
+  gap: "1em",
+}
+
+var brandStyle = {
+  float: "left",
+  margin: "auto"
+}
+
+var meunButtonStyle = {
+  float: "right",
+  margin: "auto"
+}
 
 function NavigationBar(props) {
-  const [isActive, setisActive] = React.useState(false);
+
+  // set the list of path that you dont want navigation bar to render
+
+  switch (window.location.pathname) {
+    case "/login":
+    case "/signup":
+      return (<div></div>)
+    default:
+      break;
+  }
 
 
-  // do not delete these lines
-  // const naviBar = () => {
-  //   return (
-  //     <nav class="navbar" role="navigation" aria-label="main navigation">
-  //       <div class="navbar-brand">
-  //         <a class="navbar-item" href="https://bulma.io">
-  //           <img src="https://bulma.io/images/bulma-logo.png" width="112" height="28"/>
-  //         </a>
+  const loginStateButtonClickHandler=() => {
+    if (props.auth.isAuthenticated) {
+      props.logout();
+    } else {
+      window.location.href = '/'
+    }
+  }
 
-  //         <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false" data-target="navbarBasicExample">
-  //           <span aria-hidden="true"></span>
-  //           <span aria-hidden="true"></span>
-  //           <span aria-hidden="true"></span>
-  //         </a>
-  //       </div>
+  const DropDownContent =()=> {
+    // add new entry and logic in this component
 
-  //       <div id="navbarBasicExample" class="navbar-menu">
-  //         <div class="navbar-start">
-  //           <a class="navbar-item">
-  //             Home
-  //           </a>
+    // modal state
+    const [inboxModalIsOpen, setInboxModalIsOpen] = useState(false);
+    const [searchModalIsOpen, setSearchModalIsOpen] = useState(false);
 
-  //           <a class="navbar-item">
-  //             Documentation
-  //           </a>
 
-  //           <div class="navbar-item has-dropdown is-hoverable">
-  //             <a class="navbar-link">
-  //               More
-  //             </a>
+    let entryList = [];
 
-  //             <div class="navbar-dropdown">
-  //               <a class="navbar-item">
-  //                 About
-  //               </a>
-  //               <a class="navbar-item">
-  //                 Jobs
-  //               </a>
-  //               <a class="navbar-item">
-  //                 Contact
-  //               </a>
-  //               <hr class="navbar-divider"/>
-  //               <a class="navbar-item">
-  //                 Report an issue
-  //               </a>
-  //             </div>
-  //           </div>
-  //         </div>
+    if (props.auth.isAuthenticated) {
+      // add entry that require authentication here
+      entryList.push(<ProfileButton action={() => window.location.href = "/author/" + props.auth.author.id}/>)
+      entryList.push(<InboxButton action={() => setInboxModalIsOpen(true)}/>)
+    } 
 
-  //         <div class="navbar-end">
-  //           <div class="navbar-item">
-  //             <div class="buttons">
-  //               <a class="button is-primary">
-  //                 <strong>Sign up</strong>
-  //               </a>
-  //               <a class="button is-light">
-  //                 Log in
-  //               </a>
-  //             </div>
-  //           </div>
-  //         </div>
-  //       </div>
-  //     </nav>      
-  //   )
+    // add entry that only avalible to stranger here, if needed
+    // else {}
 
-  // }
+    // add entry that will always exist here
+    entryList.push(<SearchButton action={() => setSearchModalIsOpen(true)}/>)
+    entryList.push(<LoginStateButton 
+      islogin={props.auth.isAuthenticated} 
+      action={loginStateButtonClickHandler}
+    />)
 
-  
-  const loggedInDropdown = () => {
     return (
-      <Navbar.Dropdown>
-        <Navbar.Item href={"/author/" + props.auth.author.id}>Profile</Navbar.Item>
-        <Navbar.Item onClick={props.logout}>Log out</Navbar.Item>
-      </Navbar.Dropdown>
-    );
-  };
+      <Container style={menuDropDownContentStyle}>
+        {entryList}
+      
+      {/* add modal here */}
+      <Modal className="animate__animated animate__fadeIn animate__faster" show={inboxModalIsOpen} onClose={() => setInboxModalIsOpen(false)} closeOnBlur closeOnEsc>
+        <InboxModal setModalIsOpen={setInboxModalIsOpen}/>
+      </Modal>
+      <Modal className="animate__animated animate__fadeIn animate__faster" show={searchModalIsOpen} onClose={() => setSearchModalIsOpen(false)} closeOnBlur closeOnEsc>
+        <SearchModalView setModalIsOpen={setSearchModalIsOpen}/>
+      </Modal>
+      </Container>
+    )
+  }
 
-  const loggedOutDropdown = () => {
+  const DropDown = () => {
     return (
-      <Navbar.Dropdown right={Boolean("right", false)}>
-        <Navbar.Item href="/login/">Login</Navbar.Item>
-      </Navbar.Dropdown>
-    );
-  };
-
-  const notifcationDropdown = () => {
-    return (
-      <Navbar.Item dropdown hoverable>
-        <Navbar.Link arrowless={true}>
-          <BellIcon/>
-        </Navbar.Link>
-        <Navbar.Dropdown>
-          <Navbar.Item>
-            <b>0</b>&nbsp;Notifications
-          </Navbar.Item>
-        </Navbar.Dropdown>
-      </Navbar.Item>
-    );
-  };
+      <div class="dropdown is-hoverable is-right ">
+        <div class="dropdown-trigger" >
+          <MenuButton/>
+        </div>
+        <div class="dropdown-menu animate__animated animate__fadeIn animate__faster" style={{minWidth: "55pt", marginRight: "-5pt"}}>
+          <div class="dropdown-content"style={menuDropDownStyle}>
+            <DropDownContent/>
+          </div>
+        </div>
+      </div>      
+    )
+  }
 
   return (
-    <Navbar color="light" fixed="top" active={isActive}>
-      <Navbar.Brand>
-        <Navbar.Item renderAs="a" href="/">
-          <Heading><YonderLogo svgScale="55"/></Heading>
-        </Navbar.Item>
-        <Navbar.Burger
-          onClick={() => {
-            setisActive(!isActive);
-          }}
-        />
-      </Navbar.Brand>
-      <Navbar.Menu>
-        <Navbar.Container position="end">
-          {props.auth.isAuthenticated ? notifcationDropdown() : null}
-          <Navbar.Item dropdown hoverable>
-            <Navbar.Link arrowless={true}>
-              <ProfileIcon/>
-            </Navbar.Link>
-            {props.auth.isAuthenticated ? loggedInDropdown() : loggedOutDropdown()}
-          </Navbar.Item>
-        </Navbar.Container>
-      </Navbar.Menu>
-    </Navbar>
-  );
-
-  // return (
-  //   <div>
-  //   {naviBar()}
-  //   </div>
-  // )
+    <div style={naviBarStyle}>
+      <Container style={brandStyle}>
+        <a href = '/'>
+        <YonderLogo svgScale="55"/>
+        </a>
+      </Container>
+      <Container style={meunButtonStyle}>
+        <DropDown/>
+      </Container>
+    </div>
+  )
 }
 
 const mapStateToProps = (state) => ({
   auth: state.auth,
+  allAuthors: state.stream.allAuthors,
 });
 
-export default connect(mapStateToProps, {
-  logout,
-})(withRouter(NavigationBar));
+export default connect(mapStateToProps, { logout, sendFollow })(withRouter(NavigationBar));

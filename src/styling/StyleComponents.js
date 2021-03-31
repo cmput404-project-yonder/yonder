@@ -1,6 +1,37 @@
 import { font, color } from "../components/stream/posts/styling";
 import { style } from "../components/profile/styling";
 
+export const categoriesStyle = {
+  display: "flex",
+  gap: "0.5em",
+  color: color.baseLightGrey,
+}
+
+export const footerButtonLayoutStyle = {
+  width: "100%",
+  display: "flex",
+  justifyContent: "space-between",
+  height: "13pt",
+  paddingLeft: "3em",
+  paddingRight: "3em",
+}
+
+export const postContentStyle = {
+  marginLeft: "0.5em",
+  marginRight: "0.5em",
+  paddingBottom: "0.1em",
+}
+
+
+export const DescriptionStyle = {
+  paddingBottom: "0.2em",
+  color: color.baseLightGrey,
+  marginLeft: "0.7em",
+  // border: "dashed ", 
+  // borderWidth: "0.1px",
+  // borderRadius: "3pt",
+}
+
 export const dividorStyle = {
     marginTop: "0.5em",
     marginBottom: "0.5em",
@@ -18,7 +49,7 @@ export const postStyle = {
     boxShadow: "0pt 0pt 8pt rgb(0,0,0,0.5)",
     borderRadius: "6pt",
     backgroundColor: color.backgroundCreamLighter,
-    marginBottom: "3em",
+    marginBottom: "2em",
     marginTop: "0.5em",
     fontFamily: font.segoeUI,
     fontWeight: "350",
@@ -33,18 +64,15 @@ export const individualPostStyle = {
     boxShadow: "0pt 0pt 8pt #CCCCCC",
     borderRadius: "6pt",
     backgroundColor: color.backgroundCreamLighter,
-    marginBottom: "2em",
-    marginTop: "4em",
     fontFamily: font.segoeUI,
-    fontWeight: "350",
     fontSize: "1.3em",
     color: color.baseBlack,
-    minHeight: "25em",
+    margin: "4em auto",
+    minHeight: "65vh",
+    width: "65vw",
     display: "flex",
     flexDirection: "column",
     justifyContent: "space-between",
-    margin: "auto",
-    width: "50%",
 }
 
 export const profileShowStyle = {
@@ -116,8 +144,22 @@ export const streamLayerContainerStyle = {
     height: "100%",
     
   }
-  
-  
+export const signatureStyle = {
+  display: "flex",
+  float: "right",
+  gap: "4pt",
+  color: color.baseLightGrey,
+  marginRight: "0.5em",
+  marginTop: "0.1em",
+  fontSize: "0.9em",
+}
+
+export const postContainerStyle = {
+  paddingRight: "0.6em",
+  paddingLeft: "0.6em",
+  paddingTop: "0.5em",
+  paddingBottom: "0.5em",
+}
 export const newPostButtonStyle = {
     float: "right",
     zIndex: "1",
@@ -131,7 +173,6 @@ export const newPostButtonStyle = {
   
 export const pageStyle = {
     display: "grid"
-  
   }
   
 export const postStreamStyle = {
@@ -209,7 +250,13 @@ export const labelStyle = {
     fontWeight: "400",
     color: color.baseLightGrey,
   }
-  
+
+export const postTitleStyle = {
+    fontSize: "1.2em",
+    fontWeight: "400",
+    marginLeft: "0.5em",
+  }
+
 export const formTitleStyle = {
     overflowY: "hidden",
     whiteSpace: "nowrap",

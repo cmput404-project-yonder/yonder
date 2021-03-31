@@ -1,24 +1,22 @@
 from .models import Author, AuthorFollower, AuthorFriend, Post, Inbox, RemoteNode
-from .serializers import AuthorSerializer, AuthorFriendSerializer, AuthorFollowerSerializer, PostSerializer
+from .serializers import AuthorSerializer, AuthorFriendSerializer, PostSerializer
 from django.db.models.signals import post_save
 from django.dispatch import receiver
-from django.core import serializers
 import uuid
 import requests
-import json
 
 
 def check_remote_follow(theirAuthor, ourAuthor):
     try:
-        remoteNode = RemoteNode.objects.get(host=follower["host"])
+        remoteNode = RemoteNode.objects.get(host=theirAuthor["host"])
     except RemoteNode.DoesNotExist:
         return False
 
-    url = theirAuthor["url"] + "/followers/" + ourAuthor["id"]
-    response = requests.get(url, auth=HTTPBasicAuth(remoteNode.ourUser, remoteNode.ourPassword))
-    if requests.status_code == 404:
+    url = theirAuthor["host"] + "/api/author/" + str(theirAuthor["id"]) + "/followers/" + str(ourAuthor["id"]) + "/"
+    response = requests.get(url, auth=requests.models.HTTPBasicAuth(remoteNode.our_user, remoteNode.our_password))
+    if response.status_code == 404:
         return False
-    elif requests.status_code == 200:
+    elif response.status_code == 200:
         return True
 
 # Our Server:
@@ -79,20 +77,32 @@ def create_post(sender, instance, **kwargs):
         if instance.origin == "":
             instance.origin = instance.source
 
-        # Send out to follower Inboxes
-        followers = AuthorFollower.objects.filter(author_id=instance.author)
-        for follower in followers:
+        # Get friend/followers
+        listeners = []
+        if instance.visibility == Post.Visibility.FRIENDS:
+            listeners = AuthorFriend.objects.filter(author_id=instance.author)
+        else:
+            listeners = AuthorFollower.objects.filter(author_id=instance.author)
+
+        for listener in listeners:
+            listenerId = listener.friend["id"] if instance.visibility == Post.Visibility.FRIENDS else listener.follower["id"]
+            listenerHost = listener.friend["host"] if instance.visibility == Post.Visibility.FRIENDS else listener.follower["host"]
             data = PostSerializer(instance=instance).data
             data["type"] = "post"
             try:
-                    inbox = Inbox.objects.get(author_id=follower.follower["id"])
+                    inbox = Inbox.objects.get(author_id=listenerId)
                     inbox.items.append(data)
                     inbox.save()
             except Inbox.DoesNotExist:
                 # Handle follower being on remote server
-                remoteNode = RemoteNode.objects.get(host=follower.follower["host"])
-                url = follower.follower["url"] + "/inbox/"
-                response = requests.post(url, data=data, auth=HTTPBasicAuth(remoteNode.ourUser, remoteNode.ourPassword))
+                remoteNode = RemoteNode.objects.get(host=listenerHost)
+                url = listenerHost + "api/author/" + str(listenerId) + "/inbox/"
+                response = requests.post(url, 
+                    json=data, 
+                    headers={"content-type": "application/json"}, 
+                    auth=requests.models.HTTPBasicAuth(remoteNode.our_user, remoteNode.our_password)
+                )
+                print(response.text)
             except RemoteNode.DoesNotExist:
                 print("Unknown Host, WHO ARE YOU???")
             finally:

@@ -18,10 +18,6 @@ import { color } from "./styling";
 import Dividor from "./Dividor";
 import { dividorStyle } from "../../styling/StyleComponents";
 
-import NavigationBar from "../NavigationBar";
-
-
-
 var pageStyle = {
   margin: "auto",
   maxWidth: "820pt",
@@ -81,10 +77,17 @@ class Profile extends React.Component {
     var isFollowing = this.props.isFollowing;
 
     const clickFollow = () => {
-      const status_code = this.props.sendFollow(this.props.retrievedAuthor);
-      if (status_code === 201) {
-        isFollowing = true;
+      if (this.props.loggedInAuthor.id === undefined) {
+        // redirect to login
+        window.location.href = '/'
+      } else {
+        const status_code = this.props.sendFollow(this.props.retrievedAuthor);
+        if (status_code === 201) {
+          isFollowing = true;
+        }        
       }
+
+
     };
 
     const showEditModal = (modalState) => {
@@ -135,7 +138,6 @@ class Profile extends React.Component {
 
     return (
       <Section >
-        <NavigationBar/>
         <Columns style={pageStyle}>
           <Columns.Column>
             <div className="post-list" style={profileListStyle}>

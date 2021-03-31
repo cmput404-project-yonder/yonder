@@ -10,48 +10,22 @@ import { Link } from "react-router-dom";
 import EditButton from "./EditButton";
 import ShareButton from "./ShareButton";
 import LikeButton from "./LikeButton";
-import { dividorStyle, formContainerStyle, postStyle } from "../../../styling/StyleComponents";
+import LikedButton from "./LikedButton";
+import { DescriptionStyle, dividorStyle, postStyle, categoriesStyle, signatureStyle, postContainerStyle,postTitleStyle, postContentStyle, footerButtonLayoutStyle } from "../../../styling/StyleComponents";
 import { color } from "./styling";
+// import { connectAdvanced } from "react-redux";
 
-
-var signatureStyle = {
-  display: "flex",
-  float: "right",
-  gap: "4pt",
-  color: color.baseLightGrey,
-  marginRight: "0.5em",
-}
-
-var titleStyle = {
-  fontSize: "1.2em",
-  fontWeight: "400",
-  marginLeft: "0.5em",
-}
-
-var ContentStyle = {
-  marginLeft: "0.5em",
-  marginRight: "0.5em",
-  paddingBottom: "0.2em",
-}
-
-var postContainerStyle = {
-  padding: "0.6em",
-}
-
-
-var footerButtonLayoutStyle = {
-  width: "100%",
-  display: "flex",
-  justifyContent: "space-between",
-  height: "12pt",
-  paddingLeft: "3em",
-  paddingRight: "3em",
+// local styling
+var postDividorStyle = {
+  ...dividorStyle,
+  paddingBottom: "0",
+  paddingTop: "0",
 }
 
 var buttonOverrideStyle = {
   backgroundColor: "transparent",
   border: "none",
-  marginTop: "-3pt",
+  marginTop: "-2pt",
   height: "20pt",
 }
 
@@ -64,10 +38,11 @@ function getDateString(ms) {
 
 function Post(props) {
   const [editModalIsOpen, setEditModalIsOpen] = useState(false);
+  const [isLiked, setIsLiked] = useState(false);
   const [sharingPromptIsOpen, setSharingPromptIsOpen] = useState(false);
   // console.log(props.post);
   
-  const postURL = "/author/" + props.post.author.id + "/posts/" + props.post.id;
+  const postURL = "/author/" + props.post.author.id + "/posts/" + props.post.id + "/";
 
   const IsImage = () => {
     if (props.post.contentType === "text/plain") {
@@ -80,18 +55,28 @@ function Post(props) {
       return true;
     }
   }
-  const isImage = IsImage();
-  if (isImage) {
+
+  const likedToggle = () => {
+    isLiked ? setIsLiked(false) : setIsLiked(true)
+  }
+
+  const getCategories = (cat) => {
+    let categories =  cat.map((c) => <p>#{c}</p>)
+    return (
+      <Container style={categoriesStyle}>
+        {categories}
+      </Container>
+    )
   }
 
   const displayFooterButtons = () => {
     if (props.interactive ){
       return (
         <div>
-        <Dividor style={dividorStyle}/>
+        <Dividor style={postDividorStyle}/>
         <Container style={footerButtonLayoutStyle}>
-        <Button style={buttonOverrideStyle} onClick={{}}>
-          <LikeButton/>
+        <Button style={buttonOverrideStyle} onClick={() => likedToggle()}>
+          {isLiked ? <LikedButton/> : <LikeButton/>}
         </Button>
         <Button style={buttonOverrideStyle} onClick={() => setSharingPromptIsOpen(true)}>
           <ShareButton/>
@@ -121,7 +106,7 @@ function Post(props) {
   }
 
   return (
-      <Card style={postStyle}>
+      <Card style={{...postStyle,...props.style}}>
         <Card.Content style={postContainerStyle}>
 
           {/* Title */}
@@ -130,23 +115,34 @@ function Post(props) {
           <p>·</p>
           <p>{getDateString(Date.parse(props.post.published))}</p>
           </Container>
-          <Container style={titleStyle}>
+          <Container style={postTitleStyle}>
           <Link to={`${postURL}`} style={{textDecoration: "none", color: color.baseBlack}}>{props.post.title}</Link>
           </Container>
+          
+          {/* Description */}
+          <Container style = {DescriptionStyle}>  
+            <p>{ props.post.description }</p>
+          </Container>
 
+          <Dividor style={postDividorStyle}/>
+          
           {/* Content */}
-          <Container style = {ContentStyle}>
-          <Dividor style={dividorStyle}/>
-          {isImage ? (
+          <Container style = {postContentStyle}>
+          {IsImage() ? (
             <Content style={{textAlign: "center"}}>
-              <img style={{borderRadius: "6pt"}}src={`data:${props.post.contentType},${props.post.content}`} /> 
+              <img style={{borderRadius: "6pt", maxHeight: "300pt"}}src={`data:${props.post.contentType},${props.post.content}`} /> 
             </Content>
           ) : <Content>{props.post.content}</Content> }
           </Container>
           
+          {/* categories */}
+          <Container style={postContentStyle}>
+            {getCategories(props.post.categories)}
+          </Container>
+          
           {displayFooterButtons()}
-        </Card.Content>
 
+        </Card.Content>
       </Card>
   );
 }
