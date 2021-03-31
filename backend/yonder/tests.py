@@ -157,8 +157,8 @@ class FollowerTests(APITestCase):
         self.author2 = Author.objects.create(**self.testAuthor2, user=user2)
         self.authorJSON2 = AuthorSerializer(instance=self.author2).data
 
-        self.followJSON1 = {"actor": self.authorJSON2, "object": self.authorJSON1}
-        self.followJSON2 = {"actor": self.authorJSON1, "object": self.authorJSON2}
+        self.followJSON1 = {"author": self.authorJSON2, "object": self.authorJSON1}
+        self.followJSON2 = {"author": self.authorJSON1, "object": self.authorJSON2}
 
         credBytes= base64.b64encode(f'{self.credentials1["username"]}:{self.credentials1["password"]}'.encode())
         self.client.credentials(HTTP_AUTHORIZATION='Basic ' + credBytes.decode())
@@ -461,10 +461,8 @@ class LikeTests(APITestCase):
                 "url": self.author1.get_absolute_url(),
                 "github": self.author1.github
             },
-            "object": PostSerializer(instance=self.author2_post).data
+            "object": self.author2_post.get_absolute_url()
         }
-        post_like_data["object"]["author"] = str(self.author2.id)
-        post_like_data["object"]["type"] = "post"
 
         comment_like_data = {
             "type": "like",
@@ -475,10 +473,8 @@ class LikeTests(APITestCase):
                 "url": self.author2.get_absolute_url(),
                 "github": self.author2.github
             },
-            "object": CommentSerializer(instance=self.author1_comment).data
+            "object": self.author1_comment.get_absolute_url()
         }
-        comment_like_data["object"]["author"] = str(self.author1.id)
-        comment_like_data["object"]["type"] = "comment"
 
         self.post_like_data_json = json.dumps(post_like_data)
         self.comment_like_data_json = json.dumps(comment_like_data)
