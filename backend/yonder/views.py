@@ -320,18 +320,25 @@ class inbox(generics.GenericAPIView):
     @swagger_auto_schema(tags=['inbox'])
     def post(self, request, *args, **kwargs):
         inbox = get_object_or_404(Inbox, author_id=kwargs["author_id"])
-        inbox.items.append(request.data)
-        inbox.save()        
         
-        if request.data["type"] == "Like":
+        if request.data["type"] == "like":
             author = get_object_or_404(Author, id=kwargs["author_id"])
+            post = get_object_or_404(Post, id=request.data["object_id"])
             formated_data = {
                 "author": author.id,
-                "object_url": request.data["object"]
+                "object_url": post.get_absolute_url()
             }
             like_serializer = LikeSerializer(data=formated_data)
             if like_serializer.is_valid():
                 like_serializer.save()
+            
+            inbox_data = {
+                "type": "like",
+                "actor": AuthorSerializer(instance=author).data,
+                "object": PostSerializer(instance=post).data
+            }
+            inbox.items.append(inbox_data)
+            inbox.save()        
             
         return Response(status=status.HTTP_201_CREATED)
 

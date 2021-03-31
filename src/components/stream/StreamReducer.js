@@ -47,7 +47,6 @@ export const streamReducer = (state = initialState, action) => {
     case RETRIEVE_POSTS_SUBMITTED:
     case RETRIEVE_INBOX_SUBMITTED:
     case SHARE_POST_SUBMITTED:
-    case LIKE_POST_SUBMITTED:
     return {
       ...state,
       error: "",
@@ -92,7 +91,6 @@ export const streamReducer = (state = initialState, action) => {
       return {
         ...state,
         error: "",
-        currentAuthorPosts: action.payload,
         loading: false,
       };
     case RETRIEVE_POSTS_SUCCESS:

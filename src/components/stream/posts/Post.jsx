@@ -15,7 +15,6 @@ import LikeButton from "./LikeButton";
 import LikedButton from "./LikedButton";
 import { DescriptionStyle, dividorStyle, postStyle, categoriesStyle, signatureStyle, postContainerStyle,postTitleStyle, postContentStyle, footerButtonLayoutStyle } from "../../../styling/StyleComponents";
 import { color } from "./styling";
-import { likePost } from "../StreamActions";
 // import { connectAdvanced } from "react-redux";
 
 // local styling
@@ -61,7 +60,7 @@ function Post(props) {
 
   const likedToggle = () => {
     isLiked ? setIsLiked(false) : setIsLiked(true)
-    props.likePost(props.post.id);
+    props.likePost(props.post);
   }
 
   const getCategories = (cat) => {
@@ -71,6 +70,16 @@ function Post(props) {
         {categories}
       </Container>
     )
+  }
+
+  const editButton = () => {
+    if (props.loggedInAuthor.id == props.post.author.id) {
+      return  (
+      <Button style={buttonOverrideStyle} onClick={() => setEditModalIsOpen(true)}>
+        <EditButton/>
+      </Button>
+      );
+    }
   }
 
   const displayFooterButtons = () => {
@@ -85,9 +94,7 @@ function Post(props) {
         <Button style={buttonOverrideStyle} onClick={() => setSharingPromptIsOpen(true)}>
           <ShareButton/>
         </Button>
-        <Button style={buttonOverrideStyle} onClick={() => setEditModalIsOpen(true)}>
-          <EditButton/>
-        </Button>
+        {editButton()}
         <Modal className="animate__animated animate__fadeIn animate__faster" show={editModalIsOpen} onClose={() => setEditModalIsOpen(false)} closeOnBlur closeOnEsc>
           <EditPostForm
             setEditModalIsOpen={setEditModalIsOpen}
@@ -158,8 +165,8 @@ Post.propTypes = {
 };
 
 const mapStateToProps = (state) => ({
+  loggedInAuthor: state.auth.author
 });
 
 export default connect(mapStateToProps, {
-  likePost,
 })(withRouter(Post));
