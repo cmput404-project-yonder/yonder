@@ -320,6 +320,10 @@ class inbox(generics.GenericAPIView):
     
     @swagger_auto_schema(tags=['inbox'])
     def post(self, request, *args, **kwargs):
+        originalPostHost = ""
+        if "host" in request.data:
+            originalPostHost = request.data["host"]
+            del request.data["host"]
         try:
             # handle local author
             inbox = Inbox.objects.get(author_id=kwargs["author_id"])
@@ -349,10 +353,8 @@ class inbox(generics.GenericAPIView):
             return Response(status=status.HTTP_201_CREATED)
         except Inbox.DoesNotExist:
             # Handle follower being on remote server
-            original_poster = request.data["object"]["author"]
-            remoteHost = original_poster["host"]
-            remoteNode = get_object_or_404(RemoteNode,host=remoteHost)
-            url = remoteHost + "api/author/" + kwargs["author_id"] + "/inbox/"
+            remoteNode = get_object_or_404(RemoteNode,host=originalPostHost)
+            url = originalPostHost + "api/author/" + kwargs["author_id"] + "/inbox/"
             response = requests.post(url, 
                 json=request.data, 
                 headers={"content-type": "application/json"}, 
