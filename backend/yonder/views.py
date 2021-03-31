@@ -305,7 +305,7 @@ class inbox(generics.GenericAPIView):
         author = get_object_or_404(Author, id=kwargs["author_id"])
 
         page_number = 1 if 'page' not in request.query_params else request.query_params.get('page')
-        page_size = 5 if 'size' not in request.query_params else request.query_params.get('size')
+        page_size = 50 if 'size' not in request.query_params else request.query_params.get('size')
         paginator = Paginator(inbox.items, page_size)
         page = paginator.page(page_number)
 
