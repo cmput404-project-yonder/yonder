@@ -454,31 +454,27 @@ class LikeTests(APITestCase):
         # request post and comment data
         post_like_data = {
             "type": "like",
-            "actor":{
+            "author":{
                 "type":"author",
                 "host": self.author1.host,
                 "displayName": self.author1.displayName,
                 "url": self.author1.get_absolute_url(),
                 "github": self.author1.github
             },
-            "object": PostSerializer(instance=self.author2_post).data
+            "object": self.author2_post.get_absolute_url()
         }
-        post_like_data["object"]["author"] = str(self.author2.id)
-        post_like_data["object"]["type"] = "post"
 
         comment_like_data = {
             "type": "like",
-            "actor":{
+            "author":{
                 "type":"author",
                 "host": self.author2.host,
                 "displayName": self.author2.displayName,
                 "url": self.author2.get_absolute_url(),
                 "github": self.author2.github
             },
-            "object": CommentSerializer(instance=self.author1_comment).data
+            "object": self.author1_comment.get_absolute_url()
         }
-        comment_like_data["object"]["author"] = str(self.author1.id)
-        comment_like_data["object"]["type"] = "comment"
 
         self.post_like_data_json = json.dumps(post_like_data)
         self.comment_like_data_json = json.dumps(comment_like_data)
@@ -505,8 +501,9 @@ class LikeTests(APITestCase):
         url = reverse('post_likes', args=[self.author1.id, self.author2_post.id])
         response = self.client.get(url)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(response.data[0]["author"], self.author1.id)
-        self.assertEqual(response.data[0]["object_url"], self.author2_post.get_absolute_url())
+        data_json = response.json()
+        self.assertEqual(data_json["items"][0]["author"], str(self.author1.id))
+        self.assertEqual(data_json["items"][0]["object_url"], self.author2_post.get_absolute_url())
     
     def test_get_comment_likes(self):
         # author2 sends like to author1_comment
@@ -516,9 +513,10 @@ class LikeTests(APITestCase):
 
         url = reverse('comment_likes', args=[self.author2.id, self.author2_post.id, self.author1_comment.id])
         response = self.client.get(url)
+        data_json = response.json()
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(response.data[0]["author"], self.author2.id)
-        self.assertEqual(response.data[0]["object_url"], self.author1_comment.get_absolute_url())
+        self.assertEqual(data_json["items"][0]["author"], str(self.author2.id))
+        self.assertEqual(data_json["items"][0]["object_url"], self.author1_comment.get_absolute_url())
 
     def test_get_liked(self):
         # author1 sends like to author1_comment

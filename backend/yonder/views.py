@@ -320,17 +320,17 @@ class inbox(generics.GenericAPIView):
     
     @swagger_auto_schema(tags=['inbox'])
     def post(self, request, *args, **kwargs):
+        originalPostHost = ""
+        if "host" in request.data:
+            originalPostHost = request.data["host"]
+            del request.data["host"]
         try:
             # handle local author
-            inbox = get_object_or_404(Inbox, author_id=kwargs["author_id"])
+            inbox = Inbox.objects.get(author_id=kwargs["author_id"])
             
             if request.data["type"] == "like":
                 author = get_object_or_404(Author, id=kwargs["author_id"])
-                object_data = request.data["object"]
-                if object_data["type"] == "post":
-                    object_url = get_object_or_404(Post, id=object_data["id"]).get_absolute_url()
-                elif object_data["type"] == "comment":
-                    object_url = get_object_or_404(Comment, id=object_data["id"]).get_absolute_url()
+                object_url = request.data["object"]
                 formated_data = {
                     "author": author.id,
                     "object_url": object_url
@@ -341,8 +341,8 @@ class inbox(generics.GenericAPIView):
                 
                 inbox_data = {
                     "type": "like",
-                    "actor": AuthorSerializer(instance=author).data,
-                    "object": object_data
+                    "author": request.data["author"],
+                    "object": object_url
                 }
                 inbox.items.append(inbox_data)
                 inbox.save()
@@ -353,17 +353,15 @@ class inbox(generics.GenericAPIView):
             return Response(status=status.HTTP_201_CREATED)
         except Inbox.DoesNotExist:
             # Handle follower being on remote server
-            original_poster = request.data["object"]["author"]
-            remoteHost = original_poster.host
-            remoteNode = RemoteNode.objects.get(host=remoteHost)
-            url = remoteHost + "api/author/" + kwargs["author_id"] + "/inbox/"
+            remoteNode = get_object_or_404(RemoteNode,host=originalPostHost)
+            url = originalPostHost + "api/author/" + kwargs["author_id"] + "/inbox/"
             response = requests.post(url, 
                 json=request.data, 
                 headers={"content-type": "application/json"}, 
                 auth=requests.models.HTTPBasicAuth(remoteNode.our_user, remoteNode.our_password)
             )
             print(response.text)
-            return Response(response.status_code)
+            return Response(status=response.status_code)
 
     @swagger_auto_schema(tags=['inbox'])
     def delete(self, request, *args, **kwargs):
@@ -378,9 +376,14 @@ class post_likes(generics.GenericAPIView):
     @swagger_auto_schema(tags=['likes'])
     def get(self, request, *args, **kwargs):
         post = get_object_or_404(Post, id=kwargs["post_id"])
-        likes = Like.objects.all().filter(object_url=post.get_absolute_url()) 
+        print(post.get_absolute_url())
+        likes = Like.objects.filter(object_url=post.get_absolute_url()) 
         serialized_data = [LikeSerializer(like).data for like in likes]
-        return Response(data=serialized_data, status=status.HTTP_200_OK)
+        data = {
+            "type": "likes",
+            "items": serialized_data
+        }
+        return Response(data=data, status=status.HTTP_200_OK)
 
 class comment_likes(generics.GenericAPIView):
     permission_classes = [IsAuthenticated]
@@ -388,9 +391,13 @@ class comment_likes(generics.GenericAPIView):
     @swagger_auto_schema(tags=['likes'])
     def get(self, request, *args, **kwargs):
         comment = get_object_or_404(Comment, id=kwargs["comment_id"])
-        likes = Like.objects.all().filter(object_url=comment.get_absolute_url()) 
+        likes = Like.objects.filter(object_url=comment.get_absolute_url()) 
         serialized_data = [LikeSerializer(like).data for like in likes]
-        return Response(data=serialized_data, status=status.HTTP_200_OK)
+        data = {
+            "type": "likes",
+            "items": serialized_data
+        }
+        return Response(data=data, status=status.HTTP_200_OK)
 
 class likes(generics.GenericAPIView):
     permission_classes = [IsAuthenticated]

@@ -67,13 +67,6 @@ export function Like(props) {
           <p>·</p>
           <p>liked your post</p>
         </Container>
-
-        <Dividor style={dividorStyle}/>
-
-        {/* Post title */}
-        <Container style={itemMsgStyle}>
-          <p >{props.like.object.title}</p>
-        </Container>
       </Card>
   );
 }
