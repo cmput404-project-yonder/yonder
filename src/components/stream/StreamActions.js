@@ -214,7 +214,8 @@ export const likePost = (post) => (dispatch, getState) => {
     "id": author.host + "author/" + author.id + "/",
     "url": author.host + "author/" + author.id + "/",
   };
-  likedPost["object_id"] = post.id;
+  likedPost["object"] = post;
+  likedPost["object"]["type"] = "post";
 
   dispatch({ type: LIKE_POST_SUBMITTED });
   axios

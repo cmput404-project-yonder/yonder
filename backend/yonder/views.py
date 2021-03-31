@@ -1,3 +1,4 @@
+import re
 from rest_framework.response import Response
 from rest_framework import status, generics, validators, viewsets
 from rest_framework.authtoken.models import Token
@@ -323,10 +324,14 @@ class inbox(generics.GenericAPIView):
         
         if request.data["type"] == "like":
             author = get_object_or_404(Author, id=kwargs["author_id"])
-            post = get_object_or_404(Post, id=request.data["object_id"])
+            object_data = request.data["object"]
+            if object_data["type"] == "post":
+                object_url = get_object_or_404(Post, id=object_data["id"]).get_absolute_url()
+            elif object_data["type"] == "comment":
+                object_url = get_object_or_404(Comment, id=object_data["id"]).get_absolute_url()
             formated_data = {
                 "author": author.id,
-                "object_url": post.get_absolute_url()
+                "object_url": object_url
             }
             like_serializer = LikeSerializer(data=formated_data)
             if like_serializer.is_valid():
@@ -335,10 +340,13 @@ class inbox(generics.GenericAPIView):
             inbox_data = {
                 "type": "like",
                 "actor": AuthorSerializer(instance=author).data,
-                "object": PostSerializer(instance=post).data
+                "object": object_data
             }
             inbox.items.append(inbox_data)
-            inbox.save()        
+            inbox.save()
+        else:
+            inbox.items.append(request.data)
+            inbox.save()
             
         return Response(status=status.HTTP_201_CREATED)
 
