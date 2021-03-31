@@ -30,7 +30,7 @@ def create_friend(sender, instance, **kwargs):
     if kwargs["created"]:
         authorB_id = instance.follower["id"]
         authorA = instance.author
-        authorA_json = AuthorSerializer(authorA).data
+        authorA_json = AuthorSerializer(instance=authorA).data
         try:
             authorB = Author.objects.get(pk=uuid.UUID(authorB_id))
             authorB_follow = AuthorFollower.objects.get(author=authorB, follower=authorA_json)
