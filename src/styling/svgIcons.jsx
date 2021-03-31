@@ -74,3 +74,24 @@ export function SearchAuthorIcon(props) {
         </svg>
     )
 }
+
+export function InboxModalIcon(props) {
+    // color is fixed
+    return (
+        <svg xmlns="http://www.w3.org/2000/svg" width={props.svgScale} viewBox="0 0 103 103">
+        <g id="Group_79" data-name="Group 79" transform="translate(-241.628 -38.581)">
+            <circle id="Ellipse_32" data-name="Ellipse 32" cx="51.5" cy="51.5" r="51.5" transform="translate(241.628 38.581)" fill="#e47171"/>
+            <g id="email" transform="translate(260.478 32.805)">
+            <g id="Group_78" data-name="Group 78" transform="translate(0 28.756)">
+                <g id="Group_77" data-name="Group 77" transform="translate(0 0)">
+                <path id="Path_181" data-name="Path 181" d="M65,47.069l-9.457-6.68V30.632a2.1,2.1,0,0,0-1.8-1.876H12.309a2.1,2.1,0,0,0-1.8,1.876v9.682L.675,47.069A1.651,1.651,0,0,0,0,48.269v35.65A2.176,2.176,0,0,0,1.876,85.8H64.17c.826,0,1.126-.976,1.126-1.876V48.27C65.3,47.819,65.37,47.369,65,47.069Zm-9.457-3.077,6.455,4.428L55.538,53.3ZM13.509,31.758H52.536V55.625L33.023,70.335,13.509,55.625V31.758Zm-3,12.158v9.457L4.053,48.42ZM3,51.5,24.017,67.408,3,81.593Zm3.6,31.3L26.568,69.359,31.9,73.412a1.8,1.8,0,0,0,1.051.375c.3,0,.45-.15.75-.375l5.554-4.278,20.189,13.66Zm55.689-1.726L41.729,67.258,62.293,51.5Z" transform="translate(0 -28.756)" fill="#f9dddd"/>
+                <path id="Path_182" data-name="Path 182" d="M137.338,99.676h6.755a1.5,1.5,0,1,0,0-3h-6.755a1.5,1.5,0,1,0,0,3Z" transform="translate(-116.323 -86.917)" fill="#f9dddd"/>
+                <path id="Path_183" data-name="Path 183" d="M137.338,146.7h24.017a1.5,1.5,0,1,0,0-3H137.338a1.5,1.5,0,1,0,0,3Z" transform="translate(-116.323 -127.184)" fill="#f9dddd"/>
+                <path id="Path_184" data-name="Path 184" d="M162.856,192.216a1.5,1.5,0,0,0-1.5-1.5H137.338a1.5,1.5,0,1,0,0,3h24.017A1.5,1.5,0,0,0,162.856,192.216Z" transform="translate(-116.323 -167.449)" fill="#f9dddd"/>
+                </g>
+            </g>
+            </g>
+        </g>
+        </svg>
+    )
+}

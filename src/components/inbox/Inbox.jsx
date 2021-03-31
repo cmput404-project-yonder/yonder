@@ -2,11 +2,12 @@ import React from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { withRouter } from "react-router-dom";
-import { Columns, List } from "react-bulma-components";
+import { Columns, List, Container } from "react-bulma-components";
 
 import { Post, Follow, Like } from "./InboxItems";
 
 function Inbox(props) {
+
   const follows = props.inboxFollows.map((follow) => <Follow key={follow.displayName} follower={follow} />);
   const followList = () => {
     return (
@@ -34,12 +35,28 @@ function Inbox(props) {
     );
   };
 
+  const renderSelectedTab = () => {
+    console.log("Hello")
+    switch (props.selectedTab) {
+      case "like":
+        console.log("Like")
+        return likeList();
+      case "follow":
+        console.log("F")
+        return followList();
+      case "post":
+        console.log("PPPP")
+        return postList();
+      default:
+        console.log("NOOO")
+        break;
+    }
+  }
+
   return (
     <Columns centered>
-      <Columns.Column>
-        {followList()}
-        {likeList()}
-        {postList()}
+      <Columns.Column style={{height: "40em"}}>
+        {renderSelectedTab()}
       </Columns.Column>
     </Columns>
   );
