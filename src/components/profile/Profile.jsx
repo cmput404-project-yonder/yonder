@@ -77,10 +77,17 @@ class Profile extends React.Component {
     var isFollowing = this.props.isFollowing;
 
     const clickFollow = () => {
-      const status_code = this.props.sendFollow(this.props.retrievedAuthor);
-      if (status_code === 201) {
-        isFollowing = true;
+      if (this.props.loggedInAuthor.id === undefined) {
+        // redirect to login
+        window.location.href = '/'
+      } else {
+        const status_code = this.props.sendFollow(this.props.retrievedAuthor);
+        if (status_code === 201) {
+          isFollowing = true;
+        }        
       }
+
+
     };
 
     const showEditModal = (modalState) => {

@@ -95,7 +95,7 @@ export const updatePost = (editedPost) => (dispatch, getState) => {
   axios
     .put("/author/" + editedPost.author.id + "/posts/" + editedPost.id + "/", editedPost)
     .then((response) => {
-      dispatch({ type: EDIT_POST_SUCCESS, payload: response.data });
+      dispatch({ type: EDIT_POST_SUCCESS, payload: editedPost });
     })
     .catch((error) => {
       if (error.response) {
@@ -145,11 +145,11 @@ export const deletePost = (aPost) => (dispatch, getState) => {
 
   setAxiosAuthToken(getState().auth.token);
   dispatch({ type: DELETE_POST_SUBMITTED });
-  console.log(aPost);
+
   axios
     .delete("/author/" + author.id + "/posts/" + aPost.id + "/")
     .then((response) => {
-      dispatch({ type: DELETE_POST_SUCCESS, payload: response.data });
+      dispatch({ type: DELETE_POST_SUCCESS, payload: aPost.id});
     })
     .catch((error) => {
       if (error.response) {
