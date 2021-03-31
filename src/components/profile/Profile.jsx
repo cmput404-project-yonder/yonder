@@ -158,7 +158,7 @@ class Profile extends React.Component {
             </div>
           </Columns.Column>
           <Columns.Column>
-            <PostList posts={this.props.retrievedAuthorPosts} interactive={false}/>
+            <PostList posts={this.props.retrievedAuthorPosts} interactive={true}/>
           </Columns.Column>
         </Columns>
       </Section>

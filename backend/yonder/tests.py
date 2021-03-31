@@ -7,7 +7,7 @@ from rest_framework.authtoken.models import Token
 from django.utils import timezone
 from .models import Author, User, Post, Inbox, AuthorFollower, AuthorFriend, Comment, Like
 from . import signals
-from .serializers import AuthorSerializer, InboxSerializer
+from .serializers import AuthorSerializer, CommentSerializer, InboxSerializer, PostSerializer
 from unittest.mock import patch
 import json
 import base64
@@ -349,7 +349,7 @@ class SignalTests(TestCase):
         self.testAuthor1 = {
             "displayName": "testAuthor1",
             "github": "https://github.com/cmput404-project-yonder/yonder",
-            "host": "http://testserver.com"
+            "host": "http://testserver.com/"
         }
         user1 = User.objects.create_user(**self.credentials1)
         self.author1 = Author.objects.create(**self.testAuthor1, user=user1)
@@ -362,7 +362,7 @@ class SignalTests(TestCase):
         self.testAuthor2 = {
             "displayName": "testAuthor2",
             "github": "https://github.com/cmput404-project-yonder/yonder",
-            "host": "http://testserver.com"
+            "host": "http://testserver.com/"
         }
         user2 = User.objects.create_user(**self.credentials2)
         self.author2 = Author.objects.create(**self.testAuthor2, user=user2)
@@ -379,20 +379,33 @@ class SignalTests(TestCase):
             "visibility": "PUBLIC",
             "unlisted": False
         }
+        self.like = {
+            "author": self.author2,
+            "object_url": ""
+        }
         self.testFollow = {
             "author": self.author1,
             "follower": self.authorJSON2
         }
 
-    #@patch('yonder.signals.signal_handler_post_save')
-    def test_post_to_inbox(self):
+    def test_create_post(self):
+        #author1 creates a post and sends the data to followers' inbox
         AuthorFollower.objects.create(**self.testFollow)
-        post = Post.objects.create(**self.post)
+        Post.objects.create(**self.post)
+        inbox_item1 = Inbox.objects.filter(author=self.author1).count()
+        inbox_item2= Inbox.objects.filter(author=self.author2).count()
+        #one inbox for each author, one for creating follower and one for creating post
+        self.assertEqual(inbox_item1,1)
+        self.assertEqual(inbox_item2,1)
 
-    #@patch('yonder.signals.signal_handler_follow_save')
     def test_follow_to_inbox(self):
+        #author2 follows author1 and sends the data to followee's inbox
         AuthorFollower.objects.create(**self.testFollow)
- 
+        inbox_item = Inbox.objects.filter(author=self.author1).count()
+        #one inbox for author1 sent from author2's follow
+        self.assertEqual(inbox_item,1)
+        
+
 class LikeTests(APITestCase):
     def setUp(self):
         self.credentials1 = {
@@ -406,12 +419,12 @@ class LikeTests(APITestCase):
         self.testAuthor1 = {
             "displayName": "testAuthor1",
             "github": "https://github.com/cmput404-project-yonder/yonder",
-            "host": "http://testserver.com"
+            "host": "http://testserver.com/"
         }
         self.testAuthor2 = {
             "displayName": "testAuthor2",
             "github": "https://github.com/cmput404-project-yonder/yonder",
-            "host": "http://testserver.com"
+            "host": "http://testserver.com/"
         }
         user1 = User.objects.create_user(**self.credentials1)
         user2 = User.objects.create_user(**self.credentials2)
@@ -440,27 +453,33 @@ class LikeTests(APITestCase):
 
         # request post and comment data
         post_like_data = {
-            "type": "Like",
-            "author":{
+            "type": "like",
+            "actor":{
                 "type":"author",
                 "host": self.author1.host,
                 "displayName": self.author1.displayName,
                 "url": self.author1.get_absolute_url(),
                 "github": self.author1.github
             },
-            "object": self.author2_post.get_absolute_url()
+            "object": PostSerializer(instance=self.author2_post).data
         }
+        post_like_data["object"]["author"] = str(self.author2.id)
+        post_like_data["object"]["type"] = "post"
+
         comment_like_data = {
-            "type": "Like",
-            "author":{
+            "type": "like",
+            "actor":{
                 "type":"author",
                 "host": self.author2.host,
                 "displayName": self.author2.displayName,
                 "url": self.author2.get_absolute_url(),
                 "github": self.author2.github
             },
-            "object": self.author1_comment.get_absolute_url()
+            "object": CommentSerializer(instance=self.author1_comment).data
         }
+        comment_like_data["object"]["author"] = str(self.author1.id)
+        comment_like_data["object"]["type"] = "comment"
+
         self.post_like_data_json = json.dumps(post_like_data)
         self.comment_like_data_json = json.dumps(comment_like_data)
 
