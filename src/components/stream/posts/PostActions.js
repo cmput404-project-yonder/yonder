@@ -7,13 +7,13 @@ import {
 } from "./PostTypes";
 import { setAxiosAuthToken } from "../../../utils/Utils";
 
-export const retrievePost = (postId) => (dispatch, getState) => {
+export const retrievePost = (authorId, postId) => (dispatch, getState) => {
   const state = getState();
 
   setAxiosAuthToken(state.auth.token);
   dispatch({ type: RETRIEVE_POST_SUBMITTED });
   axios
-    .get("/author/" + state.auth.author.id + "/posts/" + postId + "/")
+    .get("/author/" + authorId + "/posts/" + postId + "/")
     .then((response) => {
       dispatch({ type: RETRIEVE_POST_SUCCESS, payload: response.data });
       // console.log("1");

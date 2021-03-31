@@ -69,7 +69,7 @@ class Login extends Component {
       username: this.state.username,
       password: this.state.password,
     };
-    this.props.login(userData, "/home");
+    this.props.login(userData, "/");
   };
   render() {
     if (this.props.auth.isAuthenticated) {

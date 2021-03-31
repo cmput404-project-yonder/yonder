@@ -1,23 +1,28 @@
 from rest_framework import serializers
-from .models import Post, Author, Comment, Inbox, AuthorFollower, AuthorFriend, RemoteNode
+from .models import Post, Author, Comment, Inbox, AuthorFollower, AuthorFriend, RemoteNode, Like
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate
 from django.shortcuts import get_object_or_404
+from rest_framework.fields import UUIDField
 
 class AuthorSerializer(serializers.ModelSerializer):
+    type = 'author'
     class Meta:
         model = Author
         fields = ('id', 'host', 'displayName', 'github')
+        read_only_fields = ['type']
         
 
 
 class PostSerializer(serializers.ModelSerializer):
     author = AuthorSerializer(required=True)
+    type = 'post'
 
     class Meta:
         model = Post
         fields = ('id', 'title', 'source', 'origin', 'description', 'content', 'contentType', 'author', 'categories',
                   'count', 'size', 'published', 'visibility', 'unlisted')
+        read_only_fields = ['type']
 
     def create(self, validated_data):
         author_data = dict(validated_data.pop("author"))
@@ -36,10 +41,14 @@ class PostSerializer(serializers.ModelSerializer):
 
 
 class CommentSerializer(serializers.ModelSerializer):
+    post = serializers.StringRelatedField(read_only=True)
+    type = 'comment'
+
     class Meta:
         model = Comment
         fields = ('id', 'author', 'post', 'comment',
                   'contentType', 'published')
+        read_only_fields = ['type']
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -116,3 +125,8 @@ class InboxSerializer(serializers.ModelSerializer):
     class Meta:
         model = Inbox
         fields = ('id', 'author', 'items')
+
+class LikeSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Like
+        fields = ('id', 'author', 'object_url')

@@ -78,11 +78,11 @@ class PostForm extends Component {
   handleVisibility = () => {
     if (this.state.visibility === "PUBLIC") {
       this.setState({
-        visibility: "PRIVATE",
+        visibility: "FRIENDS",
       });
       console.log(this.state.visibility);
     }
-    else if (this.state.visibility === "PRIVATE") {
+    else if (this.state.visibility === "FRIENDS") {
       this.setState({
         visibility: "PUBLIC",
       });
@@ -148,7 +148,7 @@ class PostForm extends Component {
       unlisted: this.state.unlisted,
       visibility: this.state.visibility,
       categories: categories,
-      private: this.state.private,
+      friends: this.state.friends,
     };
     this.props.createPost(newPost);
     this.props.setModalIsOpen(false);
@@ -278,7 +278,7 @@ class PostForm extends Component {
     }
 
     const visibilityCheckBoxTranslator = (visibility) => {
-      if (visibility === "PRIVATE"){
+      if (visibility === "FRIENDS"){
         return true;
       } else {
         return false;
@@ -288,7 +288,7 @@ class PostForm extends Component {
     const VisibilityCheckBox = () => {
       return (
         <Container style={checkBoxStyle}>
-          <p style={checkBoxLabelStyle}>Private Post</p>
+          <p style={checkBoxLabelStyle}>Friends Only</p>
           <CheckBox style={checkMarkStyle} active={visibilityCheckBoxTranslator(this.state.visibility)} action={this.handleVisibility}/>
         </Container>
       )
@@ -322,7 +322,7 @@ class PostForm extends Component {
         <Container style={submittPanelStyle}>
           <Button
             className="has-tooltip-info has-tooltip-multiline"
-            data-tooltip='Checking the "Private Post" box will only allow the author to view this post. Checking the "Unlisted" box will allow this post to only show up on the stream of this post author'
+            data-tooltip='Checking the "Friends Only" box will only allow friends to view this post. Checking the "Unlisted" box will allow this post to only show up on the stream of this post author'
             style={{backgroundColor: "transparent", border: "none", fill: color.baseRed, marginTop: "1.2em", float: "left", width: "4em", padding: "0"}}
           >
             <ToolTipIcon svgScale={"25"}/>
@@ -345,7 +345,7 @@ class PostForm extends Component {
             <Form.Control>
               <Form.Textarea
                   onKeyPress={(e) => {if (e.key === "Enter") e.preventDefault();}}
-                  maxLength="30"
+                  maxLength="80"
                   cols={1}
                   name="title"
                   value={this.state.title}
@@ -359,7 +359,7 @@ class PostForm extends Component {
             <Form.Control>
               <Form.Textarea
                 onKeyPress={(e) => {if (e.key === "Enter") e.preventDefault();}}
-                maxLength="30"
+                maxLength="120"
                 cols={1}
                 name="description"
                 value={this.state.description}

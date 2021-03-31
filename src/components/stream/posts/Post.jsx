@@ -3,6 +3,8 @@ import PropTypes from "prop-types";
 import { Modal } from "react-bulma-components";
 import EditPostForm from "./EditPostForm";
 import SharingPostPrompt from "./SharingPostPrompt";
+import { connect } from "react-redux";
+import { withRouter } from "react-router-dom";
 
 import { Card, Content, Container, Button } from "react-bulma-components";
 import Dividor from "./Dividor";
@@ -11,48 +13,21 @@ import EditButton from "./EditButton";
 import ShareButton from "./ShareButton";
 import LikeButton from "./LikeButton";
 import LikedButton from "./LikedButton";
-import { dividorStyle, formContainerStyle, postStyle } from "../../../styling/StyleComponents";
+import { DescriptionStyle, dividorStyle, postStyle, categoriesStyle, signatureStyle, postContainerStyle,postTitleStyle, postContentStyle, footerButtonLayoutStyle } from "../../../styling/StyleComponents";
 import { color } from "./styling";
+// import { connectAdvanced } from "react-redux";
 
-
-var signatureStyle = {
-  display: "flex",
-  float: "right",
-  gap: "4pt",
-  color: color.baseLightGrey,
-  marginRight: "0.5em",
-}
-
-var titleStyle = {
-  fontSize: "1.2em",
-  fontWeight: "400",
-  marginLeft: "0.5em",
-}
-
-var ContentStyle = {
-  marginLeft: "0.5em",
-  marginRight: "0.5em",
-  paddingBottom: "0.2em",
-}
-
-var postContainerStyle = {
-  padding: "0.6em",
-}
-
-
-var footerButtonLayoutStyle = {
-  width: "100%",
-  display: "flex",
-  justifyContent: "space-between",
-  height: "12pt",
-  paddingLeft: "3em",
-  paddingRight: "3em",
+// local styling
+var postDividorStyle = {
+  ...dividorStyle,
+  paddingBottom: "0",
+  paddingTop: "0",
 }
 
 var buttonOverrideStyle = {
   backgroundColor: "transparent",
   border: "none",
-  marginTop: "-3pt",
+  marginTop: "-2pt",
   height: "20pt",
 }
 
@@ -82,19 +57,36 @@ function Post(props) {
       return true;
     }
   }
-  const isImage = IsImage();
-
 
   const likedToggle = () => {
     isLiked ? setIsLiked(false) : setIsLiked(true)
+    props.likePost(props.post);
   }
 
+  const getCategories = (cat) => {
+    let categories =  cat.map((c) => <p>#{c}</p>)
+    return (
+      <Container style={categoriesStyle}>
+        {categories}
+      </Container>
+    )
+  }
+
+  const editButton = () => {
+    if (props.loggedInAuthor.id == props.post.author.id) {
+      return  (
+      <Button style={buttonOverrideStyle} onClick={() => setEditModalIsOpen(true)}>
+        <EditButton/>
+      </Button>
+      );
+    }
+  }
 
   const displayFooterButtons = () => {
     if (props.interactive ){
       return (
         <div>
-        <Dividor style={dividorStyle}/>
+        <Dividor style={postDividorStyle}/>
         <Container style={footerButtonLayoutStyle}>
         <Button style={buttonOverrideStyle} onClick={() => likedToggle()}>
           {isLiked ? <LikedButton/> : <LikeButton/>}
@@ -102,9 +94,7 @@ function Post(props) {
         <Button style={buttonOverrideStyle} onClick={() => setSharingPromptIsOpen(true)}>
           <ShareButton/>
         </Button>
-        <Button style={buttonOverrideStyle} onClick={() => setEditModalIsOpen(true)}>
-          <EditButton/>
-        </Button>
+        {editButton()}
         <Modal className="animate__animated animate__fadeIn animate__faster" show={editModalIsOpen} onClose={() => setEditModalIsOpen(false)} closeOnBlur closeOnEsc>
           <EditPostForm
             setEditModalIsOpen={setEditModalIsOpen}
@@ -127,7 +117,7 @@ function Post(props) {
   }
 
   return (
-      <Card style={postStyle}>
+      <Card style={{...postStyle,...props.style}}>
         <Card.Content style={postContainerStyle}>
 
           {/* Title */}
@@ -136,14 +126,29 @@ function Post(props) {
           <p>·</p>
           <p>{getDateString(Date.parse(props.post.published))}</p>
           </Container>
-          <Container style={titleStyle}>
+          <Container style={postTitleStyle}>
           <Link to={`${postURL}`} style={{textDecoration: "none", color: color.baseBlack}}>{props.post.title}</Link>
           </Container>
-
+          
           {/* Description */}
-          <Container style = {ContentStyle}>
-          <Dividor style={dividorStyle}/> 
-            <Content>{ props.post.description }</Content>
+          <Container style = {DescriptionStyle}>  
+            <p>{ props.post.description }</p>
+          </Container>
+
+          <Dividor style={postDividorStyle}/>
+          
+          {/* Content */}
+          <Container style = {postContentStyle}>
+          {IsImage() ? (
+            <Content style={{textAlign: "center"}}>
+              <img style={{borderRadius: "6pt", maxHeight: "300pt"}}src={`data:${props.post.contentType},${props.post.content}`} /> 
+            </Content>
+          ) : <Content>{props.post.content}</Content> }
+          </Container>
+          
+          {/* categories */}
+          <Container style={postContentStyle}>
+            {getCategories(props.post.categories)}
           </Container>
           
           {displayFooterButtons()}
@@ -156,6 +161,12 @@ function Post(props) {
 Post.propTypes = {
   post: PropTypes.object.isRequired,
   updatePost: PropTypes.func.isRequired,
+  likePost: PropTypes.func.isRequired,
 };
 
-export default Post;
+const mapStateToProps = (state) => ({
+  loggedInAuthor: state.auth.author
+});
+
+export default connect(mapStateToProps, {
+})(withRouter(Post));
