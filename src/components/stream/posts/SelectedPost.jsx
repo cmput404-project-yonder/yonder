@@ -92,7 +92,7 @@ function DetailedPostList(props) {
   // 1. title, description, author, timestamp
   const TitleCard = () => {
     return (
-      <Card style={{...postStyle, marginTop: "80pt", marginBottom: "25pt"}}>
+      <Card style={{...postStyle, marginTop: "80pt", marginBottom: "0pt"}}>
         <Card.Content style={postContainerStyle}>
           {/* Title */}
           <Container style={signatureStyle}>
