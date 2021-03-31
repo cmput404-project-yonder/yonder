@@ -10,15 +10,15 @@ import json
 
 def check_remote_follow(theirAuthor, ourAuthor):
     try:
-        remoteNode = RemoteNode.objects.get(host=follower["host"])
+        remoteNode = RemoteNode.objects.get(host=theirAuthor["host"])
     except RemoteNode.DoesNotExist:
         return False
 
-    url = theirAuthor["url"] + "/followers/" + ourAuthor["id"]
+    url = theirAuthor["host"] + "/api/author/" + str(theirAuthor["id"]) + "/followers/" + str(ourAuthor["id"]) + "/"
     response = requests.get(url, auth=requests.models.HTTPBasicAuth(remoteNode.our_user, remoteNode.our_password))
-    if requests.status_code == 404:
+    if response.status_code == 404:
         return False
-    elif requests.status_code == 200:
+    elif response.status_code == 200:
         return True
 
 # Our Server:
@@ -91,8 +91,13 @@ def create_post(sender, instance, **kwargs):
             except Inbox.DoesNotExist:
                 # Handle follower being on remote server
                 remoteNode = RemoteNode.objects.get(host=follower.follower["host"])
-                url = follower.follower["url"] + "/inbox/"
-                response = requests.post(url, data=data, auth=requests.models.HTTPBasicAuth(remoteNode.our_user, remoteNode.our_password))
+                url = follower.follower["host"] + "api/author/" + str(follower.follower["id"]) + "/inbox/"
+                response = requests.post(url, 
+                    json=data, 
+                    headers={"content-type": "application/json"}, 
+                    auth=requests.models.HTTPBasicAuth(remoteNode.our_user, remoteNode.our_password)
+                )
+                print(response.text)
             except RemoteNode.DoesNotExist:
                 print("Unknown Host, WHO ARE YOU???")
             finally:

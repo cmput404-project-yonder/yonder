@@ -258,9 +258,13 @@ class author_followers_detail(viewsets.ModelViewSet):
             # handle remote author
             authorToFollow = request.data["object"]
             node = RemoteNode.objects.get(host=authorToFollow["host"])
-            url = node.host + "api/authors/" + authorToFollow["id"] + "/followers/" + follower_id
-            json_data = json.dumps(request.data)
-            response = requests.post(url, auth=requests.models.HTTPBasicAuth(node.our_user, node.our_password), data=json_data)
+            url = node.host + "api/author/" + str(authorToFollow["id"]) + "/followers/" + str(follower_id) + "/"
+            response = requests.put(url, 
+                auth=requests.models.HTTPBasicAuth(node.our_user, node.our_password), 
+                json=request.data,
+                headers={"content-type": "application/json"}
+            )
+            print(url, response.text, request.data)
             return Response(status=response.status_code)
         except RemoteNode.DoesNotExist:
             return Response("You are not allowed in the cool club", status=status.HTTP_401_UNAUTHORIZED)
@@ -274,10 +278,10 @@ class author_followers_detail(viewsets.ModelViewSet):
         return Response(status=status.HTTP_404_NOT_FOUND)
 
     def destroy(self, request, author_id, follower_id):
-        author_follower = get_object_or_404(AuthorFollower, author=author_id, follower=request.data["actor"])
+        author_follower = get_object_or_404(AuthorFollower, author=author_id, follower__id=follower_id)
         author_follower.delete()
 
-        return Response(status=status.HTTP_200_OK)
+        return Response(status=status.HTTP_204_NO_CONTENT)
 
     @swagger_auto_schema(tags=['followers'])
     def get(self, request, *args, **kwargs):

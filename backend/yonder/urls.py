@@ -6,35 +6,35 @@ from . import views
 urlpatterns = [
     path('authors/', views.local_authors.as_view(), name="authors"),
     path('authors/all/', views.local_remote_authors.as_view(), name="all_authors"),
-    path('author/<uuid:pk>/', views.author_detail.as_view(), name="author_detail"),
-    path('author/<uuid:author_id>/posts/', views.posts.as_view(), name="posts"),
+    path('author/<str:pk>/', views.author_detail.as_view(), name="author_detail"),
+    path('author/<str:author_id>/posts/', views.posts.as_view(), name="posts"),
     path(
-        'author/<uuid:author_id>/posts/<uuid:pk>/',
+        'author/<str:author_id>/posts/<str:pk>/',
         views.post_detail.as_view(),
         name="post_detail"
     ),
     path(
-        'author/<uuid:author_id>/posts/<uuid:post_id>/comments/',
+        'author/<str:author_id>/posts/<str:post_id>/comments/',
         views.comments.as_view(),
         name="comments"
     ),
     path(
-        'author/<uuid:author_id>/posts/<uuid:post_id>/comments/<uuid:pk>/',
+        'author/<str:author_id>/posts/<str:post_id>/comments/<str:pk>/',
         views.comment_detail.as_view(),
         name="comment_detail"
     ),
     path(
-        'author/<uuid:author_id>/followers/',
+        'author/<str:author_id>/followers/',
         views.author_followers.as_view({'get': 'list'}),
         name="follower_list"
     ),
     path(
-        'author/<uuid:author_id>/followers/<uuid:follower_id>/',
+        'author/<str:author_id>/followers/<str:follower_id>/',
         views.author_followers_detail.as_view({'get': 'retrieve', 'put': 'create', 'delete': 'destroy'}),
         name="followers"
     ),
     path(
-        'author/<uuid:author_id>/inbox/',
+        'author/<str:author_id>/inbox/',
         views.inbox.as_view(),
         name="inbox"
     ),

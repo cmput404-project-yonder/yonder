@@ -1,7 +1,7 @@
 from pathlib import Path
 from .base import *
 
-DEBUG = False
+DEBUG = True
 
 DATABASES["default"]["ATOMIC_REQUESTS"] = True
 
@@ -37,4 +37,4 @@ STATICFILES_DIRS = [
 STATIC_ROOT = Path.joinpath(BASE_DIR, 'staticfiles')
 STATIC_URL = "/static/"
 
-CORS_ALLOW_ALL_ORIGINS = True
+CORS_ORIGIN_ALLOW_ALL = True
