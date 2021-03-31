@@ -250,7 +250,7 @@ class author_followers_detail(viewsets.ModelViewSet):
 
         try:
             Author.objects.get(pk=author_id)
-            author_follower_data = {"author": author_id, "follower": request.data["actor"]}
+            author_follower_data = {"author": author_id, "follower": request.data["author"]}
             serializer = self.get_serializer(data=author_follower_data)
             if not serializer.is_valid():
                 return Response(status=status.HTTP_400_BAD_REQUEST)
@@ -341,7 +341,7 @@ class inbox(generics.GenericAPIView):
                 
                 inbox_data = {
                     "type": "like",
-                    "actor": AuthorSerializer(instance=author).data,
+                    "author": AuthorSerializer(instance=author).data,
                     "object": object_data
                 }
                 inbox.items.append(inbox_data)

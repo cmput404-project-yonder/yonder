@@ -33,7 +33,7 @@ export function Like(props) {
       <Card style={postStyle}>
         <Card.Content>
           <Heading size={4}>
-            <b>@{props.like.actor.displayName}</b> liked your post <b>{props.like.object.title}</b>
+            <b>@{props.like.author.displayName}</b> liked your post <b>{props.like.object.title}</b>
           </Heading>
         </Card.Content>
       </Card>
