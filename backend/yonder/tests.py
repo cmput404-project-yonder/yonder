@@ -163,6 +163,23 @@ class FollowerTests(APITestCase):
         credBytes= base64.b64encode(f'{self.credentials1["username"]}:{self.credentials1["password"]}'.encode())
         self.client.credentials(HTTP_AUTHORIZATION='Basic ' + credBytes.decode())
 
+        self.data =  {
+            "type": "post",
+            "title": "A Friendly post title about a post about web dev",
+            "id": "http://127.0.0.1:5454/author/9de17f29c12e8f97bcbbd34cc908f1baba40658e/posts/764efa883dda1e11db47671c4a3bbd9e",
+            "source": "http://lastplaceigotthisfrom.com/posts/yyyyy",
+            "origin": "http://whereitcamefrom.com/posts/zzzzz",
+            "description": "This post discusses stuff -- brief",
+            "contentType": "text/plain",
+            "content": "Þā wæs on burgum Bēowulf Scd ccan",
+            "author": self.authorJSON1,
+            "categories": ["web", "tutorial"],
+            "comments": "http://127.0.0.1:5454/author/9de17f29c12e8f97bcbbd34cc908f1baba40658e/posts/de305d54-75b4-431b-adb2-eb6b9e546013/comments",
+            "published": "2015-03-09T13:07:04+00:00",
+            "visibility": "FRIENDS",
+            "unlisted": False
+        }
+
     def test_follow(self):
         self.assertEqual(0, AuthorFollower.objects.filter(author=self.author1.id).count())
 
@@ -222,6 +239,32 @@ class FollowerTests(APITestCase):
 
         self.assertEqual(1, AuthorFriend.objects.filter(author=self.author1, friend=self.authorJSON2).count())
         self.assertEqual(1, AuthorFriend.objects.filter(author=self.author2, friend=self.authorJSON1).count())
+
+    def test_friends_post_inbox_negative(self):
+        # Only friend post should not be sent to followers
+        url = reverse('followers', args=[self.author1.id, self.author2.id])
+        self.client.put(url, data=self.followJSON1, format='json')
+
+        url = reverse('inbox', args=[self.author2.id])
+        response = self.client.post(url, content_type='application/json', data=json.dumps(self.data))
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+
+        inbox = Inbox.objects.get(author_id=self.author2.id)
+        self.assertEqual(len(inbox.items), 1)
+
+    def test_friends_post_inbox_positive(self):
+        url = reverse('followers', args=[self.author1.id, self.author2.id])
+        self.client.put(url, data=self.followJSON1, format='json')
+        url = reverse('followers', args=[self.author2.id, self.author1.id])
+        self.client.put(url, data=self.followJSON2, format='json')
+
+        url = reverse('inbox', args=[self.author2.id])
+        response = self.client.post(url, content_type='application/json', data=json.dumps(self.data))
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+
+        inbox = Inbox.objects.get(author_id=self.author2.id)
+        # 2 => follow & post items
+        self.assertEqual(len(inbox.items), 2)
 
 
 class InboxTests(APITestCase):
