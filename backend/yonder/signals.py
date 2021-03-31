@@ -1,10 +1,10 @@
-from .models import Author, AuthorFollower, AuthorFriend, Post, Inbox, RemoteNode
-from .serializers import AuthorSerializer, AuthorFriendSerializer, PostSerializer
+from .models import Author, AuthorFollower, AuthorFriend, Post, Inbox, RemoteNode, Like
+from .serializers import AuthorSerializer, AuthorFriendSerializer, PostSerializer, LikeSerializer
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 import uuid
 import requests
-
+import re
 
 def check_remote_follow(theirAuthor, ourAuthor):
     try:
@@ -113,13 +113,4 @@ def create_inbox(sender, instance, **kwargs):
     if kwargs["created"]:
         Inbox.objects.create(author=instance)
 
-'''
-@receiver(post_save, sender=Liked)
-def like_to_inbox(sender, instance, **kwargs):
-    src_author_id = re.match('(?<=/author/).*(?=/posts)', instance.object)
-    inbox = Inbox.objects.get(author_id=src_author_id)
-    if inbox.exists():
-        data = serializers.serialize('json', instance)
-        inbox.items.append(data)
-        inbox.save()
-'''
+
