@@ -1,7 +1,5 @@
-import re
-from django.contrib import auth
 from rest_framework.response import Response
-from rest_framework import mixins, status, generics, validators, viewsets
+from rest_framework import status, generics, validators, viewsets
 from rest_framework.authtoken.models import Token
 from django.contrib.sites.shortcuts import get_current_site
 from django.shortcuts import get_object_or_404, get_list_or_404
@@ -10,6 +8,7 @@ from drf_yasg.utils import swagger_auto_schema
 from django.core.paginator import Paginator
 from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
 import requests
+import json
 
 from .models import Post, Author, Comment, RemoteNode, Like
 from .serializers import *
@@ -78,7 +77,7 @@ class signup(generics.GenericAPIView):
         }, status=status.HTTP_201_CREATED)
 
 
-class authors(generics.ListAPIView):
+class local_authors(generics.ListAPIView):
     queryset = Author.objects.all()
     serializer_class = AuthorSerializer
 
@@ -86,7 +85,7 @@ class authors(generics.ListAPIView):
     def get(self, request, *args, **kwargs):
         return self.list(request, *args, **kwargs)
 
-class remote_authors(generics.GenericAPIView):
+class local_remote_authors(generics.GenericAPIView):
     queryset = Author.objects.all()
     serializer_class = AuthorSerializer
 
@@ -95,13 +94,18 @@ class remote_authors(generics.GenericAPIView):
         authors = []
         for node in remote_nodes:
             url = node.host + "api/authors/"
-            response = requests.get(url, auth=HTTPBasicAuth(node.ourUser, node.ourPassword))
-            authors.append(response.json)
+            response = requests.get(url, auth=requests.models.HTTPBasicAuth(node.our_user, node.our_password))
+            authors.extend(response.json())
+        
+        local_authors = self.get_queryset()
+        for a in local_authors:
+            local_authors_data = AuthorSerializer(instance=a).data;
+            authors.append(local_authors_data)
 
         if len(authors) > 0:
             return Response(authors, status=status.HTTP_200_OK)
         else:
-            return Response(authors, status=status.HTTP_204_NO_CONTENT)
+            return Response(status=status.HTTP_204_NO_CONTENT)
 
     @swagger_auto_schema(tags=['remote authors'])
     def get(self, request, *args, **kwargs):
@@ -237,14 +241,33 @@ class author_followers_detail(viewsets.ModelViewSet):
         return False
 
     def create(self, request, author_id, follower_id):
+        if author_id == follower_id:
+            return Response("You can't follow yourself :/", status=status.HTTP_400_BAD_REQUEST)
+
         if self.check_following(author_id, follower_id):
             return Response("Already following", status=status.HTTP_409_CONFLICT)
 
-        author_follower_data = {"author": author_id, "follower": request.data}
-        serializer = self.get_serializer(data=author_follower_data)
-        if not serializer.is_valid():
-            return Response(status=status.HTTP_400_BAD_REQUEST)
-        serializer.save()
+        try:
+            Author.objects.get(pk=author_id)
+            author_follower_data = {"author": author_id, "follower": request.data["actor"]}
+            serializer = self.get_serializer(data=author_follower_data)
+            if not serializer.is_valid():
+                return Response(status=status.HTTP_400_BAD_REQUEST)
+            serializer.save()
+        except Author.DoesNotExist:
+            # handle remote author
+            authorToFollow = request.data["object"]
+            node = RemoteNode.objects.get(host=authorToFollow["host"])
+            url = node.host + "api/author/" + str(authorToFollow["id"]) + "/followers/" + str(follower_id) + "/"
+            response = requests.put(url, 
+                auth=requests.models.HTTPBasicAuth(node.our_user, node.our_password), 
+                json=request.data,
+                headers={"content-type": "application/json"}
+            )
+            print(url, response.text, request.data)
+            return Response(status=response.status_code)
+        except RemoteNode.DoesNotExist:
+            return Response("You are not allowed in the cool club", status=status.HTTP_401_UNAUTHORIZED)
 
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
@@ -254,15 +277,11 @@ class author_followers_detail(viewsets.ModelViewSet):
 
         return Response(status=status.HTTP_404_NOT_FOUND)
 
-        # serializer = self.get_serializer(instance=author_follower)
-
-        # return Response(serializer.data["follower"], status=status.HTTP_200_OK)
-
     def destroy(self, request, author_id, follower_id):
-        author_follower = get_object_or_404(AuthorFollower, author=author_id, follower=request.data)
+        author_follower = get_object_or_404(AuthorFollower, author=author_id, follower__id=follower_id)
         author_follower.delete()
 
-        return Response(status=status.HTTP_200_OK)
+        return Response(status=status.HTTP_204_NO_CONTENT)
 
     @swagger_auto_schema(tags=['followers'])
     def get(self, request, *args, **kwargs):
@@ -282,9 +301,6 @@ class inbox(generics.GenericAPIView):
 
     @swagger_auto_schema(tags=['inbox'])
     def get(self, request, *args, **kwargs):
-        # if not request.user.is_authenticated:
-            # return Response(status=status.HTTP_401_UNAUTHORIZED)
-
         inbox = get_object_or_404(Inbox, author_id=kwargs["author_id"])
         author = get_object_or_404(Author, id=kwargs["author_id"])
 
@@ -292,7 +308,7 @@ class inbox(generics.GenericAPIView):
         page_size = 5 if 'size' not in request.query_params else request.query_params.get('size')
         paginator = Paginator(inbox.items, page_size)
         page = paginator.page(page_number)
-        
+
         data = {
             "type": "inbox",
             "author": author.get_absolute_url(),

@@ -7,7 +7,7 @@ import Dividor from "./Dividor";
 import EditButton from "./EditButton";
 import ShareButton from "./ShareButton";
 import LikeButton from "./LikeButton";
-import { dividorStyle, individualPostStyle } from "./StyleComponents";
+import { dividorStyle, individualPostStyle } from "../../../styling/StyleComponents";
 import EditPostForm from "./EditPostForm";
 import { updatePost, deletePost } from '../StreamActions';
 
@@ -75,18 +75,23 @@ class SelectedPost extends React.Component {
     const isOwnPost = IsOwnPost();
     const isImage = IsImage();
 
+    const datePublished = new Date(this.props.retrievedPost.published);
+
     return (
         <Card style={individualPostStyle}>
             <Card.Header>
-                <Card.Header.Title style={{ marginLeft: "1em" }}>
-                <p style={{ fontWeight: "250" }}>@{this.props.retrievedPost.author.displayName}</p>
+                <Card.Header.Title style={{ display: "block" }}>
+                  <Heading size={2}>
+                    {this.props.retrievedPost.title}
+                  </Heading>
+                  <p style={{ fontWeight: "300" }}>
+                    @{this.props.retrievedPost.author.displayName}<br/>
+                    <i>published {datePublished.toLocaleDateString()}</i>
+                  </p>
                 </Card.Header.Title>
             </Card.Header>
-            <Card.Content>
-                <Heading size={8}>
-                    <p>{this.props.retrievedPost.title}</p>
-                </Heading>
-                <Dividor style={dividorStyle}/>
+            <Card.Content style={{ flexGrow: "1" }}>
+                {this.props.retrievedPost.description}
                 {isImage ?(
                     <Content>
                         <img src={`data:${this.props.retrievedPost.contentType},${this.props.retrievedPost.content}`} />

@@ -12,7 +12,10 @@ import {
   SEND_FOLLOW_SUCCESS,
   CHECK_FOLLOW_SUBMITTED,
   CHECK_FOLLOW_ERROR,
-  CHECK_FOLLOW_SUCCESS
+  CHECK_FOLLOW_SUCCESS,
+  CHANGE_PROFILE_SUBMITTED,
+  CHANGE_PROFILE_ERROR,
+  CHANGE_PROFILE_SUCCESS
 } from "./ProfileTypes";
 import { setAxiosAuthToken } from "../../utils/Utils";
 
@@ -69,11 +72,12 @@ export const retrieveAuthorPosts = (authorId) => (dispatch, getState) => {
 export const sendFollow = (otherAuthor) => (dispatch, getState) => {
   const state = getState();
   const author = state.auth.author;
+  const data = {"actor": author, "object": otherAuthor, "type": "follow"}
 
   setAxiosAuthToken(state.auth.token);
   dispatch({ type: SEND_FOLLOW_SUBMITTED });
   axios
-    .put("/author/" + otherAuthor.id + "/followers/" + author.id + "/", author)
+    .put("/author/" + otherAuthor.id + "/followers/" + author.id + "/", data)
     .then((response) => {
       dispatch({ type: SEND_FOLLOW_SUCCESS });
       toast.success("You are now following " + otherAuthor.displayName);
@@ -106,18 +110,33 @@ export const checkFollowing = (otherAuthorId) => (dispatch, getState) => {
   axios
     .get("/author/" + otherAuthorId + "/followers/" + author.id + "/")
     .then((response) => {
-      if (response.status == 200) {
+      if (response.status === 200) {
         dispatch({ type: CHECK_FOLLOW_SUCCESS, payload: true });
       }
-      else if (response.status == 204) {
-        dispatch({ type: CHECK_FOLLOW_SUCCESS, payload: true });
-      }
+    })
+    .catch((error) => {
+      dispatch({ type: CHECK_FOLLOW_SUCCESS, payload: false });
+      console.log(error.message);
+    });
+};
+
+export const editProfile = (newProfile) => (dispatch, getState) => {
+  const state = getState();
+  const author = state.auth.author;
+
+  setAxiosAuthToken(state.auth.token);
+  dispatch({ type: CHANGE_PROFILE_SUBMITTED });
+  axios
+    .put("/author/" + author.id + "/", newProfile)
+    .then((response) => {
+      dispatch({ type: CHANGE_PROFILE_SUCCESS , payload: response.data});
+      toast.success("You profile is changed");
     })
     .catch((error) => {
       if (error.response) {
         toast.error(JSON.stringify(error.response.data));
         dispatch({
-          type: CHECK_FOLLOW_ERROR,
+          type: CHANGE_PROFILE_ERROR,
           errorData: error.response.data,
         });
       } else if (error.message) {

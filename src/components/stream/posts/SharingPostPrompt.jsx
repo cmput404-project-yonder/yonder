@@ -10,6 +10,7 @@ import Dividor from "./Dividor";
 import CancelButton from "./CancelButton";
 import ConfirmButton from "./ConfirmButton";
 
+import { cardStyle } from "../../../styling/StyleComponents";
 
 var submittPanelStyle = {
     margin: "0.5em",
@@ -20,20 +21,11 @@ var submittPanelStyle = {
 }
 
 
-
 var buttonLayoutStyle = {
     display: "flex",
     width: "0em",
     float: "right",
     marginRight: "10em",       // the width of two button.
-}
-
-var cardStyle = {
-    borderRadius: "8pt",
-    width: "470pt",
-    height: "auto",
-    boxShadow: "0pt 0pt 12pt #AAAAAA",
-    backgroundColor: color.backgroundCream,
 }
 
 var postIconStyle = {
@@ -51,8 +43,8 @@ var postCardDisplayStyle = {
     marginRight: "1em",
     paddingTop: "1em",
     paddingBottom: "1em",
-    paddingRight: "1.5em",
-    paddingLeft: "1.5em",
+    paddingRight: "1em",
+    paddingLeft: "1em",
     fontSize: "1.3em",
     backgroundColor: color.backgroundGrey,
 }
@@ -69,23 +61,21 @@ var dividorStyle = {
 
 var promptTitleStyle = {
     fontSize: "2.2em",
-    fontWeight: "400",
+    fontWeight: "300",
     marginTop: "-62pt",
     marginLeft: "80pt",
     fontFamily: font.segoeUI,
-    color: color.baseLightGrey,
+    color: color.baseBlack,
     float: "left",
 }
 
 class SharingPostPromptCard extends React.Component {
     render() {
-
         const PostCard = () => {
             return (
                 <Card style={postCardDisplayStyle}>
-                    <p>{this.props.post.title}</p>
-                    <Dividor style={dividorStyle}/>
-                    <p>{this.props.post.content}</p>
+                    <p style={{fontSize: "1.5em"}}>{this.props.post.title}</p>
+                    <p style={{fontWeight: "300"}}>{this.props.post.description}</p>
                     <Dividor style={dividorStyle}/>
                     <p>@{this.props.post.author.displayName}</p>
                 </Card>
@@ -110,7 +100,8 @@ class SharingPostPromptCard extends React.Component {
             // this function implement the sharing functionility
 
             // send the entire post to backend.
-            this.props.sharePost(this.props.post)
+            this.props.sharePost(this.props.post);
+            this.props.setModalIsOpen(false);
         }
 
         const PostSubmitPanel = () => {

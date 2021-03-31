@@ -1,3 +1,4 @@
+import { retrieveAuthor } from "./ProfileActions";
 import {
   RETRIEVE_AUTHOR_ERROR,
   RETRIEVE_AUTHOR_SUBMITTED,
@@ -10,7 +11,10 @@ import {
   SEND_FOLLOW_SUCCESS,
   CHECK_FOLLOW_SUBMITTED,
   CHECK_FOLLOW_ERROR,
-  CHECK_FOLLOW_SUCCESS
+  CHECK_FOLLOW_SUCCESS,
+  CHANGE_PROFILE_SUBMITTED,
+  CHANGE_PROFILE_ERROR,
+  CHANGE_PROFILE_SUCCESS,
 } from "./ProfileTypes";
 
 const initialState = {
@@ -21,17 +25,21 @@ const initialState = {
   loading: false,
 };
 
+
 export const profileReducer = (state = initialState, action) => {
   switch (action.type) {
+    case CHANGE_PROFILE_SUBMITTED:
     case RETRIEVE_AUTHOR_POSTS_SUBMITTED:
-    case RETRIEVE_AUTHOR_SUBMITTED:
     case SEND_FOLLOW_SUBMITTED:
     case CHECK_FOLLOW_SUBMITTED:
+    case RETRIEVE_AUTHOR_SUBMITTED:
       return {
         ...state,
         error: "",
         loading: true,
       };
+
+    case CHANGE_PROFILE_ERROR:
     case RETRIEVE_AUTHOR_POSTS_ERROR:
     case RETRIEVE_AUTHOR_ERROR:
     case SEND_FOLLOW_ERROR:
@@ -41,6 +49,8 @@ export const profileReducer = (state = initialState, action) => {
         error: action.errorData,
         loading: false,
       };
+
+    
     case RETRIEVE_AUTHOR_SUCCESS:
       return {
         ...state,
@@ -66,6 +76,14 @@ export const profileReducer = (state = initialState, action) => {
         ...state,
         error: "",
         isFollowing: action.payload,
+        loading: false,
+      };
+
+    case CHANGE_PROFILE_SUCCESS:
+      return {
+        ...state,
+        error: "",
+        retrievedAuthor: action.payload,
         loading: false,
       };
     default:

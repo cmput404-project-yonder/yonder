@@ -4,21 +4,72 @@ import { Modal } from "react-bulma-components";
 import EditPostForm from "./EditPostForm";
 import SharingPostPrompt from "./SharingPostPrompt";
 
-import { Card, Content, Heading } from "react-bulma-components";
-import { font, color } from "./styling";
+import { Card, Content, Container, Button } from "react-bulma-components";
 import Dividor from "./Dividor";
 import { Link } from "react-router-dom";
 import EditButton from "./EditButton";
 import ShareButton from "./ShareButton";
 import LikeButton from "./LikeButton";
-import { dividorStyle, postStyle, textStyle, authorStyle, contentStyle } from "./StyleComponents";
+import LikedButton from "./LikedButton";
+import { dividorStyle, formContainerStyle, postStyle } from "../../../styling/StyleComponents";
+import { color } from "./styling";
+
+
+var signatureStyle = {
+  display: "flex",
+  float: "right",
+  gap: "4pt",
+  color: color.baseLightGrey,
+  marginRight: "0.5em",
+}
+
+var titleStyle = {
+  fontSize: "1.2em",
+  fontWeight: "400",
+  marginLeft: "0.5em",
+}
+
+var ContentStyle = {
+  marginLeft: "0.5em",
+  marginRight: "0.5em",
+  paddingBottom: "0.2em",
+}
+
+var postContainerStyle = {
+  padding: "0.6em",
+}
+
+
+var footerButtonLayoutStyle = {
+  width: "100%",
+  display: "flex",
+  justifyContent: "space-between",
+  height: "12pt",
+  paddingLeft: "3em",
+  paddingRight: "3em",
+}
+
+var buttonOverrideStyle = {
+  backgroundColor: "transparent",
+  border: "none",
+  marginTop: "-3pt",
+  height: "20pt",
+}
+
+function getDateString(ms) {
+  let date = new Date(ms);
+  return date.toLocaleDateString();
+}
+
+
 
 function Post(props) {
   const [editModalIsOpen, setEditModalIsOpen] = useState(false);
+  const [isLiked, setIsLiked] = useState(false);
   const [sharingPromptIsOpen, setSharingPromptIsOpen] = useState(false);
-  console.log(props.post);
+  // console.log(props.post);
   
-  const postURL = "/author/" + props.post.author.id + "/posts/" + props.post.id;
+  const postURL = "/author/" + props.post.author.id + "/posts/" + props.post.id + "/";
 
   const IsImage = () => {
     if (props.post.contentType === "text/plain") {
@@ -32,57 +83,72 @@ function Post(props) {
     }
   }
   const isImage = IsImage();
-  if (isImage) {
+
+
+  const likedToggle = () => {
+    isLiked ? setIsLiked(false) : setIsLiked(true)
   }
 
-  console.log(isImage);
+
+  const displayFooterButtons = () => {
+    if (props.interactive ){
+      return (
+        <div>
+        <Dividor style={dividorStyle}/>
+        <Container style={footerButtonLayoutStyle}>
+        <Button style={buttonOverrideStyle} onClick={() => likedToggle()}>
+          {isLiked ? <LikedButton/> : <LikeButton/>}
+        </Button>
+        <Button style={buttonOverrideStyle} onClick={() => setSharingPromptIsOpen(true)}>
+          <ShareButton/>
+        </Button>
+        <Button style={buttonOverrideStyle} onClick={() => setEditModalIsOpen(true)}>
+          <EditButton/>
+        </Button>
+        <Modal className="animate__animated animate__fadeIn animate__faster" show={editModalIsOpen} onClose={() => setEditModalIsOpen(false)} closeOnBlur closeOnEsc>
+          <EditPostForm
+            setEditModalIsOpen={setEditModalIsOpen}
+            post={props.post}
+            updatePost={props.updatePost}
+            deletePost={props.deletePost}
+          />
+        </Modal>
+        <Modal className="animate__animated animate__fadeIn animate__faster" show={sharingPromptIsOpen} onClose={() => setSharingPromptIsOpen(false)} closeOnBlur closeOnEsc>
+          <SharingPostPrompt
+            setModalIsOpen={setSharingPromptIsOpen}   
+            post={props.post}
+            sharePost={props.sharePost}
+          />
+        </Modal>
+      </Container>
+      </div>
+      );
+    }
+  }
 
   return (
       <Card style={postStyle}>
-        <Card.Header>
-          <Card.Header.Title style={{ marginLeft: "1em" }}>
-              <p style={{ fontWeight: "250" }}>@{props.post.author.displayName}</p>
-          </Card.Header.Title>
-        </Card.Header>
-        <Card.Content>
-          <Heading size={8}>
-            <Link to={`${postURL}`}>{props.post.title}</Link>
-          </Heading>
-          <Dividor style={dividorStyle}/>
-          {isImage ? (
-            <Content>
-              <img src={`data:${props.post.contentType},${props.post.content}`} /> 
-            </Content>
-          ) : <Content>{props.post.content}</Content> }
-          <Dividor style={dividorStyle}/>
-          <p style={{ margin: "1em", fontSize: "0.7em" }}>{props.post.published}</p>
+        <Card.Content style={postContainerStyle}>
+
+          {/* Title */}
+          <Container style={signatureStyle}>
+          <p style={{ fontWeight: "250" }}>@{props.post.author.displayName}</p>
+          <p>·</p>
+          <p>{getDateString(Date.parse(props.post.published))}</p>
+          </Container>
+          <Container style={titleStyle}>
+          <Link to={`${postURL}`} style={{textDecoration: "none", color: color.baseBlack}}>{props.post.title}</Link>
+          </Container>
+
+          {/* Description */}
+          <Container style = {ContentStyle}>
+          <Dividor style={dividorStyle}/> 
+            <Content>{ props.post.description }</Content>
+          </Container>
+          
+          {displayFooterButtons()}
+
         </Card.Content>
-        <Card.Footer>
-          <Card.Footer.Item renderAs="a" onClick={{}}>
-            <LikeButton/>
-          </Card.Footer.Item>
-          <Card.Footer.Item renderAs="a" onClick={() => setSharingPromptIsOpen(true)}>
-            <ShareButton/>
-          </Card.Footer.Item>
-          <Card.Footer.Item renderAs="a" onClick={() => setEditModalIsOpen(true)}>
-            <EditButton/>
-          </Card.Footer.Item>
-          <Modal show={editModalIsOpen} onClose={() => setEditModalIsOpen(false)} closeOnBlur closeOnEsc>
-            <EditPostForm
-              setEditModalIsOpen={setEditModalIsOpen}
-              post={props.post}
-              updatePost={props.updatePost}
-              deletePost={props.deletePost}
-            />
-          </Modal>
-          <Modal show={sharingPromptIsOpen} onClose={() => setSharingPromptIsOpen(false)} closeOnBlur closeOnEsc>
-            <SharingPostPrompt
-              setModalIsOpen={setSharingPromptIsOpen}   
-              post={props.post}
-              sharePost={props.sharePost}
-            />
-          </Modal>
-        </Card.Footer>
       </Card>
   );
 }

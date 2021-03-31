@@ -8,8 +8,8 @@ import { color } from "./styling";
 var divStyle = {
     height: "0em",
     borderBottom: "0.1px " + color.baseLightGrey + " dashed",
-    marginLeft: "1em",
-    marginRight: "1em",
+    marginLeft: "0em",
+    marginRight: "0em",
 }
 
 // component
