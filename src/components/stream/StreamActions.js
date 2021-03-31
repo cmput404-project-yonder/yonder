@@ -202,7 +202,10 @@ export const likePost = (likedPost) => (dispatch, getState) => {
   const state = getState();
   setAxiosAuthToken(state.auth.token);
 
+  likedPost["type"] = "like";
   likedPost["author"] = state.auth.author;
+  console.log(state.auth);
+  //likedPost["post"] = state.auth.post.
 
   dispatch({ type: LIKE_POST_SUBMITTED });
   axios

@@ -13,6 +13,7 @@ import LikeButton from "./LikeButton";
 import LikedButton from "./LikedButton";
 import { DescriptionStyle, dividorStyle, postStyle, categoriesStyle, signatureStyle, postContainerStyle,postTitleStyle, postContentStyle, footerButtonLayoutStyle } from "../../../styling/StyleComponents";
 import { color } from "./styling";
+import { likePost } from "../StreamActions";
 // import { connectAdvanced } from "react-redux";
 
 // local styling
@@ -58,6 +59,7 @@ function Post(props) {
 
   const likedToggle = () => {
     isLiked ? setIsLiked(false) : setIsLiked(true)
+    likePost();
   }
 
   const getCategories = (cat) => {
@@ -150,6 +152,7 @@ function Post(props) {
 Post.propTypes = {
   post: PropTypes.object.isRequired,
   updatePost: PropTypes.func.isRequired,
+  likePost: PropTypes.func.isRequired,
 };
 
 export default Post;
