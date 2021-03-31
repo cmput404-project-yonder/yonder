@@ -1,15 +1,20 @@
-import React from 'react'
+import React, {useState} from 'react'
 import { ReactSearchAutocomplete } from 'react-search-autocomplete'
+import { font, color } from "../../styling/ColorFontConfig";
+
 
 function SearchBar(props) {
+
   const items = props.authors.map((p, i) => {
       return {id: i, name: p.displayName}
   });
 
   const handleOnSelect = (item) => {
     // the item selected
-    const author = props.authors[item.id];
-    props.follow(author);
+    // const author = props.authors[item.id];
+    // props.follow(author);
+
+    props.setAuthor(props.authors[item.id]);
   }
 
 
@@ -30,13 +35,22 @@ function SearchBar(props) {
   // };
 
   return (
-    <div style={{ width: "100%"}}>
+    <div style={{ width: "80%",  margin: "auto"}}>
       <ReactSearchAutocomplete
         items={items}
         onSelect={handleOnSelect}
         maxResults={5}
-        styling={{borderRadius: "6pt"}}
+        styling={{
+          borderRadius: "5pt",
+          height: "28pt",
+          hoverBackgroundColor: "transparent",
+          boxShadow: "none",
+          fontSize: "1.1em",
+          fontFamily: font.segoeUI,
+          color: color.baseLightGrey,
+        }}
       />
+
     </div>
   );
 }

@@ -55,3 +55,43 @@ export function SignupIcon(props) {
         </svg>
     )
 }
+
+export function SearchAuthorIcon(props) {
+    // color is fixed
+    return (
+        <svg xmlns="http://www.w3.org/2000/svg" width={props.svgScale}  viewBox="0 0 103 103">
+        <g id="Group_77" data-name="Group 77" transform="translate(-430.628 -45.581)">
+            <circle id="Ellipse_32" data-name="Ellipse 32" cx="51.5" cy="51.5" r="51.5" transform="translate(430.628 45.581)" fill="#e47171"/>
+            <g id="online-resume" transform="translate(452.56 67.513)">
+            <path id="Path_175" data-name="Path 175" d="M57.4,9.24H52.091V8.663A8.672,8.672,0,0,0,43.429,0H8.778A1.733,1.733,0,0,0,7.046,1.733V9.24H1.733A1.733,1.733,0,0,0,0,10.973V47.933a1.733,1.733,0,0,0,1.733,1.733h18.7l-1.465,6.006h-2.1a1.733,1.733,0,0,0,0,3.465h25.41a1.733,1.733,0,1,0,0-3.465h-2.1L38.7,49.666H57.4a1.733,1.733,0,0,0,1.733-1.733V10.973A1.733,1.733,0,0,0,57.4,9.24ZM45.161,3.763A5.222,5.222,0,0,1,48.328,6.93H45.161Zm-34.651-.3H41.7v5.2A1.733,1.733,0,0,0,43.429,10.4h5.2V39.271H10.511Zm-7.046,9.24H7.046V39.271H3.465ZM22.534,55.672,24,49.666H35.138L36.6,55.672ZM55.672,46.2H3.465V42.736H55.672Zm0-6.93H52.091V12.705h3.581Z" fill="#f9dddd"/>
+            <path id="Path_176" data-name="Path 176" d="M122.733,78.1h18.48a1.733,1.733,0,0,0,1.733-1.733,10.983,10.983,0,0,0-5.9-9.726,6.93,6.93,0,1,0-10.151,0,10.983,10.983,0,0,0-5.9,9.726A1.733,1.733,0,0,0,122.733,78.1Zm9.24-19.635a3.465,3.465,0,1,1-3.465,3.465A3.469,3.469,0,0,1,131.973,58.465Zm0,10.4a7.521,7.521,0,0,1,7.306,5.775H124.667A7.521,7.521,0,0,1,131.973,68.86Z" transform="translate(-107.024 -48.647)" fill="#f9dddd"/>
+            <path id="Path_177" data-name="Path 177" d="M337.353,115h-4.62a1.733,1.733,0,1,0,0,3.465h4.62a1.733,1.733,0,0,0,0-3.465Z" transform="translate(-292.769 -101.717)" fill="#f9dddd"/>
+            <path id="Path_178" data-name="Path 178" d="M337.353,170h-4.62a1.733,1.733,0,1,0,0,3.465h4.62a1.733,1.733,0,0,0,0-3.465Z" transform="translate(-292.769 -150.365)" fill="#f9dddd"/>
+            <path id="Path_179" data-name="Path 179" d="M337.353,225h-4.62a1.733,1.733,0,1,0,0,3.465h4.62a1.733,1.733,0,0,0,0-3.465Z" transform="translate(-292.769 -199.012)" fill="#f9dddd"/>
+            <path id="Path_180" data-name="Path 180" d="M142.763,280h-30.03a1.733,1.733,0,1,0,0,3.465h30.03a1.733,1.733,0,1,0,0-3.465Z" transform="translate(-98.179 -247.659)" fill="#f9dddd"/>
+            </g>
+        </g>
+        </svg>
+    )
+}
+
+export function InboxModalIcon(props) {
+    // color is fixed
+    return (
+        <svg xmlns="http://www.w3.org/2000/svg" width={props.svgScale} viewBox="0 0 103 103">
+        <g id="Group_79" data-name="Group 79" transform="translate(-241.628 -38.581)">
+            <circle id="Ellipse_32" data-name="Ellipse 32" cx="51.5" cy="51.5" r="51.5" transform="translate(241.628 38.581)" fill="#e47171"/>
+            <g id="email" transform="translate(260.478 32.805)">
+            <g id="Group_78" data-name="Group 78" transform="translate(0 28.756)">
+                <g id="Group_77" data-name="Group 77" transform="translate(0 0)">
+                <path id="Path_181" data-name="Path 181" d="M65,47.069l-9.457-6.68V30.632a2.1,2.1,0,0,0-1.8-1.876H12.309a2.1,2.1,0,0,0-1.8,1.876v9.682L.675,47.069A1.651,1.651,0,0,0,0,48.269v35.65A2.176,2.176,0,0,0,1.876,85.8H64.17c.826,0,1.126-.976,1.126-1.876V48.27C65.3,47.819,65.37,47.369,65,47.069Zm-9.457-3.077,6.455,4.428L55.538,53.3ZM13.509,31.758H52.536V55.625L33.023,70.335,13.509,55.625V31.758Zm-3,12.158v9.457L4.053,48.42ZM3,51.5,24.017,67.408,3,81.593Zm3.6,31.3L26.568,69.359,31.9,73.412a1.8,1.8,0,0,0,1.051.375c.3,0,.45-.15.75-.375l5.554-4.278,20.189,13.66Zm55.689-1.726L41.729,67.258,62.293,51.5Z" transform="translate(0 -28.756)" fill="#f9dddd"/>
+                <path id="Path_182" data-name="Path 182" d="M137.338,99.676h6.755a1.5,1.5,0,1,0,0-3h-6.755a1.5,1.5,0,1,0,0,3Z" transform="translate(-116.323 -86.917)" fill="#f9dddd"/>
+                <path id="Path_183" data-name="Path 183" d="M137.338,146.7h24.017a1.5,1.5,0,1,0,0-3H137.338a1.5,1.5,0,1,0,0,3Z" transform="translate(-116.323 -127.184)" fill="#f9dddd"/>
+                <path id="Path_184" data-name="Path 184" d="M162.856,192.216a1.5,1.5,0,0,0-1.5-1.5H137.338a1.5,1.5,0,1,0,0,3h24.017A1.5,1.5,0,0,0,162.856,192.216Z" transform="translate(-116.323 -167.449)" fill="#f9dddd"/>
+                </g>
+            </g>
+            </g>
+        </g>
+        </svg>
+    )
+}
