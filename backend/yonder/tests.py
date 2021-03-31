@@ -157,8 +157,8 @@ class FollowerTests(APITestCase):
         self.author2 = Author.objects.create(**self.testAuthor2, user=user2)
         self.authorJSON2 = AuthorSerializer(instance=self.author2).data
 
-        self.followJSON1 = {"author": self.authorJSON2, "object": self.authorJSON1}
-        self.followJSON2 = {"author": self.authorJSON1, "object": self.authorJSON2}
+        self.followJSON1 = {"actor": self.authorJSON2, "object": self.authorJSON1}
+        self.followJSON2 = {"actor": self.authorJSON1, "object": self.authorJSON2}
 
         credBytes= base64.b64encode(f'{self.credentials1["username"]}:{self.credentials1["password"]}'.encode())
         self.client.credentials(HTTP_AUTHORIZATION='Basic ' + credBytes.decode())
@@ -454,7 +454,7 @@ class LikeTests(APITestCase):
         # request post and comment data
         post_like_data = {
             "type": "like",
-            "actor":{
+            "author":{
                 "type":"author",
                 "host": self.author1.host,
                 "displayName": self.author1.displayName,
@@ -466,7 +466,7 @@ class LikeTests(APITestCase):
 
         comment_like_data = {
             "type": "like",
-            "actor":{
+            "author":{
                 "type":"author",
                 "host": self.author2.host,
                 "displayName": self.author2.displayName,
