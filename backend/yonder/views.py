@@ -378,9 +378,13 @@ class post_likes(generics.GenericAPIView):
     @swagger_auto_schema(tags=['likes'])
     def get(self, request, *args, **kwargs):
         post = get_object_or_404(Post, id=kwargs["post_id"])
-        likes = Like.objects.all().filter(object_url=post.get_absolute_url()) 
+        likes = Like.objects.filter(object_url=post.get_absolute_url()) 
         serialized_data = [LikeSerializer(like).data for like in likes]
-        return Response(data=serialized_data, status=status.HTTP_200_OK)
+        data = {
+            "type": "likes",
+            "items": serialized_data
+        }
+        return Response(data=data, status=status.HTTP_200_OK)
 
 class comment_likes(generics.GenericAPIView):
     permission_classes = [IsAuthenticated]
@@ -388,9 +392,13 @@ class comment_likes(generics.GenericAPIView):
     @swagger_auto_schema(tags=['likes'])
     def get(self, request, *args, **kwargs):
         comment = get_object_or_404(Comment, id=kwargs["comment_id"])
-        likes = Like.objects.all().filter(object_url=comment.get_absolute_url()) 
+        likes = Like.objects.filter(object_url=comment.get_absolute_url()) 
         serialized_data = [LikeSerializer(like).data for like in likes]
-        return Response(data=serialized_data, status=status.HTTP_200_OK)
+        data = {
+            "type": "likes",
+            "items": serialized_data
+        }
+        return Response(data=data, status=status.HTTP_200_OK)
 
 class likes(generics.GenericAPIView):
     permission_classes = [IsAuthenticated]

@@ -505,8 +505,9 @@ class LikeTests(APITestCase):
         url = reverse('post_likes', args=[self.author1.id, self.author2_post.id])
         response = self.client.get(url)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(response.data[0]["author"], self.author1.id)
-        self.assertEqual(response.data[0]["object_url"], self.author2_post.get_absolute_url())
+        data_json = response.json()
+        self.assertEqual(data_json["items"][0]["author"], str(self.author1.id))
+        self.assertEqual(data_json["items"][0]["object_url"], self.author2_post.get_absolute_url())
     
     def test_get_comment_likes(self):
         # author2 sends like to author1_comment
@@ -516,9 +517,10 @@ class LikeTests(APITestCase):
 
         url = reverse('comment_likes', args=[self.author2.id, self.author2_post.id, self.author1_comment.id])
         response = self.client.get(url)
+        data_json = response.json()
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(response.data[0]["author"], self.author2.id)
-        self.assertEqual(response.data[0]["object_url"], self.author1_comment.get_absolute_url())
+        self.assertEqual(data_json["items"][0]["author"], str(self.author2.id))
+        self.assertEqual(data_json["items"][0]["object_url"], self.author1_comment.get_absolute_url())
 
     def test_get_liked(self):
         # author1 sends like to author1_comment
