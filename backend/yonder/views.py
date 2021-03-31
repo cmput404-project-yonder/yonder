@@ -337,7 +337,7 @@ class inbox(generics.GenericAPIView):
                 
                 inbox_data = {
                     "type": "like",
-                    "author": AuthorSerializer(instance=author).data,
+                    "author": request.data["author"],
                     "object": object_url
                 }
                 inbox.items.append(inbox_data)
