@@ -353,7 +353,7 @@ class EditPostForm extends Component {
             <Form.Control>
               <Form.Textarea
                   onKeyPress={(e) => {if (e.key === "Enter") e.preventDefault();}}
-                  maxLength="30"
+                  maxLength="80"
                   cols={1}
                   name="title"
                   value={this.state.title}
@@ -367,7 +367,7 @@ class EditPostForm extends Component {
             <Form.Control>
               <Form.Textarea
                 onKeyPress={(e) => {if (e.key === "Enter") e.preventDefault();}}
-                maxLength="30"
+                maxLength="120"
                 cols={1}
                 name="description"
                 value={this.state.description}

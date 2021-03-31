@@ -3,6 +3,8 @@ import PropTypes from "prop-types";
 import { Modal } from "react-bulma-components";
 import EditPostForm from "./EditPostForm";
 import SharingPostPrompt from "./SharingPostPrompt";
+import { connect } from "react-redux";
+import { withRouter } from "react-router-dom";
 
 import { Card, Content, Container, Button } from "react-bulma-components";
 import Dividor from "./Dividor";
@@ -58,6 +60,7 @@ function Post(props) {
 
   const likedToggle = () => {
     isLiked ? setIsLiked(false) : setIsLiked(true)
+    props.likePost(props.post);
   }
 
   const getCategories = (cat) => {
@@ -67,6 +70,16 @@ function Post(props) {
         {categories}
       </Container>
     )
+  }
+
+  const editButton = () => {
+    if (props.loggedInAuthor.id == props.post.author.id) {
+      return  (
+      <Button style={buttonOverrideStyle} onClick={() => setEditModalIsOpen(true)}>
+        <EditButton/>
+      </Button>
+      );
+    }
   }
 
   const displayFooterButtons = () => {
@@ -81,9 +94,7 @@ function Post(props) {
         <Button style={buttonOverrideStyle} onClick={() => setSharingPromptIsOpen(true)}>
           <ShareButton/>
         </Button>
-        <Button style={buttonOverrideStyle} onClick={() => setEditModalIsOpen(true)}>
-          <EditButton/>
-        </Button>
+        {editButton()}
         <Modal className="animate__animated animate__fadeIn animate__faster" show={editModalIsOpen} onClose={() => setEditModalIsOpen(false)} closeOnBlur closeOnEsc>
           <EditPostForm
             setEditModalIsOpen={setEditModalIsOpen}
@@ -150,6 +161,12 @@ function Post(props) {
 Post.propTypes = {
   post: PropTypes.object.isRequired,
   updatePost: PropTypes.func.isRequired,
+  likePost: PropTypes.func.isRequired,
 };
 
-export default Post;
+const mapStateToProps = (state) => ({
+  loggedInAuthor: state.auth.author
+});
+
+export default connect(mapStateToProps, {
+})(withRouter(Post));
