@@ -322,7 +322,7 @@ class inbox(generics.GenericAPIView):
     def post(self, request, *args, **kwargs):
         try:
             # handle local author
-            inbox = get_object_or_404(Inbox, author_id=kwargs["author_id"])
+            inbox = Inbox.objects.get(author_id=kwargs["author_id"])
             
             if request.data["type"] == "like":
                 author = get_object_or_404(Author, id=kwargs["author_id"])
@@ -355,7 +355,7 @@ class inbox(generics.GenericAPIView):
             # Handle follower being on remote server
             original_poster = request.data["object"]["author"]
             remoteHost = original_poster.host
-            remoteNode = RemoteNode.objects.get(host=remoteHost)
+            remoteNode = get_object_or_404(RemoteNode,host=remoteHost)
             url = remoteHost + "api/author/" + kwargs["author_id"] + "/inbox/"
             response = requests.post(url, 
                 json=request.data, 
@@ -363,7 +363,7 @@ class inbox(generics.GenericAPIView):
                 auth=requests.models.HTTPBasicAuth(remoteNode.our_user, remoteNode.our_password)
             )
             print(response.text)
-            return Response(response.status_code)
+            return Response(status=response.status_code)
 
     @swagger_auto_schema(tags=['inbox'])
     def delete(self, request, *args, **kwargs):
