@@ -38,6 +38,21 @@ urlpatterns = [
         views.inbox.as_view(),
         name="inbox"
     ),
+    path(
+        'author/<uuid:author_id>/post/<uuid:post_id>/likes/',
+        views.post_likes.as_view(),
+        name="post_likes"
+    ),
+    path(
+        'author/<uuid:author_id>/post/<uuid:post_id>/comments/<uuid:comment_id>/likes/',
+        views.comment_likes.as_view(),
+        name="comment_likes"
+    ),
+    path(
+        'author/<uuid:author_id>/liked/',
+        views.likes.as_view(),
+        name="likes"
+    ),
     url('login', views.login.as_view(), name='login'),
     url('signup', views.signup.as_view(), name='signup'),
     url('logout', views.logout.as_view(), name='logout'),
