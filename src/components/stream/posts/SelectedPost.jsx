@@ -152,6 +152,7 @@ function DetailedPostList(props) {
     return (
       <Card style={postStyle}>
         <Card.Content style={{...postContainerStyle, marginTop: "0.3em"}}>
+            
             {/* Content */}
             <Container style = {postContentStyle}>
             {IsImage() ? (
