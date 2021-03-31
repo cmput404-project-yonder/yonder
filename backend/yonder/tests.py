@@ -404,23 +404,8 @@ class SignalTests(TestCase):
         inbox_item = Inbox.objects.filter(author=self.author1).count()
         #one inbox for author1 sent from author2's follow
         self.assertEqual(inbox_item,1)
-    
-    def test_like_to_inbox(self):
-        #author2 likes a post created by author1 and sends the data to author1's inbox
-        AuthorFollower.objects.create(**self.testFollow)
-        post = Post.objects.create(**self.post)
-        self.like["object_url"] = post.get_absolute_url()
-        Like.objects.create(**self.like)
-        inbox = Inbox.objects.filter(author=self.author1)
-        for _inbox in inbox:
-            inbox_items = _inbox.items
-        #one inbox created for author1
-        self.assertEqual(inbox.count(),1)
-        #two inbox items from author2's follow and author2's like on the post
-        self.assertEqual(len(inbox_items), 2)
         
 
- 
 class LikeTests(APITestCase):
     def setUp(self):
         self.credentials1 = {

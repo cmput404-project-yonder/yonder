@@ -320,35 +320,50 @@ class inbox(generics.GenericAPIView):
     
     @swagger_auto_schema(tags=['inbox'])
     def post(self, request, *args, **kwargs):
-        inbox = get_object_or_404(Inbox, author_id=kwargs["author_id"])
-        
-        if request.data["type"] == "like":
-            author = get_object_or_404(Author, id=kwargs["author_id"])
-            object_data = request.data["object"]
-            if object_data["type"] == "post":
-                object_url = get_object_or_404(Post, id=object_data["id"]).get_absolute_url()
-            elif object_data["type"] == "comment":
-                object_url = get_object_or_404(Comment, id=object_data["id"]).get_absolute_url()
-            formated_data = {
-                "author": author.id,
-                "object_url": object_url
-            }
-            like_serializer = LikeSerializer(data=formated_data)
-            if like_serializer.is_valid():
-                like_serializer.save()
+        try:
+            # handle local author
+            inbox = get_object_or_404(Inbox, author_id=kwargs["author_id"])
             
-            inbox_data = {
-                "type": "like",
-                "actor": AuthorSerializer(instance=author).data,
-                "object": object_data
-            }
-            inbox.items.append(inbox_data)
-            inbox.save()
-        else:
-            inbox.items.append(request.data)
-            inbox.save()
-            
-        return Response(status=status.HTTP_201_CREATED)
+            if request.data["type"] == "like":
+                author = get_object_or_404(Author, id=kwargs["author_id"])
+                object_data = request.data["object"]
+                if object_data["type"] == "post":
+                    object_url = get_object_or_404(Post, id=object_data["id"]).get_absolute_url()
+                elif object_data["type"] == "comment":
+                    object_url = get_object_or_404(Comment, id=object_data["id"]).get_absolute_url()
+                formated_data = {
+                    "author": author.id,
+                    "object_url": object_url
+                }
+                like_serializer = LikeSerializer(data=formated_data)
+                if like_serializer.is_valid():
+                    like_serializer.save()
+                
+                inbox_data = {
+                    "type": "like",
+                    "actor": AuthorSerializer(instance=author).data,
+                    "object": object_data
+                }
+                inbox.items.append(inbox_data)
+                inbox.save()
+            else:
+                inbox.items.append(request.data)
+                inbox.save()
+                
+            return Response(status=status.HTTP_201_CREATED)
+        except Inbox.DoesNotExist:
+            # Handle follower being on remote server
+            original_poster = request.data["object"]["author"]
+            remoteHost = original_poster.host
+            remoteNode = RemoteNode.objects.get(host=remoteHost)
+            url = remoteHost + "api/author/" + kwargs["author_id"] + "/inbox/"
+            response = requests.post(url, 
+                json=request.data, 
+                headers={"content-type": "application/json"}, 
+                auth=requests.models.HTTPBasicAuth(remoteNode.our_user, remoteNode.our_password)
+            )
+            print(response.text)
+            return Response(response.status_code)
 
     @swagger_auto_schema(tags=['inbox'])
     def delete(self, request, *args, **kwargs):
