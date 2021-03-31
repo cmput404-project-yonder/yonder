@@ -66,8 +66,7 @@ function DetailedPostList(props) {
   }
 
   const IsOwnPost = () => {
-    const currentUserId = JSON.parse(window.localStorage.getItem("user")).author;
-    if (currentUserId === this.props.retrievedPost.author.id) {
+    if (props.loggedInAuthor.id === props.post.author.id) {
       console.log("This is your own post");
       return true;
     }
@@ -168,7 +167,7 @@ function DetailedPostList(props) {
             </Container>
             
             {/* action buttons*/}
-            {IsOwnPost? displayFooterButtons():null}
+            {IsOwnPost()? displayFooterButtons():null}
         </Card.Content>
       </Card>      
     )
@@ -212,28 +211,13 @@ function DetailedPostList(props) {
 }
 
 class SelectedPost extends React.Component {
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      isOpen: false,
-    }
-  }
-  
-  handleModal = () => {
-    this.setState({
-      ...this.state,
-      isOpen: !this.state.isOpen,
-    });
-    console.log("Modal is open: ", this.state.isOpen);
-  }
 
   componentDidMount() {
     const {
       match: { params },
     } = this.props;
 
-    this.props.retrievePost(params.id);
+    this.props.retrievePost(params.author_id,params.id);
   }
 
   render() {
@@ -256,7 +240,7 @@ class SelectedPost extends React.Component {
           <div style={streamLayerContainerStyle}>
             <Container fluid>
               <Columns centered>
-               <DetailedPostList post={this.props.retrievedPost}/>
+               <DetailedPostList post={this.props.retrievedPost} loggedInAuthor={this.props.loggedInAuthor}/>
               </Columns>
             </Container>
           </div>
@@ -266,6 +250,7 @@ class SelectedPost extends React.Component {
 }
 
 SelectedPost.propTypes = {
+  loggedInAuthor: PropTypes.object.isRequired,
   retrievePost: PropTypes.func.isRequired,
   retrievedPost: PropTypes.object.isRequired,
   loading: PropTypes.bool.isRequired,
@@ -274,6 +259,7 @@ SelectedPost.propTypes = {
 const mapStateToProps = (state) => ({
   loading: state.post.loading,
   retrievedPost: state.post.retrievedPost,
+  loggedInAuthor: state.auth.author,
 });
 
 export default connect(mapStateToProps, { retrievePost, updatePost, deletePost })(withRouter(SelectedPost));
