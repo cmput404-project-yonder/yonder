@@ -10,7 +10,7 @@ from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnl
 import requests
 import json
 
-from .models import Post, Author, Comment, RemoteNode
+from .models import Post, Author, Comment, RemoteNode, Like
 from .serializers import *
 
 
@@ -305,7 +305,7 @@ class inbox(generics.GenericAPIView):
         author = get_object_or_404(Author, id=kwargs["author_id"])
 
         page_number = 1 if 'page' not in request.query_params else request.query_params.get('page')
-        page_size = 5 if 'size' not in request.query_params else request.query_params.get('size')
+        page_size = 50 if 'size' not in request.query_params else request.query_params.get('size')
         paginator = Paginator(inbox.items, page_size)
         page = paginator.page(page_number)
 
@@ -321,7 +321,18 @@ class inbox(generics.GenericAPIView):
     def post(self, request, *args, **kwargs):
         inbox = get_object_or_404(Inbox, author_id=kwargs["author_id"])
         inbox.items.append(request.data)
-        inbox.save()            
+        inbox.save()        
+        
+        if request.data["type"] == "Like":
+            author = get_object_or_404(Author, id=kwargs["author_id"])
+            formated_data = {
+                "author": author.id,
+                "object_url": request.data["object"]
+            }
+            like_serializer = LikeSerializer(data=formated_data)
+            if like_serializer.is_valid():
+                like_serializer.save()
+            
         return Response(status=status.HTTP_201_CREATED)
 
     @swagger_auto_schema(tags=['inbox'])
@@ -330,3 +341,37 @@ class inbox(generics.GenericAPIView):
         inbox.items.clear()
         inbox.save()
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+class post_likes(generics.GenericAPIView):
+    permission_classes = [IsAuthenticated]
+
+    @swagger_auto_schema(tags=['likes'])
+    def get(self, request, *args, **kwargs):
+        post = get_object_or_404(Post, id=kwargs["post_id"])
+        likes = Like.objects.all().filter(object_url=post.get_absolute_url()) 
+        serialized_data = [LikeSerializer(like).data for like in likes]
+        return Response(data=serialized_data, status=status.HTTP_200_OK)
+
+class comment_likes(generics.GenericAPIView):
+    permission_classes = [IsAuthenticated]
+
+    @swagger_auto_schema(tags=['likes'])
+    def get(self, request, *args, **kwargs):
+        comment = get_object_or_404(Comment, id=kwargs["comment_id"])
+        likes = Like.objects.all().filter(object_url=comment.get_absolute_url()) 
+        serialized_data = [LikeSerializer(like).data for like in likes]
+        return Response(data=serialized_data, status=status.HTTP_200_OK)
+
+class likes(generics.GenericAPIView):
+    permission_classes = [IsAuthenticated]
+
+    @swagger_auto_schema(tags=['likes'])
+    def get(self, request, *args, **kwargs):
+        author = get_object_or_404(Author, id=kwargs["author_id"])
+        likes = Like.objects.all().filter(author_id=author.id) 
+        serialized_likes = [LikeSerializer(like).data for like in likes]
+        data = {
+            "type": "liked",
+            "items": serialized_likes
+        }
+        return Response(data=data, status=status.HTTP_200_OK)

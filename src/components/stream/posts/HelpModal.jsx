@@ -8,7 +8,7 @@ function HelpModal(props) {
     <div className="help-modal">
       <Modal show={modalIsOpen} onClose={() => setModalIsOpen(false)} closeOnBlur closeOnEsc>
         <p>
-            Private<br></br>
+            FRIENDS<br></br>
             Public<br></br>
             Unlisted<br></br>
         </p>

@@ -22,13 +22,13 @@ class Author(models.Model):
     github = models.URLField(null=True, blank=True)
 
     def get_absolute_url(self):
-        return self.host + "/author/%s" % self.id
+        return self.host + "author/%s/" % self.id
 
 
 class Post(models.Model):
     class Visibility(models.TextChoices):
-        PUBLIC = 'PUBLIC', _('Public')
-        PRIVATE = 'PRIVATE', _('Private')
+        PUBLIC = 'PUBLIC', _('PUBLIC')
+        FRIENDS = 'FRIENDS', _('FRIENDS')
 
     id = models.UUIDField(unique=True, default=uuid.uuid4,
                           editable=False, primary_key=True)
@@ -56,7 +56,7 @@ class Post(models.Model):
     unlisted = models.BooleanField()
 
     def get_absolute_url(self):
-        return self.author.get_absolute_url() + "/posts/%s" % self.id
+        return self.author.get_absolute_url() + "posts/%s/" % self.id
 
 
 class Comment(models.Model):
@@ -73,7 +73,7 @@ class Comment(models.Model):
     published = models.DateTimeField()
 
     def get_absolute_url(self):
-        return self.post.get_absolute_url() + "/comments/%s" % self.id
+        return self.post.get_absolute_url() + "comments/%s/" % self.id
 
 class AuthorFollower(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
@@ -98,4 +98,9 @@ class Inbox(models.Model):
                           editable=False, primary_key=True)
     author = models.ForeignKey(Author, on_delete=models.CASCADE)
     items = ArrayField(models.JSONField(), default=list)
-    
+
+class Like(models.Model):
+    id = models.UUIDField(unique=True, default=uuid.uuid4,
+                          editable=False, primary_key=True)
+    author = models.ForeignKey(Author, on_delete=models.CASCADE)
+    object_url = models.CharField(max_length=200)
