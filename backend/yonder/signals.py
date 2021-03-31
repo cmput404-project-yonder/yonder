@@ -1,10 +1,10 @@
-from .models import Author, AuthorFollower, AuthorFriend, Post, Inbox, RemoteNode
-from .serializers import AuthorSerializer, AuthorFriendSerializer, PostSerializer
+from .models import Author, AuthorFollower, AuthorFriend, Post, Inbox, RemoteNode, Like
+from .serializers import AuthorSerializer, AuthorFriendSerializer, PostSerializer, LikeSerializer
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 import uuid
 import requests
-
+import re
 
 def check_remote_follow(theirAuthor, ourAuthor):
     try:
@@ -108,18 +108,39 @@ def create_post(sender, instance, **kwargs):
             finally:
                 instance.save()
 
+@receiver(post_save, sender=Like,dispatch_uid='signal_handler_like_save')
+def like_to_inbox(sender, instance, **kwargs):
+    if kwargs["created"]:
+
+        # Get friend/followers
+        original_post = instance.object_url
+        original_poster_id = original_post.split("/author/")[1].split("/posts/")[0]
+        original_poster = Author.objects.get(id=original_poster_id)
+        original_poster_JSON = AuthorSerializer(instance=original_poster).data
+        data = LikeSerializer(instance=instance).data
+        data["type"] = "Like"
+        data["author"] = original_poster_JSON
+        try:
+                inbox = Inbox.objects.get(author_id=original_poster_id)
+                inbox.items.append(data)
+                inbox.save()
+        except Inbox.DoesNotExist:
+            # Handle follower being on remote server
+            remoteHost = original_poster.host
+            remoteNode = RemoteNode.objects.get(host=remoteHost)
+            url = remoteHost + "api/author/" + str(original_poster_id) + "/inbox/"
+            response = requests.post(url, 
+                json=data, 
+                headers={"content-type": "application/json"}, 
+                auth=requests.models.HTTPBasicAuth(remoteNode.our_user, remoteNode.our_password)
+            )
+            print(response.text)
+        except RemoteNode.DoesNotExist:
+            print("Unknown Host, WHO ARE YOU???")
+
 @receiver(post_save, sender=Author)
 def create_inbox(sender, instance, **kwargs):
     if kwargs["created"]:
-        Inbox.objects.create(author=instancew)
+        Inbox.objects.create(author=instance)
 
-'''
-@receiver(post_save, sender=Liked)
-def like_to_inbox(sender, instance, **kwargs):
-    src_author_id = re.match('(?<=/author/).*(?=/posts)', instance.object)
-    inbox = Inbox.objects.get(author_id=src_author_id)
-    if inbox.exists():
-        data = serializers.serialize('json', instance)
-        inbox.items.append(data)
-        inbox.save()
-'''
+
