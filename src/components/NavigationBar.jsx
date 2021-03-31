@@ -1,154 +1,132 @@
 import React, { useState } from "react";
 import { withRouter } from "react-router-dom";
 import { connect } from "react-redux";
-import { Navbar, Heading } from "react-bulma-components";
+import { Navbar, Container} from "react-bulma-components";
 
 import { logout } from "./login/LoginActions";
 import { sendFollow } from "../components/profile/ProfileActions";
 import SearchBar from "./SearchBar";
 
+import { Redirect } from "react-router-dom";
 import YonderLogo from "./YonderLogo";
-import ProfileIcon from "./ProfileIcon";
 import BellIcon from "./BellIcon";
+import MenuButton from "./MenuButton";
+import SearchButton from "./SearchButton";
+import LoginStateButton from "./loginStateButton";
+import ProfileButton from "./ProfileButton";
+import InboxButton from "./InboxButton";
+
+import { postStyle } from "../styling/StyleComponents";
+import { color } from "../styling/ColorFontConfig";
+
+
+
+// local stylings
+// do not move to ./styling
+var naviBarStyle = {
+  position: "fixed",
+  // display: "flex",
+  // justifyContent: "space-between",
+  width: "100%",
+  height: "auto",
+  backgroundColor: "transparent",
+  zIndex: "5",
+  paddingLeft: "1em",
+  paddingRight: "1em",
+  paddingTop: "0.5em",
+  paddingBottom: "0.5em",
+}
+
+var menuDropDownStyle = {
+  borderRadius: "6pt",
+  textAlign: "center",
+  backgroundColor: color.backgroundCreamLighter,
+}
+
+var menuDropDownContentStyle = {
+  display: "flex",
+  flexDirection: "column",
+  marginTop: "1em",
+  marginBottom: "1em",
+  gap: "1em",
+}
+
+var brandStyle = {
+  float: "left",
+  margin: "auto"
+}
+
+var meunButtonStyle = {
+  float: "right",
+  margin: "auto"
+}
 
 function NavigationBar(props) {
   const [isActive, setisActive] = useState(false);
 
+  const loginStateButtonClickHandler=() => {
+    if (props.auth.isAuthenticated) {
+      props.logout();
+    } else {
+      window.location.href = '/'
+    }
+  }
 
-  // do not delete these lines
-  // const naviBar = () => {
-  //   return (
-  //     <nav class="navbar" role="navigation" aria-label="main navigation">
-  //       <div class="navbar-brand">
-  //         <a class="navbar-item" href="https://bulma.io">
-  //           <img src="https://bulma.io/images/bulma-logo.png" width="112" height="28"/>
-  //         </a>
+  const DropDownContent =()=> {
+    // add new entry and logic in this component
 
-  //         <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false" data-target="navbarBasicExample">
-  //           <span aria-hidden="true"></span>
-  //           <span aria-hidden="true"></span>
-  //           <span aria-hidden="true"></span>
-  //         </a>
-  //       </div>
+    let entryList = [];
 
-  //       <div id="navbarBasicExample" class="navbar-menu">
-  //         <div class="navbar-start">
-  //           <a class="navbar-item">
-  //             Home
-  //           </a>
+    if (props.auth.isAuthenticated) {
+      // add entry that require authentication here
+      entryList.push(<ProfileButton action={() => window.location.href = "/author/" + props.auth.author.id}/>)
+      entryList.push(<InboxButton/>)
+    } 
 
-  //           <a class="navbar-item">
-  //             Documentation
-  //           </a>
+    // add entry that only avalible to stranger here, if needed
+    // else {}
 
-  //           <div class="navbar-item has-dropdown is-hoverable">
-  //             <a class="navbar-link">
-  //               More
-  //             </a>
+    // add entry that will always exist here
+    entryList.push(<SearchButton/>)
+    entryList.push(<LoginStateButton 
+      islogin={props.auth.isAuthenticated} 
+      action={loginStateButtonClickHandler}
+    />)
 
-  //             <div class="navbar-dropdown">
-  //               <a class="navbar-item">
-  //                 About
-  //               </a>
-  //               <a class="navbar-item">
-  //                 Jobs
-  //               </a>
-  //               <a class="navbar-item">
-  //                 Contact
-  //               </a>
-  //               <hr class="navbar-divider"/>
-  //               <a class="navbar-item">
-  //                 Report an issue
-  //               </a>
-  //             </div>
-  //           </div>
-  //         </div>
-
-  //         <div class="navbar-end">
-  //           <div class="navbar-item">
-  //             <div class="buttons">
-  //               <a class="button is-primary">
-  //                 <strong>Sign up</strong>
-  //               </a>
-  //               <a class="button is-light">
-  //                 Log in
-  //               </a>
-  //             </div>
-  //           </div>
-  //         </div>
-  //       </div>
-  //     </nav>      
-  //   )
-
-  // }
-
-  
-  const loggedInDropdown = () => {
     return (
-      <Navbar.Dropdown>
-        <Navbar.Item href={"/author/" + props.auth.author.id}>Profile</Navbar.Item>
-        <Navbar.Item onClick={props.logout}>Log out</Navbar.Item>
-      </Navbar.Dropdown>
-    );
-  };
+      <Container style={menuDropDownContentStyle}>
+        {entryList}
+      </Container>
+    )
+  }
 
-  const loggedOutDropdown = () => {
+  const DropDown = () => {
     return (
-      <Navbar.Dropdown right={Boolean("right", false)}>
-        <Navbar.Item href="/login/">Login</Navbar.Item>
-      </Navbar.Dropdown>
-    );
-  };
-
-  const notifcationDropdown = () => {
-    return (
-      <Navbar.Item dropdown hoverable>
-        <Navbar.Link arrowless={true}>
-          <BellIcon/>
-        </Navbar.Link>
-        <Navbar.Dropdown>
-          <Navbar.Item>
-            <b>0</b>&nbsp;Notifications
-          </Navbar.Item>
-        </Navbar.Dropdown>
-      </Navbar.Item>
-    );
-  };
+      <div class="dropdown is-hoverable is-right is-active">
+        <div class="dropdown-trigger" >
+          <MenuButton/>
+        </div>
+        <div class="dropdown-menu" style={{minWidth: "55pt", marginRight: "-5pt"}}>
+          <div class="dropdown-content"style={menuDropDownStyle}>
+            <DropDownContent/>
+          </div>
+        </div>
+      </div>      
+    )
+  }
 
   return (
-    <Navbar color="light" fixed="top" active={isActive}>
-      <Navbar.Brand>
-        <Navbar.Item renderAs="a" href="/">
-          <Heading><YonderLogo svgScale="55"/></Heading>
-        </Navbar.Item>
-        <Navbar.Burger
-          onClick={() => {
-            setisActive(!isActive);
-          }}
-        />
-      </Navbar.Brand>
-      <Navbar.Container position="end">
-        <Navbar.Item>
-          {/* <SearchBar authors={props.allAuthors} follow={props.sendFollow}/> */}
-        </Navbar.Item>
-        <Navbar.Menu>
-          {props.auth.isAuthenticated ? notifcationDropdown() : null}
-          <Navbar.Item dropdown hoverable>
-            <Navbar.Link arrowless={true}>
-              <ProfileIcon/>
-            </Navbar.Link>
-            {props.auth.isAuthenticated ? loggedInDropdown() : loggedOutDropdown()}
-          </Navbar.Item>
-        </Navbar.Menu>
-      </Navbar.Container>
-    </Navbar>
-  );
-
-  // return (
-  //   <div>
-  //   {naviBar()}
-  //   </div>
-  // )
+    <div style={naviBarStyle}>
+      <Container style={brandStyle}>
+        <a href = '/'>
+        <YonderLogo svgScale="55"/>
+        </a>
+      </Container>
+      <Container style={meunButtonStyle}>
+        <DropDown/>
+      </Container>
+    </div>
+  )
 }
 
 const mapStateToProps = (state) => ({
