@@ -7,7 +7,7 @@ from rest_framework.authtoken.models import Token
 from django.utils import timezone
 from .models import Author, User, Post, Inbox, AuthorFollower, AuthorFriend, Comment, Like
 from . import signals
-from .serializers import AuthorSerializer, InboxSerializer
+from .serializers import AuthorSerializer, CommentSerializer, InboxSerializer, PostSerializer
 from unittest.mock import patch
 import json
 import base64
@@ -468,27 +468,33 @@ class LikeTests(APITestCase):
 
         # request post and comment data
         post_like_data = {
-            "type": "Like",
-            "author":{
+            "type": "like",
+            "actor":{
                 "type":"author",
                 "host": self.author1.host,
                 "displayName": self.author1.displayName,
                 "url": self.author1.get_absolute_url(),
                 "github": self.author1.github
             },
-            "object": self.author2_post.get_absolute_url()
+            "object": PostSerializer(instance=self.author2_post).data
         }
+        post_like_data["object"]["author"] = str(self.author2.id)
+        post_like_data["object"]["type"] = "post"
+
         comment_like_data = {
-            "type": "Like",
-            "author":{
+            "type": "like",
+            "actor":{
                 "type":"author",
                 "host": self.author2.host,
                 "displayName": self.author2.displayName,
                 "url": self.author2.get_absolute_url(),
                 "github": self.author2.github
             },
-            "object": self.author1_comment.get_absolute_url()
+            "object": CommentSerializer(instance=self.author1_comment).data
         }
+        comment_like_data["object"]["author"] = str(self.author1.id)
+        comment_like_data["object"]["type"] = "comment"
+
         self.post_like_data_json = json.dumps(post_like_data)
         self.comment_like_data_json = json.dumps(comment_like_data)
 

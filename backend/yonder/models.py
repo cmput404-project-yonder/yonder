@@ -58,6 +58,9 @@ class Post(models.Model):
     def get_absolute_url(self):
         return self.author.get_absolute_url() + "posts/%s/" % self.id
 
+    def __str__(self):
+        return self.get_absolute_url()
+
 
 class Comment(models.Model):
     id = models.UUIDField(unique=True, default=uuid.uuid4,

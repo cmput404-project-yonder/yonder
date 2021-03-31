@@ -9,7 +9,7 @@ import { connect } from "react-redux";
 class SearchModalView extends React.Component {
     render() {
         return (
-            <Card style={{...cardStyle, height:"30em"}} >
+            <Card style={{...cardStyle, height:"20em", width: "30em"}} >
                 <SearchBar authors={this.props.allAuthors} follow={this.props.sendFollow}/>
             </Card>
         )
