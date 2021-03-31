@@ -11,7 +11,7 @@ function Inbox(props) {
   const follows = props.inboxFollows.map((follow) => <Follow key={follow.displayName} follower={follow} />);
   const followList = () => {
     return (
-      <div className="post-list">
+      <div className="post-list animate__animated animate__fadeIn animate__faster">
         <List hoverable>{follows}</List>
       </div>
     );
@@ -20,7 +20,7 @@ function Inbox(props) {
   const likes = props.inboxLikes.map((like) => <Like key={like.id} like={like} />);
   const likeList = () => {
     return (
-      <div className="post-list">
+      <div className="post-list animate__animated animate__fadeIn animate__faster">
         <List hoverable>{likes}</List>
       </div>
     );
@@ -29,13 +29,13 @@ function Inbox(props) {
   const posts = props.inboxPosts.map((post) => <Post key={post.id} post={post} />);
   const postList = () => {
     return (
-      <div className="post-list">
+      <div className="post-list animate__animated animate__fadeIn animate__faster">
         <List hoverable>{posts}</List>
       </div>
     );
   };
 
-  const renderSelectedTab = () => {
+  const RenderSelectedTab = () => {
     console.log("Hello")
     switch (props.selectedTab) {
       case "like":
@@ -55,8 +55,8 @@ function Inbox(props) {
 
   return (
     <Columns centered>
-      <Columns.Column style={{height: "40em"}}>
-        {renderSelectedTab()}
+      <Columns.Column style={{height: "40em", overflowY: "scroll"}}>
+        <RenderSelectedTab />
       </Columns.Column>
     </Columns>
   );
