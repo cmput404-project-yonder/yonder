@@ -354,7 +354,7 @@ class inbox(generics.GenericAPIView):
         except Inbox.DoesNotExist:
             # Handle follower being on remote server
             original_poster = request.data["object"]["author"]
-            remoteHost = original_poster.host
+            remoteHost = original_poster["host"]
             remoteNode = get_object_or_404(RemoteNode,host=remoteHost)
             url = remoteHost + "api/author/" + kwargs["author_id"] + "/inbox/"
             response = requests.post(url, 
