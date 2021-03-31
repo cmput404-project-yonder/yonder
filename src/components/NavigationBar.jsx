@@ -121,11 +121,11 @@ function NavigationBar(props) {
 
   const DropDown = () => {
     return (
-      <div class="dropdown is-hoverable is-right">
+      <div class="dropdown is-hoverable is-right ">
         <div class="dropdown-trigger" >
           <MenuButton/>
         </div>
-        <div class="dropdown-menu" style={{minWidth: "55pt", marginRight: "-5pt"}}>
+        <div class="dropdown-menu animate__animated animate__fadeIn animate__faster" style={{minWidth: "55pt", marginRight: "-5pt"}}>
           <div class="dropdown-content"style={menuDropDownStyle}>
             <DropDownContent/>
           </div>
