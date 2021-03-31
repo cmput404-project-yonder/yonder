@@ -46,7 +46,7 @@ function ProfileCard(props) {
     if (props.author != null) {
         return (
             <Container>
-            <Card style={profileCardStyle}>
+            <Card style={profileCardStyle} className="animate__animated animate__fadeIn animate__faster">
                 <FollowButton onClick={()=>props.follow(props.author)} style={{float: "right", marginTop: "-8pt", marginRight: "-8pt"}}/>
                 <p style={{fontSize: "1.4em"}}>{props.author.displayName}</p>
                 <Dividor style={dividorStyle}/>
@@ -68,7 +68,7 @@ function SearchModalView(props) {
     const [selectedAuthor, setSelectedAuthor] = useState(null);
 
     return (
-        <Card style={{...cardStyle, minWidth: "20em", maxWidth: "30em", marginTop: "-20%", paddingBottom: "2.5em"}}>
+        <Card style={{...cardStyle, minWidth: "18em", maxWidth: "32em", marginTop: "-20%", paddingBottom: "2.5em"}}>
             
             <Container style={searchTitleDivStyle}>
                 <Container style= {searchIconStyle}>
