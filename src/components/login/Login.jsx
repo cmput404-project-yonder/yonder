@@ -73,7 +73,7 @@ class Login extends Component {
   };
   render() {
     if (this.props.auth.isAuthenticated) {
-      return <Redirect to="/stream" />;
+      return <Redirect to="/stream" />
     } else return (
       <Section>
         <Container className="animate__animated animate__pulse animate_faster" style={loginCardStyle}>

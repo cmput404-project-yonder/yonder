@@ -40,6 +40,7 @@ function getDateString(ms) {
 }
 
 function DetailedPostList(props) {
+  console.log("DetailPostList ", props);
   // this component seprate a post into three part
   // and put these parts into the list
   // 1. title, description, author, timestamp
@@ -110,9 +111,10 @@ function DetailedPostList(props) {
           </Container>
 
         </Card.Content>
-      </Card>      
+      </Card>
     );
   }
+
 
   const displayFooterButtons = () => {
     return (
@@ -255,6 +257,8 @@ SelectedPost.propTypes = {
   retrievePost: PropTypes.func.isRequired,
   retrievedPost: PropTypes.object.isRequired,
   loading: PropTypes.bool.isRequired,
+  updatePost: PropTypes.func.isRequired,
+  likePost: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = (state) => ({
