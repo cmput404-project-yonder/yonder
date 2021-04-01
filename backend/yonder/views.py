@@ -135,6 +135,7 @@ class author_detail(generics.RetrieveUpdateDestroyAPIView):
 class public_posts(generics.ListAPIView):
     queryset = posts = Post.objects.filter(visibility='PUBLIC')
     serializer_class = PostSerializer
+    permission_classes = [IsAuthenticated]
     
     @swagger_auto_schema(tags=['public_posts'])
     def get(self, request, *args, **kwargs):
