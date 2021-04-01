@@ -12,7 +12,7 @@ def check_remote_follow(theirAuthor, ourAuthor):
     except RemoteNode.DoesNotExist:
         return False
 
-    url = theirAuthor["host"] + "/api/author/" + str(theirAuthor["id"]) + "/followers/" + str(ourAuthor["id"]) + "/"
+    url = theirAuthor["host"] + "api/author/" + str(theirAuthor["id"]) + "/followers/" + str(ourAuthor["id"]) + "/"
     response = requests.get(url, auth=requests.models.HTTPBasicAuth(remoteNode.our_user, remoteNode.our_password))
     if response.status_code == 404:
         return False
@@ -30,7 +30,7 @@ def create_friend(sender, instance, **kwargs):
     if kwargs["created"]:
         authorB_id = instance.follower["id"]
         authorA = instance.author
-        authorA_json = AuthorSerializer(authorA).data
+        authorA_json = AuthorSerializer(instance=authorA).data
         try:
             authorB = Author.objects.get(pk=uuid.UUID(authorB_id))
             authorB_follow = AuthorFollower.objects.get(author=authorB, follower=authorA_json)
@@ -107,36 +107,6 @@ def create_post(sender, instance, **kwargs):
                 print("Unknown Host, WHO ARE YOU???")
             finally:
                 instance.save()
-
-@receiver(post_save, sender=Like,dispatch_uid='signal_handler_like_save')
-def like_to_inbox(sender, instance, **kwargs):
-    if kwargs["created"]:
-
-        # Get friend/followers
-        original_post = instance.object_url
-        original_poster_id = original_post.split("/author/")[1].split("/posts/")[0]
-        original_poster = Author.objects.get(id=original_poster_id)
-        original_poster_JSON = AuthorSerializer(instance=original_poster).data
-        data = LikeSerializer(instance=instance).data
-        data["type"] = "Like"
-        data["author"] = original_poster_JSON
-        try:
-                inbox = Inbox.objects.get(author_id=original_poster_id)
-                inbox.items.append(data)
-                inbox.save()
-        except Inbox.DoesNotExist:
-            # Handle follower being on remote server
-            remoteHost = original_poster.host
-            remoteNode = RemoteNode.objects.get(host=remoteHost)
-            url = remoteHost + "api/author/" + str(original_poster_id) + "/inbox/"
-            response = requests.post(url, 
-                json=data, 
-                headers={"content-type": "application/json"}, 
-                auth=requests.models.HTTPBasicAuth(remoteNode.our_user, remoteNode.our_password)
-            )
-            print(response.text)
-        except RemoteNode.DoesNotExist:
-            print("Unknown Host, WHO ARE YOU???")
 
 @receiver(post_save, sender=Author)
 def create_inbox(sender, instance, **kwargs):

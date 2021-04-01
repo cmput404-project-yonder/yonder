@@ -7,7 +7,6 @@ import { Container, Columns, Section } from "react-bulma-components";
 import PostList from "./posts/PostList";
 import PopupModal from "./posts/PopupModal";
 
-import InboxModalPopUp from "../inbox/InboxModalPopUp";
 import { buttonLayerContainerStyle, streamLayerContainerStyle, newPostButtonStyle, pageStyle } from "../../styling/StyleComponents";
 import { createPost, updatePost, sharePost, likePost, retrieveLoggedInAuthorPosts, deletePost, retrieveInbox, retrieveAllAuthors } from "./StreamActions";
 

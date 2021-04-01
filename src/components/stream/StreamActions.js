@@ -89,11 +89,14 @@ export const createPost = (newPost) => (dispatch, getState) => {
 };
 
 export const updatePost = (editedPost) => (dispatch, getState) => {
+  const state = getState();
+  const author = state.auth;
+
   setAxiosAuthToken(getState().auth.token);
   dispatch({ type: EDIT_POST_SUBMITTED });
   console.log(editedPost);
   axios
-    .put("/author/" + editedPost.author.id + "/posts/" + editedPost.id + "/", editedPost)
+    .put("/author/" + author.id + "/posts/" + editedPost.id + "/", editedPost)
     .then((response) => {
       dispatch({ type: EDIT_POST_SUCCESS, payload: editedPost });
     })
@@ -198,15 +201,25 @@ export const retrieveAllAuthors = () => (dispatch, getState) => {
 };
 
 
-export const likePost = (likedPost) => (dispatch, getState) => {
+export const likePost = (post) => (dispatch, getState) => {
+  const likedPost = {};
   const state = getState();
+  const author = state.auth.author;
   setAxiosAuthToken(state.auth.token);
 
-  likedPost["author"] = state.auth.author;
+  likedPost["type"] = "like";
+  likedPost["author"] = 
+  {...author,
+    "type": "author",
+    "id": author.id,
+    "url": author.host + "author/" + author.id + "/",
+  };
+  likedPost["object"] = likedPost["author"]["url"] + "/posts/" + post.id + "/";
+  likedPost["host"] = post.author.host;
 
   dispatch({ type: LIKE_POST_SUBMITTED });
   axios
-    .post("/author/" + state.auth.author.id + "/inbox/")
+    .post("/author/" + post.author.id + "/inbox/", likedPost)
     .then((response) => {
       dispatch({ type: LIKE_POST_SUCCESS, payload: response.data });
     })

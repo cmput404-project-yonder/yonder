@@ -22,7 +22,7 @@ class Author(models.Model):
     github = models.URLField(null=True, blank=True)
 
     def get_absolute_url(self):
-        return self.host + "author/%s/" % self.id
+        return self.host + f'api/author/{self.id}/'
 
 
 class Post(models.Model):
@@ -56,7 +56,10 @@ class Post(models.Model):
     unlisted = models.BooleanField()
 
     def get_absolute_url(self):
-        return self.author.get_absolute_url() + "posts/%s/" % self.id
+        return self.author.get_absolute_url() + f"posts/{self.id}/"
+
+    def __str__(self):
+        return self.get_absolute_url()
 
 
 class Comment(models.Model):
@@ -73,7 +76,7 @@ class Comment(models.Model):
     published = models.DateTimeField()
 
     def get_absolute_url(self):
-        return self.post.get_absolute_url() + "comments/%s/" % self.id
+        return self.post.get_absolute_url() + f"comments/{self.id}/"
 
 class AuthorFollower(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)

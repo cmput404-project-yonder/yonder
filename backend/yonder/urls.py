@@ -40,12 +40,12 @@ urlpatterns = [
         name="inbox"
     ),
     path(
-        'author/<uuid:author_id>/post/<uuid:post_id>/likes/',
+        'author/<uuid:author_id>/posts/<uuid:post_id>/likes/',
         views.post_likes.as_view(),
         name="post_likes"
     ),
     path(
-        'author/<uuid:author_id>/post/<uuid:post_id>/comments/<uuid:comment_id>/likes/',
+        'author/<uuid:author_id>/posts/<uuid:post_id>/comments/<uuid:comment_id>/likes/',
         views.comment_likes.as_view(),
         name="comment_likes"
     ),
