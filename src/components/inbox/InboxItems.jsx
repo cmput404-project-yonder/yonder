@@ -63,7 +63,7 @@ export function Like(props) {
       <Card style={itemCardStyle}>
         {/* message */}
         <Container style={itemMsgStyle}>
-          <p style={{ fontWeight: "250" }}>@{props.like.actor.displayName}</p>
+          <p style={{ fontWeight: "250" }}>@{props.like.author.displayName}</p>
           <p>·</p>
           <p>liked your post</p>
         </Container>
