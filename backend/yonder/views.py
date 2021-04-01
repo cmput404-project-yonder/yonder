@@ -132,6 +132,14 @@ class author_detail(generics.RetrieveUpdateDestroyAPIView):
     def delete(self, request, *args, **kwargs):
         return self.destroy(request, *args, **kwargs)
 
+class public_posts(generics.ListAPIView):
+    queryset = posts = Post.objects.filter(visibility='PUBLIC')
+    serializer_class = PostSerializer
+    permission_classes = [IsAuthenticated]
+    
+    @swagger_auto_schema(tags=['public_posts'])
+    def get(self, request, *args, **kwargs):
+        return self.list(request, *args, **kwargs)
 
 class posts(generics.ListCreateAPIView):
     serializer_class = PostSerializer
