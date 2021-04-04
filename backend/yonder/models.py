@@ -106,5 +106,4 @@ class Like(models.Model):
     id = models.UUIDField(unique=True, default=uuid.uuid4,
                           editable=False, primary_key=True)
     author = models.JSONField()
-    author_id =  models.CharField(max_length=200, null=True, blank=True)
     object_url = models.CharField(max_length=200)

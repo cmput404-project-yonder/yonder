@@ -329,7 +329,7 @@ class inbox(generics.GenericAPIView):
             inbox = Inbox.objects.get(author_id=kwargs["author_id"])
             
             if request.data["type"] == "like":
-                existing_like = Like.objects.all().filter(author_id=request.data["author"]["id"], object_url=request.data["object"])
+                existing_like = Like.objects.all().filter(author__id=request.data["author"]["id"], object_url=request.data["object"])
                 if len(existing_like) != 0:
                     return Response(status=status.HTTP_409_CONFLICT)    
 
@@ -407,7 +407,7 @@ class likes(generics.GenericAPIView):
     @swagger_auto_schema(tags=['likes'])
     def get(self, request, *args, **kwargs):
         author = get_object_or_404(Author, id=kwargs["author_id"])
-        likes = Like.objects.all().filter(author_id=author.id) 
+        likes = Like.objects.all().filter(author__id=str(author.id)) 
         serialized_likes = [LikeSerializer(like).data for like in likes]
         data = {
             "type": "liked",
