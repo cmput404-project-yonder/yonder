@@ -329,11 +329,14 @@ class inbox(generics.GenericAPIView):
             inbox = Inbox.objects.get(author_id=kwargs["author_id"])
             
             if request.data["type"] == "like":
-                author = get_object_or_404(Author, id=kwargs["author_id"])
-                object_url = request.data["object"]
+                existing_like = Like.objects.all().filter(author_id=request.data["author"]["id"], object_url=request.data["object"])
+                if len(existing_like) != 0:
+                    return Response(status=status.HTTP_409_CONFLICT)    
+
                 formated_data = {
-                    "author": author.id,
-                    "object_url": object_url
+                    "author": request.data["author"],
+                    "author_id": request.data["author"]["id"],
+                    "object_url": request.data["object"]
                 }
                 like_serializer = LikeSerializer(data=formated_data)
                 if like_serializer.is_valid():
@@ -342,7 +345,7 @@ class inbox(generics.GenericAPIView):
                 inbox_data = {
                     "type": "like",
                     "author": request.data["author"],
-                    "object": object_url
+                    "object": request.data["object"]
                 }
                 inbox.items.append(inbox_data)
                 inbox.save()
@@ -376,7 +379,6 @@ class post_likes(generics.GenericAPIView):
     @swagger_auto_schema(tags=['likes'])
     def get(self, request, *args, **kwargs):
         post = get_object_or_404(Post, id=kwargs["post_id"])
-        print(post.get_absolute_url())
         likes = Like.objects.filter(object_url=post.get_absolute_url()) 
         serialized_data = [LikeSerializer(like).data for like in likes]
         data = {
