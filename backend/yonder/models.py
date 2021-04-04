@@ -66,7 +66,7 @@ class Comment(models.Model):
     id = models.UUIDField(unique=True, default=uuid.uuid4,
                           editable=False, primary_key=True)
     post = models.ForeignKey(Post, on_delete=models.CASCADE)
-    author = models.ForeignKey(Author, on_delete=models.CASCADE)
+    author = models.JSONField()
     comment = models.CharField(max_length=400)
     contentType = models.CharField(
         max_length=20,
@@ -105,5 +105,5 @@ class Inbox(models.Model):
 class Like(models.Model):
     id = models.UUIDField(unique=True, default=uuid.uuid4,
                           editable=False, primary_key=True)
-    author = models.ForeignKey(Author, on_delete=models.CASCADE)
+    author = models.JSONField()
     object_url = models.CharField(max_length=200)
