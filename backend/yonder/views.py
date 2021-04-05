@@ -186,11 +186,25 @@ class comments(generics.ListCreateAPIView):
 
     @swagger_auto_schema(tags=['comments'])
     def get(self, request, *args, **kwargs):
-        return self.list(request, *args, **kwargs)
+        comments = Comment.objects.filter(post_id=kwargs["post_id"]).order_by('published')
+        page_number = 1 if 'page' not in request.query_params else request.query_params.get('page')
+        page_size = 50 if 'size' not in request.query_params else request.query_params.get('size')
+        paginator = Paginator(comments, page_size)
+        page = paginator.page(page_number)
+        serialized_comments = [self.serializer_class(comment).data for comment in page.object_list]
+
+        return Response(serialized_comments, status=status.HTTP_200_OK)
 
     @swagger_auto_schema(tags=['comments'])
     def post(self, request, *args, **kwargs):
-        return self.create(request, *args, **kwargs)
+        post = get_object_or_404(Post, id=kwargs["post_id"])
+        request.data['post'] = post.id
+        comment_serializer = self.serializer_class(data=request.data)
+        if not comment_serializer.is_valid():
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+
+        comment_serializer.save()
+        return Response(status=status.HTTP_201_CREATED)
 
 
 class comment_detail(generics.RetrieveUpdateDestroyAPIView):
@@ -335,7 +349,6 @@ class inbox(generics.GenericAPIView):
 
                 formated_data = {
                     "author": request.data["author"],
-                    "author_id": request.data["author"]["id"],
                     "object_url": request.data["object"]
                 }
                 like_serializer = LikeSerializer(data=formated_data)
