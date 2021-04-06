@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import { Modal } from "react-bulma-components";
 
-import PostForm from "./PostForm";
+import PostForm from "../PostForm";
 
-import AddButton from "./NewPostFloatingButton";
+import AddButton from "../buttons/NewPostFloatingButton";
 
 function PopupModal(props) {
   const [modalIsOpen, setModalIsOpen] = useState(false);

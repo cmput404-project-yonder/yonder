@@ -2,7 +2,7 @@
     props.action - onClick event
 */
 
-import { LikedIcon } from "./buttons/postSVG";
+import { LikeIcon } from "./postSVG";
 import { Container } from "react-bulma-components";
 import { color } from "../../../profile/styling";
 
@@ -19,7 +19,7 @@ var buttonStyle = {
 function LikeButton(props) {
     return (
         <Container style={buttonStyle.style} class="likeButton">
-            <a onClick={props.action}><LikedIcon svgScale={buttonStyle.scale} /></a>
+            <a onClick={props.action}><LikeIcon svgScale={buttonStyle.scale} /></a>
         </Container>
     );
 }

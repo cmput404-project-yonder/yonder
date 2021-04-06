@@ -2,9 +2,9 @@
     props.action - onClick event
 */
 
-import { PencilIcon } from "./postSVG";
+import { PencilIcon } from "./buttons/postSVG";
 import { Container } from "react-bulma-components";
-import {color} from "./styling";
+import {color} from "../styling";
 
 
 // local styling

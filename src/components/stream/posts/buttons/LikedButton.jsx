@@ -2,7 +2,7 @@
     props.action - onClick event
 */
 
-import { LikedIcon } from "./buttons/postSVG";
+import { LikedIcon } from "./postSVG";
 import { Container } from "react-bulma-components";
 import { color } from "../../../profile/styling";
 

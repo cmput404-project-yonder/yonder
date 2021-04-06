@@ -5,11 +5,11 @@ import Markdown from "react-markdown";
 import ReactTags from "react-tag-autocomplete";
 import "./react-tags.css";
 
-import CancelButton from "./CancelButton";
-import ConfirmButton from "./ConfirmButton";
+import CancelButton from "./buttons/CancelButton";
+import ConfirmButton from "./buttons/ConfirmButton";
 import CheckBox from "./CheckBox";
 
-import { TextIcon, ImageIcon, MarkdownIcon, ToolTipIcon } from "./postSVG";
+import { TextIcon, ImageIcon, MarkdownIcon, ToolTipIcon } from "./buttons/postSVG";
 import { ImageUploadIcon } from "../../../styling/svgIcons";
 import PostTab from "./PostTab";
 import Dividor from "./Dividor"

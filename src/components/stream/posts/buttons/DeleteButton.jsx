@@ -2,7 +2,7 @@
     props.action - onClick event
 */
 
-import { DeleteIcon } from "./buttons/postSVG";
+import { DeleteIcon } from "./postSVG";
 import { Container } from "react-bulma-components";
 import {color} from "../styling";
 

@@ -4,7 +4,7 @@
 
 import { CancelButton } from "./postSVG";
 import { Container } from "react-bulma-components";
-import {color} from "./styling";
+import {color} from "../styling";
 
 
 // local styling

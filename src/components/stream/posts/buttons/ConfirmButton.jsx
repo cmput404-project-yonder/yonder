@@ -2,7 +2,7 @@
     props.action - onClick event
 */
 
-import { DeleteIcon } from "./buttons/postSVG";
+import { ConfirmButton } from "./postSVG";
 import { Container } from "react-bulma-components";
 import {color} from "../styling";
 
@@ -12,18 +12,18 @@ var buttonStyle = {
     scale: "40",
     style: {
         padding: "1.2em",
-        fill: color.buttonRed,
+        fill: color.buttonGreen,
     }
 }
 
 // component
-function DeleteButton(props) {
+function ConfirmCirButton(props) {
 
     return (
         <Container style={buttonStyle.style}>
-            <a onClick={props.action}><DeleteIcon svgScale={buttonStyle.scale}/></a>
+            <a onClick={props.action}><ConfirmButton svgScale={buttonStyle.scale}/></a>
         </Container>
     );
 }
 
-export default DeleteButton;
+export default ConfirmCirButton;
