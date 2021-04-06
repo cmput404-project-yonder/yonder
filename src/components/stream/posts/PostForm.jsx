@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import ReactMde from "react-mde";
-import { Form, Button, Card, Container } from "react-bulma-components";
+import { Form, Card, Container } from "react-bulma-components";
 import Markdown from "react-markdown";
 import ReactTags from "react-tag-autocomplete";
 import "./react-tags.css";

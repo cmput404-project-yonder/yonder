@@ -15,10 +15,10 @@ import InboxModalPopUp from "../../inbox/InboxModalPopUp";
 import EditPostForm from "./EditPostForm";
 import SharingPostPrompt from "./SharingPostPrompt";
 import { updatePost, deletePost } from '../StreamActions';
+import ReactMde from "react-mde";
+import Markdown from "react-markdown";
 
 import { retrievePost } from "./PostActions";
-
-
 
 // local styling
 var postDividorStyle = {
@@ -32,6 +32,14 @@ var buttonOverrideStyle = {
   border: "none",
   marginTop: "-2pt",
   height: "20pt",
+}
+
+function displayComment() {
+  return (
+    <div className="container">
+      <ReactMde/>
+    </div>
+  );
 }
 
 function getDateString(ms) {
@@ -176,10 +184,11 @@ function DetailedPostList(props) {
     )
   }
 
-  // do not delete these lines, will be used in part3 for display comments
-  const CommentCard = () => {
+  const CommentCard = (CommentList) => {
     // render template of one comment
-    // this function is not planned for part2
+    const listComment = CommentList.map((comment) =>
+      <li>{comment}</li>
+    );
     return (
       <Card style={postStyle}>
         <Card.Content style={postContainerStyle}>
@@ -194,8 +203,9 @@ function DetailedPostList(props) {
           </Container>
 
           {/* comment section */}
-          <Container style = {DescriptionStyle}>  
-            <p>This is a mockup comment object</p>
+          <Container style = {DescriptionStyle}>
+            <ul>{listComment}</ul>
+            {displayComment()}
           </Container>
           
         </Card.Content>
@@ -203,8 +213,8 @@ function DetailedPostList(props) {
     )
   }
 
-  const CommentList = []                                 // add comment to this list
-  const listItems = [TitleCard(), ContentCard()]    // add component to this list for displaying
+  const CommentList = ["hi", "hello"]                                 // add comment to this list
+  const listItems = [TitleCard(), ContentCard(), CommentCard(CommentList)]    // add component to this list for displaying
   return (
     <div className="post-list animate__animated animate__fadeInDown">
       <List hoverable>{listItems}</List>
