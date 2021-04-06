@@ -1,4 +1,4 @@
-import { font, color } from "../components/stream/posts/styling";
+import { font, color } from "./ColorFontConfig";
 import { style } from "../components/profile/styling";
 
 export const categoriesStyle = {
@@ -211,10 +211,10 @@ export const panelStyle = {
     display: "flex",
     justifyContent: "between",
     textAlign: "center",
-    paddingTop: "0.2em",
+    paddingTop: "0em",
     paddingBottom: "0em",
-    fontSize: "1.35em",
-    fontWeight: "350",
+    fontSize: "1.5em",
+    fontWeight: "400",
     paddingLeft: "1em",
     paddingRight: "1em",
   }
@@ -234,8 +234,8 @@ export const submittPanelStyle = {
 export const formContainerStyle = {
     boxShadow: "0pt 0pt 3pt #B1B1B1",
     borderRadius: "8pt",
-    marginLeft: "-1.2em",
-    marginRight: "-1.2em",
+    marginLeft: "0.8em",
+    marginRight: "0.8em",
     paddingTop: "1em",
     paddingBottom: "1em",
     paddingRight: "1.5em",
@@ -275,7 +275,6 @@ export const postIconStyle = {
     scale: "70",
     style: {
       padding: "1em",
-      fill: color.postIcon,
     }
   }
 

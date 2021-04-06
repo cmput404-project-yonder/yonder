@@ -1,4 +1,5 @@
 import { motion } from 'framer-motion';
+import { color } from '../../../styling/ColorFontConfig';
 /*
 SVG components:
     cancelButton
@@ -37,7 +38,7 @@ export function YonderMainLogo(props) {
 export function TextIcon(props) {
     // a placeholder
     return (
-        <svg id="Text" xmlns="http://www.w3.org/2000/svg" width={props.svgScale} viewBox="0 0 103.001 102.993">
+        <svg id="Text" xmlns="http://www.w3.org/2000/svg" fill={color.buttonGreen} width={props.svgScale} viewBox="0 0 103.001 102.993">
         <path id="Ellipse_20" d="M69.83,18.185A51.492,51.492,0,1,0,115.1,45.523,51.491,51.491,0,0,0,69.83,18.185ZM61.008,46.408l2.2,4.1L49.646,57.576,71.832,99.342l-4.068,2.416L45.184,59.3,32.1,66.691l-1.91-4.105Zm30.623.014L89.459,69.463,108.5,79.691l-5.277,2.637L87.734,73.2l-.705,18.1-5.238,2.895,2.574-22.6L65.029,60.953l4.508-2.746,16.186,9.824,1.328-18.9Z" transform="translate(-18.128 -18.185)"/>
         </svg>
     );
@@ -46,7 +47,7 @@ export function TextIcon(props) {
 export function ImageIcon(props) {
     // a placeholder
     return (
-        <svg id="Image" xmlns="http://www.w3.org/2000/svg" width={props.svgScale} viewBox="0 0 103.001 102.993">
+        <svg id="Image" xmlns="http://www.w3.org/2000/svg" fill={color.buttonBlue} width={props.svgScale} viewBox="0 0 103.001 102.993">
         <path id="Ellipse_22" d="M69.83,18.185A51.492,51.492,0,1,0,115.1,45.523,51.491,51.491,0,0,0,69.83,18.185ZM89.4,41a10.949,10.949,0,0,1,10.283,6.166c3.607,7.017,12.541,22.629,12.541,22.629l-4.266,2.334S98.5,52.748,95.727,49.352s-5.654-5.228-10.945-3.059-5.357,8.315-4.992,10.947S91.863,80.582,91.863,80.582l-4.1,2.656S77.161,61.9,75.086,59.652,69.194,54.1,63.531,57.24s-4.105,10.785-4.105,10.785L71.178,91.932l-4.023,2.174L49.688,61.426l3.619-2.17,3.381,4.99a11.492,11.492,0,0,1,2.162-7.3,10.832,10.832,0,0,1,10.2-5.1,14.762,14.762,0,0,1,7.6,3.061s.124-8.217,5.76-11.768A13.779,13.779,0,0,1,89.4,41ZM31.256,53.777,55.8,99.578,51.3,102.154l-24.229-45.8Z" transform="translate(-18.128 -18.185)"/>
         </svg>
     );
@@ -64,7 +65,7 @@ export function SharingPostIcon(props) {
 export function MarkdownIcon(props) {
     // a placeholder
     return (
-        <svg id="Markdown" xmlns="http://www.w3.org/2000/svg" width={props.svgScale} viewBox="0 0 103.001 102.993">
+        <svg id="Markdown" xmlns="http://www.w3.org/2000/svg" fill={color.buttonOrange} width={props.svgScale} viewBox="0 0 103.001 102.993">
         <path id="Ellipse_21" d="M69.83,18.185A51.492,51.492,0,1,0,115.1,45.523,51.491,51.491,0,0,0,69.83,18.185ZM98.574,38.055l1.692,3.543s-4.538-1.028-6.68,6.412,9.978,25.383,9.978,25.383l-3.3,1.932L84.326,45.863l3.381-1.932,3.541,6.358s-.911-4.516,1.521-7.916a11.716,11.716,0,0,1,5.8-4.318Zm-30.2,7.367L88.234,82.178,84.924,83.99,68.375,52.09l3.236,39.365L69.625,92.5,38.8,68.039,56.285,99.432l-3.668,1.81L32.9,65l4.246-2.539L67.656,86.6,64.563,47.742Z" transform="translate(-18.128 -18.185)"/>
         </svg>
     );
