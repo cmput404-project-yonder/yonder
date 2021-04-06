@@ -17,6 +17,13 @@ import { checkBoxLabelStyle, checkBoxStyle, checkMarkStyle, createPostHeaderStyp
 tabStyle, submittPanelStyle, formContainerStyle, labelStyle, dividorStyle, formTitleStyle, buttonLayoutStyle, postIconStyle } from "../../../styling/StyleComponents";
 import { color } from "./styling";
 
+var menuDropDownStyle = {
+  borderRadius: "6pt",
+  border: "1px solid #cfcccc",
+  textAlign: "center",
+  backgroundColor: "backgroundTooltip",
+}
+
 class PostForm extends Component {
   constructor(props) {
     super(props);
@@ -317,16 +324,29 @@ class PostForm extends Component {
       )
     }
 
+    const DropDown = () => {
+      return (
+        <div class="dropdown is-hoverable" style={{ float:"left", marginTop: "1.8em" }}>
+          <div class="dropdown-trigger" >
+            <span
+              style={{backgroundColor: "transparent", border: "none", fill: color.baseRed, width: "4em", padding: "0"}}
+            >
+            <ToolTipIcon svgScale={"25"} />
+            </span>
+          </div>
+          <div class="dropdown-menu animate__animated animate__fadeIn animate__faster" style={{minWidth: "250pt", marginRight: "-5pt"}}>
+            <div class="dropdown-content"style={menuDropDownStyle}>
+            <strong>Friends Only</strong> will only allow friends to view this post. <br></br><strong>Unlisted</strong> will allow this post to only show up on the stream of this post author.
+            </div>
+          </div>
+        </div>      
+      )
+    }
+
     const PostSubmitPanel = () => {
       return (
         <Container style={submittPanelStyle}>
-          <Button
-            className="has-tooltip-info has-tooltip-multiline"
-            data-tooltip='Checking the "Friends Only" box will only allow friends to view this post. Checking the "Unlisted" box will allow this post to only show up on the stream of this post author'
-            style={{backgroundColor: "transparent", border: "none", fill: color.baseRed, marginTop: "1.2em", float: "left", width: "4em", padding: "0"}}
-          >
-            <ToolTipIcon svgScale={"25"}/>
-          </Button>
+          <DropDown />
           <VisibilityCheckBox />
           <UnlistCheckBox/>
           <PostFormButtonPanel/>
