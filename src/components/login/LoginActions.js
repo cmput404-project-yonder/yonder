@@ -15,7 +15,7 @@ export const login = (userData, redirectTo) => (dispatch) => {
       setAxiosAuthToken(auth_token);
       dispatch(setToken(auth_token));
       dispatch(setCurrentUser(user));
-      dispatch(setCurrentAuthor(author, "/stream"));
+      dispatch(setCurrentAuthor(author, redirectTo));
     })
     .catch((error) => {
       dispatch(unsetCurrentUser());
