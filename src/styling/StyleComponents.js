@@ -211,10 +211,10 @@ export const panelStyle = {
     display: "flex",
     justifyContent: "between",
     textAlign: "center",
-    paddingTop: "0.2em",
+    paddingTop: "0em",
     paddingBottom: "0em",
-    fontSize: "1.35em",
-    fontWeight: "350",
+    fontSize: "1.5em",
+    fontWeight: "400",
     paddingLeft: "1em",
     paddingRight: "1em",
   }
