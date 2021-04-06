@@ -77,16 +77,12 @@ function Inbox(props) {
     console.log("Hello")
     switch (props.selectedTab) {
       case "like":
-        console.log("Like")
         return likeList();
       case "follow":
-        console.log("F")
         return followList();
       case "post":
-        console.log("PPPP")
         return postList();
       default:
-        console.log("NOOO")
         break;
     }
   }
