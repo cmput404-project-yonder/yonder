@@ -89,7 +89,7 @@ function Inbox(props) {
 
   return (
     <Columns centered>
-      <Columns.Column style={{height: "40em", overflowY: "scroll"}} className="inbox">
+      <Columns.Column style={{height: "40em", overflowY: "scroll"}} className="hideScroll">
         <RenderSelectedTab />
       </Columns.Column>
     </Columns>

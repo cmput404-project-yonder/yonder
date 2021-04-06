@@ -22,9 +22,10 @@ var activeStyle = Object.assign (
     {
         color: color.buttonRed,
         border: "solid",
+        borderWidth: "1.5pt",
         backgroundColor: "transparent",
-        fontSize: "1.1em",
-        height: "2em",
+        fontSize: "1em",
+        height: "1.8em",
     }
 )
 
@@ -34,8 +35,8 @@ var inactiveStyle = Object.assign (
         color: color.baseLightGrey,
         border: "none",
         backgroundColor: "transparent",
-        fontSize: "1.1em",
-        height: "2em",
+        fontSize: "1em",
+        height: "1.8em",
     }
 )
 
