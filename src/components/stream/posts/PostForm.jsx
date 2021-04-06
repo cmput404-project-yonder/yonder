@@ -311,7 +311,7 @@ class PostForm extends Component {
       // Confirm and back button used to submit form
       return (
         <Container style={buttonLayoutStyle}>
-          <CancelButton action={cancelButtonHandler}/>
+          {/* <CancelButton action={cancelButtonHandler}/> */}
           <ConfirmButton action={this.addPost}/>
         </Container>
       )

@@ -24,7 +24,7 @@ export const buttonLayoutStyle = {
   display: "flex",
   width: "0em",
   float: "right",
-  marginRight: "15em",       // the width of two button.
+  marginRight: "10em",       // the width of two button.
 }
 
 
@@ -318,7 +318,7 @@ class EditPostForm extends Component {
       return (
         <Container style={buttonLayoutStyle}>
           
-          <CancelButton action={() => this.props.setEditModalIsOpen(false)}/>
+          {/* <CancelButton action={() => this.props.setEditModalIsOpen(false)}/> */}
           <DeleteButton action={this.removePost}/>
           <ConfirmButton action={this.editPost}/>
         </Container>

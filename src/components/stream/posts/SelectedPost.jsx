@@ -175,33 +175,33 @@ function DetailedPostList(props) {
   }
 
   // do not delete these lines, will be used in part3 for display comments
-  // const CommentCard = () => {
-  //   // render template of one comment
-  //   // this function is not planned for part2
-  //   return (
-  //     <Card style={postStyle}>
-  //       <Card.Content style={postContainerStyle}>
-  //         {/* author and timestamp */}
-  //         <Container style={signatureStyle}>
-  //         <p style={{ fontWeight: "250" }}>@{props.post.author.displayName}</p>
-  //         <p>·</p>
-  //         <p>{getDateString(Date.parse(props.post.published))}</p>
-  //         </Container>
-  //         <Container style={postTitleStyle}>
-  //         <p style={{color: color.baseBlack}}>Comment</p>
-  //         </Container>
+  const CommentCard = () => {
+    // render template of one comment
+    // this function is not planned for part2
+    return (
+      <Card style={postStyle}>
+        <Card.Content style={postContainerStyle}>
+          {/* author and timestamp */}
+          <Container style={signatureStyle}>
+          <p style={{ fontWeight: "250" }}>@{props.post.author.displayName}</p>
+          <p>·</p>
+          <p>{getDateString(Date.parse(props.post.published))}</p>
+          </Container>
+          <Container style={postTitleStyle}>
+          <p style={{color: color.baseBlack}}>Comment</p>
+          </Container>
 
-  //         {/* comment section */}
-  //         <Container style = {DescriptionStyle}>  
-  //           <p>This is a mockup comment object</p>
-  //         </Container>
+          {/* comment section */}
+          <Container style = {DescriptionStyle}>  
+            <p>This is a mockup comment object</p>
+          </Container>
           
-  //       </Card.Content>
-  //     </Card>
-  //   )
-  // }
+        </Card.Content>
+      </Card>
+    )
+  }
 
-  // const CommentList = []                                 // add comment to this list
+  const CommentList = []                                 // add comment to this list
   const listItems = [TitleCard(), ContentCard()]    // add component to this list for displaying
   return (
     <div className="post-list animate__animated animate__fadeInDown">
