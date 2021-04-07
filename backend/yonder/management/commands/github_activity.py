@@ -12,7 +12,7 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         try:
-            timestamp = time.time() - 300
+            timestamp = time.time() - 600
             matchSince = time.strftime('%a, %d %b %Y %H:%M:%S GMT', time.gmtime(timestamp))
             headers = {
                 "Accept": "application/vnd.github.v3+json",
