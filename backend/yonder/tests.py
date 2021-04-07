@@ -504,17 +504,18 @@ class LikeTests(APITestCase):
         self.author2_post = Post.objects.create(**self.author2_post)
         self.author1_comment = {
             "post": self.author2_post,
-            "author": self.author1,
+            "author": AuthorSerializer(self.author1).data,
             "comment": "cool post dude",
             "published": "2015-03-09T13:07:04+00:00"
         }
         self.author1_comment = Comment.objects.create(**self.author1_comment)
 
         # request post and comment data
-        post_like_data = {
+        post_like_data_from_author_1 = {
             "type": "like",
             "author":{
                 "type":"author",
+                "id": str(self.author1.id),
                 "host": self.author1.host,
                 "displayName": self.author1.displayName,
                 "url": self.author1.get_absolute_url(),
@@ -522,11 +523,23 @@ class LikeTests(APITestCase):
             },
             "object": self.author2_post.get_absolute_url()
         }
-
-        comment_like_data = {
+        comment_like_data_from_author_1 = {
             "type": "like",
             "author":{
                 "type":"author",
+                "id": str(self.author1.id),
+                "host": self.author1.host,
+                "displayName": self.author1.displayName,
+                "url": self.author1.get_absolute_url(),
+                "github": self.author1.github
+            },
+            "object": self.author1_comment.get_absolute_url()
+        }
+        comment_like_data_from_author_2 = {
+            "type": "like",
+            "author":{
+                "type":"author",
+                "id": str(self.author2.id),
                 "host": self.author2.host,
                 "displayName": self.author2.displayName,
                 "url": self.author2.get_absolute_url(),
@@ -535,60 +548,160 @@ class LikeTests(APITestCase):
             "object": self.author1_comment.get_absolute_url()
         }
 
-        self.post_like_data_json = json.dumps(post_like_data)
-        self.comment_like_data_json = json.dumps(comment_like_data)
+        self.post_like_data_from_author_1_json = json.dumps(post_like_data_from_author_1)
+        self.comment_like_data_from_author_2_json = json.dumps(comment_like_data_from_author_2)
+        self.comment_like_data_from_author_1_json = json.dumps(comment_like_data_from_author_1)
 
         credBytes= base64.b64encode(f'{self.credentials1["username"]}:{self.credentials1["password"]}'.encode())
         self.client.credentials(HTTP_AUTHORIZATION='Basic ' + credBytes.decode())
     
     def test_post_like(self):
         # author1 sends like to author2_post
-        url = reverse('inbox', args=[self.author1.id])
-        response = self.client.post(url, content_type='application/json', data=self.post_like_data_json)
+        url = reverse('inbox', args=[self.author2.id])
+        response = self.client.post(url, content_type='application/json', data=self.post_like_data_from_author_1_json)
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
-        author = Author.objects.get(displayName=self.testAuthor2["displayName"])
+        # confirm author2_post has like from author1
         like = Like.objects.get(object_url=self.author2_post.get_absolute_url())
-        self.assertEqual(like.author.id, self.author1.id)
+        self.assertEqual(like.author['id'], str(self.author1.id))
     
+    def test_post_dupliate_like(self):
+        # author1 sends like to author2_post
+        url = reverse('inbox', args=[self.author2.id])
+        response = self.client.post(url, content_type='application/json', data=self.post_like_data_from_author_1_json)
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+
+        # confirm author1 cant send like to autor2_post
+        url = reverse('inbox', args=[self.author2.id])
+        response = self.client.post(url, content_type='application/json', data=self.post_like_data_from_author_1_json)
+        self.assertEqual(response.status_code, status.HTTP_409_CONFLICT)
+
     def test_get_post_likes(self):
         # author1 sends like to author2_post
-        url = reverse('inbox', args=[self.author1.id])
-        response = self.client.post(url, content_type='application/json', data=self.post_like_data_json)
+        url = reverse('inbox', args=[self.author2.id])
+        response = self.client.post(url, content_type='application/json', data=self.post_like_data_from_author_1_json)
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
-        url = reverse('post_likes', args=[self.author1.id, self.author2_post.id])
+        # confirm author2_post has likes from author1
+        url = reverse('post_likes', args=[self.author2.id, self.author2_post.id])
         response = self.client.get(url)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         data_json = response.json()
-        self.assertEqual(data_json["items"][0]["author"], str(self.author1.id))
+        self.assertEqual(data_json["items"][0]["author"]["id"], str(self.author1.id))
         self.assertEqual(data_json["items"][0]["object_url"], self.author2_post.get_absolute_url())
     
     def test_get_comment_likes(self):
         # author2 sends like to author1_comment
-        url = reverse('inbox', args=[self.author2.id])
-        response = self.client.post(url, content_type='application/json', data=self.comment_like_data_json)
+        url = reverse('inbox', args=[self.author1.id])
+        response = self.client.post(url, content_type='application/json', data=self.comment_like_data_from_author_2_json)
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
+        # confirm author1_comment has like from author2
         url = reverse('comment_likes', args=[self.author2.id, self.author2_post.id, self.author1_comment.id])
         response = self.client.get(url)
         data_json = response.json()
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(data_json["items"][0]["author"], str(self.author2.id))
+        self.assertEqual(data_json["items"][0]["author"]["id"], str(self.author2.id))
         self.assertEqual(data_json["items"][0]["object_url"], self.author1_comment.get_absolute_url())
 
     def test_get_liked(self):
         # author1 sends like to author1_comment
-        url = reverse('inbox', args=[self.author1.id])
-        response = self.client.post(url, content_type='application/json', data=self.comment_like_data_json)
+        url = reverse('inbox', args=[self.author2.id])
+        response = self.client.post(url, content_type='application/json', data=self.comment_like_data_from_author_1_json)
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         
         # author1 sends like to author2_post
-        url = reverse('inbox', args=[self.author1.id])
-        response = self.client.post(url, content_type='application/json', data=self.post_like_data_json)
+        url = reverse('inbox', args=[self.author2.id])
+        response = self.client.post(url, content_type='application/json', data=self.post_like_data_from_author_1_json)
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
         url = reverse('likes', args=[self.author1.id])
         response = self.client.get(url)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(len(response.data["items"]), 2)
+
+class CommentTests(APITestCase):
+    def setUp(self):
+        self.credentials1 = {
+            'username': 'testUser1',
+            'password': 'testPassword1'
+        }
+        self.credentials2 = {
+            'username': 'testUser2',
+            'password': 'testPassword2'
+        }
+        self.testAuthor1 = {
+            "displayName": "testAuthor1",
+            "github": "https://github.com/cmput404-project-yonder/yonder",
+            "host": "http://testserver.com/"
+        }
+        self.testAuthor2 = {
+            "displayName": "testAuthor2",
+            "github": "https://github.com/cmput404-project-yonder/yonder",
+            "host": "http://testserver.com/"
+        }
+        user1 = User.objects.create_user(**self.credentials1)
+        user2 = User.objects.create_user(**self.credentials2)
+        self.author1 = Author.objects.create(**self.testAuthor1, user=user1)
+        self.author2 = Author.objects.create(**self.testAuthor2, user=user2)
+
+        # create post and comment
+        self.author2_post = {
+            "title": "A post title about a post about web dev",
+            "description": "This post discusses stuff -- brief",
+            "contentType": "text/plain",
+            "content": "Þā wæs on burgum Bēowulf Scyldinga",
+            "author": self.author2,
+            "categories": ["web", "tutorial"],
+            "visibility": "PUBLIC",
+            "unlisted": False
+        }
+        self.author2_post = Post.objects.create(**self.author2_post)
+        self.author1_first_comment = {
+            "post": self.author2_post,
+            "author": AuthorSerializer(self.author1).data,
+            "comment": "cool post dude",
+            "published": "2015-03-09T13:07:04+00:00"
+        }
+        self.author1_second_comment = {
+            "post": self.author2_post,
+            "author": AuthorSerializer(self.author1).data,
+            "comment": "can i reshare it?",
+            "published": "2015-03-09T13:07:04+00:00"
+        }
+        self.author1_first_comment = Comment.objects.create(**self.author1_first_comment)
+        self.author1_second_comment = Comment.objects.create(**self.author1_second_comment)
+
+        comment_like_data_from_author_1 = {
+            "author":{
+                "type":"author",
+                "id": str(self.author1.id),
+                "url": self.author1.get_absolute_url(),
+                "host": self.author1.host,
+                "displayName": self.author1.displayName,
+                "github": self.author1.github
+            },
+            "comment":"Sick Olde English",
+            "published": "2015-03-09T13:07:04+00:00"
+        }
+        self.comment_like_data_from_author_1_json = json.dumps(comment_like_data_from_author_1)
+
+        credBytes= base64.b64encode(f'{self.credentials1["username"]}:{self.credentials1["password"]}'.encode())
+        self.client.credentials(HTTP_AUTHORIZATION='Basic ' + credBytes.decode())
+    
+    def test_get_comments(self):
+        url = reverse('comments', args=[self.author2.id, self.author2_post.id])
+        response = self.client.get(url)
+        self.assertEqual(len(response.data), 2)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+    
+    def test_post_comment(self):
+        # author1 comments on author2 post
+        url = reverse('comments', args=[self.author2.id, self.author2_post.id])
+        response = self.client.post(url, content_type='application/json', data=self.comment_like_data_from_author_1_json)
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        
+        url = reverse('comments', args=[self.author2.id, self.author2_post.id])
+        response = self.client.get(url)
+        self.assertEqual(len(response.data), 3)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)

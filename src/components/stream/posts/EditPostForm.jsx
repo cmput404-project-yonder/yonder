@@ -229,8 +229,8 @@ class EditPostForm extends Component {
         <div class="file is-centered is-boxed">
           <label class="file-label"style={{width: "100%", height: "38pt"}}>
             <input class="file-input" type="file" name="resume" onChange={this.handleFileSelected}/>
-            <span class="file-cta">
-              <div style={{margin: "auto", marginTop: "-6pt"}}>
+            <span class="file-cta" style={{backgroundColor: "transparent", border: "none"}}>
+              <div style={{margin: "auto", marginTop: "-8pt"}}>
               <ImageUploadIcon svgScale={"35"} fill={color.baseBlack}/>
               </div>
             </span>
@@ -244,7 +244,7 @@ class EditPostForm extends Component {
         return (
           <img 
             src={ "image/png" ? `data:image/png;base64,${this.state.imageContent}` : `data:image/jpeg;base64,${this.state.content}` } 
-            style={{borderRadius: "6pt", margin: "auto", maxHeight: "15em", minHeight: "15em", objectFit: "cover"}} 
+            style={{borderRadius: "6pt", margin: "auto", objectFit: "cover"}} 
           />
         )
       }
@@ -253,11 +253,13 @@ class EditPostForm extends Component {
     const imageUploader = () => {
       return (
         <Form.Control>
-          <Container style={{display: "flex", flexDirection: "column", border: "1px solid #d1d1d1", borderRadius: "4px", minHeight: "17em", maxHeight: "22em"}}>
+          
+          <Container style={{backgroundColor: "#F9F9F9", display: "flex", flexDirection: "column", border: "1px solid #d1d1d1", borderRadius: "6pt", minHeight: "17em", maxHeight: "22em", padding: "0.5em"}}>
           <FileUploadForm/>
-          <Container style={{display: "flex", padding: "1em", width: "100%"}}>
+          <Container style={{backgroundColor: "white", display: "flex", width: "100%", border: "1px solid #d1d1d1", borderRadius: "6pt", overflowY: "scroll"}} className="hideScroll">
           {imagePreview()}
           </Container>
+          
           </Container>
           
         </Form.Control>
@@ -397,9 +399,7 @@ class EditPostForm extends Component {
               {this.state.selectedTab === "image" ? imageUploader() : null}
             </Form.Control>
           </Form.Field>
-          <Dividor style={dividorStyle}/>
           <SelectionPanel/>
-          <Dividor style={dividorStyle}/>
         </Container>
         <PostSubmitPanel/>
       </Card>

@@ -194,11 +194,25 @@ class comments(generics.ListCreateAPIView):
 
     @swagger_auto_schema(tags=['comments'])
     def get(self, request, *args, **kwargs):
-        return self.list(request, *args, **kwargs)
+        comments = Comment.objects.filter(post_id=kwargs["post_id"]).order_by('published')
+        page_number = 1 if 'page' not in request.query_params else request.query_params.get('page')
+        page_size = 50 if 'size' not in request.query_params else request.query_params.get('size')
+        paginator = Paginator(comments, page_size)
+        page = paginator.page(page_number)
+        serialized_comments = [self.serializer_class(comment).data for comment in page.object_list]
+
+        return Response(serialized_comments, status=status.HTTP_200_OK)
 
     @swagger_auto_schema(tags=['comments'])
     def post(self, request, *args, **kwargs):
-        return self.create(request, *args, **kwargs)
+        post = get_object_or_404(Post, id=kwargs["post_id"])
+        request.data['post'] = post.id
+        comment_serializer = self.serializer_class(data=request.data)
+        if not comment_serializer.is_valid():
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+
+        comment_serializer.save()
+        return Response(status=status.HTTP_201_CREATED)
 
 
 class comment_detail(generics.RetrieveUpdateDestroyAPIView):
@@ -337,11 +351,13 @@ class inbox(generics.GenericAPIView):
             inbox = Inbox.objects.get(author_id=kwargs["author_id"])
             
             if request.data["type"] == "like":
-                author = get_object_or_404(Author, id=kwargs["author_id"])
-                object_url = request.data["object"]
+                existing_like = Like.objects.all().filter(author__id=request.data["author"]["id"], object_url=request.data["object"])
+                if len(existing_like) != 0:
+                    return Response(status=status.HTTP_409_CONFLICT)    
+
                 formated_data = {
-                    "author": author.id,
-                    "object_url": object_url
+                    "author": request.data["author"],
+                    "object_url": request.data["object"]
                 }
                 like_serializer = LikeSerializer(data=formated_data)
                 if like_serializer.is_valid():
@@ -350,7 +366,7 @@ class inbox(generics.GenericAPIView):
                 inbox_data = {
                     "type": "like",
                     "author": request.data["author"],
-                    "object": object_url
+                    "object": request.data["object"]
                 }
                 inbox.items.append(inbox_data)
                 inbox.save()
@@ -384,7 +400,6 @@ class post_likes(generics.GenericAPIView):
     @swagger_auto_schema(tags=['likes'])
     def get(self, request, *args, **kwargs):
         post = get_object_or_404(Post, id=kwargs["post_id"])
-        print(post.get_absolute_url())
         likes = Like.objects.filter(object_url=post.get_absolute_url()) 
         serialized_data = [LikeSerializer(like).data for like in likes]
         data = {
@@ -413,7 +428,7 @@ class likes(generics.GenericAPIView):
     @swagger_auto_schema(tags=['likes'])
     def get(self, request, *args, **kwargs):
         author = get_object_or_404(Author, id=kwargs["author_id"])
-        likes = Like.objects.all().filter(author_id=author.id) 
+        likes = Like.objects.all().filter(author__id=str(author.id)) 
         serialized_likes = [LikeSerializer(like).data for like in likes]
         data = {
             "type": "liked",
