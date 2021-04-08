@@ -177,25 +177,42 @@ class post_detail(generics.RetrieveUpdateDestroyAPIView):
     @swagger_auto_schema(tags=['posts'])
     def get(self, request, *args, **kwargs):
         try:  
-            requestor = ""
-            post = Post.objects.get(id = self.kwargs["pk"])
+            post = Post.objects.get(id=self.kwargs["pk"])
+            postJSON = PostSerializer(instance=post).data
             if post.visibility == "FRIENDS":
-                requestor = request.user
-                follows = AuthorFollower.objects.filter(author_id=self.kwargs["author_id"])
+                req_user = User.objects.get(username=request.user)
+                requestor = Author.objects.get(user=req_user)
+                follows = AuthorFollower.objects.filter(author_id=post.author.id)
                 for follow in follows:
-                    if follow.follower["id"] == requestor:
-                        _follows = AuthorFollower.objects.filter(author_id=requestor)
+                    if follow.follower["id"] == str(requestor.id):
+                        _follows = AuthorFollower.objects.filter(author_id=requestor.id)
                         for _follow in _follows:
                             if _follow.follower["id"] == self.kwargs["author_id"]:
-                                return self.retrieve(request, *args, **kwargs)
-                            else:
-                                return Response(status = status.HTTP_401_UNAUTHORIZED)
-                    else:
-                        return Response(status = status.HTTP_401_UNAUTHORIZED)
-            return self.retrieve(request, *args, **kwargs)
+                                return Response(postJSON, status=status.HTTP_200_OK)
+
+                return Response(status=status.HTTP_401_UNAUTHORIZED)
+
+            elif post.visibility == "PUBLIC":
+                return Response(postJSON, status=status.HTTP_200_OK)
+
+            else:
+                return Response(status=status.HTTP_400_BAD_REQUEST)
 
         except Post.DoesNotExist:
             return Response(status=status.HTTP_404_NOT_FOUND)
+
+        except Author.DoesNotExist:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+
+        except AuthorFollower.DoesNotExist:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+        
+        except User.DoesNotExist:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+
+        except Exception as e:
+            print(e)
+            return Response(status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
     @swagger_auto_schema(tags=['posts'])
     def put(self, request, *args, **kwargs):

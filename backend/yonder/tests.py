@@ -183,8 +183,8 @@ class PostTests(APITestCase):
         self.authorJSON1 = AuthorSerializer(instance=self.author).data
         self.authorJSON2 = AuthorSerializer(instance=self.author2).data
 
-        self.followJSON1 = {"actor": self.authorJSON1, "object": self.authorJSON2}
-        self.followJSON2 = {"actor": self.authorJSON2, "object": self.authorJSON1}
+        self.followJSON1 = {"actor": self.authorJSON2, "object": self.authorJSON1}
+        self.followJSON2 = {"actor": self.authorJSON1, "object": self.authorJSON2}
 
         credBytes= base64.b64encode(f'{self.credentials["username"]}:{self.credentials["password"]}'.encode())
         self.client.credentials(HTTP_AUTHORIZATION='Basic ' + credBytes.decode())
@@ -201,6 +201,8 @@ class PostTests(APITestCase):
 
         user3 = User.objects.create_user(**self.credentials3)
         self.author3 = Author.objects.create(**self.testAuthor3, user=user3)
+
+
 
         self.post = {
             "title": "A post title about a post about web dev",
@@ -222,6 +224,14 @@ class PostTests(APITestCase):
             "categories": ["web", "tutorial"],
             "visibility": "FRIENDS",
             "unlisted": False
+        }
+        self.testFollow = {
+            "author": self.author,
+            "follower": self.authorJSON2
+        }
+        self.testFollow2 = {
+            "author": self.author2,
+            "follower": self.authorJSON1
         }
 
     def test_create_post(self):
@@ -246,31 +256,33 @@ class PostTests(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
     def test_get_post_friends(self):
-        #login as user1
-        login_url = reverse('login')
-        self.client.post(login_url, data=self.credentials, format='json')
+
+        AuthorFollower.objects.create(**self.testFollow)
+        AuthorFollower.objects.create(**self.testFollow2)
 
         url = reverse('posts', args=[self.author2.id])
         self.client.post(url, data=self.postFriends, format='json')
         post_id = Post.objects.get(title=self.postFriends["title"]).id
         post_url = url + str(post_id) + "/"
+
+        #login as user1
+        self.client.login(username=self.credentials["username"], password=self.credentials["password"])
+
         response = self.client.get(post_url)
 
         #tests if getting post was successful 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
         #logout
-        login_url = reverse('logout')
-        self.client.post(login_url, data=self.credentials, format='json')
+        self.client.logout()
 
         #login as user3
-        login_url = reverse('login')
-        self.client.post(login_url, data=self.credentials3, format='json')
+        self.client.login(username=self.credentials3["username"], password=self.credentials3["password"])
 
-        response = self.client.get(post_url)
+        response2 = self.client.get(post_url)
 
         #tests if getting post was not successful 
-        self.assertFalse(response.status_code, status.HTTP_200_OK)
+        self.assertNotEqual(response2.status_code, status.HTTP_200_OK)
 
 
 
@@ -304,7 +316,7 @@ class FollowerTests(APITestCase):
 
         self.followJSON1 = {"actor": self.authorJSON2, "object": self.authorJSON1}
         self.followJSON2 = {"actor": self.authorJSON1, "object": self.authorJSON2}
-
+    
         credBytes= base64.b64encode(f'{self.credentials1["username"]}:{self.credentials1["password"]}'.encode())
         self.client.credentials(HTTP_AUTHORIZATION='Basic ' + credBytes.decode())
 
