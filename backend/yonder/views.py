@@ -176,26 +176,7 @@ class post_detail(generics.RetrieveUpdateDestroyAPIView):
 
     @swagger_auto_schema(tags=['posts'])
     def get(self, request, *args, **kwargs):
-        try:  
-            requestor = ""
-            post = Post.objects.get(id = self.kwargs["pk"])
-            if post.visibility == "FRIENDS":
-                requestor = request.user
-                follows = AuthorFollower.objects.filter(author_id=self.kwargs["author_id"])
-                for follow in follows:
-                    if follow.follower["id"] == requestor:
-                        _follows = AuthorFollower.objects.filter(author_id=requestor)
-                        for _follow in _follows:
-                            if _follow.follower["id"] == self.kwargs["author_id"]:
-                                return self.retrieve(request, *args, **kwargs)
-                            else:
-                                return Response(status = status.HTTP_401_UNAUTHORIZED)
-                    else:
-                        return Response(status = status.HTTP_401_UNAUTHORIZED)
-            return self.retrieve(request, *args, **kwargs)
-
-        except Post.DoesNotExist:
-            return Response(status=status.HTTP_404_NOT_FOUND)
+        return self.retrieve(request, *args, **kwargs)
 
     @swagger_auto_schema(tags=['posts'])
     def put(self, request, *args, **kwargs):
@@ -327,18 +308,18 @@ class author_followers_detail(viewsets.ModelViewSet):
             
         except AuthorFollower.DoesNotExist:
 
-            authorToUnfollow = request.data["actor"]
+            authorToUnfollow = request.data["object"]
             node = RemoteNode.objects.get(host=authorToUnfollow["host"])
             url = node.host + "api/author/" + str(authorToUnfollow["id"]) + "/followers/" + str(follower_id) + "/"
             response = requests.delete(url,
                 auth=requests.models.HTTPBasicAuth(node.our_user, node.our_password),
-                json=request.data, 
-                headers={"Accept": "*/*","Content-type": "application/json"}
+                headers={"Accept": "*/*"}
             )
             print(url, response.text, request.data)
             return Response(status=response.status_code)
 
         return Response(status.HTTP_404_NOT_FOUND)
+        
     @swagger_auto_schema(tags=['followers'])
     def get(self, request, *args, **kwargs):
         return self.retrieve(request, *args, **kwargs)
