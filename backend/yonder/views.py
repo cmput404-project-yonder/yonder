@@ -301,11 +301,25 @@ class author_followers_detail(viewsets.ModelViewSet):
         return Response(status=status.HTTP_404_NOT_FOUND)
 
     def destroy(self, request, author_id, follower_id):
-        author_follower = get_object_or_404(AuthorFollower, author=author_id, follower__id=follower_id)
-        author_follower.delete()
+        try:
+            author_follower = AuthorFollower.objects.get(author=author_id, follower__id=follower_id)
+            author_follower.delete()
+            return Response(status=status.HTTP_204_NO_CONTENT)
+            
+        except AuthorFollower.DoesNotExist:
 
-        return Response(status=status.HTTP_204_NO_CONTENT)
+            authorToUnfollow = request.data["object"]
+            node = RemoteNode.objects.get(host=authorToUnfollow["host"])
+            url = node.host + "api/author/" + str(authorToUnfollow["id"]) + "/followers/" + str(follower_id) + "/"
+            response = requests.delete(url,
+                auth=requests.models.HTTPBasicAuth(node.our_user, node.our_password),
+                headers={"Accept": "*/*"}
+            )
+            print(url, response.text, request.data)
+            return Response(status=response.status_code)
 
+        return Response(status.HTTP_404_NOT_FOUND)
+        
     @swagger_auto_schema(tags=['followers'])
     def get(self, request, *args, **kwargs):
         return self.retrieve(request, *args, **kwargs)
