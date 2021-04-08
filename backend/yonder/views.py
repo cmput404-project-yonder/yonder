@@ -312,8 +312,9 @@ class author_followers_detail(viewsets.ModelViewSet):
             node = RemoteNode.objects.get(host=authorToUnfollow["host"])
             url = node.host + "api/author/" + str(authorToUnfollow["id"]) + "/followers/" + str(follower_id) + "/"
             response = requests.delete(url,
-                auth=requests.models.HTTPBasicAuth(node.our_user, node.our_password), 
-                headers={"Accept": "*/*"}
+                auth=requests.models.HTTPBasicAuth(node.our_user, node.our_password),
+                json=request.data, 
+                headers={"Accept": "*/*","Content-type": "application/json"}
             )
             print(url, response.text, request.data)
             return Response(status=response.status_code)
