@@ -153,20 +153,54 @@ class PublicPostTests(APITestCase):
 
 class PostTests(APITestCase):
     def setUp(self):
+
         self.credentials = {
             'username': 'testUser1',
             'password': 'testPassword1'
         }
         self.testAuthor = {
-            "displayName": "testLogin",
+            "displayName": "testAuthor",
             "github": "https://github.com/cmput404-project-yonder/yonder",
             "host": "http://testserver.com"
         }
+
         user = User.objects.create_user(**self.credentials)
         self.author = Author.objects.create(**self.testAuthor, user=user)
 
+        self.credentials2 = {
+            'username': 'testUser2',
+            'password': 'testPassword2'
+        }
+        self.testAuthor2 = {
+            "displayName": "testAuthor2",
+            "github": "https://github.com/cmput404-project-yonder/yonder",
+            "host": "http://testserver.com"
+        }
+
+        user2 = User.objects.create_user(**self.credentials2)
+        self.author2 = Author.objects.create(**self.testAuthor2, user=user2)
+
+        self.authorJSON1 = AuthorSerializer(instance=self.author).data
+        self.authorJSON2 = AuthorSerializer(instance=self.author2).data
+
+        self.followJSON1 = {"actor": self.authorJSON1, "object": self.authorJSON2}
+        self.followJSON2 = {"actor": self.authorJSON2, "object": self.authorJSON1}
+
         credBytes= base64.b64encode(f'{self.credentials["username"]}:{self.credentials["password"]}'.encode())
         self.client.credentials(HTTP_AUTHORIZATION='Basic ' + credBytes.decode())
+
+        self.credentials3 = {
+            'username': 'testUser3',
+            'password': 'testPassword3'
+        }
+        self.testAuthor3 = {
+            "displayName": "testAuthor3",
+            "github": "https://github.com/cmput404-project-yonder/yonder",
+            "host": "http://testserver.com"
+        }
+
+        user3 = User.objects.create_user(**self.credentials3)
+        self.author3 = Author.objects.create(**self.testAuthor3, user=user3)
 
         self.post = {
             "title": "A post title about a post about web dev",
@@ -179,7 +213,19 @@ class PostTests(APITestCase):
             "unlisted": False
         }
 
-    def test_create(self):
+        self.postFriends = {
+            "title": "A post title about a post about web dev",
+            "description": "This post discusses stuff -- brief",
+            "contentType": "text/plain",
+            "content": "Þā wæs on burgum Bēowulf Scyldinga",
+            "author": self.testAuthor2,
+            "categories": ["web", "tutorial"],
+            "visibility": "FRIENDS",
+            "unlisted": False
+        }
+
+    def test_create_post(self):
+
         url = reverse('posts', args=[self.author.id])
         response = self.client.post(
             url, data=self.post, format='json')
@@ -187,6 +233,46 @@ class PostTests(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertIsNotNone(Post.objects.get(
             title=self.post["title"]))
+
+    def test_get_post(self):
+
+        url = reverse('posts', args=[self.author.id])
+        self.client.post(url, data=self.post, format='json')
+        post_id = Post.objects.get(title=self.post["title"]).id
+        post_url = url + str(post_id) + "/"
+        response = self.client.get(post_url)
+
+        #tests if getting post was successful 
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+    def test_get_post_friends(self):
+        #login as user1
+        login_url = reverse('login')
+        self.client.post(login_url, data=self.credentials, format='json')
+
+        url = reverse('posts', args=[self.author2.id])
+        self.client.post(url, data=self.postFriends, format='json')
+        post_id = Post.objects.get(title=self.postFriends["title"]).id
+        post_url = url + str(post_id) + "/"
+        response = self.client.get(post_url)
+
+        #tests if getting post was successful 
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+        #logout
+        login_url = reverse('logout')
+        self.client.post(login_url, data=self.credentials, format='json')
+
+        #login as user3
+        login_url = reverse('login')
+        self.client.post(login_url, data=self.credentials3, format='json')
+
+        response = self.client.get(post_url)
+
+        #tests if getting post was not successful 
+        self.assertFalse(response.status_code, status.HTTP_200_OK)
+
+
 
 class FollowerTests(APITestCase):
     def setUp(self):
