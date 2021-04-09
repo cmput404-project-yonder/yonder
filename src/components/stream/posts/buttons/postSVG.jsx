@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { color } from '../../../styling/ColorFontConfig';
+import { color } from '../../../../styling/ColorFontConfig';
 /*
 SVG components:
     cancelButton
