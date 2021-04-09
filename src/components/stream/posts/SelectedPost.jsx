@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
-import { withRouter } from "react-router-dom";
+import { withRouter, useLocation } from "react-router-dom";
 import { Modal, Button, Content, Section, Card,Container,Columns, List } from "react-bulma-components";
 import Dividor from "./Dividor";
 import EditButton from "./buttons/EditButton";
@@ -54,6 +54,7 @@ function DetailedPostList(props) {
   const [sharingPromptIsOpen, setSharingPromptIsOpen] = useState(false);
   const [writtenComment, setWrittenComment] = useState("");
   console.log("PROPS:",props.commentList);
+  let location = useLocation();
 
   // helper functions
   const IsImage = () => {
@@ -231,6 +232,7 @@ function DetailedPostList(props) {
             onClick={e => {
               props.createComment(writtenComment);
               setWrittenComment("");
+              window.location.reload();
             }}
           >
           Comment
