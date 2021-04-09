@@ -2,28 +2,27 @@
     props.action - onClick event
 */
 
-import { ConfirmButton } from "./postSVG";
+import { PencilIcon } from "./postSVG";
 import { Container } from "react-bulma-components";
-import {color} from "./styling";
+import {color} from "../styling";
 
 
 // local styling
 var buttonStyle = {
-    scale: "40",
+    scale: "20",
     style: {
-        padding: "1.2em",
         fill: color.buttonGreen,
     }
 }
 
 // component
-function ConfirmCirButton(props) {
+function EditButton(props) {
 
     return (
         <Container style={buttonStyle.style}>
-            <a onClick={props.action}><ConfirmButton svgScale={buttonStyle.scale}/></a>
+            <a onClick={props.action}><PencilIcon svgScale={buttonStyle.scale}/></a>
         </Container>
     );
 }
 
-export default ConfirmCirButton;
+export default EditButton;

@@ -11,8 +11,8 @@ import { Form, Container, Card } from "react-bulma-components";
 import { ProfileIcon } from "./ProfileIcons";
 import { color, font } from "./styling";
 
-import CancelButton from "../stream/posts/CancelButton";
-import ConfirmButton from "../stream/posts/ConfirmButton";
+import CancelButton from "../stream/posts/buttons/CancelButton";
+import ConfirmButton from "../stream/posts/buttons/ConfirmButton";
 import Dividor from "./Dividor";
 import { dividorStyle, cardStyle } from "../../styling/StyleComponents";
 

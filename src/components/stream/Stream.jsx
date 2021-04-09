@@ -6,7 +6,7 @@ import { Container, Columns, Section } from "react-bulma-components";
 import { Redirect } from "react-router-dom";
 
 import PostList from "./posts/PostList";
-import PopupModal from "./posts/PopupModal";
+import PopupModal from "./posts/modals/PopupModal";
 
 import { buttonLayerContainerStyle, streamLayerContainerStyle, newPostButtonStyle, pageStyle } from "../../styling/StyleComponents";
 import { createPost, updatePost, sharePost, likePost, retrieveLoggedInAuthorPosts, deletePost, retrieveInbox, retrieveAllAuthors } from "./StreamActions";

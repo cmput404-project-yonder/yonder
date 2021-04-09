@@ -3,12 +3,12 @@ import React from "react";
 import { Card, Container } from "react-bulma-components";
 import { color, font } from "./styling";
 
-import { SharingPostIcon } from "./postSVG";
+import { SharingPostIcon } from "./buttons/postSVG";
 import Dividor from "./Dividor";
 
 
-import CancelButton from "./CancelButton";
-import ConfirmButton from "./ConfirmButton";
+import CancelButton from "./buttons/CancelButton";
+import ConfirmButton from "./buttons/ConfirmButton";
 
 import { cardStyle } from "../../../styling/StyleComponents";
 

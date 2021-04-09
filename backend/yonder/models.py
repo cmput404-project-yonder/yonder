@@ -73,7 +73,7 @@ class Comment(models.Model):
         choices=ContentTypes.choices,
         default=ContentTypes.TEXT,
     )
-    published = models.DateTimeField()
+    published = models.DateTimeField(auto_now_add=True)
 
     def get_absolute_url(self):
         return self.post.get_absolute_url() + f"comments/{self.id}/"

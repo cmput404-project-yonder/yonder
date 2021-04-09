@@ -268,7 +268,7 @@ export const buttonLayoutStyle = {
     display: "flex",
     width: "0em",
     float: "right",
-    marginRight: "10em",       // the width of two button.
+    marginRight: "5em",       // the width of two button.
   }
   
 export const postIconStyle = {

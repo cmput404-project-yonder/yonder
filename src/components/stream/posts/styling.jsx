@@ -10,6 +10,7 @@ var color = {
     backgroundGrey: "#fefefe",
     backgroundCream: "#F9F5EF",
     backgroundCreamLighter: "#FFFAF1",
+    backgroundTooltip: "#dbdbdb",
 }
 
 var font = {
