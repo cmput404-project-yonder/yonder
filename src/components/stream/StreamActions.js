@@ -66,6 +66,7 @@ export const createPost = (newPost) => (dispatch, getState) => {
   setAxiosAuthToken(state.auth.token);
 
   newPost["author"] = state.auth.author;
+  console.log("newpost:",newPost);
 
   dispatch({ type: NEW_POST_SUBMITTED });
   axios

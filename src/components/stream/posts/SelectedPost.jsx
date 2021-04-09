@@ -18,7 +18,7 @@ import { updatePost, deletePost } from '../StreamActions';
 import ReactMde from "react-mde";
 import Markdown from "react-markdown";
 
-import { retrievePost } from "./PostActions";
+import { retrievePost, createComment } from "./PostActions";
 
 // local styling
 var postDividorStyle = {
@@ -34,21 +34,12 @@ var buttonOverrideStyle = {
   height: "20pt",
 }
 
-function displayComment() {
-  return (
-    <div className="container">
-      <ReactMde/>
-    </div>
-  );
-}
-
 function getDateString(ms) {
   let date = new Date(ms);
   return date.toLocaleDateString();
 }
 
 function DetailedPostList(props) {
-  console.log("DetailPostList ", props);
   // this component seprate a post into three part
   // and put these parts into the list
   // 1. title, description, author, timestamp
@@ -60,6 +51,7 @@ function DetailedPostList(props) {
   const [isLiked, setIsLiked] = useState(false);
   const [editModalIsOpen, setEditModalIsOpen] = useState(false);
   const [sharingPromptIsOpen, setSharingPromptIsOpen] = useState(false);
+  const [writtenComment, setWrittenComment] = useState("");
 
   // helper functions
   const IsImage = () => {
@@ -97,6 +89,30 @@ function DetailedPostList(props) {
       </Container>
     )
   }
+
+  const displayCommentEditor = () => {
+    return(
+      <div>
+        <ReactMde
+          value={writtenComment}
+          onChange={m => setWrittenComment(m)}
+        />
+        <Button
+          style={{ float: "right", marginRight: `-2px` }}
+          onClick={e => {
+            props.createComment(writtenComment);
+            setWrittenComment("");
+          }}
+        >
+        Comment
+      </Button>
+    </div>
+    )
+  }
+
+  // const handleCommentSubmit =() => {
+
+  // }
 
   // 1. title, description, author, timestamp
   const TitleCard = () => {
@@ -187,34 +203,52 @@ function DetailedPostList(props) {
   const CommentCard = (CommentList) => {
     // render template of one comment
     const listComment = CommentList.map((comment) =>
-      <li>{comment}</li>
+      <List.Item>
+        <Card style={postStyle}>
+          <Card.Content style={postContainerStyle}>
+            {/* author and timestamp */}
+            <Container style={signatureStyle}>
+              <p style={{ fontWeight: "250" }}>@{props.post.author.displayName}</p>
+              <p>·</p>
+              <p>{getDateString(Date.parse(props.post.published))}</p>
+            </Container>
+            <Container style={postTitleStyle}>
+              <p style={{ color: color.baseBlack }}>Comments</p>
+            </Container>
+            {/* comment section */}
+            <Container style={DescriptionStyle}>
+              {comment.comment}
+              </Container>
+          </Card.Content>
+        </Card>
+      </List.Item>
     );
+    return (
+      <List>
+        {listComment}
+      </List>
+    )
+  }
+
+  const CommentEditorCard = () => {
     return (
       <Card style={postStyle}>
         <Card.Content style={postContainerStyle}>
-          {/* author and timestamp */}
-          <Container style={signatureStyle}>
-          <p style={{ fontWeight: "250" }}>@{props.post.author.displayName}</p>
-          <p>·</p>
-          <p>{getDateString(Date.parse(props.post.published))}</p>
-          </Container>
-          <Container style={postTitleStyle}>
-          <p style={{color: color.baseBlack}}>Comment</p>
-          </Container>
-
-          {/* comment section */}
-          <Container style = {DescriptionStyle}>
-            <ul>{listComment}</ul>
-            {displayComment()}
-          </Container>
-          
+          {displayCommentEditor()}
         </Card.Content>
       </Card>
     )
   }
 
-  const CommentList = ["hi", "hello"]                                 // add comment to this list
-  const listItems = [TitleCard(), ContentCard(), CommentCard(CommentList)]    // add component to this list for displaying
+  const CommentList = [{
+    comment: "hi",
+    contentType: "text/markdown",
+    },
+    {comment: "hello",
+  contentType: "text/markdown"},
+  ];                          
+  // add comment to this list
+  const listItems = [TitleCard(), ContentCard(), CommentCard(CommentList), CommentEditorCard()]    // add component to this list for displaying
   return (
     <div className="post-list animate__animated animate__fadeInDown">
       <List hoverable>{listItems}</List>
@@ -253,7 +287,7 @@ class SelectedPost extends React.Component {
           <div style={streamLayerContainerStyle}>
             <Container fluid>
               <Columns centered>
-               <DetailedPostList post={this.props.retrievedPost} loggedInAuthor={this.props.loggedInAuthor}/>
+               <DetailedPostList post={this.props.retrievedPost} loggedInAuthor={this.props.loggedInAuthor} comments={this.props.comments} createComment={this.props.createComment} />
               </Columns>
             </Container>
           </div>
@@ -271,10 +305,14 @@ SelectedPost.propTypes = {
   likePost: PropTypes.func.isRequired,
 };
 
+DetailedPostList.propTypes = {
+  createComment: PropTypes.func.isRequired,
+}
+
 const mapStateToProps = (state) => ({
   loading: state.post.loading,
   retrievedPost: state.post.retrievedPost,
   loggedInAuthor: state.auth.author,
 });
 
-export default connect(mapStateToProps, { retrievePost, updatePost, deletePost })(withRouter(SelectedPost));
+export default connect(mapStateToProps, { retrievePost, updatePost, deletePost, createComment })(withRouter(SelectedPost));
