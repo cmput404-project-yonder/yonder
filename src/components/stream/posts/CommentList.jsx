@@ -1,26 +1,16 @@
-import React, { Component } from 'react';
+import React, { useState } from 'react';
+import SelectedPost from './SelectedPost';
 
-class CommentList extends Component {
-    constructor(props) {
-        super(props);
-
-        this.state = {
-            commentList: [{
-                comment: "",
-                commentType: "text/markdown",
-            }]
-        }
-    }
-
-    
-
-    render() {
-        return (
-            <div>
-                Rendering comment list
-            </div>
-        );
-    }
+function CommentList(commentData) {
+    console.log("commentList:",commentData);
+    return (
+        <div>
+            {
+                // commentData.map(comment => <p>{comment}</p>)
+                commentData[0]
+            }
+        </div>
+    )
 }
 
 export default CommentList;

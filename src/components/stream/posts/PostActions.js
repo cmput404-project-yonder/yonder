@@ -7,6 +7,9 @@ import {
   NEW_COMMENT_SUBMITTED,
   NEW_COMMENT_SUCCESS,
   NEW_COMMENT_ERROR,
+  RETRIEVE_COMMENT_LIST_SUBMITTED,
+  RETRIEVE_COMMENT_LIST_SUCCESS,
+  RETRIEVE_COMMENT_LIST_ERROR,
 } from "./PostTypes";
 import { setAxiosAuthToken } from "../../../utils/Utils";
 
@@ -56,6 +59,32 @@ export const createComment = (comment) => (dispatch, getState) => {
         toast.error(JSON.stringify(error.response.data));
         dispatch({
           type: NEW_COMMENT_ERROR,
+          errorData: error.response.data,
+        });
+      } else if (error.message) {
+        toast.error(JSON.stringify(error.message));
+      } else {
+        toast.error(JSON.stringify(error));
+      }
+    });
+};
+
+export const retrieveCommentList = (authorId, postId) => (dispatch, getState) => {
+  const state = getState();
+  console.log("STATE:",state);
+
+  setAxiosAuthToken(state.auth.token);
+  dispatch({ type: RETRIEVE_COMMENT_LIST_SUBMITTED });
+  axios
+    .get("/author/" + authorId + "/posts/" + postId + "/comments/")
+    .then((response) => {
+      dispatch({ type: RETRIEVE_COMMENT_LIST_SUCCESS, payload: response.data });
+    })
+    .catch((error) => {
+      if (error.response) {
+        toast.error(JSON.stringify(error.response.data));
+        dispatch({
+          type: RETRIEVE_COMMENT_LIST_ERROR,
           errorData: error.response.data,
         });
       } else if (error.message) {

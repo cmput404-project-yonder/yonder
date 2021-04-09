@@ -5,12 +5,16 @@ import {
     NEW_COMMENT_SUBMITTED,
     NEW_COMMENT_SUCCESS,
     NEW_COMMENT_ERROR,
+    RETRIEVE_COMMENT_LIST_SUBMITTED,
+    RETRIEVE_COMMENT_LIST_SUCCESS,
+    RETRIEVE_COMMENT_LIST_ERROR,
   } from "./PostTypes";
   
   const initialState = {
     error: "",
     retrievedPost: {},
     comments: {},
+    retrievedCommentList: {},
     loading: false,
   };
   
@@ -52,6 +56,25 @@ import {
             ...state,
             error: "",
             comments: action.payload,
+            loading: false,
+          };
+        case RETRIEVE_COMMENT_LIST_SUBMITTED:
+          return {
+            ...state,
+            error: "",
+            loading: true,
+          };
+        case RETRIEVE_COMMENT_LIST_ERROR:
+          return {
+            ...state,
+            error: action.errorData,
+            loading: false,
+          };
+        case RETRIEVE_COMMENT_LIST_SUCCESS:
+          return {
+            ...state,
+            error: "",
+            retrievedCommentList: action.payload,
             loading: false,
           };
       default:
