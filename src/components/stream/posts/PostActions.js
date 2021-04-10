@@ -112,10 +112,19 @@ export const retrievePostLikes = (post, setterFunction) => (dispatch, getState) 
       // console.log(post);
       // console.log(response.data);
       setterFunction(response.data);
+
     })
     .catch((error) => {
       if (error.response) {
-        toast.error(JSON.stringify(error.response.data));
+
+        // handles specific status code
+        switch (error.response.status) {
+          case 404:
+            break;
+          default:
+            toast.error(JSON.stringify(error.response.data));
+            break;
+        }
         dispatch({
           type: RETRIEVE_POSTLIKE_ERROR,
           errorData: error.response.data,
