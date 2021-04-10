@@ -68,10 +68,16 @@ export const profileReducer = (state = initialState, action) => {
         loading: false,
       };
     case SEND_FOLLOW_SUCCESS:
+      return {
+        ...state,
+        error: "",
+        loading: false,
+      };
     case DELETE_FOLLOW_SUCCESS:
       return {
         ...state,
         error: "",
+        isFollowing: false,
         loading: false,
       };
     case CHECK_FOLLOW_SUCCESS:
@@ -81,7 +87,6 @@ export const profileReducer = (state = initialState, action) => {
         isFollowing: action.payload,
         loading: false,
       };
-
     case CHANGE_PROFILE_SUCCESS:
       return {
         ...state,
