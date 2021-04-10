@@ -1,12 +1,15 @@
 import React, { useState } from "react";
+import { connect } from "react-redux";
+import { withRouter } from "react-router-dom";
 import { Card, Container } from "react-bulma-components";
+
 import { color, font } from "./styling";
 import Inbox from "./Inbox";
-import { cardStyle } from "../../styling/StyleComponents";
+import { cardStyle, panelStyle, tabStyle } from "../../styling/StyleComponents";
 import { InboxModalIcon } from "../../styling/svgIcons";
-
 import PostTab from "../stream/posts/PostTab";
-import { panelStyle, tabStyle } from "../../styling/StyleComponents";
+import DeleteButton from "../stream/posts/buttons/DeleteButton";
+import { clearInbox } from "../stream/StreamActions";
 
 
 // local styling
@@ -56,37 +59,39 @@ function InboxModal (props){
             break
         }
     }
-    
+
     const SelectionPanel = () => {
     // custom selection tab
     // text, markdown, image
-    return (
+      return (
         <Container style={{...panelStyle, paddingBottom: "1em"}}>
-            <PostTab style={tabStyle} text="Like" active={tabSelected === "like"} action={() => selectTab("like")}/>
-            <PostTab style={tabStyle} text="Follow" active={tabSelected === "follow"} action={() => selectTab("follow")}/>
-            <PostTab style={tabStyle} text="Post"active={tabSelected === "post"} action={() => selectTab("post")}/>
-        </Container>  
-    )
+          <PostTab style={tabStyle} text="Like" active={tabSelected === "like"} action={() => selectTab("like")}/>
+          <PostTab style={tabStyle} text="Follow" active={tabSelected === "follow"} action={() => selectTab("follow")}/>
+          <PostTab style={tabStyle} text="Post"active={tabSelected === "post"} action={() => selectTab("post")}/>
+        </Container>
+      )
     }
 
     return (
-        <Card style={cardStyle} >
-            
-            <Container style={inboxIconStyle}>
-                <InboxModalIcon svgScale={"55"}/>
-            </Container>
-            <Container>
-                <p style={inboxTitleStyle}> Your Inbox</p>
-            </Container>
-            <hr style={shadowDividorStyle}></hr>
-            <Card.Content style={{marginTop: "1.2em", marginBottom: "1.2em"}}>
-                <Inbox selectedTab={tabSelected}/> 
-            </Card.Content>
-            <hr style={{...shadowDividorStyle, transform: "rotate(180deg)"}}></hr>
-            <SelectionPanel/>
-        </Card>
+      <Card style={cardStyle} >
+        <Container style={inboxIconStyle}>
+          <InboxModalIcon svgScale={"55"}/>
+        </Container>
+        <Container>
+          <p style={inboxTitleStyle}> Your Inbox</p>
+        </Container>
+        <DeleteButton action={() => props.clearInbox()}/>
+        <hr style={shadowDividorStyle}></hr>
+        <Card.Content style={{marginTop: "1.2em", marginBottom: "1.2em"}}>
+          <Inbox selectedTab={tabSelected}/> 
+        </Card.Content>
+        <hr style={{...shadowDividorStyle, transform: "rotate(180deg)"}}></hr>
+        <SelectionPanel/>
+      </Card>
     )
 }
 
+const mapStateToProps = (state) => ({
+});
 
-export default InboxModal;
+export default connect(mapStateToProps, { clearInbox })(withRouter(InboxModal));
