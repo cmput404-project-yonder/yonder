@@ -123,9 +123,9 @@ class author_detail(generics.RetrieveUpdateDestroyAPIView):
         data = serializer.data
         data["url"] = author.get_absolute_url()
         return Response(serializer.data)
-
+    
     @swagger_auto_schema(tags=['authors'])
-    def put(self, request, *args, **kwargs):
+    def post(self, request, *args, **kwargs):
         return self.update(request, *args, **kwargs)
 
     @swagger_auto_schema(tags=['authors'])
