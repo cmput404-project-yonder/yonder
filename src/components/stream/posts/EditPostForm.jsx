@@ -21,18 +21,21 @@ import { checkBoxLabelStyle, checkBoxStyle, checkMarkStyle, createPostHeaderStyp
   tabStyle, submittPanelStyle, formContainerStyle, labelStyle, dividorStyle, formTitleStyle, postIconStyle } from "../../../styling/StyleComponents";
 
 
+var menuDropDownStyle = {
+  borderRadius: "5pt",
+  textAlign: "left",
+  borderWidth: "1pt",
+  padding: "1em",
+  border: "1pt solid" + color.baseLightGrey,
+  backgroundColor: "white",
+  color: color.baseLightGrey,
+}
+
 export const buttonLayoutStyle = {
   display: "flex",
   width: "0em",
   float: "right",
   marginRight: "10em",       // the width of two button.
-}
-
-var menuDropDownStyle = {
-  borderRadius: "6pt",
-  border: "1px solid #cfcccc",
-  textAlign: "center",
-  backgroundColor: "backgroundTooltip",
 }
 
 class EditPostForm extends Component {
@@ -209,7 +212,7 @@ class EditPostForm extends Component {
           value={this.state.textContent}
           onChange={this.onChange}
           style={{
-            height: `245px`,
+            height:`246.3px`,
           }}
         />
       );
@@ -262,7 +265,7 @@ class EditPostForm extends Component {
       return (
         <Form.Control>
           
-          <Container style={{backgroundColor: "#F9F9F9", display: "flex", flexDirection: "column", border: "1px solid #d1d1d1", borderRadius: "6pt", minHeight: "17em", maxHeight: "22em", padding: "0.5em"}}>
+          <Container style={{backgroundColor: "#F9F9F9", display: "flex", flexDirection: "column", border: "1px solid #d1d1d1", borderRadius: "6pt", height: "246.3px", padding: "0.5em"}}>
           <FileUploadForm/>
           <Container style={{backgroundColor: "white", display: "flex", width: "100%", border: "1px solid #d1d1d1", borderRadius: "6pt", overflowY: "scroll"}} className="hideScroll">
           {imagePreview()}
@@ -335,22 +338,27 @@ class EditPostForm extends Component {
       )
     }
 
-    const DropDown = () => {
+    const ToolTip = () => {
       return (
-        <div class="dropdown is-hoverable" style={{ float:"left", marginTop: "1.8em" }}>
+        <Container style={checkBoxStyle}>
+        <div class="dropdown is-hoverable is-up" >
           <div class="dropdown-trigger" >
             <span
-              style={{backgroundColor: "transparent", border: "none", fill: color.baseRed, width: "4em", padding: "0"}}
+              style={{backgroundColor: "transparent", border: "none", fill: color.baseRed, padding: "0"}}
             >
             <ToolTipIcon svgScale={"25"} />
             </span>
           </div>
-          <div class="dropdown-menu animate__animated animate__fadeIn animate__faster" style={{minWidth: "250pt", marginRight: "-5pt"}}>
+          <div class="dropdown-menu animate__animated animate__fadeIn animate__faster" style={{minWidth: "250pt", marginBottom: "6pt", marginLeft: "-10pt"}}>
             <div class="dropdown-content"style={menuDropDownStyle}>
-            <strong>Friends Only</strong> will only allow friends to view this post. <br></br><strong>Unlisted</strong> will allow this post to only show up on the stream of this post author.
+              <p>
+                {"<Friends> Only allows only friends to view this post."} <br></br>
+                {"<Unlisted> make this post only visible to you."}
+              </p>
             </div>
           </div>
-        </div>      
+        </div>    
+        </Container>  
       )
     }
   
@@ -358,7 +366,7 @@ class EditPostForm extends Component {
     const PostSubmitPanel = () => {
       return (
         <Container style={submittPanelStyle}>
-          <DropDown />
+          <ToolTip />
           <VisibilityCheckBox />
           <UnlistCheckBox/>
           <PostFormButtonPanel/>
@@ -368,16 +376,16 @@ class EditPostForm extends Component {
 
     return (
       <Card style={cardStyle} className="animate__animated animate__slideInUp">
-        <Container style={createPostHeaderStype}>
+        {/* <Container style={createPostHeaderStype}>
           <Container style={postIconStyle.style}>{postIcons()}</Container>
-        </Container>
+        </Container> */}
         <Container style={formContainerStyle}>
           <Form.Field>
             <Form.Label style={labelStyle}>Title</Form.Label>
             <Form.Control>
               <Form.Textarea
                   onKeyPress={(e) => {if (e.key === "Enter") e.preventDefault();}}
-                  maxLength="80"
+                  maxLength="30"
                   cols={1}
                   name="title"
                   value={this.state.title}
@@ -391,7 +399,7 @@ class EditPostForm extends Component {
             <Form.Control>
               <Form.Textarea
                 onKeyPress={(e) => {if (e.key === "Enter") e.preventDefault();}}
-                maxLength="120"
+                maxLength="50"
                 cols={1}
                 name="description"
                 value={this.state.description}

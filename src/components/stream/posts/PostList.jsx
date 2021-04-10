@@ -15,10 +15,23 @@ function PostList(props) {
   props.posts.sort((postA,postB) => Date.parse(postB["published"])-Date.parse(postA["published"]));
   const postList = props.posts.map((post) => <Post interactive={props.interactive} post={post} updatePost={props.updatePost} deletePost={props.deletePost} likePost={props.likePost} sharePost={props.sharePost}/>);
 
+
+  const createNewPostGuide = () => {
+    if (props.createPost !== undefined) {
+      return (
+        <Container style={{textAlign: "center", display: "flex", gap: "1em", marginBottom: "3em"}}>
+          <p style={{marginTop: "0.3em",fontSize: "1.9em", fontWeight: "400", color: color.baseLightGrey}}>click to start</p>
+          <PopupModal isFlat={true} createPost={props.createPost}/>
+        </Container>        
+      )
+    }
+  }
+
+
   if (postList.length === 0) {
     return (
       <div className="post-list animate__animated animate__fadeInUp">
-        <Card style={{...postStyle, height: "auto", fontSize: "1em"}}>
+        <Card style={{...postStyle, height: "auto", fontSize: "1em", minWidth: "30em"}}>
           <Container>
             <Container style={{textAlign: "center", marginTop: "12em", marginBottom: "9em"}}>
                 <Container style={{fill: color.baseLightGrey}}>
@@ -27,18 +40,15 @@ function PostList(props) {
                 <p style={{fontSize: "2.8em", fontWeight: "450", color: color.baseLightGrey}}>Empty feed :(</p>
             </Container>
           </Container>
+          {createNewPostGuide()}
 
-          <Container style={{textAlign: "center", display: "flex", gap: "1em", marginBottom: "3em"}}>
-            <p style={{marginTop: "0.3em",fontSize: "2.2em", fontWeight: "400", color: color.baseLightGrey}}>Click here to create post ></p>
-            <PopupModal createPost={props.createPost}/>
-          </Container>
         </Card>
       </div>
     );
   } else {
     return (
       <div className="post-list animate__animated animate__fadeInUp">
-        <List hoverable>{postList}</List>
+        <List style={{minWidth: "30em"}} hoverable>{postList}</List>
       </div>
     );    
   }

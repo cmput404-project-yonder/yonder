@@ -5,23 +5,25 @@ import Markdown from "react-markdown";
 import ReactTags from "react-tag-autocomplete";
 import "./react-tags.css";
 
-import CancelButton from "./buttons/CancelButton";
 import ConfirmButton from "./buttons/ConfirmButton";
 import CheckBox from "./CheckBox";
 
 import { TextIcon, ImageIcon, MarkdownIcon, ToolTipIcon } from "./buttons/postSVG";
 import { ImageUploadIcon } from "../../../styling/svgIcons";
 import PostTab from "./PostTab";
-import Dividor from "./Dividor"
 import { checkBoxLabelStyle, checkBoxStyle, checkMarkStyle, createPostHeaderStype, cardStyle, panelStyle,
 tabStyle, submittPanelStyle, formContainerStyle, labelStyle, dividorStyle, formTitleStyle, buttonLayoutStyle, postIconStyle } from "../../../styling/StyleComponents";
 import { color } from "./styling";
 
+
 var menuDropDownStyle = {
-  borderRadius: "6pt",
-  border: "1px solid #cfcccc",
-  textAlign: "center",
-  backgroundColor: "backgroundTooltip",
+  borderRadius: "5pt",
+  textAlign: "left",
+  borderWidth: "1pt",
+  padding: "1em",
+  border: "1pt solid" + color.baseLightGrey,
+  backgroundColor: "white",
+  color: color.baseLightGrey,
 }
 
 class PostForm extends Component {
@@ -190,7 +192,7 @@ class PostForm extends Component {
           value={this.state.textContent}
           onChange={this.onChange}
           style={{
-            height: `245px`,
+            height: `246.3px`,
           }}
         />
       );
@@ -242,7 +244,7 @@ class PostForm extends Component {
       return (
         <Form.Control>
           
-          <Container style={{backgroundColor: "#F9F9F9", display: "flex", flexDirection: "column", border: "1px solid #d1d1d1", borderRadius: "6pt", minHeight: "17em", maxHeight: "22em", padding: "0.5em"}}>
+          <Container style={{backgroundColor: "#F9F9F9", display: "flex", flexDirection: "column", border: "1px solid #d1d1d1", borderRadius: "6pt", height: "246.3px", padding: "0.5em"}}>
           <FileUploadForm/>
           <Container style={{backgroundColor: "white", display: "flex", width: "100%", border: "1px solid #d1d1d1", borderRadius: "6pt", overflowY: "scroll"}} className="hideScroll">
           {imagePreview()}
@@ -252,17 +254,6 @@ class PostForm extends Component {
           
         </Form.Control>
       )
-    }
-
-    const postIcons = () => {
-      switch (this.state.selectedTab) {
-        case "text":
-          return (<TextIcon svgScale={postIconStyle.scale} />)
-        case "image":
-          return (<ImageIcon svgScale={postIconStyle.scale} />)
-        case "markdown":
-          return (<MarkdownIcon svgScale={postIconStyle.scale} />)
-      }
     }
 
     const SelectionPanel = () => {
@@ -303,19 +294,6 @@ class PostForm extends Component {
       )
     }
 
-     const cancelButtonHandler = () => {
-      // exit animation attemps, commented out for now.
-      // dont know how to find .modal.is-active.modal-background
-      // maybe ill give it another try in part3
-      // --- Gengyuan
-
-      // let formCard = document.getElementById("postFormCard");
-      // formCard.addEventListener("animationend", () => {this.props.setModalIsOpen(false);})
-      // formCard.className = 'animate__animated animate__fadeOutDown'
-
-      this.props.setModalIsOpen(false);
-    }
-
     const PostFormButtonPanel = () => {
       // Confirm and back button used to submit form
       return (
@@ -326,29 +304,34 @@ class PostForm extends Component {
       )
     }
 
-    const DropDown = () => {
+    const ToolTip = () => {
       return (
-        <div class="dropdown is-hoverable" style={{ float:"left", marginTop: "1.8em" }}>
+        <Container style={checkBoxStyle}>
+        <div class="dropdown is-hoverable is-up" >
           <div class="dropdown-trigger" >
             <span
-              style={{backgroundColor: "transparent", border: "none", fill: color.baseRed, width: "4em", padding: "0"}}
+              style={{backgroundColor: "transparent", border: "none", fill: color.baseRed, padding: "0"}}
             >
             <ToolTipIcon svgScale={"25"} />
             </span>
           </div>
-          <div class="dropdown-menu animate__animated animate__fadeIn animate__faster" style={{minWidth: "250pt", marginRight: "-5pt"}}>
+          <div class="dropdown-menu animate__animated animate__fadeIn animate__faster" style={{minWidth: "250pt", marginBottom: "6pt", marginLeft: "-10pt"}}>
             <div class="dropdown-content"style={menuDropDownStyle}>
-            <strong>Friends Only</strong> will only allow friends to view this post. <br></br><strong>Unlisted</strong> will allow this post to only show up on the stream of this post author.
+              <p>
+                {"<Friends> Only allows only friends to view this post."} <br></br>
+                {"<Unlisted> make this post only visible to you."}
+              </p>
             </div>
           </div>
-        </div>      
+        </div>    
+        </Container>  
       )
     }
 
     const PostSubmitPanel = () => {
       return (
         <Container style={submittPanelStyle}>
-          <DropDown />
+          <ToolTip />
           <VisibilityCheckBox />
           <UnlistCheckBox/>
           <PostFormButtonPanel/>
@@ -358,16 +341,16 @@ class PostForm extends Component {
 
     return (
       <Card id="postFormCard" style={cardStyle} className="animate__animated animate__slideInUp">
-        <Container style={createPostHeaderStype}>
+        {/* <Container style={createPostHeaderStype}>
           <Container style={postIconStyle.style}>{postIcons()}</Container>
-        </Container>
+        </Container> */}
         <Container style={formContainerStyle}>
           <Form.Field>
             <Form.Label style={labelStyle}>Title</Form.Label>
             <Form.Control>
               <Form.Textarea
                   onKeyPress={(e) => {if (e.key === "Enter") e.preventDefault();}}
-                  maxLength="80"
+                  maxLength="30"
                   cols={1}
                   name="title"
                   value={this.state.title}
@@ -381,7 +364,7 @@ class PostForm extends Component {
             <Form.Control>
               <Form.Textarea
                 onKeyPress={(e) => {if (e.key === "Enter") e.preventDefault();}}
-                maxLength="120"
+                maxLength="50"
                 cols={1}
                 name="description"
                 value={this.state.description}

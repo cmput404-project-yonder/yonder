@@ -4,6 +4,7 @@
 
 import { AddIcon } from "./postSVG";
 import { Container, Button } from "react-bulma-components";
+import { color } from "../styling";
 
 // local styling
 var buttonStyle = {
@@ -25,8 +26,32 @@ var buttonStyle = {
     }
 }
 
+var buttonFLatStyle = {
+    scale: "28",
+    style: {
+        button:{
+            height: "3em",
+            width: "3em",
+            borderRadius: "9pt",
+            backgroundColor: "transparent",
+            border: "solid",
+            borderColor: color.baseRed,
+            borderWidth: "1.5pt"
+        },
+        icon: {
+            paddingTop: "3pt",
+            paddingLeft: "5pt",
+            fill: color.baseRed,
+        },
+    }
+}
+
 // component
 function AddButton(props) {
+
+    if (props.isFlat) {
+        buttonStyle = buttonFLatStyle;
+    }
 
     return (
         <Container style={props.style}>

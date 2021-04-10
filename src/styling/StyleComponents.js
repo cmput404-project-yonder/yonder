@@ -236,8 +236,9 @@ export const submittPanelStyle = {
 export const formContainerStyle = {
     boxShadow: "0pt 0pt 3pt #B1B1B1",
     borderRadius: "8pt",
-    marginLeft: "0.8em",
-    marginRight: "0.8em",
+    marginLeft: "1em",
+    marginRight: "1em",
+    marginTop: "1em",
     paddingTop: "1em",
     paddingBottom: "1em",
     paddingRight: "1.5em",
