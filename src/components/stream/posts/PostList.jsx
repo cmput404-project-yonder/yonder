@@ -31,7 +31,7 @@ function PostList(props) {
   if (postList.length === 0) {
     return (
       <div className="post-list animate__animated animate__fadeInUp">
-        <Card style={{...postStyle, height: "auto", fontSize: "1em", minWidth: "30em"}}>
+        <Card style={{...postStyle, height: "auto", fontSize: "1em", minWidth: "400pt"}}>
           <Container>
             <Container style={{textAlign: "center", marginTop: "12em", marginBottom: "9em"}}>
                 <Container style={{fill: color.baseLightGrey}}>
@@ -48,7 +48,7 @@ function PostList(props) {
   } else {
     return (
       <div className="post-list animate__animated animate__fadeInUp">
-        <List style={{minWidth: "30em"}} hoverable>{postList}</List>
+        <List style={{minWidth: "400pt"}} hoverable>{postList}</List>
       </div>
     );    
   }

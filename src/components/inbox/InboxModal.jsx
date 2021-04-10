@@ -3,32 +3,9 @@ import { Card, Container } from "react-bulma-components";
 import { color, font } from "../../styling/ColorFontConfig";
 import Inbox from "./Inbox";
 import { cardStyle } from "../../styling/StyleComponents";
-import { InboxModalIcon } from "../../styling/svgIcons";
 
 import PostTab from "../stream/posts/PostTab";
 import { panelStyle, tabStyle } from "../../styling/StyleComponents";
-
-
-// local styling
-var inboxIconStyle = {
-    transform: "rotate(-35deg)",
-    width: "3em",
-    float: "left",
-    marginTop: "-0.8em",
-    marginLeft: "-0.8em",
-    zIndex: "5",
-}
-
-var inboxTitleStyle = {
-    textAlign: "center", 
-    marginRight: "1em", 
-    fontSize: "2.5em",
-    height: "3.3em",
-    color: color.baseLightGrey,
-    fontWeight: "400",
-    paddingTop: "0.8em",
-
-}
 
 var shadowDividorStyle = {
     border:"none",

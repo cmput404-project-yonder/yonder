@@ -6,24 +6,25 @@ import SharingPostPrompt from "./SharingPostPrompt";
 import { connect } from "react-redux";
 import { withRouter } from "react-router-dom";
 
-import { Card, Content, Container, Button } from "react-bulma-components";
-import Dividor from "./Dividor";
+import { Card, Content, Container } from "react-bulma-components";
 import EditButton from "./buttons/EditButton";
 import ShareButton from "./buttons/ShareButton";
 import LikedButton from "./buttons/LikedButton";
 import { DescriptionStyle, postStyle, categoriesStyle, signatureStyle, postContainerStyle,postTitleStyle, postContentStyle, footerButtonLayoutStyle } from "../../../styling/StyleComponents";
 import { color } from "./styling";
-// import { connectAdvanced } from "react-redux";
 
 import { retrievePostLikes } from "./PostActions";
 
 
 // local styling
-var postDividorStyle = {
-  paddingTop: "0.4em",
-  paddingBottom: "0.2em",
-  marginLeft: "0.4em",
-  marginRight: "0.4em",
+var shadowDividorStyle = {
+  border:"none",
+  width: "105%",
+  height: "50px",
+  boxShadow:"0 10pt 10pt -15pt rgb(0,0,0,0.3)",
+  margin: "-40pt auto -15pt",
+  marginLeft: "-1em",
+  backgroundColor: color.backgroundCreamLighter,
 }
 
 function getDateString(ms) {
@@ -33,11 +34,12 @@ function getDateString(ms) {
 
 
 
+
+
 function Post(props) {
   const [editModalIsOpen, setEditModalIsOpen] = useState(false);
   const [sharingPromptIsOpen, setSharingPromptIsOpen] = useState(false);
-  const [likeCount, setLikeCount] = useState(-1);
-  // console.log(props.post);
+  const [likeCount, setLikeCount] = useState(0);
   
   const postURL = "/author/" + props.post.author.id + "/posts/" + props.post.id + "/";
 
@@ -53,12 +55,7 @@ function Post(props) {
     }
   }
 
-
   const postLikeSetter = (likeList) => {
-    
-    console.log("setter is called");
-    
-    
     setLikeCount(likeList.items.length);
   }
 
@@ -66,6 +63,9 @@ function Post(props) {
     props.retrievePostLikes(props.post, postLikeSetter);
     props.likePost(props.post);
   }
+  
+  props.retrievePostLikes(props.post, postLikeSetter);
+  setInterval(()=>props.retrievePostLikes(props.post, postLikeSetter),30000);
 
   const getCategories = (cat) => {
     let categories =  cat.map((c) => <p>#{c}</p>)
@@ -139,7 +139,8 @@ function Post(props) {
             <p>{ props.post.description }</p>
           </Container>
 
-          <Dividor style={postDividorStyle}/>
+          <hr style={{...shadowDividorStyle, backgroundColor: "transparent", marginBottom: "0.5em", marginTop: "-32pt"}}></hr>
+
           </a>
           
           {/* Content */}
