@@ -71,7 +71,7 @@ def follow_to_inbox(sender, instance, **kwargs):
 
 @receiver(post_save, sender=Post,dispatch_uid='signal_handler_post_save')
 def create_post(sender, instance, **kwargs):
-    if kwargs["created"]:
+    if kwargs["created"] and instance.unlisted == False:
         # Set origin & source on creation
         instance.source = instance.get_absolute_url()
         if instance.origin == "":

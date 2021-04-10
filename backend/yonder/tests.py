@@ -138,6 +138,16 @@ class PublicPostTests(APITestCase):
             "visibility": "PRIVATE",
             "unlisted": False
         }
+        self.post3 = {
+            "title": "A public unlisted post",
+            "description": "private post",
+            "contentType": "text/plain",
+            "content": "Not everyone can see this",
+            "author": self.testAuthor,
+            "categories": ["web", "tutorial"],
+            "visibility": "PRIVATE",
+            "unlisted": True
+        }
 
         def test_get(self):
             #Create two public posts and a private post
@@ -148,6 +158,21 @@ class PublicPostTests(APITestCase):
 
             get_url = reverse('public_posts')
             response = self.client.get(get_url)
+            #Returns two public posts that were created
+            self.assertEqual(len(response), 2)
+
+        def test_get_with_unlisted(self):
+            post_url = reverse('posts', args=[self.author.id])
+            self.client.post(post_url, data=self.post1, format='json')
+            self.client.post(post_url, data=self.post2, format='json')
+
+            #should not be retrieved since private
+            self.client.post(post_url, data=self.post3, format='json')
+            #should not be retrieved since unlisted
+            self.client.post(post_url, data=self.post4, format='json')
+            get_url = reverse('public_posts')
+            response = self.client.get(get_url)
+
             #Returns two public posts that were created
             self.assertEqual(len(response), 2)
 
@@ -370,6 +395,31 @@ class InboxTests(APITestCase):
         }
         self.data_json = json.dumps(data, sort_keys=True)
 
+        data_unlisted = {
+            "type": "post",
+            "title": "A Friendly post title about a post about web dev",
+            "id": "http://127.0.0.1:5454/author/9de17f29c12e8f97bcbbd34cc908f1baba40658e/posts/764efa883dda1e11db47671c4a3bbd9e",
+            "source": "http://lastplaceigotthisfrom.com/posts/yyyyy",
+            "origin": "http://whereitcamefrom.com/posts/zzzzz",
+            "description": "This post discusses stuff -- brief",
+            "contentType": "text/plain",
+            "content": "Þā wæs on burgum Bēowulf Scd ccan",
+            "author": {
+                "type": "author",
+                "id": "http://127.0.0.1:5454/author/9de17f29c12e8f97bcbbd34cc908f1baba40658e",
+                "host": "http://127.0.0.1:5454/",
+                "displayName": "Lara Croft",
+                "url": "http://127.0.0.1:5454/author/9de17f29c12e8f97bcbbd34cc908f1baba40658e",
+                "github": "http://github.com/laracroft"
+            },
+            "categories": ["web", "tutorial"],
+            "comments": "http://127.0.0.1:5454/author/9de17f29c12e8f97bcbbd34cc908f1baba40658e/posts/de305d54-75b4-431b-adb2-eb6b9e546013/comments",
+            "published": "2015-03-09T13:07:04+00:00",
+            "visibility": "FRIENDS",
+            "unlisted": True
+        }
+        self.data_unlisted_json = json.dumps(data, sort_keys=True)
+
     def test_get_inbox(self):
         url = reverse('inbox', args=[self.author.id])
         response = self.client.get(url)
@@ -440,6 +490,16 @@ class SignalTests(TestCase):
             "visibility": "PUBLIC",
             "unlisted": False
         }
+        self.post_unlisted = {
+            "title": "A post testing post save signal",
+            "description": "This post discusses stuff -- brief",
+            "contentType": "text/plain",
+            "content": "Þā wæs on burgum Bēowulf Scyldinga",
+            "author": self.author1,
+            "categories": ["web", "tutorial"],
+            "visibility": "PUBLIC",
+            "unlisted": True
+        }
         self.like = {
             "author": self.author2,
             "object_url": ""
@@ -454,10 +514,18 @@ class SignalTests(TestCase):
         AuthorFollower.objects.create(**self.testFollow)
         Post.objects.create(**self.post)
         inbox_item1 = Inbox.objects.filter(author=self.author1).count()
-        inbox_item2= Inbox.objects.filter(author=self.author2).count()
+        inbox_item2 = Inbox.objects.filter(author=self.author2).count()
         #one inbox for each author, one for creating follower and one for creating post
         self.assertEqual(inbox_item1,1)
         self.assertEqual(inbox_item2,1)
+
+    def test_create_unlisted_post(self):
+        AuthorFollower.objects.create(**self.testFollow)
+        Post.objects.create(**self.post_unlisted)
+
+        inbox_item = len(Inbox.objects.get(author=self.author2).items)
+        #Inbox should contain no items since the post was unlisted
+        self.assertEqual(inbox_item,0)
 
     def test_follow_to_inbox(self):
         #author2 follows author1 and sends the data to followee's inbox

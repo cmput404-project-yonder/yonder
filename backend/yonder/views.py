@@ -133,7 +133,7 @@ class author_detail(generics.RetrieveUpdateDestroyAPIView):
         return self.destroy(request, *args, **kwargs)
 
 class public_posts(generics.ListAPIView):
-    queryset = posts = Post.objects.filter(visibility='PUBLIC')
+    queryset = posts = Post.objects.filter(visibility='PUBLIC', unlisted=False)
     serializer_class = PostSerializer
     permission_classes = [IsAuthenticated]
     
