@@ -13,6 +13,7 @@ import json
 
 from .models import Post, Author, Comment, RemoteNode, Like
 from .serializers import *
+from .signals import check_remote_follow
 
 
 class login(generics.GenericAPIView):
@@ -256,10 +257,6 @@ class author_followers_detail(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticatedOrReadOnly]
 
     def check_following(self, author_id, follower_id):
-        author_followers = AuthorFollower.objects.filter(author=author_id)
-        for af in author_followers:
-            if af.follower["id"] == str(follower_id):
-                return True
 
         return False
 
@@ -294,8 +291,25 @@ class author_followers_detail(viewsets.ModelViewSet):
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
     def retrieve(self, request, author_id, follower_id):
-        if self.check_following(author_id, follower_id):
-            return Response(status=status.HTTP_200_OK)
+        try:
+            author = Author.objects.get(pk=author_id)
+            author_followers = AuthorFollower.objects.filter(author=author)
+            for af in author_followers:
+                if af.follower["id"] == str(follower_id):
+                    return Response(status=status.HTTP_200_OK)
+        except Author.DoesNotExist:
+            # handle remote follower
+            remote_nodes = RemoteNode.objects.all()
+            for remote_node in remote_nodes:
+                theirFollower = {
+                    "host": remote_node.host,
+                    "id": author_id
+                }
+                ourAuthor = {
+                    "id": follower_id
+                }
+                if check_remote_follow(theirFollower, ourAuthor):
+                    return Response(status=status.HTTP_200_OK)
 
         return Response(status=status.HTTP_404_NOT_FOUND)
 
@@ -305,13 +319,15 @@ class author_followers_detail(viewsets.ModelViewSet):
             author_follower.delete()
             return Response(status=status.HTTP_204_NO_CONTENT)
         except AuthorFollower.DoesNotExist:
-            authorToUnfollow = request.data["object"]
-            node = RemoteNode.objects.get(host=authorToUnfollow["host"])
-            url = node.host + "api/author/" + str(authorToUnfollow["id"]) + "/followers/" + str(follower_id) + "/"
-            response = requests.delete(url,
-                auth=requests.models.HTTPBasicAuth(node.our_user, node.our_password),
-            )
-            return Response(status=response.status_code)
+            # handle remote follower
+            remote_nodes = RemoteNode.objects.all()
+            for remote_node in remote_nodes:
+                node = RemoteNode.objects.get(host=remote_node.host)
+                url = node.host + "api/author/" + author_id + "/followers/" + follower_id + "/"
+                response = requests.delete(url,
+                    auth=requests.models.HTTPBasicAuth(remote_node.our_user, remote_node.our_password),
+                )
+                return Response(status=response.status_code)
 
         return Response(status.HTTP_404_NOT_FOUND)
 
