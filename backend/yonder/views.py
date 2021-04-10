@@ -287,7 +287,6 @@ class author_followers_detail(viewsets.ModelViewSet):
                 json=request.data,
                 headers={"content-type": "application/json"}
             )
-            print(url, response.text, request.data)
             return Response(status=response.status_code)
         except RemoteNode.DoesNotExist:
             return Response("You are not allowed in the cool club", status=status.HTTP_401_UNAUTHORIZED)
@@ -305,21 +304,17 @@ class author_followers_detail(viewsets.ModelViewSet):
             author_follower = AuthorFollower.objects.get(author=author_id, follower__id=follower_id)
             author_follower.delete()
             return Response(status=status.HTTP_204_NO_CONTENT)
-            
         except AuthorFollower.DoesNotExist:
-
             authorToUnfollow = request.data["object"]
             node = RemoteNode.objects.get(host=authorToUnfollow["host"])
             url = node.host + "api/author/" + str(authorToUnfollow["id"]) + "/followers/" + str(follower_id) + "/"
             response = requests.delete(url,
                 auth=requests.models.HTTPBasicAuth(node.our_user, node.our_password),
-                headers={"Accept": "*/*"}
             )
-            print(url, response.text, request.data)
             return Response(status=response.status_code)
 
         return Response(status.HTTP_404_NOT_FOUND)
-        
+
     @swagger_auto_schema(tags=['followers'])
     def get(self, request, *args, **kwargs):
         return self.retrieve(request, *args, **kwargs)
@@ -363,7 +358,7 @@ class inbox(generics.GenericAPIView):
         try:
             # handle local author
             inbox = Inbox.objects.get(author_id=kwargs["author_id"])
-            
+
             if request.data["type"] == "like":
                 existing_like = Like.objects.all().filter(author__id=request.data["author"]["id"], object_url=request.data["object"])
                 if len(existing_like) != 0:
@@ -376,7 +371,7 @@ class inbox(generics.GenericAPIView):
                 like_serializer = LikeSerializer(data=formated_data)
                 if like_serializer.is_valid():
                     like_serializer.save()
-                
+
                 inbox_data = {
                     "type": "like",
                     "author": request.data["author"],
@@ -387,7 +382,7 @@ class inbox(generics.GenericAPIView):
             else:
                 inbox.items.append(request.data)
                 inbox.save()
-                
+
             return Response(status=status.HTTP_201_CREATED)
         except Inbox.DoesNotExist:
             # Handle follower being on remote server

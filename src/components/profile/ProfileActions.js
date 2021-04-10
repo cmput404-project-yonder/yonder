@@ -10,6 +10,9 @@ import {
   SEND_FOLLOW_SUBMITTED,
   SEND_FOLLOW_ERROR,
   SEND_FOLLOW_SUCCESS,
+  DELETE_FOLLOW_SUBMITTED,
+  DELETE_FOLLOW_ERROR,
+  DELETE_FOLLOW_SUCCESS,
   CHECK_FOLLOW_SUBMITTED,
   CHECK_FOLLOW_ERROR,
   CHECK_FOLLOW_SUCCESS,
@@ -96,7 +99,36 @@ export const sendFollow = (otherAuthor) => (dispatch, getState) => {
       } else {
         toast.error(JSON.stringify(error));
       }
+      return error.status;
+    });
+};
 
+export const deleteFollow = (otherAuthor) => (dispatch, getState) => {
+  const state = getState();
+  const author = state.auth.author;
+
+  setAxiosAuthToken(state.auth.token);
+  dispatch({ type: DELETE_FOLLOW_SUBMITTED });
+  axios
+    .delete("/author/" + otherAuthor.id + "/followers/" + author.id + "/")
+    .then((response) => {
+      dispatch({ type: DELETE_FOLLOW_SUCCESS });
+      toast.success("You are no longer following " + otherAuthor.displayName);
+
+      return response.status;
+    })
+    .catch((error) => {
+      if (error.response) {
+        toast.error(JSON.stringify(error.response.data));
+        dispatch({
+          type: DELETE_FOLLOW_ERROR,
+          errorData: error.response.data,
+        });
+      } else if (error.message) {
+        toast.error(JSON.stringify(error.message));
+      } else {
+        toast.error(JSON.stringify(error));
+      }
       return error.status;
     });
 };
