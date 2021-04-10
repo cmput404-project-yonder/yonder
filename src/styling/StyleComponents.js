@@ -157,8 +157,8 @@ export const signatureStyle = {
 }
 
 export const postContainerStyle = {
-  paddingRight: "0.4em",
-  paddingLeft: "0.4em",
+  paddingRight: "0.6em",
+  paddingLeft: "0.6em",
   paddingTop: "0.5em",
   paddingBottom: "0.5em",
 }
@@ -214,7 +214,9 @@ export const panelStyle = {
     justifyContent: "between",
     textAlign: "center",
     paddingTop: "0em",
-    paddingBottom: "0em",
+    paddingBottom: "2.5em",
+    marginTop: "-0.5em",
+    marginBottom: "-3em",
     fontSize: "1.5em",
     fontWeight: "400",
     paddingLeft: "1em",
