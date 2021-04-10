@@ -232,6 +232,9 @@ export const likePost = (post) => (dispatch, getState) => {
           case 409:
             toast.error("You already liked this post");
             break;
+          case 404:
+            toast.error("Author have deleted this post");
+            break;
           default:
             toast.error(JSON.stringify(error.response.data));
             break;
