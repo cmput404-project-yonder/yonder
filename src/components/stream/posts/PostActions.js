@@ -42,11 +42,13 @@ export const createComment = (comment) => (dispatch, getState) => {
   const commentObj = {};
   const state = getState();
   const author = state.auth.author;
+  console.log("state:",state);
 
   setAxiosAuthToken(state.auth.token);
   commentObj["author"] = author;
   commentObj["comment"] = comment;
   commentObj["contentType"] = "text/markdown";
+  
   dispatch({ type: NEW_COMMENT_SUBMITTED });
   axios
     .post("/author/" + state.auth.author.id + "/posts/" + state.post.retrievedPost.id + "/comments/", commentObj)
