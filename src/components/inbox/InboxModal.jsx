@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Card, Container } from "react-bulma-components";
-import { color, font } from "./styling";
+import { color, font } from "../../styling/ColorFontConfig";
 import Inbox from "./Inbox";
 import { cardStyle } from "../../styling/StyleComponents";
 import { InboxModalIcon } from "../../styling/svgIcons";
@@ -22,11 +22,11 @@ var inboxIconStyle = {
 var inboxTitleStyle = {
     textAlign: "center", 
     marginRight: "1em", 
-    fontSize: "2em",
-    padding: "1.2em",
-    color: color.baseBlack,
-    fontFamily: font.segoeUI,
-    fontWeight: "300",
+    fontSize: "2.5em",
+    height: "3.3em",
+    padding: "1.0em",
+    color: color.baseLightGrey,
+    fontWeight: "450",
 }
 
 var shadowDividorStyle = {

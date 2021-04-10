@@ -52,6 +52,7 @@ class Stream extends Component {
                   <Columns.Column>
                     <PostList
                       posts={posts}
+                      createPost={this.props.createPost}
                       updatePost={this.props.updatePost}
                       deletePost={this.props.deletePost}
                       sharePost={this.props.sharePost}

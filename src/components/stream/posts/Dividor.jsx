@@ -9,7 +9,7 @@ var divStyle = {
     height: "1pt",
     marginTop: "-3pt",
     marginBottom: "-3pt",
-    backgroundColor: "#F2E5D1",
+    backgroundColor: "rgb(168,157,146, 0.2)",
     borderRadius: "6pt",
 }
 

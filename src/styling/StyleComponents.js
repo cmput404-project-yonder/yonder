@@ -49,7 +49,7 @@ export const cardStyle = {
 
 export const postStyle = {
     boxShadow: "0pt 0pt 8pt rgb(0,0,0,0.4)",
-    borderRadius: "6pt",
+    borderRadius: "7pt",
     backgroundColor: color.backgroundCreamLighter,
     marginBottom: "2em",
     marginTop: "0.5em",
@@ -167,7 +167,7 @@ export const newPostButtonStyle = {
     zIndex: "1",
     position: "fixed",
     right: "5%",
-    bottom: "5%",
+    bottom: "8%",
     display: "flex",
     gap: "2em",
     flexDirection: "column",

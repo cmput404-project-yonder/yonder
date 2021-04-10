@@ -10,9 +10,10 @@ var color = {
     buttonBlue: "#54B2E9",
     buttonIndigo: "#7D99F5",
     postIcon: "#8fc9eb",
-    backgroundGrey: "#fefefe",
-    backgroundCream: "#F9F5EF",
-    backgroundCreamLighter: "#FFF1DC",
+    backgroundGrey: "#FFFFFF",
+    backgroundCream: "#FEF5E8",
+    backgroundCreamLighter: "#FFF3DC",
+    textLightGreyOnCream: "#9B9285",
 }
 
 var font = {

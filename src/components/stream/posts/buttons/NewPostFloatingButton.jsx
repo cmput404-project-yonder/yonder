@@ -7,20 +7,20 @@ import { Container, Button } from "react-bulma-components";
 
 // local styling
 var buttonStyle = {
-    scale: "25",
+    scale: "32",
     style: {
         button: {
-            height: "3em",
-            width: "3em",
-            borderRadius: "100%",
-            boxShadow: "0pt 0pt 6pt rgb(0,0,0,0.5)",
-            backgroundColor: "rgb(234,132,132,0.8)",
+            height: "3.6em",
+            width: "3.6em",
+            borderRadius: "12pt",
+            boxShadow: "0pt 0pt 8pt rgb(0,0,0,0.3)",
+            backgroundColor: "#686863",
             border: "none",
         },
         icon: {
             paddingTop: "3pt",
-            paddingLeft: "1pt",
-            fill: "rgb(255,255,255,0.9)",
+            paddingLeft: "5pt",
+            fill: "white",
         }
     }
 }

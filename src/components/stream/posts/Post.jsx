@@ -92,8 +92,9 @@ function Post(props) {
 
           {/* buttons */}
           <LikedButton count={likeCount} action={() => likedToggle()}/>
-          <ShareButton action={() => setSharingPromptIsOpen(true)}/>
           {editButton()}
+          <ShareButton action={() => setSharingPromptIsOpen(true)}/>
+          
 
           {/* modal */}
           <Modal className="animate__animated animate__fadeIn animate__faster" show={editModalIsOpen} onClose={() => setEditModalIsOpen(false)} closeOnBlur closeOnEsc>

@@ -14,7 +14,7 @@ import EditProfileButton from "./buttons/EditButton";
 import ProfileEdit from "./ProfileEdit";
 // import FriendButton from "./buttons/FriendButton";
 
-import { color } from "./styling";
+import { color } from "../../styling/ColorFontConfig";
 import Dividor from "./Dividor";
 import { dividorStyle } from "../../styling/StyleComponents";
 
