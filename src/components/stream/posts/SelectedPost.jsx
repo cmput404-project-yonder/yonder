@@ -53,8 +53,7 @@ function DetailedPostList(props) {
   const [editModalIsOpen, setEditModalIsOpen] = useState(false);
   const [sharingPromptIsOpen, setSharingPromptIsOpen] = useState(false);
   const [writtenComment, setWrittenComment] = useState("");
-  console.log("PROPS:",props.commentList);
-  let location = useLocation();
+  console.log("PROPS:", props);
 
   // helper functions
   const IsImage = () => {
@@ -193,17 +192,17 @@ function DetailedPostList(props) {
         <Card.Content style={postContainerStyle}>
           {/* author and timestamp */}
           <Container style={signatureStyle}>
-          <p style={{ fontWeight: "250" }}>@{props.post.author.displayName}</p>
           <p>·</p>
-          <p>{getDateString(Date.parse(props.post.published))}</p>
           </Container>
           <Container style={postTitleStyle}>
-          <p style={{color: color.baseBlack}}>Comments</p>
+          <p style={{color: color.baseBlack}}>Comment</p>
           </Container>
           {/* comment section */}
           <Container style={DescriptionStyle}>
             {
-              <CommentList commentData={props.commentList} />
+              <div >
+                <CommentList commentData={props.commentList} postAuthorName={props.loggedInAuthor} />
+              </div>
             }
             {/* {listOfComments.map(comment => (
               <p 
@@ -261,6 +260,7 @@ class SelectedPost extends React.Component {
 
     this.props.retrievePost(params.author_id,params.id);
     this.props.retrieveCommentList(params.athor_id,params.id);
+    console.log("params:",params);
   }
 
   render() {

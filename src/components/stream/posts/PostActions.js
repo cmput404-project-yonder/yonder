@@ -71,7 +71,7 @@ export const createComment = (comment) => (dispatch, getState) => {
 
 export const retrieveCommentList = (authorId, postId) => (dispatch, getState) => {
   const state = getState();
-  console.log("STATE:",state);
+  console.log("state:",state);
 
   setAxiosAuthToken(state.auth.token);
   dispatch({ type: RETRIEVE_COMMENT_LIST_SUBMITTED });
