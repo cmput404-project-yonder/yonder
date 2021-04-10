@@ -5,7 +5,7 @@ props.active: booleam value -> true -> box is checked, false -> box is unchecked
 
 import React from "react";
 import { Container } from "react-bulma-components";
-import { CheckBoxChecked, CheckBoxUnchecked } from "./postSVG";
+import { CheckBoxChecked, CheckBoxUnchecked } from "./buttons/postSVG";
 import { color } from "./styling";
 
 // local styling

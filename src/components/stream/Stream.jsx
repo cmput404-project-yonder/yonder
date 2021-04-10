@@ -6,7 +6,7 @@ import { Container, Columns, Section } from "react-bulma-components";
 import { Redirect } from "react-router-dom";
 
 import PostList from "./posts/PostList";
-import PopupModal from "./posts/PopupModal";
+import PopupModal from "./posts/modals/PopupModal";
 
 import { buttonLayerContainerStyle, streamLayerContainerStyle, newPostButtonStyle, pageStyle } from "../../styling/StyleComponents";
 import { createPost, updatePost, sharePost, likePost, retrieveLoggedInAuthorPosts, deletePost, retrieveInbox, retrieveAllAuthors } from "./StreamActions";
@@ -52,6 +52,7 @@ class Stream extends Component {
                   <Columns.Column>
                     <PostList
                       posts={posts}
+                      createPost={this.props.createPost}
                       updatePost={this.props.updatePost}
                       deletePost={this.props.deletePost}
                       sharePost={this.props.sharePost}

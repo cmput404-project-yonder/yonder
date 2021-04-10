@@ -63,7 +63,7 @@ class AuthorAccountTests(APITestCase):
             "github": "https://github.com/newGithubLink",
         }
         url = reverse('author_detail', args=[self.author.id])
-        response = self.client.put(
+        response = self.client.post(
             url,
             data=data,
             format='json'
@@ -153,19 +153,20 @@ class PublicPostTests(APITestCase):
 
 class PostTests(APITestCase):
     def setUp(self):
-
         self.credentials = {
             'username': 'testUser1',
             'password': 'testPassword1'
         }
         self.testAuthor = {
-            "displayName": "testAuthor",
+            "displayName": "testLogin",
             "github": "https://github.com/cmput404-project-yonder/yonder",
             "host": "http://testserver.com"
         }
-
         user = User.objects.create_user(**self.credentials)
         self.author = Author.objects.create(**self.testAuthor, user=user)
+
+        credBytes= base64.b64encode(f'{self.credentials["username"]}:{self.credentials["password"]}'.encode())
+        self.client.credentials(HTTP_AUTHORIZATION='Basic ' + credBytes.decode())
 
         self.credentials2 = {
             'username': 'testUser2',
@@ -202,8 +203,6 @@ class PostTests(APITestCase):
         user3 = User.objects.create_user(**self.credentials3)
         self.author3 = Author.objects.create(**self.testAuthor3, user=user3)
 
-
-
         self.post = {
             "title": "A post title about a post about web dev",
             "description": "This post discusses stuff -- brief",
@@ -235,7 +234,6 @@ class PostTests(APITestCase):
         }
 
     def test_create_post(self):
-
         url = reverse('posts', args=[self.author.id])
         response = self.client.post(
             url, data=self.post, format='json')
@@ -362,9 +360,11 @@ class FollowerTests(APITestCase):
         response = self.client.put(url, data=self.followJSON1, format='json')
 
         url = reverse('followers', args=[self.author1.id, self.author2.id])
-        response = self.client.delete(url)
+        response = self.client.delete(url, data=self.followJSON1, format='json')
 
+        #tests if the delete was successful
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
+        #check if deleted follow does not exist
         self.assertEqual(0, AuthorFollower.objects.filter(author=self.author1.id).count())
 
     def test_check_not_follower(self):

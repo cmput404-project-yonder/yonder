@@ -66,6 +66,7 @@ export const createPost = (newPost) => (dispatch, getState) => {
   setAxiosAuthToken(state.auth.token);
 
   newPost["author"] = state.auth.author;
+  console.log("newpost:",newPost);
 
   dispatch({ type: NEW_POST_SUBMITTED });
   axios
@@ -212,9 +213,9 @@ export const likePost = (post) => (dispatch, getState) => {
   {...author,
     "type": "author",
     "id": author.id,
-    "url": author.host + "author/" + author.id + "/",
+    "url": author.host + "api/author/" + author.id,
   };
-  likedPost["object"] = likedPost["author"]["url"] + "/posts/" + post.id + "/";
+  likedPost["object"] = post.author.host + "api/author/" + post.author.id + "/posts/" + post.id + "/";
   likedPost["host"] = post.author.host;
 
   dispatch({ type: LIKE_POST_SUBMITTED });
@@ -225,11 +226,25 @@ export const likePost = (post) => (dispatch, getState) => {
     })
     .catch((error) => {
       if (error.response) {
-        toast.error(JSON.stringify(error.response.data));
+
+        // handles specific status code
+        switch (error.response.status) {
+          case 409:
+            toast.error("You already liked this post");
+            break;
+          case 404:
+            toast.error("Author have deleted this post");
+            break;
+          default:
+            toast.error(JSON.stringify(error.response.data));
+            break;
+        }
+
         dispatch({
           type: LIKE_POST_ERROR,
           errorData: error.response.data,
         });
+
       } else if (error.message) {
         toast.error(JSON.stringify(error.message));
       } else {

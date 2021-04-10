@@ -5,23 +5,30 @@ import { Card, Heading, Container } from "react-bulma-components";
 import { cardStyle, dividorStyle, postStyle, signatureStyle } from "../../styling/StyleComponents";
 import { color } from "../../styling/ColorFontConfig";
 
-import Dividor from "../profile/Dividor";
+import Dividor from "../stream/posts/Dividor";
 
 var itemCardStyle = {
-  padding: "1.2em",
+  padding: "1.1em",
+  paddingBottom: "1.5em",
   borderRadius: "6pt",
-  boxShadow: "0pt 0pt 3pt rgb(0,0,0,0.1)",
-  width: "98%",
+  // boxShadow: "0pt 0pt 3pt rgb(0,0,0,0.2)",
+  boxShadow: "none",
+  backgroundColor: "#E47171",
+  width: "97%",
   margin: "auto",
-  marginTop: "2em",
-  marginBottom: "2em",
+  marginTop: "0em",
+  marginBottom: "0.8em",
+  // border: "solid",
+  // borderColor: color.baseLightGrey,
+  borderWidth: "1pt",
 }
 
 var itemMsgStyle = {
-  ...signatureStyle,
-  float: "none",
-  fontSize: "1.4em",
-  color: color.baseBlack,
+  display: "flex",
+  justifyContent: "flex-start",
+  gap: "4pt",
+  color: "white",
+  fontSize: "1.7em",
 }
 
 export function Post(props) {
@@ -35,12 +42,11 @@ export function Post(props) {
           <p>made a new post</p>
         </Container>
 
-        <Dividor style={dividorStyle}/>
+        {/* <Dividor style={{marginTop: "2.2em", marginBottom: "2em"}}/>
 
-        {/* Post title */}
         <Container style={itemMsgStyle}>
           <p >{props.post.title}</p>
-        </Container>
+        </Container> */}
     </Card>
   );
 }
@@ -52,7 +58,7 @@ export function Follow(props) {
         <Container style={itemMsgStyle}>
           <p style={{ fontWeight: "250" }}>@{props.follower.displayName}</p>
           <p>·</p>
-          <p>is now following you</p>
+          <p>followed you</p>
         </Container>
       </Card>
   );
