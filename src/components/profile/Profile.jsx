@@ -75,6 +75,7 @@ class Profile extends React.Component {
     this.props.retrieveAuthorPosts(params.id);
     this.props.checkFollowing(params.id);
   }
+
   render() {
     if (this.state.isFollowing !== this.props.isFollowing) {
       this.setState({ isFollowing: this.props.isFollowing });

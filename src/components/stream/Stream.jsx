@@ -17,7 +17,7 @@ class Stream extends Component {
       // untill author is properly set
       window.location = window.location;
     }
-    
+
     this.props.retrieveLoggedInAuthorPosts();
     this.props.retrieveInbox();
     if (!this.props.allAuthors) {

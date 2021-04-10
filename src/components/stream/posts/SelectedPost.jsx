@@ -262,30 +262,29 @@ class SelectedPost extends React.Component {
   }
 
   render() {
-      
     if (this.props.loading || !this.props.retrievedPost.author) {
-        return (
-            <div class="pageloader is-active">
-                <span class="title">Loading</span>
-            </div>
-        );
+      return (
+        <div class="pageloader is-active">
+          <span class="title">Loading</span>
+        </div>
+      );
     }
 
     return (
-        <Section style={pageStyle}>
-          <div style={buttonLayerContainerStyle}>
-            <Container style={newPostButtonStyle}>
-              {/* add floating buttons here, if needed */}
-            </Container>
-          </div>
-          <div style={streamLayerContainerStyle}>
-            <Container fluid>
-              <Columns centered>
-               <DetailedPostList post={this.props.retrievedPost} loggedInAuthor={this.props.loggedInAuthor} comments={this.props.comments} createComment={this.props.createComment} commentList={this.props.retrievedCommentList} />
-              </Columns>
-            </Container>
-          </div>
-        </Section>
+      <Section style={pageStyle}>
+        <div style={buttonLayerContainerStyle}>
+          <Container style={newPostButtonStyle}>
+            {/* add floating buttons here, if needed */}
+          </Container>
+        </div>
+        <div style={streamLayerContainerStyle}>
+          <Container fluid>
+            <Columns centered>
+              <DetailedPostList post={this.props.retrievedPost} loggedInAuthor={this.props.loggedInAuthor} comments={this.props.comments} createComment={this.props.createComment} commentList={this.props.retrievedCommentList} />
+            </Columns>
+          </Container>
+        </div>
+      </Section>
     );
   }
 }
