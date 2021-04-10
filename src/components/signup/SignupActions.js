@@ -1,7 +1,7 @@
 import axios from "axios";
 import { toast } from "react-toastify";
+import { push } from "connected-react-router";
 import { CREATE_USER_ERROR, CREATE_USER_SUBMITTED, CREATE_USER_SUCCESS } from "./SignupTypes";
-import { setToken, setCurrentUser, setCurrentAuthor } from "../login/LoginActions";
 import { setAxiosAuthToken } from "../../utils/Utils";
 
 export const signup = (userData) => (dispatch) => {
@@ -10,17 +10,9 @@ export const signup = (userData) => (dispatch) => {
     .post("/signup/", userData)
     .then((response) => {
       dispatch({ type: CREATE_USER_SUCCESS });
-      toast.success("Account created successfully.");
+      toast.success("Account created successfully. Request access from an admin.");
 
-      // Handle loging & redirect user
-      const auth_token = response.data.token;
-      const author = response.data.author;
-      const user = response.data.user;
-
-      setAxiosAuthToken(auth_token);
-      dispatch(setToken(auth_token));
-      dispatch(setCurrentUser(user));
-      dispatch(setCurrentAuthor(author, "/stream"));
+      dispatch(push("/login"));
     })
     .catch((error) => {
       if (error.response) {

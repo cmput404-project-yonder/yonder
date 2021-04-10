@@ -26,10 +26,9 @@ class App extends Component {
           <Switch>
             <Route path="/signup" component={Signup} />
             <Route path="/login" component={Login} />
-            <Route path="/stream" component={Stream} />
+            <Route path="/" component={Stream} />
             <Route exact path="/author/:id" component={Profile} />
             <Route exact path="/author/:author_id/posts/:id" component={SelectedPost} />
-            <Route exact path="/" component={Home} />
           </Switch>
         </Root>
       </div>
