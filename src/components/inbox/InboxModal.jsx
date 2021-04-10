@@ -11,11 +11,11 @@ import { panelStyle, tabStyle } from "../../styling/StyleComponents";
 
 // local styling
 var inboxIconStyle = {
-    transform: "rotate(-30deg)",
+    transform: "rotate(-35deg)",
     width: "3em",
     float: "left",
-    marginTop: "-1em",
-    marginLeft: "-1em",
+    marginTop: "-0.8em",
+    marginLeft: "-0.8em",
     zIndex: "5",
 }
 
@@ -24,9 +24,10 @@ var inboxTitleStyle = {
     marginRight: "1em", 
     fontSize: "2.5em",
     height: "3.3em",
-    padding: "1.0em",
     color: color.baseLightGrey,
-    fontWeight: "450",
+    fontWeight: "400",
+    paddingTop: "0.8em",
+
 }
 
 var shadowDividorStyle = {
@@ -35,7 +36,7 @@ var shadowDividorStyle = {
     height: "50px",
     boxShadow:"0 10pt 10pt -15pt rgb(0,0,0,0.8)",
     margin: "-40pt auto -15pt",
-    backgroundColor: color.backgroundCream,
+    backgroundColor: color.backgroundCreamLighter,
 }
 
 function InboxModal (props){
@@ -61,7 +62,7 @@ function InboxModal (props){
     // custom selection tab
     // text, markdown, image
     return (
-        <Container style={{...panelStyle, paddingBottom: "1em"}}>
+        <Container style={{...panelStyle, paddingBottom: "0.25em"}}>
             <PostTab style={tabStyle} text="Like" active={tabSelected === "like"} action={() => selectTab("like")}/>
             <PostTab style={tabStyle} text="Follow" active={tabSelected === "follow"} action={() => selectTab("follow")}/>
             <PostTab style={tabStyle} text="Post"active={tabSelected === "post"} action={() => selectTab("post")}/>
@@ -70,20 +71,22 @@ function InboxModal (props){
     }
 
     return (
-        <Card style={cardStyle} >
+        <Card style={{...cardStyle, backgroundColor: color.backgroundCreamLighter, width: "420pt"}} className="animate__animated animate__slideInDown">
             
-            <Container style={inboxIconStyle}>
-                <InboxModalIcon svgScale={"55"}/>
+            {/* <Container style={inboxIconStyle}>
+                <InboxModalIcon svgScale={"75"}/>
             </Container>
             <Container>
-                <p style={inboxTitleStyle}> Your Inbox</p>
-            </Container>
-            <hr style={shadowDividorStyle}></hr>
-            <Card.Content style={{marginTop: "1.2em", marginBottom: "1.2em"}}>
+                <p style={inboxTitleStyle}>Inbox</p>
+            </Container> */}
+            <hr style={{...shadowDividorStyle, marginTop: "-3.2em", backgroundColor: "transparent"}}></hr>
+            <Card.Content style={{marginTop: "0.8em", marginBottom: "3.2em"}}>
                 <Inbox selectedTab={tabSelected}/> 
             </Card.Content>
             <hr style={{...shadowDividorStyle, transform: "rotate(180deg)"}}></hr>
+            <div style={{marginTop: "-3.7em"}}>
             <SelectionPanel/>
+            </div>
         </Card>
     )
 }

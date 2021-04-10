@@ -55,7 +55,7 @@ var createPostHeaderStype = {
 
 var promptTitleStyle = {
     fontSize: "2.2em",
-    fontWeight: "450",
+    fontWeight: "300",
     marginTop: "-60pt",
     marginLeft: "140pt",
     color: color.baseLightGrey,
