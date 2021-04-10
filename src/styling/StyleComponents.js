@@ -247,10 +247,11 @@ export const formContainerStyle = {
   }
   
 export const labelStyle = {
-    paddingTop: "0.1em",
+    paddingTop: "0em",
     paddingLeft: "0.5em",
     textAlign: "left",
     fontWeight: "400",
+    fontSize: "1.25em",
     color: color.baseLightGrey,
   }
 

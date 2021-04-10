@@ -3,6 +3,7 @@ import ReactMde from "react-mde";
 import { Form, Card, Container } from "react-bulma-components";
 import Markdown from "react-markdown";
 import ReactTags from "react-tag-autocomplete";
+import { toast } from "react-toastify";
 import "./react-tags.css";
 
 import ConfirmButton from "./buttons/ConfirmButton";
@@ -159,10 +160,22 @@ class PostForm extends Component {
       categories: categories,
       friends: this.state.friends,
     };
-    this.props.createPost(newPost);
-    this.props.setModalIsOpen(false);
-    console.log(this.state);
-    
+
+    // catch empty post
+
+    if (newPost.title === "") {
+      toast.error("title cannot be empty");
+    }
+    else if (newPost.description === "") {
+      toast.error("description cannot be empty");
+    }
+    else if (newPost.content === "") {
+      toast.error("content cannot be empty");
+    }
+    else {
+      this.props.createPost(newPost);
+      this.props.setModalIsOpen(false);   
+    }
   }
 
   selectTab(tab) {
@@ -176,8 +189,13 @@ class PostForm extends Component {
   }
 
   onAddition(cat) {
-    const categories = [].concat(this.state.categories, cat);
-    this.setState({ categories });
+
+    if (this.state.categories.length >= 5) {
+      toast.error("You can't add more tags");
+    } else {
+      const categories = [].concat(this.state.categories, cat);
+      this.setState({ categories });      
+    }
   }
 
   render() {
@@ -346,7 +364,7 @@ class PostForm extends Component {
         </Container> */}
         <Container style={formContainerStyle}>
           <Form.Field>
-            <Form.Label style={labelStyle}>Title</Form.Label>
+            <Form.Label style={labelStyle}>Title <span style={{color: color.baseRed}}>*</span></Form.Label>
             <Form.Control>
               <Form.Textarea
                   onKeyPress={(e) => {if (e.key === "Enter") e.preventDefault();}}
@@ -356,11 +374,12 @@ class PostForm extends Component {
                   value={this.state.title}
                   style={formTitleStyle}
                   onChange={this.onChange}
+                  placeholder={"Add title"}
               />
             </Form.Control>
           </Form.Field>
           <Form.Field>
-            <Form.Label style={labelStyle}>Description</Form.Label>
+            <Form.Label style={labelStyle}>Description <span style={{color: color.baseRed}}>*</span></Form.Label>
             <Form.Control>
               <Form.Textarea
                 onKeyPress={(e) => {if (e.key === "Enter") e.preventDefault();}}
@@ -370,6 +389,7 @@ class PostForm extends Component {
                 value={this.state.description}
                 style={formTitleStyle}
                 onChange={this.onChange}
+                placeholder={"Add description"}
               />
             </Form.Control>
           </Form.Field>
@@ -387,7 +407,7 @@ class PostForm extends Component {
             </Form.Control>
           </Form.Field>
           <Form.Field>
-            <Form.Label style={labelStyle}>Content</Form.Label>
+            <Form.Label style={labelStyle}>Content <span style={{color: color.baseRed}}>*</span></Form.Label>
             <Form.Control>
               {this.state.selectedTab === "text" ? textEditor() : null}
               {this.state.selectedTab === "markdown" ? markdownEditor() : null}

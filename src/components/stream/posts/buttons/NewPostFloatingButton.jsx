@@ -7,7 +7,7 @@ import { Container, Button } from "react-bulma-components";
 import { color } from "../styling";
 
 // local styling
-var buttonStyle = {
+var buttonFloatStyle = {
     scale: "32",
     style: {
         button: {
@@ -50,7 +50,9 @@ var buttonFLatStyle = {
 function AddButton(props) {
 
     if (props.isFlat) {
-        buttonStyle = buttonFLatStyle;
+        var buttonStyle = buttonFLatStyle;
+    } else {
+        var buttonStyle = buttonFloatStyle;
     }
 
     return (
