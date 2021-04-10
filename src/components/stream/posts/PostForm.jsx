@@ -54,20 +54,12 @@ class PostForm extends Component {
     this.reactTags = React.createRef();
   }
 
-  handleOnHoverHelp = () => {
-    console.log("Mouse is hovering");
-  }
-
-  handleOffHoverHelp = () => {
-    console.log("Mouse has left");
-  }
-
   handleFileSelected = event => {
     let file = event.target.files[0];
     if (file) {
       const reader = new FileReader();
       reader.onload = this.handleReaderLoaded.bind(this);
-      reader.readAsBinaryString(file);
+      reader.readAsDataURL(file);
     }
     this.setState({
       imageObj: file,
@@ -78,8 +70,9 @@ class PostForm extends Component {
   handleReaderLoaded = (readerEvt) => {
     let binaryString = readerEvt.target.result;
     this.setState({
-      imageContent: btoa(binaryString),
+      imageContent: (binaryString),
     })
+    console.log(binaryString);
   }
 
   handleVisibility = () => {
@@ -231,7 +224,7 @@ class PostForm extends Component {
       if (this.state.imageContent !== "") {
         return (
           <img 
-            src={ "image/png" ? `data:image/png;base64,${this.state.imageContent}` : `data:image/jpeg;base64,${this.state.content}` } 
+            src={this.state.imageContent}
             style={{borderRadius: "6pt", margin: "auto", maxHeight: "15em", minHeight: "15em", objectFit: "cover"}} 
           />
         )

@@ -13,8 +13,8 @@ import {
   const initialState = {
     error: "",
     retrievedPost: {},
-    comments: {},
-    retrievedCommentList: {},
+    comments: [],
+    retrievedCommentList: [],
     loading: false,
   };
   

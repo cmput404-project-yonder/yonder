@@ -141,7 +141,7 @@ function Post(props) {
           <Container style = {postContentStyle}>
           {IsImage() ? (
             <Content style={{textAlign: "center"}}>
-              <img style={{borderRadius: "6pt", maxHeight: "300pt"}}src={`data:${props.post.contentType},${props.post.content}`} /> 
+              <img style={{borderRadius: "6pt", maxHeight: "300pt"}}src={props.post.content} /> 
             </Content>
           ) : <Content>{props.post.content}</Content> }
           </Container>

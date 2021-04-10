@@ -300,7 +300,7 @@ SelectedPost.propTypes = {
   updatePost: PropTypes.func.isRequired,
   likePost: PropTypes.func.isRequired,
   retrieveCommentList: PropTypes.func.isRequired,
-  retrievedCommentList: PropTypes.object.isRequired,
+  retrievedCommentList: PropTypes.array.isRequired,
 };
 
 DetailedPostList.propTypes = {
