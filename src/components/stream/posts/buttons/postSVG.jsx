@@ -1,4 +1,3 @@
-import { motion } from 'framer-motion';
 import { color } from '../../../../styling/ColorFontConfig';
 /*
 SVG components:
@@ -123,39 +122,15 @@ export function LikeIcon(props) {
     )
 }
 
-const svgVariants = {
-    hidden: { 
-        scale: 0,
-    },
-    visible: {
-        position:"fixed",
-        rotate: 0,
-        transition: { duration : 0.5 },
-        scale: 1,
-    }
-}
-
 export function LikedIcon(props) {
     return (
-        <header>
-            <motion.svg xmlns="http://www.w3.org/2000/svg" width={props.svgScale} viewBox="0 0 80 70.625"
-                variants={svgVariants}
-                initial="hidden"
-                animate="visible"
-            >
+        <svg xmlns="http://www.w3.org/2000/svg" width={props.svgScale} viewBox="0 0 80 71.174">
             <g id="like" transform="translate(0 -30)">
                 <g id="Group_64" data-name="Group 64" transform="translate(0 30)">
                 <path id="Path_149" data-name="Path 149" d="M58.75,30a18.941,18.941,0,0,0-11.829,4.089A26.946,26.946,0,0,0,40,42.412a26.944,26.944,0,0,0-6.921-8.323A18.941,18.941,0,0,0,21.25,30C9.136,30,0,39.909,0,53.049c0,14.2,11.4,23.909,28.651,38.612,2.93,2.5,6.251,5.327,9.7,8.346a2.5,2.5,0,0,0,3.291,0c3.452-3.019,6.773-5.849,9.7-8.348C68.6,76.958,80,67.245,80,53.049,80,39.909,70.864,30,58.75,30Z" transform="translate(0 -30)"/>
                 </g>
             </g>
-            </motion.svg>
-            <motion.div className="liked"
-                initial={{ y: -250 }}
-                animate={{ y: -10 }}
-                transition={{ delay: 0.2, type: 'spring', stiffness: 120 }}
-            />
-                
-        </header>
+        </svg>
     )
 }
 

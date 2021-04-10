@@ -24,12 +24,14 @@ class App extends Component {
           <ToastContainer hideProgressBar={true} newestOnTop={true} />
           <NavigationBar/>
           <Switch>
+            <div style={{paddingTop: "6em"}}>
             <Route path="/signup" component={Signup} />
             <Route path="/login" component={Login} />
             <Route path="/stream" component={Stream} />
             <Route exact path="/author/:id" component={Profile} />
             <Route exact path="/author/:author_id/posts/:id" component={SelectedPost} />
             <Route exact path="/" component={Home} />
+            </div>
           </Switch>
         </Root>
       </div>

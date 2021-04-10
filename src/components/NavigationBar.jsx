@@ -138,7 +138,7 @@ function NavigationBar(props) {
     <div style={naviBarStyle}>
       <Container style={brandStyle}>
         <a href = '/'>
-        <YonderLogo svgScale="55"/>
+        <YonderLogo svgScale="70"/>
         </a>
       </Container>
       <Container style={meunButtonStyle}>

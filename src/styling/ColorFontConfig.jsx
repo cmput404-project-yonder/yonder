@@ -12,7 +12,7 @@ var color = {
     postIcon: "#8fc9eb",
     backgroundGrey: "#fefefe",
     backgroundCream: "#F9F5EF",
-    backgroundCreamLighter: "#FFFAF1",
+    backgroundCreamLighter: "#FFF1DC",
 }
 
 var font = {

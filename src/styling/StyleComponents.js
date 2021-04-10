@@ -11,22 +11,24 @@ export const footerButtonLayoutStyle = {
   width: "100%",
   display: "flex",
   justifyContent: "space-between",
-  height: "13pt",
-  paddingLeft: "3em",
-  paddingRight: "3em",
+  height: "28pt",
+  paddingLeft: "1.5em",
+  paddingRight: "1.5em",
 }
 
 export const postContentStyle = {
   marginLeft: "0.5em",
   marginRight: "0.5em",
-  paddingBottom: "0.1em",
+  paddingBottom: "2pt",
+  paddingTop: "3pt",
+  fontSize: "1em",
 }
 
 
 export const DescriptionStyle = {
   paddingBottom: "0.2em",
   color: color.baseLightGrey,
-  marginLeft: "0.7em",
+  marginLeft: "0.4em",
   // border: "dashed ", 
   // borderWidth: "0.1px",
   // borderRadius: "3pt",
@@ -46,14 +48,14 @@ export const cardStyle = {
   }
 
 export const postStyle = {
-    boxShadow: "0pt 0pt 8pt rgb(0,0,0,0.5)",
+    boxShadow: "0pt 0pt 8pt rgb(0,0,0,0.4)",
     borderRadius: "6pt",
     backgroundColor: color.backgroundCreamLighter,
     marginBottom: "2em",
     marginTop: "0.5em",
     fontFamily: font.segoeUI,
     fontWeight: "350",
-    fontSize: "1.3em",
+    fontSize: "1.45em",
     color: color.baseBlack,
     display: "flex",
     flexDirection: "column",
@@ -155,8 +157,8 @@ export const signatureStyle = {
 }
 
 export const postContainerStyle = {
-  paddingRight: "0.6em",
-  paddingLeft: "0.6em",
+  paddingRight: "0.4em",
+  paddingLeft: "0.4em",
   paddingTop: "0.5em",
   paddingBottom: "0.5em",
 }
@@ -252,9 +254,10 @@ export const labelStyle = {
   }
 
 export const postTitleStyle = {
-    fontSize: "1.2em",
+    fontSize: "1.1em",
     fontWeight: "400",
-    marginLeft: "0.5em",
+    marginLeft: "0.4em",
+    textTransform: "capitalize",
   }
 
 export const formTitleStyle = {

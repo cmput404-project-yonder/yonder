@@ -2,14 +2,14 @@ import { Container, Button } from "react-bulma-components";
 
 // local styling
 var buttonStyle = {
-    scale: "34",
+    scale: "40",
     style: {
         button: {
-            height: "3.2em",
-            width: "3.2em",
+            height: "3.6em",
+            width: "3.6em",
             borderRadius: "100%",
             // boxShadow: "0pt 0pt 6pt rgb(0,0,0,0.5)",
-            backgroundColor: "rgb(121,207,235,0.8)",
+            backgroundColor: "#73B2C6",
             border: "none",
         },
         icon: {

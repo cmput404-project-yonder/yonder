@@ -6,17 +6,18 @@ import { color } from "./styling";
 
 // local styling for this component
 var divStyle = {
-    height: "0em",
-    borderBottom: "0.1px " + color.baseLightGrey + " dashed",
-    marginLeft: "0em",
-    marginRight: "0em",
+    height: "1pt",
+    marginTop: "-3pt",
+    marginBottom: "-3pt",
+    backgroundColor: "#F2E5D1",
+    borderRadius: "6pt",
 }
 
 // component
 function Dividor(props) {
     return (
         <Container style={props.style}>
-            <div style={divStyle}/>
+            <hr style={divStyle}/>
         </Container>
     );
 }
