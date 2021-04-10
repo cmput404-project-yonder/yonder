@@ -254,11 +254,25 @@ export const likePost = (post) => (dispatch, getState) => {
     })
     .catch((error) => {
       if (error.response) {
-        toast.error(JSON.stringify(error.response.data));
+
+        // handles specific status code
+        switch (error.response.status) {
+          case 409:
+            toast.error("You already liked this post");
+            break;
+          case 404:
+            toast.error("Author have deleted this post");
+            break;
+          default:
+            toast.error(JSON.stringify(error.response.data));
+            break;
+        }
+
         dispatch({
           type: LIKE_POST_ERROR,
           errorData: error.response.data,
         });
+
       } else if (error.message) {
         toast.error(JSON.stringify(error.message));
       } else {

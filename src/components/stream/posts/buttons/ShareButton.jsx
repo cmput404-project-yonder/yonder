@@ -4,24 +4,38 @@
 
 import { SharingIcon } from "./postSVG";
 import { Container } from "react-bulma-components";
-import {color} from "../styling";
+import { color } from "../../../../styling/ColorFontConfig";
 
 
 // local styling
 var buttonStyle = {
-    scale: "20",
+    scale: "22",
     style: {
         fill: color.buttonOrange,
-    }
+        display: "flex",
+        justifyContent: "center",
+        gap: "0.5em",
+
+    },
+    override: {
+        height: "2.5em",
+        width: "6em",
+        border: "none",
+        backgroundColor: "transparent",
+        cursor: "pointer",
+    },
 }
+
 
 // component
 function ShareButton(props) {
 
     return (
-        <Container style={buttonStyle.style}>
-            <a onClick={props.action}><SharingIcon svgScale={buttonStyle.scale}/></a>
-        </Container>
+        <button type="button" style={buttonStyle.override} onClick={props.action}>
+            <Container style={buttonStyle.style}>
+                <SharingIcon svgScale={buttonStyle.scale}/>
+            </Container>
+        </button>
     );
 }
 

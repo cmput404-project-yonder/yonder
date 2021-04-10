@@ -16,7 +16,7 @@ function Inbox(props) {
   const followList = () => {
     if (follows.length === 0) {
       return (
-        <Container style={{textAlign: "center", marginRight: "1em", marginTop: "30%"}}>
+        <Container style={{textAlign: "center", marginRight: "1em", marginTop: "40%"}}>
           <Container style={{fill: color.baseLightGrey}}>
             <InboxEmptyIcon svgScale={"80"}/>  
           </Container>
@@ -37,7 +37,7 @@ function Inbox(props) {
 
     if (likes.length === 0) {
       return (
-        <Container style={{textAlign: "center", marginRight: "1em", marginTop: "30%"}}>
+        <Container style={{textAlign: "center", marginRight: "1em", marginTop: "40%"}}>
           <Container style={{fill: color.baseLightGrey}}>
             <InboxEmptyIcon svgScale={"80"}/>  
           </Container>
@@ -57,7 +57,7 @@ function Inbox(props) {
   const postList = () => {
     if (posts.length === 0) {
       return (
-        <Container style={{textAlign: "center", marginRight: "1em", marginTop: "30%"}}>
+        <Container style={{textAlign: "center", marginRight: "1em", marginTop: "40%"}}>
           <Container style={{fill: color.baseLightGrey}}>
             <InboxEmptyIcon svgScale={"80"}/>  
           </Container>

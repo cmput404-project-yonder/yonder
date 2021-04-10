@@ -25,12 +25,14 @@ class App extends Component {
           <ToastContainer hideProgressBar={true} newestOnTop={true} />
           <NavigationBar/>
           <Switch>
+            <div style={{paddingTop: "8em"}}>
             <Page path="/signup" component={Signup} title="Signup"/>
             <Page path="/login" component={Login} title="Login"/>
             <Page path="/stream" component={Stream} title="Stream"/>
             <Page exact path="/author/:id" component={Profile} title="Profile"/>
             <Page exact path="/author/:author_id/posts/:id" component={SelectedPost} title="View Post"/>
             <Page exact path="/" component={Home} />
+            </div>
           </Switch>
         </Root>
       </div>
