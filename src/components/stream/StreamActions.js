@@ -213,9 +213,9 @@ export const likePost = (post) => (dispatch, getState) => {
   {...author,
     "type": "author",
     "id": author.id,
-    "url": author.host + "author/" + author.id + "/",
+    "url": author.host + "api/author/" + author.id,
   };
-  likedPost["object"] = likedPost["author"]["url"] + "/posts/" + post.id + "/";
+  likedPost["object"] = post.author.host + "api/author/" + post.author.id + "/posts/" + post.id + "/";
   likedPost["host"] = post.author.host;
 
   dispatch({ type: LIKE_POST_SUBMITTED });

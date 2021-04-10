@@ -4,6 +4,7 @@ from django.urls import path
 from . import views
 
 urlpatterns = [
+    path('posts/', views.public_posts.as_view(), name="public_posts"),
     path('authors/', views.local_authors.as_view(), name="authors"),
     path('authors/all/', views.local_remote_authors.as_view(), name="all_authors"),
     path('author/<str:pk>/', views.author_detail.as_view(), name="author_detail"),
