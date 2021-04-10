@@ -9,7 +9,7 @@ function PopupModal(props) {
   const [modalIsOpen, setModalIsOpen] = useState(false);
   return (
     <div className="post-form-modal">
-      <AddButton action={() => setModalIsOpen(true)}/>
+      <AddButton isFlat={props.isFlat} action={() => setModalIsOpen(true)}/>
       <Modal className="animate__animated animate__fadeIn animate__faster" show={modalIsOpen} onClose={() => setModalIsOpen(false)} closeOnBlur closeOnEsc>
         <PostForm setModalIsOpen={setModalIsOpen} createPost={props.createPost} />
       </Modal>

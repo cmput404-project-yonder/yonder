@@ -6,21 +6,22 @@ import { color } from "../styling/ColorFontConfig";
 
 // local styling
 var buttonStyle = {
-    scale: "20",
+    scale: "25",
     text: {
-        color: color.baseLightGrey,
+        color: color.textLightGreyOnCream,
+        fontSize: "1.3em",
     },
     style: {
         loginButton: {
-            height: "3em",
-            width: "3em",
+            height: "3.5em",
+            width: "3.5em",
             borderRadius: "100%",
             backgroundColor: color.buttonGreen,
             border: "none",
         },
         logoutButton: {
-            height: "2.6em",
-            width: "2.6em",
+            height: "3.5em",
+            width: "3.5em",
             borderRadius: "100%",
             backgroundColor: color.buttonRed,
             border: "none",

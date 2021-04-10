@@ -67,6 +67,7 @@
 .react-tags__search-input {
   /* prevent autoresize overflowing the container */
   max-width: 100%;
+  color: #C5C5C5;
 
   /* remove styles and layout from this element */
   margin: 0;

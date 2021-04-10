@@ -1,4 +1,3 @@
-import { motion } from 'framer-motion';
 import { color } from '../../../../styling/ColorFontConfig';
 /*
 SVG components:
@@ -89,9 +88,41 @@ export function CheckBoxUnchecked(props) {
 
 export function AddIcon(props) {
     return (
-        <svg xmlns="http://www.w3.org/2000/svg" width={props.svgScale} viewBox="0 0 100 100">
-        <path id="add" d="M91.071,41.071H60.714a1.786,1.786,0,0,1-1.786-1.786V8.929a8.929,8.929,0,1,0-17.857,0V39.286a1.786,1.786,0,0,1-1.786,1.786H8.929a8.929,8.929,0,1,0,0,17.857H39.286a1.786,1.786,0,0,1,1.786,1.786V91.071a8.929,8.929,0,1,0,17.857,0V60.714a1.786,1.786,0,0,1,1.786-1.786H91.071a8.929,8.929,0,1,0,0-17.857Zm0,0"/>
+        <svg xmlns="http://www.w3.org/2000/svg" width={props.svgScale} viewBox="0 0 511.964 512">
+        <g id="contract" transform="translate(-0.018)">
+            <g id="Group_82" data-name="Group 82">
+            <g id="Group_81" data-name="Group 81">
+                <path id="Path_188" data-name="Path 188" d="M498.791,161.127a45.054,45.054,0,0,0-63.645,0L390.018,206.3V87.426a44.7,44.7,0,0,0-13.181-31.819L334.412,13.18A44.7,44.7,0,0,0,302.592,0H45.018a45.051,45.051,0,0,0-45,45V467a45.051,45.051,0,0,0,45,45h300a45.051,45.051,0,0,0,45-45V333.631L498.79,224.767A44.974,44.974,0,0,0,498.791,161.127ZM300.019,30c2.834,0,8.3-.491,13.18,4.393L355.625,76.82c4.76,4.761,4.394,9.978,4.394,13.18h-60Zm60,437a15.016,15.016,0,0,1-15,15h-300a15.017,15.017,0,0,1-15-15V45a15.017,15.017,0,0,1,15-15h225v75a15,15,0,0,0,15,15h75V236.323s-44.254,44.292-44.256,44.293l-21.2,21.2a15,15,0,0,0-3.624,5.863l-21.214,63.64A15,15,0,0,0,288.7,390.3l63.64-21.213a14.988,14.988,0,0,0,5.863-3.624l1.82-1.82V467Zm-33.64-154.573,21.213,21.213-8.1,8.1-31.819,10.606,10.606-31.82Zm42.422-.005-21.213-21.213,72.105-72.166L440.9,240.256ZM477.573,203.558,462.11,219.034,440.9,197.821l15.468-15.481a15,15,0,1,1,21.208,21.218Z"/>
+            </g>
+            </g>
+            <g id="Group_84" data-name="Group 84">
+            <g id="Group_83" data-name="Group 83">
+                <path id="Path_189" data-name="Path 189" d="M285.018,150h-210a15,15,0,0,0,0,30h210a15,15,0,0,0,0-30Z"/>
+            </g>
+            </g>
+            <g id="Group_86" data-name="Group 86">
+            <g id="Group_85" data-name="Group 85">
+                <path id="Path_190" data-name="Path 190" d="M225.018,210h-150a15,15,0,0,0,0,30h150a15,15,0,0,0,0-30Z"/>
+            </g>
+            </g>
+            <g id="Group_88" data-name="Group 88">
+            <g id="Group_87" data-name="Group 87">
+                <path id="Path_191" data-name="Path 191" d="M225.018,270h-150a15,15,0,0,0,0,30h150a15,15,0,0,0,0-30Z"/>
+            </g>
+            </g>
+            <g id="Group_90" data-name="Group 90">
+            <g id="Group_89" data-name="Group 89">
+                <path id="Path_192" data-name="Path 192" d="M225.018,330h-150a15,15,0,0,0,0,30h150a15,15,0,0,0,0-30Z"/>
+            </g>
+            </g>
+            <g id="Group_92" data-name="Group 92">
+            <g id="Group_91" data-name="Group 91">
+                <path id="Path_193" data-name="Path 193" d="M285.018,422h-90a15,15,0,1,0,0,30h90a15,15,0,0,0,0-30Z"/>
+            </g>
+            </g>
+        </g>
         </svg>
+
     )
 }
 
@@ -123,39 +154,15 @@ export function LikeIcon(props) {
     )
 }
 
-const svgVariants = {
-    hidden: { 
-        scale: 0,
-    },
-    visible: {
-        position:"fixed",
-        rotate: 0,
-        transition: { duration : 0.5 },
-        scale: 1,
-    }
-}
-
 export function LikedIcon(props) {
     return (
-        <header>
-            <motion.svg xmlns="http://www.w3.org/2000/svg" width={props.svgScale} viewBox="0 0 80 70.625"
-                variants={svgVariants}
-                initial="hidden"
-                animate="visible"
-            >
+        <svg xmlns="http://www.w3.org/2000/svg" width={props.svgScale} viewBox="0 0 80 71.174">
             <g id="like" transform="translate(0 -30)">
                 <g id="Group_64" data-name="Group 64" transform="translate(0 30)">
                 <path id="Path_149" data-name="Path 149" d="M58.75,30a18.941,18.941,0,0,0-11.829,4.089A26.946,26.946,0,0,0,40,42.412a26.944,26.944,0,0,0-6.921-8.323A18.941,18.941,0,0,0,21.25,30C9.136,30,0,39.909,0,53.049c0,14.2,11.4,23.909,28.651,38.612,2.93,2.5,6.251,5.327,9.7,8.346a2.5,2.5,0,0,0,3.291,0c3.452-3.019,6.773-5.849,9.7-8.348C68.6,76.958,80,67.245,80,53.049,80,39.909,70.864,30,58.75,30Z" transform="translate(0 -30)"/>
                 </g>
             </g>
-            </motion.svg>
-            <motion.div className="liked"
-                initial={{ y: -250 }}
-                animate={{ y: -10 }}
-                transition={{ delay: 0.2, type: 'spring', stiffness: 120 }}
-            />
-                
-        </header>
+        </svg>
     )
 }
 
