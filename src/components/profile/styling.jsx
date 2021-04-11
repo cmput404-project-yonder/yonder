@@ -3,6 +3,7 @@ var color = {
   baseWhite: "white",
   baseRed: "#D18D8D",
   baseLightGrey: "#AAAAAA",
+  baseGreyHard: "#8F8F8F",
   buttonGreen:"#99D4B4",
   buttonRed: "#DD7272",
   buttonOrange: "#E69942",

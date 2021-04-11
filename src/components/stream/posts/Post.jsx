@@ -10,7 +10,7 @@ import { Card, Content, Container } from "react-bulma-components";
 import EditButton from "./buttons/EditButton";
 import ShareButton from "./buttons/ShareButton";
 import LikedButton from "./buttons/LikedButton";
-import { DescriptionStyle, postStyle, categoriesStyle, signatureStyle, postContainerStyle,postTitleStyle, postContentStyle, footerButtonLayoutStyle } from "../../../styling/StyleComponents";
+import { DescriptionStyle, categoriesStyle, signatureStyle, postContainerStyle,postTitleStyle, postContentStyle, footerButtonLayoutStyle,postStyle } from "../../../styling/StyleComponents";
 import { color } from "./styling";
 
 import { retrievePostLikes } from "./PostActions";
@@ -36,38 +36,55 @@ function getDateString(ms) {
 
 
 
-function Post(props) {
-  const [editModalIsOpen, setEditModalIsOpen] = useState(false);
-  const [sharingPromptIsOpen, setSharingPromptIsOpen] = useState(false);
-  const [likeCount, setLikeCount] = useState(0);
-  
-  const postURL = "/author/" + props.post.author.id + "/posts/" + props.post.id + "/";
+class Post extends React.Component {
 
-  const IsImage = () => {
-    if (props.post.contentType === "text/plain") {
-      return false;
-    }
-    else if (props.post.contentType === "text/markdown") {
-      return false;
-    }
-    else {
-      return true;
-    }
+  constructor(props) {
+    super(props);
+    this.state = {
+      editModalIsOpen: false,
+      sharingPromptIsOpen: false,
+      likeCount: 0,
+      postURL: "/author/" + this.props.post.author.id + "/posts/" + this.props.post.id + "/",
+      likePolling: null,
+    };
+  } 
+
+  componentDidMount() {
+    // set up polling for this post
+    this.props.retrievePostLikes(this.props.post, this.postLikeSetter);
+    this.state["likePolling"] = setInterval(()=>this.props.retrievePostLikes(this.props.post, this.postLikeSetter),30000);
   }
 
-  const postLikeSetter = (likeList) => {
-    setLikeCount(likeList.items.length);
+  componentWillUnmount() {
+    clearInterval(this.state["likePolling"]);
   }
 
-  const likedToggle = () => {
-    props.retrievePostLikes(props.post, postLikeSetter);
-    props.likePost(props.post);
+  // set states
+  setEditModalIsOpen = (s) => {
+    this.setState({editModalIsOpen: s});
   }
-  
-  props.retrievePostLikes(props.post, postLikeSetter);
-  setInterval(()=>props.retrievePostLikes(props.post, postLikeSetter),30000);
+  setSharingPromptIsOpen = (s) => {
+    this.setState({sharingPromptIsOpen: s});
+  }
+  setLikeCount = (s) => {
+    this.setState({likeCount: s});
+  }
 
-  const getCategories = (cat) => {
+  // helpers
+  isImage = () => {
+    let isText = (this.props.post.contentType === "text/plain");
+    let isMark = (this.props.post.contentType === "text/markdown");
+    return ((isText||isMark)?false:true)
+  }
+  postLikeSetter = (likeList) => {
+    this.setLikeCount(likeList.items.length);
+  }
+  likedToggle = () => {
+    this.props.likePost(this.props.post, () => this.props.retrievePostLikes(this.props.post, this.postLikeSetter));
+  }
+  getCategories = (cat) => {
+    // transform a given cat array into component lists for displaying
+    // return an components contains strings
     let categories =  cat.map((c) => <p>#{c}</p>)
     return (
       <Container style={categoriesStyle}>
@@ -76,40 +93,41 @@ function Post(props) {
     )
   }
 
-  const editButton = () => {
-    if (props.loggedInAuthor.id == props.post.author.id) {
+  // sub components
+  editButton = () => {
+    // edit button
+    if (this.props.loggedInAuthor.id == this.props.post.author.id) {
       return  (
-        <EditButton action={() => setEditModalIsOpen(true)}/>
+        <EditButton action={() => this.setEditModalIsOpen(true)}/>
       );
     }
   }
-
-  const displayFooterButtons = () => {
-    if (props.interactive ){
+  displayFooterButtons = () => {
+    if (this.props.interactive ){
       return (
         <div>
         <Container style={footerButtonLayoutStyle}>
 
           {/* buttons */}
-          <LikedButton count={likeCount} action={() => likedToggle()}/>
-          {editButton()}
-          <ShareButton action={() => setSharingPromptIsOpen(true)}/>
+          <LikedButton count={this.state.likeCount} action={() => this.likedToggle()}/>
+          {this.editButton()}
+          <ShareButton action={() => this.setSharingPromptIsOpen(true)}/>
           
 
           {/* modal */}
-          <Modal className="animate__animated animate__fadeIn animate__faster" show={editModalIsOpen} onClose={() => setEditModalIsOpen(false)} closeOnBlur closeOnEsc>
+          <Modal className="animate__animated animate__fadeIn animate__faster" show={this.state.editModalIsOpen} onClose={() => this.setEditModalIsOpen(false)} closeOnBlur closeOnEsc>
             <EditPostForm
-              setEditModalIsOpen={setEditModalIsOpen}
-              post={props.post}
-              updatePost={props.updatePost}
-              deletePost={props.deletePost}
+              setEditModalIsOpen={this.setEditModalIsOpen}
+              post={this.props.post}
+              updatePost={this.props.updatePost}
+              deletePost={this.props.deletePost}
             />
           </Modal>
-          <Modal className="animate__animated animate__fadeIn animate__faster" show={sharingPromptIsOpen} onClose={() => setSharingPromptIsOpen(false)} closeOnBlur closeOnEsc>
+          <Modal className="animate__animated animate__fadeIn animate__faster" show={this.state.sharingPromptIsOpen} onClose={() => this.setSharingPromptIsOpen(false)} closeOnBlur closeOnEsc>
             <SharingPostPrompt
-              setModalIsOpen={setSharingPromptIsOpen}   
-              post={props.post}
-              sharePost={props.sharePost}
+              setModalIsOpen={this.setSharingPromptIsOpen}   
+              post={this.props.post}
+              sharePost={this.props.sharePost}
             />
           </Modal>
       
@@ -118,50 +136,50 @@ function Post(props) {
       );
     }
   }
+  render() {
+    return (
+        <Card style={{...postStyle,...this.props.style}}>
+          <Card.Content style={postContainerStyle}>
+            
+            <a href={this.state.postURL}>
+              {/* Title */}
+              <Container style={signatureStyle}>
+                <p style={{ fontWeight: "250" }}>@{this.props.post.author.displayName}</p>
+                <p>·</p>
+                <p>{getDateString(Date.parse(this.props.post.published))}</p>
+              </Container>
+              <Container style={postTitleStyle}>
+                <p style={{textDecoration: "none", color: color.baseBlack}}>{this.props.post.title}</p>
+              </Container>
+              
+              {/* Description */}
+              <Container style = {DescriptionStyle}>  
+                <p>{this.props.post.description }</p>
+              </Container>
 
-  return (
-      <Card style={{...postStyle,...props.style}}>
-        <Card.Content style={postContainerStyle}>
+              <hr style={{...shadowDividorStyle, backgroundColor: "transparent", marginBottom: "0.5em", marginTop: "-32pt"}}></hr>
+            </a>
+            
+            {/* Content */}
+            <Container style = {postContentStyle}>
+            {this.isImage() ? (
+              <Content style={{textAlign: "center"}}>
+                <img style={{borderRadius: "6pt", maxHeight: "500pt"}}src={this.props.post.content} /> 
+              </Content>
+            ) : <Content>{this.props.post.content}</Content> }
+            </Container>
+            
+            {/* categories */}
+            <Container style={postContentStyle}>
+              {this.getCategories(this.props.post.categories)}
+            </Container>
+            
+            {this.displayFooterButtons()}
 
-          {/* Title */}
-          <a href={postURL}>
-          <Container style={signatureStyle}>
-          <p style={{ fontWeight: "250" }}>@{props.post.author.displayName}</p>
-          <p>·</p>
-          <p>{getDateString(Date.parse(props.post.published))}</p>
-          </Container>
-          <Container style={postTitleStyle}>
-          <p style={{textDecoration: "none", color: color.baseBlack}}>{props.post.title}</p>
-          </Container>
-          
-          {/* Description */}
-          <Container style = {DescriptionStyle}>  
-            <p>{ props.post.description }</p>
-          </Container>
-
-          <hr style={{...shadowDividorStyle, backgroundColor: "transparent", marginBottom: "0.5em", marginTop: "-32pt"}}></hr>
-
-          </a>
-          
-          {/* Content */}
-          <Container style = {postContentStyle}>
-          {IsImage() ? (
-            <Content style={{textAlign: "center"}}>
-              <img style={{borderRadius: "6pt", maxHeight: "500pt"}}src={props.post.content} /> 
-            </Content>
-          ) : <Content>{props.post.content}</Content> }
-          </Container>
-          
-          {/* categories */}
-          <Container style={postContentStyle}>
-            {getCategories(props.post.categories)}
-          </Container>
-          
-          {displayFooterButtons()}
-
-        </Card.Content>
-      </Card>
-  );
+          </Card.Content>
+        </Card>
+    );
+  }
 }
 
 Post.propTypes = {

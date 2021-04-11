@@ -63,9 +63,9 @@ function NavigationBar(props) {
   // set the list of path that you dont want navigation bar to render
 
   switch (window.location.pathname) {
-    case "/login":
-    case "/signup":
-      return (<div></div>)
+    // case "/login":
+    // case "/signup":
+    //   return (<div></div>)
     default:
       break;
   }

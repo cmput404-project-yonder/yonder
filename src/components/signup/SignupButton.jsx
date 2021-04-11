@@ -4,15 +4,15 @@ import { color } from "./styling";
 
 // local styling
 var buttonStyle = {
-  scale: "24",
+  scale: "25",
   style: {
     fill: "white",
     paddingTop: "3pt",
     paddingLeft: "2pt",
   },
   button: {
-    height: "3em",
-    width: "3em",
+    height: "3.2em",
+    width: "3.2em",
     borderRadius: "100%",
     backgroundColor: color.baseRed,
     border: "none",

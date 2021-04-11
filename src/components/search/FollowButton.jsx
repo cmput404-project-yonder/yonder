@@ -40,7 +40,7 @@ function FollowButton(props) {
           </g>
           <g id="Group_54" data-name="Group 54" transform="translate(7.126 5.701)">
             <g id="Group_53" data-name="Group 53">
-              <path id="Path_130" data-name="Path 130" d="M88.79,64.267a8.456,8.456,0,1,0,8.456,8.456A8.466,8.466,0,0,0,88.79,64.267Z" transform="translate(-80.334 -64.267)" fill="#d75c5c"/>
+              <path id="Path_130" data-name="Path 130" d="M88.79,64.267a8.456,8.456,0,1,0,8.456,8.456A8.466,8.466,0,0,0,88.79,64.267Z" transform="translate(-80.334 -64.267)"/>
             </g>
           </g>
         </svg>

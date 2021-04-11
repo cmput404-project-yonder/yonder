@@ -14,18 +14,19 @@ import { color, font } from "./styling";
 import CancelButton from "../stream/posts/buttons/CancelButton";
 import ConfirmButton from "../stream/posts/buttons/ConfirmButton";
 import Dividor from "./Dividor";
-import { dividorStyle, cardStyle } from "../../styling/StyleComponents";
+import { dividorStyle, cardStyle, labelStyle } from "../../styling/StyleComponents";
+import { toast } from "react-toastify";
 
 
 const formContainerStyle = {
   boxShadow: "0pt 0pt 3pt #B1B1B1",
   borderRadius: "8pt",
-  marginLeft: "-1.2em",
-  marginRight: "-1.2em",
-  paddingTop: "1em",
-  paddingBottom: "1em",
-  paddingRight: "1.5em",
-  paddingLeft: "1.5em",
+  marginLeft: "1.2em",
+  marginRight: "1.2em",
+  paddingTop: "0em",
+  paddingBottom: "0em",
+  paddingRight: "0.5em",
+  paddingLeft: "0.5em",
   backgroundColor: color.backgroundGrey,
 }
 
@@ -77,7 +78,7 @@ const submittPanelStyle = {
 const buttonLayoutStyle = {
   display: "flex",
   width: "0em",
-  marginRight: "10em",       // the width of two button.
+  marginRight: "5em",       // the width of two button.
 }
 
 
@@ -90,7 +91,6 @@ class ProfileEdit extends React.Component {
     this.state = {
       displayName: this.props.displayName,
       githubURL: this.props.githubURL,
-      password: '',
     };
   }
 
@@ -103,14 +103,21 @@ class ProfileEdit extends React.Component {
   };
 
   confirmEdit = () => {
-    // not complete
-    // missing password, currently, api doest support it
     const newProfile = {
       displayName: this.state.displayName,
       github: this.state.githubURL,
     }
-    this.props.editProfile(newProfile);
-    this.props.onCancel();
+
+    if (newProfile.displayName === "") {
+      toast.error("Display Name cannot be empty");
+    }
+    else if ((newProfile.github.replace("https://github.com/","") === newProfile.github)||(newProfile.github.replace("https://github.com/","")==="")) {
+      toast.error("Github url invalid");
+    }
+    else {
+      this.props.editProfile(newProfile);
+      this.props.onCancel();
+    }
   }
 
   render() {
@@ -118,7 +125,6 @@ class ProfileEdit extends React.Component {
       // Confirm and back button used to submit form
       return (
         <Container style={buttonLayoutStyle}>
-          <CancelButton action={this.props.onCancel}/>
           <ConfirmButton action={this.confirmEdit}/>
         </Container>
       )
@@ -132,7 +138,7 @@ class ProfileEdit extends React.Component {
     }
 
 
-    const { displayName, password, githubURL } = this.state;
+    const { displayName, githubURL } = this.state;
     return (
       <Card style={cardStyle} className="animate__animated animate__slideInUp">
         <Container style={headingStyle.overall}>
@@ -143,7 +149,7 @@ class ProfileEdit extends React.Component {
         <Container style={formContainerStyle}>
         <Container style={formStyle.overall}>
           <Form.Field>
-            <Form.Label style={formStyle.label}>Display Name</Form.Label>
+            <Form.Label style={labelStyle}>Display Name <span style={{color: color.baseRed}}>*</span></Form.Label>
             <Form.Control>
               <Form.Input
                 name="displayName"
@@ -155,19 +161,7 @@ class ProfileEdit extends React.Component {
             </Form.Control>
           </Form.Field>
           <Form.Field>
-            <Form.Label style={formStyle.label}>Password</Form.Label>
-            <Form.Control>
-                <Form.Input 
-                    name="password" 
-                    onChange={this.onChange} 
-                    value={password} type="password" 
-                    placeholder="Enter your new password"
-                ></Form.Input>
-            </Form.Control>
-        </Form.Field>
-        <Dividor style={dividorStyle}/>
-          <Form.Field>
-            <Form.Label style={formStyle.label}>Github URL</Form.Label>
+            <Form.Label style={labelStyle}>Github URL</Form.Label>
             <Form.Control>
               <Form.Input
                 name="githubURL"

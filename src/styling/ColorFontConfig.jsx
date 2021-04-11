@@ -12,7 +12,7 @@ var color = {
     buttonIndigo: "#7D99F5",
     postIcon: "#8fc9eb",
     backgroundGrey: "#FFFFFF",
-    backgroundCream: "#FEF7EF",
+    backgroundCream: "#FFF4E2",             // this one is actually ligter
     backgroundCreamLighter: "#FFF3DC",
     textLightGreyOnCream: "#9B9285",
 }

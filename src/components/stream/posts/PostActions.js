@@ -106,6 +106,8 @@ export const retrievePostLikes = (post, setterFunction) => (dispatch, getState) 
   const state = getState();
 
   setAxiosAuthToken(state.auth.token);
+  console.log("STATE");
+  console.log(state.auth.token);
   dispatch({ type:  RETRIEVE_POSTLIKE_SUBMITTED});
   axios
     .get("/author/" + post.author.id + "/posts/" + post.id + "/likes/")
