@@ -7,8 +7,8 @@ import Inbox from "./Inbox";
 import { cardStyle, tabStyle, panelStyle, checkBoxStyle } from "../../styling/StyleComponents";
 
 import PostTab from "../stream/posts/PostTab";
-import DeleteButton from "../stream/posts/buttons/DeleteButton";
-import { clearInbox } from "../stream/StreamActions";
+import DeleteButton from "./DeleteButton";
+import { clearInbox } from "../NavigationActions";
 
 // local styling
 var shadowDividorStyle = {
@@ -53,7 +53,7 @@ function InboxModal (props){
         // custom selection tab
         // text, markdown, image
         return (
-            <Container style={{...panelStyle, paddingBottom: "0.25em", marginRight: "6em"}}>
+            <Container style={{...panelStyle, paddingBottom: "0.25em", marginRight: "5.5em"}}>
                 <PostTab style={tabStyle} text="Like" active={tabSelected === "like"} action={() => selectTab("like")}/>
                 <PostTab style={tabStyle} text="Follow" active={tabSelected === "follow"} action={() => selectTab("follow")}/>
                 <PostTab style={tabStyle} text="Post"active={tabSelected === "post"} action={() => selectTab("post")}/>
@@ -104,7 +104,7 @@ function InboxModal (props){
             <Container>
                 <SelectionPanel/>
             </Container>
-            <Container style={{float: "right", marginTop: "-26pt", marginRight: "3em"}}>
+            <Container style={{float: "right", marginTop: "-18pt", marginRight: "3em"}}>
                 <ToolTip/>
             </Container>
             </div>

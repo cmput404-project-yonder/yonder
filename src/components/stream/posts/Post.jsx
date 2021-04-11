@@ -34,7 +34,7 @@ function getDateString(ms) {
 
 
 
-
+ 
 
 class Post extends React.Component {
 
@@ -51,8 +51,8 @@ class Post extends React.Component {
 
   componentDidMount() {
     // set up polling for this post
-    this.props.retrievePostLikes(this.props.post, this.postLikeSetter);
-    this.state["likePolling"] = setInterval(()=>this.props.retrievePostLikes(this.props.post, this.postLikeSetter),30000);
+    this.likePollingCall(this.props.post, this.postLikeSetter);
+    this.state["likePolling"] = setInterval(()=>this.likePollingCall(this.props.post, this.postLikeSetter), 5 * 1000);
   }
 
   componentWillUnmount() {
@@ -70,6 +70,24 @@ class Post extends React.Component {
     this.setState({likeCount: s});
   }
 
+
+  // polling handler
+  likePollingCall = (post, setter) => {
+    // this function is safe measure (wrapper) for preventing situation where auth is not set, but the webpage is still open
+    // polling will only be done if auth is set
+    if ((this.props.auth !== undefined)&&(this.props.auth.isAuthenticated)) {
+      this.props.retrievePostLikes(post, setter);
+    }
+  }
+
+  likePostCall = (post, setter=null) => {
+    // same as likePollingCall
+    // call this function to like a post
+    if ((this.props.auth !== undefined)&&(this.props.auth.isAuthenticated)) {
+      this.props.likePost(post, setter);
+    }
+  }
+
   // helpers
   isImage = () => {
     let isText = (this.props.post.contentType === "text/plain");
@@ -80,7 +98,8 @@ class Post extends React.Component {
     this.setLikeCount(likeList.items.length);
   }
   likedToggle = () => {
-    this.props.likePost(this.props.post, () => this.props.retrievePostLikes(this.props.post, this.postLikeSetter));
+    // like a post, and trigger a event to retrive likes after backend responded.
+    this.likePostCall(this.props.post, () => this.likePollingCall(this.props.post, this.postLikeSetter));
   }
   getCategories = (cat) => {
     // transform a given cat array into component lists for displaying
@@ -190,6 +209,7 @@ Post.propTypes = {
 };
 
 const mapStateToProps = (state) => ({
+  auth: state.auth,
   loggedInAuthor: state.auth.author
 });
 

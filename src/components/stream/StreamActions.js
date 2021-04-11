@@ -10,17 +10,11 @@ import {
   DELETE_POST_SUBMITTED,
   DELETE_POST_SUCCESS,
   DELETE_POST_ERROR,
-  RETRIEVE_INBOX_SUBMITTED,
-  RETRIEVE_INBOX_ERROR,
-  RETRIEVE_INBOX_SUCCESS,
-  CLEAR_INBOX_SUBMITTED,
-  CLEAR_INBOX_ERROR,
-  CLEAR_INBOX_SUCCESS,
+
   RETRIEVE_POSTS_SUBMITTED,
   RETRIEVE_POSTS_SUCCESS,
   RETRIEVE_POSTS_ERROR,
-  RETRIEVE_ALL_AUTHORS_SUCCESS,
-  RETRIEVE_ALL_AUTHORS_ERROR,
+
   LIKE_POST_SUBMITTED,
   LIKE_POST_SUCCESS,
   LIKE_POST_ERROR,
@@ -127,57 +121,6 @@ export const updatePost = (editedPost, setter=null) => (dispatch, getState) => {
     });
 };
 
-export const retrieveInbox = () => (dispatch, getState) => {
-  const state = getState();
-  const authorId = state.auth.author.id;
-
-  setAxiosAuthToken(state.auth.token);
-  dispatch({ type: RETRIEVE_INBOX_SUBMITTED });
-  axios
-    .get("/author/" + authorId + "/inbox/")
-    .then((response) => {
-      dispatch({ type: RETRIEVE_INBOX_SUCCESS, payload: response.data });
-    })
-    .catch((error) => {
-      if (error.response) {
-        toast.error(JSON.stringify(error.response.data));
-        dispatch({
-          type: RETRIEVE_INBOX_ERROR,
-          errorData: error.response.data,
-        });
-      } else if (error.message) {
-        toast.error(JSON.stringify(error.message));
-      } else {
-        toast.error(JSON.stringify(error));
-      }
-    });
-};
-
-export const clearInbox = () => (dispatch, getState) => {
-  const state = getState();
-  const authorId = state.auth.author.id;
-
-  setAxiosAuthToken(state.auth.token);
-  dispatch({ type: CLEAR_INBOX_SUBMITTED });
-  axios
-    .delete("/author/" + authorId + "/inbox/")
-    .then((response) => {
-      dispatch({ type: CLEAR_INBOX_SUCCESS });
-    })
-    .catch((error) => {
-      if (error.response) {
-        toast.error(JSON.stringify(error.response.data));
-        dispatch({
-          type: CLEAR_INBOX_ERROR,
-          errorData: error.response.data,
-        });
-      } else if (error.message) {
-        toast.error(JSON.stringify(error.message));
-      } else {
-        toast.error(JSON.stringify(error));
-      }
-    });
-};
 
 export const deletePost = (aPost) => (dispatch, getState) => {
   const state = getState();
@@ -206,38 +149,6 @@ export const deletePost = (aPost) => (dispatch, getState) => {
       }
     });
 };
-
-export const retrieveAllAuthors = () => (dispatch, getState) => {
-  const state = getState();
-  const cachedAuthors = JSON.parse(sessionStorage.getItem("allAuthors")); 
-
-  if (isEmpty(cachedAuthors)) {
-    setAxiosAuthToken(state.auth.token);
-    // No SUMBITTED dispatch, cause retrieving from other servers can take a while;
-    axios
-      .get("/authors/" + "all/")
-      .then((response) => {
-        dispatch({ type: RETRIEVE_ALL_AUTHORS_SUCCESS, payload: response.data });
-        sessionStorage.setItem("allAuthors", JSON.stringify(response.data));
-      })
-      .catch((error) => {
-        if (error.response) {
-          toast.error(JSON.stringify(error.response.data));
-          dispatch({
-            type: RETRIEVE_ALL_AUTHORS_ERROR,
-            errorData: error.response.data,
-          });
-        } else if (error.message) {
-          toast.error(JSON.stringify(error.message));
-        } else {
-          toast.error(JSON.stringify(error));
-        }
-      });
-    } else {
-      dispatch({ type: RETRIEVE_ALL_AUTHORS_SUCCESS, payload: cachedAuthors });
-    }
-};
-
 
 export const likePost = (post, chainFunction=null) => (dispatch, getState) => {
   // if chainFunction is given, chainFunction is called when .post success
@@ -275,6 +186,12 @@ export const likePost = (post, chainFunction=null) => (dispatch, getState) => {
             break;
           case 404:
             toast.error("Author have deleted this post");
+            break;
+          case 401:
+            // too deep in the rabbit hole
+            // like polling/like is handled by post.jsx
+            // if 401 happends, then we just ignore it, this error will eventually cought by navigationbar
+            // and redirect user to login.
             break;
           default:
             toast.error(JSON.stringify(error.response.data));

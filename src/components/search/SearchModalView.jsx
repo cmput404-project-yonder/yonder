@@ -109,7 +109,7 @@ function SearchModalView(props) {
 
 
 const mapStateToProps = (state) => ({
-  allAuthors: state.stream.allAuthors,
+  allAuthors: state.navigation.allAuthors,
   isFollowing: state.profile.isFollowing,
 });
 

@@ -106,8 +106,6 @@ export const retrievePostLikes = (post, setterFunction) => (dispatch, getState) 
   const state = getState();
 
   setAxiosAuthToken(state.auth.token);
-  console.log("STATE");
-  console.log(state.auth.token);
   dispatch({ type:  RETRIEVE_POSTLIKE_SUBMITTED});
   axios
     .get("/author/" + post.author.id + "/posts/" + post.id + "/likes/")
@@ -126,6 +124,12 @@ export const retrievePostLikes = (post, setterFunction) => (dispatch, getState) 
         // handles specific status code
         switch (error.response.status) {
           case 404:
+            break;
+          case 401:
+            // too deep in the rabbit hole
+            // like polling is handled by post.jsx
+            // if 401 happends, then we just ignore it, this error will eventually cought by navigationbar
+            // and redirect user to login.
             break;
           default:
             toast.error(JSON.stringify(error.response.data));

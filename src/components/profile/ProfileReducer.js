@@ -31,6 +31,8 @@ const initialState = {
 
 export const profileReducer = (state = initialState, action) => {
   switch (action.type) {
+
+    // submit
     case CHANGE_PROFILE_SUBMITTED:
     case RETRIEVE_AUTHOR_POSTS_SUBMITTED:
     case SEND_FOLLOW_SUBMITTED:
@@ -42,6 +44,8 @@ export const profileReducer = (state = initialState, action) => {
         error: "",
         loading: true,
       };
+
+    // error
     case CHANGE_PROFILE_ERROR:
     case RETRIEVE_AUTHOR_POSTS_ERROR:
     case RETRIEVE_AUTHOR_ERROR:
@@ -53,6 +57,8 @@ export const profileReducer = (state = initialState, action) => {
         error: action.errorData,
         loading: false,
       };
+
+    
     case RETRIEVE_AUTHOR_SUCCESS:
       return {
         ...state,
