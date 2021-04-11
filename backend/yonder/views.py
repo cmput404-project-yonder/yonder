@@ -177,7 +177,26 @@ class post_detail(generics.RetrieveUpdateDestroyAPIView):
 
     @swagger_auto_schema(tags=['posts'])
     def get(self, request, *args, **kwargs):
-        return self.retrieve(request, *args, **kwargs)
+        
+        post = get_object_or_404(Post, id=self.kwargs["pk"])
+        postJSON = PostSerializer(instance=post).data
+        if post.visibility == "FRIENDS":
+            req_user = get_object_or_404(User, username=request.user)
+            requestor = get_object_or_404(Author, user=req_user)
+            follows = AuthorFollower.objects.filter(author_id=post.author.id)
+            for follow in follows:
+                if follow.follower["id"] == str(requestor.id):
+                    _follows = AuthorFollower.objects.filter(author_id=requestor.id)
+                    for _follow in _follows:
+                        if _follow.follower["id"] == self.kwargs["author_id"]:
+                            return Response(postJSON, status=status.HTTP_200_OK)
+            return Response(status=status.HTTP_401_UNAUTHORIZED)
+
+        elif post.visibility == "PUBLIC":
+            return Response(postJSON, status=status.HTTP_200_OK)
+
+        else:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
 
     @swagger_auto_schema(tags=['posts'])
     def put(self, request, *args, **kwargs):
