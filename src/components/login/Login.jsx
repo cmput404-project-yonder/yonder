@@ -10,6 +10,7 @@ import { color } from "../../styling/ColorFontConfig";
 import LoginButton from "./LoginButton";
 import { LoginPageIcon } from "../../styling/svgIcons";
 import { labelStyle } from "../../styling/StyleComponents.js";
+import { toast } from "react-toastify";
 
 
 var loginCardStyle = {
@@ -83,9 +84,31 @@ class Login extends Component {
       username: this.state.username,
       password: this.state.password,
     };
-    this.props.login(userData, "/");
+    
+    if (userData.username === "") {
+      toast.error("Username cannot be empty");
+    }
+    else if (userData.password === "") {
+      toast.error("Password cannot be empty");
+    }
+    else {
+      this.props.login(userData, "/");
+    }
   };
+
+
+
   render() {
+
+    const keypressHandler = (e) => {
+      // press enter to submitt
+      if (e.charCode === 13) {
+        e.preventDefault();
+        this.onLoginClick();
+      }
+    }
+
+
     if (this.props.auth.isAuthenticated) {
       return <Redirect to="/stream" />
     } else return (
@@ -108,6 +131,7 @@ class Login extends Component {
                   placeholder="User name"
                   value={this.state.username}
                   onChange={this.onChange}
+                  onKeyPress={keypressHandler}
                 />
               </Form.Control>
             </Form.Field>
@@ -121,6 +145,7 @@ class Login extends Component {
                   placeholder="Password"
                   value={this.state.password}
                   onChange={this.onChange}
+                  onKeyPress={keypressHandler}
                 />
               </Form.Control>
             </Form.Field>

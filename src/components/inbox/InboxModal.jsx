@@ -76,7 +76,7 @@ function InboxModal (props){
             <div class="dropdown-menu animate__animated animate__fadeIn animate__faster" style={{minWidth: "250pt", marginBottom: "-8pt"}}>
               <div class="dropdown-content"style={menuDropDownStyle}>
                 <p>
-                  {"Waring, this action deletes all your inbox messages, this will remove people's old post from your stream"}
+                  {"Warning, this action deletes all your inbox messages, this will remove people's old post from your stream"}
                 </p>
               </div>
             </div>

@@ -11,6 +11,7 @@ import { signup } from "./SignupActions";
 import SignupButton from "./SignupButton";
 import { LoginPageIcon } from "../../styling/svgIcons";
 import { labelStyle } from "../../styling/StyleComponents.js";
+import { toast } from "react-toastify";
 
 var loginCardStyle = {
   borderRadius: "14pt",
@@ -87,10 +88,32 @@ class Signup extends Component {
       displayName: this.state.displayName,
       github: this.state.githubURL,
     };
-    this.props.signup(userData);
+
+
+    if (userData.username === "") {
+      toast.error("Username cannot be empty");
+    }
+    else if (userData.password === "") {
+      toast.error("Password cannot be empty");
+    }
+    else if (userData.displayName === "") {
+      toast.error("Display Name cannot be empty");
+    }
+    else {
+      this.props.signup(userData);
+    }
   };
 
   render() {
+
+    const keypressHandler = (e) => {
+      // press enter to submitt
+      if (e.charCode === 13) {
+        e.preventDefault();
+        this.onSignupClick();
+      }
+    }
+
     return (
       <Section>
         <Container className="animate__animated animate__fadeInUp animate_faster" style={loginCardStyle}>
@@ -111,6 +134,7 @@ class Signup extends Component {
                   placeholder="User name"
                   value={this.state.username}
                   onChange={this.onChange}
+                  onKeyPress={keypressHandler}
                 />
               </Form.Control>
             </Form.Field>
@@ -124,6 +148,7 @@ class Signup extends Component {
                   placeholder="Password"
                   value={this.state.password}
                   onChange={this.onChange}
+                  onKeyPress={keypressHandler}
                 />
               </Form.Control>
             </Form.Field>
@@ -137,6 +162,7 @@ class Signup extends Component {
                   placeholder="Display Name"
                   value={this.state.displayName}
                   onChange={this.onChange}
+                  onKeyPress={keypressHandler}
                 />
               </Form.Control>
             </Form.Field>
@@ -150,6 +176,7 @@ class Signup extends Component {
                   placeholder="Github URL"
                   value={this.state.githubURL}
                   onChange={this.onChange}
+                  onKeyPress={keypressHandler}
                 />
               </Form.Control>
             </Form.Field>
