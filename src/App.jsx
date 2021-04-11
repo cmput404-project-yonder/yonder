@@ -25,7 +25,7 @@ class App extends Component {
           <ToastContainer style={{margin: "2em", marginTop: "60pt", fontSize: "1.3em", width: "auto", width: "80%",maxWidth: "20em", }} hideProgressBar={true} newestOnTop={true} />
           <NavigationBar/>
           <Switch>
-            <div style={{paddingTop: "6em"}}>
+            <div style={{paddingTop: "8em"}}>
             <Page path="/signup" component={Signup} title="Signup"/>
             <Page path="/login" component={Login} title="Login"/>
             <Page path="/stream" component={Stream} title="Stream"/>
