@@ -84,7 +84,7 @@ class EditPostForm extends Component {
     if (file) {
       const reader = new FileReader();
       reader.onload = this.handleReaderLoaded.bind(this);
-      reader.readAsBinaryString(file);
+      reader.readAsDataURL(file);
     }
     this.setState({
       imageObj: file,
@@ -95,7 +95,7 @@ class EditPostForm extends Component {
   handleReaderLoaded = (readerEvt) => {
     let binaryString = readerEvt.target.result;
     this.setState({
-      imageContent: btoa(binaryString),
+      imageContent: (binaryString),
     })
   }
 
