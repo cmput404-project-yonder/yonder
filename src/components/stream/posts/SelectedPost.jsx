@@ -98,7 +98,7 @@ function DetailedPostList(props) {
   // 1. title, description, author, timestamp
   const TitleCard = () => {
     return (
-      <Card style={{...postStyle, marginTop: "80pt", marginBottom: "0pt"}}>
+      <Card style={{...postStyle, marginBottom: "0pt"}}>
         <Card.Content style={postContainerStyle}>
           {/* Title */}
           <Container style={signatureStyle}>
@@ -257,7 +257,6 @@ class SelectedPost extends React.Component {
 
 
   render() {
-      
     if (this.props.loading || !this.props.retrievedPost.author) {
         return (
             <div className="pageloader is-active">

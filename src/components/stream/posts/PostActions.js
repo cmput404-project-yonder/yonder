@@ -11,6 +11,9 @@ import {
   RETRIEVE_COMMENT_LIST_SUCCESS,
   RETRIEVE_COMMENT_LIST_ERROR,
   UPDATE_RETRIEVED_POST,
+  RETRIEVE_POSTLIKE_SUBMITTED,
+  RETRIEVE_POSTLIKE_ERROR,
+  RETRIEVE_POSTLIKE_SUCCESS,
 } from "./PostTypes";
 import { setAxiosAuthToken } from "../../../utils/Utils";
 
@@ -99,3 +102,41 @@ export const updateRetrivedPost = (newPost) => (dispatch) => {
   dispatch({type: UPDATE_RETRIEVED_POST, payload: newPost});
 }
 
+export const retrievePostLikes = (post, setterFunction) => (dispatch, getState) => {
+  const state = getState();
+
+  setAxiosAuthToken(state.auth.token);
+  dispatch({ type:  RETRIEVE_POSTLIKE_SUBMITTED});
+  axios
+    .get("/author/" + post.author.id + "/posts/" + post.id + "/likes/")
+    .then((response) => {
+      dispatch({ type: RETRIEVE_POST_SUCCESS, payload: response.data});
+      // debug
+      // console.log("retrievePostLikes - response data: ");
+      // console.log(post);
+      // console.log(response.data);
+      setterFunction(response.data);
+
+    })
+    .catch((error) => {
+      if (error.response) {
+
+        // handles specific status code
+        switch (error.response.status) {
+          case 404:
+            break;
+          default:
+            toast.error(JSON.stringify(error.response.data));
+            break;
+        }
+        dispatch({
+          type: RETRIEVE_POSTLIKE_ERROR,
+          errorData: error.response.data,
+        });
+      } else if (error.message) {
+        toast.error(JSON.stringify(error.message));
+      } else {
+        toast.error(JSON.stringify(error));
+      }
+    });
+}

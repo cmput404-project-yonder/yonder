@@ -1,4 +1,4 @@
-import { font, color } from "../components/stream/posts/styling";
+import { font, color } from "./ColorFontConfig";
 import { style } from "../components/profile/styling";
 
 export const categoriesStyle = {
@@ -11,22 +11,24 @@ export const footerButtonLayoutStyle = {
   width: "100%",
   display: "flex",
   justifyContent: "space-between",
-  height: "13pt",
-  paddingLeft: "3em",
-  paddingRight: "3em",
+  height: "28pt",
+  paddingLeft: "1.5em",
+  paddingRight: "1.5em",
 }
 
 export const postContentStyle = {
   marginLeft: "0.5em",
   marginRight: "0.5em",
-  paddingBottom: "0.1em",
+  paddingBottom: "2pt",
+  paddingTop: "3pt",
+  fontSize: "1em",
 }
 
 
 export const DescriptionStyle = {
   paddingBottom: "0.2em",
   color: color.baseLightGrey,
-  marginLeft: "0.7em",
+  marginLeft: "0.4em",
   // border: "dashed ", 
   // borderWidth: "0.1px",
   // borderRadius: "3pt",
@@ -46,14 +48,14 @@ export const cardStyle = {
   }
 
 export const postStyle = {
-    boxShadow: "0pt 0pt 8pt rgb(0,0,0,0.5)",
-    borderRadius: "6pt",
+    boxShadow: "0pt 0pt 8pt rgb(0,0,0,0.4)",
+    borderRadius: "7pt",
     backgroundColor: color.backgroundCreamLighter,
     marginBottom: "2em",
     marginTop: "0.5em",
     fontFamily: font.segoeUI,
     fontWeight: "350",
-    fontSize: "1.3em",
+    fontSize: "1.45em",
     color: color.baseBlack,
     display: "flex",
     flexDirection: "column",
@@ -165,7 +167,7 @@ export const newPostButtonStyle = {
     zIndex: "1",
     position: "fixed",
     right: "5%",
-    bottom: "5%",
+    bottom: "8%",
     display: "flex",
     gap: "2em",
     flexDirection: "column",
@@ -211,10 +213,12 @@ export const panelStyle = {
     display: "flex",
     justifyContent: "between",
     textAlign: "center",
-    paddingTop: "0.2em",
-    paddingBottom: "0em",
-    fontSize: "1.35em",
-    fontWeight: "350",
+    paddingTop: "0em",
+    paddingBottom: "2.5em",
+    marginTop: "-0.5em",
+    marginBottom: "-3em",
+    fontSize: "1.5em",
+    fontWeight: "400",
     paddingLeft: "1em",
     paddingRight: "1em",
   }
@@ -234,8 +238,9 @@ export const submittPanelStyle = {
 export const formContainerStyle = {
     boxShadow: "0pt 0pt 3pt #B1B1B1",
     borderRadius: "8pt",
-    marginLeft: "-1.2em",
-    marginRight: "-1.2em",
+    marginLeft: "1em",
+    marginRight: "1em",
+    marginTop: "1em",
     paddingTop: "1em",
     paddingBottom: "1em",
     paddingRight: "1.5em",
@@ -244,17 +249,19 @@ export const formContainerStyle = {
   }
   
 export const labelStyle = {
-    paddingTop: "0.1em",
+    paddingTop: "0em",
     paddingLeft: "0.5em",
     textAlign: "left",
     fontWeight: "400",
+    fontSize: "1.25em",
     color: color.baseLightGrey,
   }
 
 export const postTitleStyle = {
-    fontSize: "1.2em",
+    fontSize: "1.1em",
     fontWeight: "400",
-    marginLeft: "0.5em",
+    marginLeft: "0.4em",
+    textTransform: "capitalize",
   }
 
 export const formTitleStyle = {
@@ -275,7 +282,6 @@ export const postIconStyle = {
     scale: "70",
     style: {
       padding: "1em",
-      fill: color.postIcon,
     }
   }
 

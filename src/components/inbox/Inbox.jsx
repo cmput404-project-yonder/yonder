@@ -6,56 +6,90 @@ import { Columns, List, Container } from "react-bulma-components";
 
 import { Post, Follow, Like } from "./InboxItems";
 
+import { InboxEmptyIcon } from "../../styling/svgIcons";
+import { color } from "../../styling/ColorFontConfig";
+
+
 function Inbox(props) {
 
   const follows = props.inboxFollows.map((follow) => <Follow key={follow.displayName} follower={follow} />);
   const followList = () => {
-    return (
-      <div className="post-list animate__animated animate__fadeIn animate__faster">
-        <List hoverable>{follows}</List>
-      </div>
-    );
+    if (follows.length === 0) {
+      return (
+        <Container style={{textAlign: "center", marginRight: "1em", marginTop: "40%"}}>
+          <Container style={{fill: color.baseLightGrey}}>
+            <InboxEmptyIcon svgScale={"80"}/>  
+          </Container>
+          <p style={{fontSize: "2em", color: color.baseLightGrey}}>Empty</p>
+        </Container>
+      );
+    } else {
+      return (
+        <div className="post-list animate__animated animate__fadeIn animate__faster">
+          <List hoverable>{follows}</List>
+        </div>
+      );
+    }
   };
 
   const likes = props.inboxLikes.map((like) => <Like key={like.id} like={like} />);
   const likeList = () => {
-    return (
-      <div className="post-list animate__animated animate__fadeIn animate__faster">
-        <List hoverable>{likes}</List>
-      </div>
-    );
+
+    if (likes.length === 0) {
+      return (
+        <Container style={{textAlign: "center", marginRight: "1em", marginTop: "40%"}}>
+          <Container style={{fill: color.baseLightGrey}}>
+            <InboxEmptyIcon svgScale={"80"}/>  
+          </Container>
+          <p style={{fontSize: "2em", color: color.baseLightGrey}}>Empty</p>
+        </Container>
+      );
+    } else {
+      return (
+        <div className="post-list animate__animated animate__fadeIn animate__faster">
+          <List hoverable>{likes}</List>
+        </div>
+      );
+    }
   };
 
   const posts = props.inboxPosts.map((post) => <Post key={post.id} post={post} />);
   const postList = () => {
-    return (
-      <div className="post-list animate__animated animate__fadeIn animate__faster">
-        <List hoverable>{posts}</List>
-      </div>
-    );
+    if (posts.length === 0) {
+      return (
+        <Container style={{textAlign: "center", marginRight: "1em", marginTop: "40%"}}>
+          <Container style={{fill: color.baseLightGrey}}>
+            <InboxEmptyIcon svgScale={"80"}/>  
+          </Container>
+          <p style={{fontSize: "2em", color: color.baseLightGrey}}>Empty</p>
+        </Container>
+      );
+    } else {
+      return (
+        <div className="post-list animate__animated animate__fadeIn animate__faster">
+          <List hoverable>{posts}</List>
+        </div>
+      );
+    }
   };
 
   const RenderSelectedTab = () => {
     console.log("Hello")
     switch (props.selectedTab) {
       case "like":
-        console.log("Like")
         return likeList();
       case "follow":
-        console.log("F")
         return followList();
       case "post":
-        console.log("PPPP")
         return postList();
       default:
-        console.log("NOOO")
         break;
     }
   }
 
   return (
     <Columns centered>
-      <Columns.Column style={{height: "40em", overflowY: "scroll"}}>
+      <Columns.Column style={{height: "40em", overflowY: "scroll"}} className="hideScroll">
         <RenderSelectedTab />
       </Columns.Column>
     </Columns>

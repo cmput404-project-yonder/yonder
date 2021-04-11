@@ -1,11 +1,11 @@
 import React, { Component } from "react";
 import ReactMde from "react-mde";
-import { Form, Button, Card, Container } from "react-bulma-components";
+import { Form, Card, Container } from "react-bulma-components";
 import Markdown from "react-markdown";
 import ReactTags from "react-tag-autocomplete";
+import { toast } from "react-toastify";
 import "./react-tags.css";
 
-import CancelButton from "./buttons/CancelButton";
 import ConfirmButton from "./buttons/ConfirmButton";
 import DeleteButton from "./buttons/DeleteButton";
 import CheckBox from "./CheckBox";
@@ -14,25 +14,27 @@ import { TextIcon, ImageIcon, MarkdownIcon, ToolTipIcon,  } from "./buttons/post
 import { ImageUploadIcon } from "../../../styling/svgIcons";
 import { color } from "./styling";
 import PostTab from "./PostTab";
-import Dividor from "./Dividor"
 
 
 import { checkBoxLabelStyle, checkBoxStyle, checkMarkStyle, createPostHeaderStype, cardStyle, panelStyle, 
   tabStyle, submittPanelStyle, formContainerStyle, labelStyle, dividorStyle, formTitleStyle, postIconStyle } from "../../../styling/StyleComponents";
 
 
+var menuDropDownStyle = {
+  borderRadius: "5pt",
+  textAlign: "left",
+  borderWidth: "1pt",
+  padding: "1em",
+  border: "1pt solid" + color.baseLightGrey,
+  backgroundColor: "white",
+  color: color.baseLightGrey,
+}
+
 export const buttonLayoutStyle = {
   display: "flex",
   width: "0em",
   float: "right",
   marginRight: "10em",       // the width of two button.
-}
-
-var menuDropDownStyle = {
-  borderRadius: "6pt",
-  border: "1px solid #cfcccc",
-  textAlign: "center",
-  backgroundColor: "backgroundTooltip",
 }
 
 class EditPostForm extends Component {
@@ -173,8 +175,19 @@ class EditPostForm extends Component {
       categories: categories,
     };
 
-    this.props.updatePost(editedPost);
-    this.props.setEditModalIsOpen(false);
+    if (editedPost.title === "") {
+      toast.error("title cannot be empty");
+    }
+    else if (editedPost.description === "") {
+      toast.error("description cannot be empty");
+    }
+    else if (editedPost.content === "") {
+      toast.error("content cannot be empty");
+    }
+    else {
+      this.props.updatePost(editedPost);
+      this.props.setEditModalIsOpen(false);
+    }
   }
 
   removePost() {
@@ -193,8 +206,12 @@ class EditPostForm extends Component {
   }
 
   onAddition(cat) {
-    const categories = [].concat(this.state.categories, cat);
-    this.setState({ categories });
+    if (this.state.categories.length >= 5) {
+      toast.error("You can't add more tags");
+    } else {
+      const categories = [].concat(this.state.categories, cat);
+      this.setState({ categories });      
+    }
   }
 
   render() {
@@ -209,7 +226,7 @@ class EditPostForm extends Component {
           value={this.state.textContent}
           onChange={this.onChange}
           style={{
-            height: `245px`,
+            height:`246.3px`,
           }}
         />
       );
@@ -234,11 +251,11 @@ class EditPostForm extends Component {
 
     const FileUploadForm = () => {
       return (
-        <div className="file is-centered is-boxed">
-          <label className="file-label"style={{width: "100%", height: "38pt"}}>
-            <input className="file-input" type="file" name="resume" onChange={this.handleFileSelected}/>
-            <span className="file-cta">
-              <div style={{margin: "auto", marginTop: "-6pt"}}>
+        <div class="file is-centered is-boxed">
+          <label class="file-label"style={{width: "100%", height: "38pt"}}>
+            <input class="file-input" type="file" name="resume" onChange={this.handleFileSelected}/>
+            <span class="file-cta" style={{backgroundColor: "transparent", border: "none"}}>
+              <div style={{margin: "auto", marginTop: "-8pt"}}>
               <ImageUploadIcon svgScale={"35"} fill={color.baseBlack}/>
               </div>
             </span>
@@ -251,8 +268,8 @@ class EditPostForm extends Component {
       if (this.state.imageContent !== "") {
         return (
           <img 
-            src={this.state.imageContent}
-            style={{borderRadius: "6pt", margin: "auto", maxHeight: "15em", minHeight: "15em", objectFit: "cover"}} 
+            src={ "image/png" ? `data:image/png;base64,${this.state.imageContent}` : `data:image/jpeg;base64,${this.state.content}` } 
+            style={{borderRadius: "6pt", margin: "auto", objectFit: "cover"}} 
           />
         )
       }
@@ -261,11 +278,13 @@ class EditPostForm extends Component {
     const imageUploader = () => {
       return (
         <Form.Control>
-          <Container style={{display: "flex", flexDirection: "column", border: "1px solid #d1d1d1", borderRadius: "4px", minHeight: "17em", maxHeight: "22em"}}>
+          
+          <Container style={{backgroundColor: "#F9F9F9", display: "flex", flexDirection: "column", border: "1px solid #d1d1d1", borderRadius: "6pt", height: "246.3px", padding: "0.5em"}}>
           <FileUploadForm/>
-          <Container style={{display: "flex", padding: "1em", width: "100%"}}>
+          <Container style={{backgroundColor: "white", display: "flex", width: "100%", border: "1px solid #d1d1d1", borderRadius: "6pt", overflowY: "scroll"}} className="hideScroll">
           {imagePreview()}
           </Container>
+          
           </Container>
           
         </Form.Control>
@@ -333,22 +352,27 @@ class EditPostForm extends Component {
       )
     }
 
-    const DropDown = () => {
+    const ToolTip = () => {
       return (
-        <div className="dropdown is-hoverable" style={{ float:"left", marginTop: "1.8em" }}>
-          <div className="dropdown-trigger" >
+        <Container style={checkBoxStyle}>
+        <div class="dropdown is-hoverable is-up" >
+          <div class="dropdown-trigger" >
             <span
-              style={{backgroundColor: "transparent", border: "none", fill: color.baseRed, width: "4em", padding: "0"}}
+              style={{backgroundColor: "transparent", border: "none", fill: color.baseRed, padding: "0"}}
             >
             <ToolTipIcon svgScale={"25"} />
             </span>
           </div>
-          <div className="dropdown-menu animate__animated animate__fadeIn animate__faster" style={{minWidth: "250pt", marginRight: "-5pt"}}>
-            <div className="dropdown-content"style={menuDropDownStyle}>
-            <strong>Friends Only</strong> will only allow friends to view this post. <br></br><strong>Unlisted</strong> will allow this post to only show up on the stream of this post author.
+          <div class="dropdown-menu animate__animated animate__fadeIn animate__faster" style={{minWidth: "250pt", marginBottom: "6pt", marginLeft: "-10pt"}}>
+            <div class="dropdown-content"style={menuDropDownStyle}>
+              <p>
+                {"<Friends> Only allows only friends to view this post."} <br></br>
+                {"<Unlisted> make this post only visible to you."}
+              </p>
             </div>
           </div>
-        </div>      
+        </div>    
+        </Container>  
       )
     }
   
@@ -356,7 +380,7 @@ class EditPostForm extends Component {
     const PostSubmitPanel = () => {
       return (
         <Container style={submittPanelStyle}>
-          <DropDown />
+          <ToolTip />
           <VisibilityCheckBox />
           <UnlistCheckBox/>
           <PostFormButtonPanel/>
@@ -366,35 +390,37 @@ class EditPostForm extends Component {
 
     return (
       <Card style={cardStyle} className="animate__animated animate__slideInUp">
-        <Container style={createPostHeaderStype}>
+        {/* <Container style={createPostHeaderStype}>
           <Container style={postIconStyle.style}>{postIcons()}</Container>
-        </Container>
+        </Container> */}
         <Container style={formContainerStyle}>
           <Form.Field>
-            <Form.Label style={labelStyle}>Title</Form.Label>
+            <Form.Label style={labelStyle}>Title <span style={{color: color.baseRed}}>*</span></Form.Label>
             <Form.Control>
               <Form.Textarea
                   onKeyPress={(e) => {if (e.key === "Enter") e.preventDefault();}}
-                  maxLength="80"
+                  maxLength="30"
                   cols={1}
                   name="title"
                   value={this.state.title}
                   style={formTitleStyle}
                   onChange={this.onChange}
+                  placeholder={"Add title"}
               />
             </Form.Control>
           </Form.Field>
           <Form.Field>
-            <Form.Label style={labelStyle}>Description</Form.Label>
+            <Form.Label style={labelStyle}>Description <span style={{color: color.baseRed}}>*</span></Form.Label>
             <Form.Control>
               <Form.Textarea
                 onKeyPress={(e) => {if (e.key === "Enter") e.preventDefault();}}
-                maxLength="120"
+                maxLength="50"
                 cols={1}
                 name="description"
                 value={this.state.description}
                 style={formTitleStyle}
                 onChange={this.onChange}
+                placeholder={"Add Description"}
               />
             </Form.Control>
           </Form.Field>
@@ -412,16 +438,14 @@ class EditPostForm extends Component {
             </Form.Control>
           </Form.Field>
           <Form.Field>
-            <Form.Label style={labelStyle}>Content</Form.Label>
+            <Form.Label style={labelStyle}>Content <span style={{color: color.baseRed}}>*</span></Form.Label>
             <Form.Control>
               {this.state.selectedTab === "text" ? textEditor() : null}
               {this.state.selectedTab === "markdown" ? markdownEditor() : null}
               {this.state.selectedTab === "image" ? imageUploader() : null}
             </Form.Control>
           </Form.Field>
-          <Dividor style={dividorStyle}/>
           <SelectionPanel/>
-          <Dividor style={dividorStyle}/>
         </Container>
         <PostSubmitPanel/>
       </Card>

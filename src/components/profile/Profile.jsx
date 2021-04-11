@@ -6,15 +6,16 @@ import { Modal, Container, Columns, Section } from "react-bulma-components";
 
 import PostList from "../stream/posts/PostList";
 import ProfileDetail from "./ProfileDetail";
-import { retrieveAuthor, retrieveAuthorPosts, sendFollow, checkFollowing, editProfile } from "./ProfileActions";
+import { retrieveAuthor, retrieveAuthorPosts, sendFollow, deleteFollow, checkFollowing, editProfile } from "./ProfileActions";
 
 // buttons
 import FollowButton from "./buttons/FollowButton";
+import DeleteButton from "../stream/posts/buttons/DeleteButton";
 import EditProfileButton from "./buttons/EditButton";
 import ProfileEdit from "./ProfileEdit";
 // import FriendButton from "./buttons/FriendButton";
 
-import { color } from "./styling";
+import { color } from "../../styling/ColorFontConfig";
 import Dividor from "./Dividor";
 import { dividorStyle } from "../../styling/StyleComponents";
 
@@ -60,7 +61,8 @@ class Profile extends React.Component {
     super(props);
 
     this.state = {
-      editProfileModalIsOpen: false
+      editProfileModalIsOpen: false,
+      isFollowing: false
     };
   }
 
@@ -71,10 +73,13 @@ class Profile extends React.Component {
 
     this.props.retrieveAuthor(params.id);
     this.props.retrieveAuthorPosts(params.id);
-    this.props.checkFollowing(params.id)
+    this.props.checkFollowing(params.id);
   }
+
   render() {
-    var isFollowing = this.props.isFollowing;
+    if (this.state.isFollowing !== this.props.isFollowing) {
+      this.setState({ isFollowing: this.props.isFollowing });
+    }
 
     const clickFollow = () => {
       if (this.props.loggedInAuthor.id === undefined) {
@@ -83,38 +88,40 @@ class Profile extends React.Component {
       } else {
         const status_code = this.props.sendFollow(this.props.retrievedAuthor);
         if (status_code === 201) {
-          isFollowing = true;
-        }        
+          this.setState({ isFollowing: true });
+        }
       }
-
-
     };
+
+    const clickUnfollow = () => {
+      this.props.deleteFollow(this.props.retrievedAuthor);
+      this.setState({ isFollowing: false });
+    }
 
     const showEditModal = (modalState) => {
       this.setState({editProfileModalIsOpen: modalState})
     };
 
-    if (this.props.loading) {
+    const followButton = () => {
+      return <FollowButton onClick={() => clickFollow()}/>
+    }
+
+    const unfollowButton = () => {
       return (
-        <div className="pageloader is-active animate__animated animate__fadeIn animate__faster">
-          <span className="title">Loading</span>
-        </div>
-      );
+        <DeleteButton action={clickUnfollow}
+        />
+      )
     }
 
     const otherAuthor = () => {
-      if (!isFollowing) {
-        return (
-          <Container>
+      return (
+        <Container>
           <Dividor style={dividorStyle}/>
           <Container style={buttonLayoutStyle}>
-                <FollowButton onClick={() => clickFollow()}/>
+            {this.state.isFollowing ? unfollowButton() : followButton()}
           </Container>
-          </Container>
-        );
-      } else {
-        return null;
-      }
+        </Container>
+      );
     };
 
     const loggedAuthor = () => {
@@ -135,6 +142,14 @@ class Profile extends React.Component {
           </Container>
       );
     };
+
+    if (this.props.loading) {
+      return (
+        <div class="pageloader is-active animate__animated animate__fadeIn animate__faster">
+          <span class="title">Loading</span>
+        </div>
+      );
+    }
 
     return (
       <Section >
@@ -184,4 +199,11 @@ const mapStateToProps = (state) => ({
   isFollowing: state.profile.isFollowing
 });
 
-export default connect(mapStateToProps, { retrieveAuthorPosts, retrieveAuthor, sendFollow, checkFollowing, editProfile })(withRouter(Profile));
+export default connect(mapStateToProps, {
+  retrieveAuthorPosts,
+  retrieveAuthor,
+  sendFollow,
+  deleteFollow,
+  checkFollowing,
+  editProfile
+})(withRouter(Profile));

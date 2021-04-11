@@ -2,7 +2,8 @@ var color = {
     baseBlack: "#505050",
     baseWhite: "white",
     baseRed: "#D18D8D",
-    baseLightGrey: "#AAAAAA",
+    baseLightGrey: "#8F8F8F",
+    baseBackgroundDark: "#373737",
     buttonGreen:"#99D4B4",
     buttonRed: "#DD7272",
     buttonOrange: "#F68444",
@@ -10,9 +11,10 @@ var color = {
     buttonBlue: "#54B2E9",
     buttonIndigo: "#7D99F5",
     postIcon: "#8fc9eb",
-    backgroundGrey: "#fefefe",
-    backgroundCream: "#F9F5EF",
-    backgroundCreamLighter: "#FFFAF1",
+    backgroundGrey: "#FFFFFF",
+    backgroundCream: "#FEF7EF",
+    backgroundCreamLighter: "#FFF3DC",
+    textLightGreyOnCream: "#9B9285",
 }
 
 var font = {

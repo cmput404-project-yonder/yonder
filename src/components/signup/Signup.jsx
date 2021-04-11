@@ -15,7 +15,7 @@ var loginCardStyle = {
   borderRadius: "8pt",
   width: "630pt",
   height: "340pt",
-  marginTop: "150pt",
+  marginTop: "80pt",
   boxShadow: "0pt 0pt 8pt rgb(0,0,0,0.5)",
   backgroundColor: color.backgroundCream,
 }
@@ -63,6 +63,7 @@ class Signup extends Component {
       githubURL: "",
     };
   }
+
   onChange = (e) => {
     this.setState({ [e.target.name]: e.target.value });
   };

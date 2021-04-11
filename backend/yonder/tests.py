@@ -63,7 +63,7 @@ class AuthorAccountTests(APITestCase):
             "github": "https://github.com/newGithubLink",
         }
         url = reverse('author_detail', args=[self.author.id])
-        response = self.client.put(
+        response = self.client.post(
             url,
             data=data,
             format='json'
@@ -91,6 +91,65 @@ class AuthorAccountTests(APITestCase):
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
+class PublicPostTests(APITestCase):
+    def setUp(self):
+        self.credentials = {
+            'username': 'testUser1',
+            'password': 'testPassword1'
+        }
+        self.testAuthor = {
+            "displayName": "testLogin",
+            "github": "https://github.com/cmput404-project-yonder/yonder",
+            "host": "http://testserver.com"
+        }
+        user = User.objects.create_user(**self.credentials)
+        self.author = Author.objects.create(**self.testAuthor, user=user)
+
+        credBytes= base64.b64encode(f'{self.credentials["username"]}:{self.credentials["password"]}'.encode())
+        self.client.credentials(HTTP_AUTHORIZATION='Basic ' + credBytes.decode())
+
+        self.post1 = {
+            "title": "A public post",
+            "description": "public post",
+            "contentType": "text/plain",
+            "content": "Everyone can see this",
+            "author": self.testAuthor,
+            "categories": ["web", "tutorial"],
+            "visibility": "PUBLIC",
+            "unlisted": False
+        }
+        self.post2 = {
+            "title": "Another public post",
+            "description": "public post",
+            "contentType": "text/plain",
+            "content": "Everyone can also see this",
+            "author": self.testAuthor,
+            "categories": ["web", "tutorial"],
+            "visibility": "PUBLIC",
+            "unlisted": False
+        }
+        self.post3 = {
+            "title": "A private post",
+            "description": "private post",
+            "contentType": "text/plain",
+            "content": "Not everyone can see this",
+            "author": self.testAuthor,
+            "categories": ["web", "tutorial"],
+            "visibility": "PRIVATE",
+            "unlisted": False
+        }
+
+        def test_get(self):
+            #Create two public posts and a private post
+            post_url = reverse('posts', args=[self.author.id])
+            self.client.post(post_url, data=self.post1, format='json')
+            self.client.post(post_url, data=self.post2, format='json')
+            self.client.post(post_url, data=self.post3, format='json')
+
+            get_url = reverse('public_posts')
+            response = self.client.get(get_url)
+            #Returns two public posts that were created
+            self.assertEqual(len(response), 2)
 
 class PostTests(APITestCase):
     def setUp(self):
@@ -205,9 +264,11 @@ class FollowerTests(APITestCase):
         response = self.client.put(url, data=self.followJSON1, format='json')
 
         url = reverse('followers', args=[self.author1.id, self.author2.id])
-        response = self.client.delete(url)
+        response = self.client.delete(url, data=self.followJSON1, format='json')
 
+        #tests if the delete was successful
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
+        #check if deleted follow does not exist
         self.assertEqual(0, AuthorFollower.objects.filter(author=self.author1.id).count())
 
     def test_check_not_follower(self):

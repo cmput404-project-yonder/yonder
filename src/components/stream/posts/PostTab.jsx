@@ -8,8 +8,8 @@ tab components:
 */
 
 import React from "react";
-import { Container } from "react-bulma-components";
-import { color } from "./styling";
+import { Container, Button } from "react-bulma-components";
+import { color } from "../../../styling/ColorFontConfig";
 
 // styling
 
@@ -20,7 +20,14 @@ var tabStyle = {
 var activeStyle = Object.assign (
     {}, tabStyle,
     {
-        color: color.baseRed,
+        color: color.buttonRed,
+        border: "solid",
+        borderWidth: "1.3pt",
+        borderRadius: "6pt",
+        backgroundColor: "transparent",
+        fontSize: "1em",
+        height: "1.9em",
+        cursor: "pointer",
     }
 )
 
@@ -28,6 +35,11 @@ var inactiveStyle = Object.assign (
     {}, tabStyle,
     {
         color: color.baseLightGrey,
+        border: "none",
+        backgroundColor: "transparent",
+        fontSize: "1em",
+        height: "1.9em",
+        cursor: "pointer",
     }
 )
 
@@ -35,7 +47,7 @@ class PostTab extends React.Component {
     render() {
         return (
             <Container style={this.props.style}>
-                <a style={this.props.active ? activeStyle : inactiveStyle}><p onClick={this.props.action}>{this.props.text}</p></a>
+                <button type="button" style={this.props.active ? activeStyle : inactiveStyle}><p onClick={this.props.action}>{this.props.text}</p></button>
             </Container>
         );
     }

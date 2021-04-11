@@ -27,14 +27,14 @@ var naviBarStyle = {
   height: "auto",
   backgroundColor: "transparent",
   zIndex: "5",
-  paddingLeft: "1em",
-  paddingRight: "1em",
-  paddingTop: "0.5em",
-  paddingBottom: "0.5em",
+  paddingLeft: "2em",
+  paddingRight: "2em",
+  paddingTop: "1em",
+  paddingBottom: "1em",
 }
 
 var menuDropDownStyle = {
-  borderRadius: "6pt",
+  borderRadius: "10pt",
   textAlign: "center",
   backgroundColor: color.backgroundCreamLighter,
 }
@@ -42,9 +42,9 @@ var menuDropDownStyle = {
 var menuDropDownContentStyle = {
   display: "flex",
   flexDirection: "column",
-  marginTop: "1em",
-  marginBottom: "1em",
-  gap: "1em",
+  marginTop: "0.5em",
+  marginBottom: "0.5em",
+  gap: "0.9em",
 }
 
 var brandStyle = {
@@ -53,8 +53,9 @@ var brandStyle = {
 }
 
 var meunButtonStyle = {
-  float: "right",
-  margin: "auto"
+  position: "fixed",
+  right: "5%",
+  marginRight: "-2pt",
 }
 
 function NavigationBar(props) {
@@ -121,12 +122,12 @@ function NavigationBar(props) {
 
   const DropDown = () => {
     return (
-      <div className="dropdown is-hoverable is-right ">
-        <div className="dropdown-trigger" >
+      <div class="dropdown is-hoverable is-right">
+        <div class="dropdown-trigger" >
           <MenuButton/>
         </div>
-        <div className="dropdown-menu animate__animated animate__fadeIn animate__faster" style={{minWidth: "55pt", marginRight: "-5pt"}}>
-          <div className="dropdown-content"style={menuDropDownStyle}>
+        <div class="dropdown-menu animate__animated animate__fadeIn animate__faster" style={{minWidth: "63pt", marginRight: "-5pt"}}>
+          <div class="dropdown-content"style={menuDropDownStyle}>
             <DropDownContent/>
           </div>
         </div>
@@ -138,7 +139,7 @@ function NavigationBar(props) {
     <div style={naviBarStyle}>
       <Container style={brandStyle}>
         <a href = '/'>
-        <YonderLogo svgScale="55"/>
+        <YonderLogo svgScale="70"/>
         </a>
       </Container>
       <Container style={meunButtonStyle}>

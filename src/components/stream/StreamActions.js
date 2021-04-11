@@ -13,6 +13,9 @@ import {
   RETRIEVE_INBOX_SUBMITTED,
   RETRIEVE_INBOX_ERROR,
   RETRIEVE_INBOX_SUCCESS,
+  CLEAR_INBOX_SUBMITTED,
+  CLEAR_INBOX_ERROR,
+  CLEAR_INBOX_SUCCESS,
   RETRIEVE_POSTS_SUBMITTED,
   RETRIEVE_POSTS_SUCCESS,
   RETRIEVE_POSTS_ERROR,
@@ -134,13 +137,38 @@ export const retrieveInbox = () => (dispatch, getState) => {
     .get("/author/" + authorId + "/inbox/")
     .then((response) => {
       dispatch({ type: RETRIEVE_INBOX_SUCCESS, payload: response.data });
-      console.log(response.data);
     })
     .catch((error) => {
       if (error.response) {
         toast.error(JSON.stringify(error.response.data));
         dispatch({
           type: RETRIEVE_INBOX_ERROR,
+          errorData: error.response.data,
+        });
+      } else if (error.message) {
+        toast.error(JSON.stringify(error.message));
+      } else {
+        toast.error(JSON.stringify(error));
+      }
+    });
+};
+
+export const clearInbox = () => (dispatch, getState) => {
+  const state = getState();
+  const authorId = state.auth.author.id;
+
+  setAxiosAuthToken(state.auth.token);
+  dispatch({ type: CLEAR_INBOX_SUBMITTED });
+  axios
+    .delete("/author/" + authorId + "/inbox/")
+    .then((response) => {
+      dispatch({ type: CLEAR_INBOX_SUCCESS });
+    })
+    .catch((error) => {
+      if (error.response) {
+        toast.error(JSON.stringify(error.response.data));
+        dispatch({
+          type: CLEAR_INBOX_ERROR,
           errorData: error.response.data,
         });
       } else if (error.message) {
@@ -222,9 +250,9 @@ export const likePost = (post) => (dispatch, getState) => {
   {...author,
     "type": "author",
     "id": author.id,
-    "url": author.host + "author/" + author.id + "/",
+    "url": author.host + "api/author/" + author.id,
   };
-  likedPost["object"] = likedPost["author"]["url"] + "/posts/" + post.id + "/";
+  likedPost["object"] = post.author.host + "api/author/" + post.author.id + "/posts/" + post.id + "/";
   likedPost["host"] = post.author.host;
 
   dispatch({ type: LIKE_POST_SUBMITTED });
@@ -235,11 +263,25 @@ export const likePost = (post) => (dispatch, getState) => {
     })
     .catch((error) => {
       if (error.response) {
-        toast.error(JSON.stringify(error.response.data));
+
+        // handles specific status code
+        switch (error.response.status) {
+          case 409:
+            toast.error("You already liked this post");
+            break;
+          case 404:
+            toast.error("Author have deleted this post");
+            break;
+          default:
+            toast.error(JSON.stringify(error.response.data));
+            break;
+        }
+
         dispatch({
           type: LIKE_POST_ERROR,
           errorData: error.response.data,
         });
+
       } else if (error.message) {
         toast.error(JSON.stringify(error.message));
       } else {

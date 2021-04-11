@@ -13,6 +13,7 @@ import json
 
 from .models import Post, Author, Comment, RemoteNode, Like
 from .serializers import *
+from .signals import check_remote_follow
 
 
 class login(generics.GenericAPIView):
@@ -123,15 +124,23 @@ class author_detail(generics.RetrieveUpdateDestroyAPIView):
         data = serializer.data
         data["url"] = author.get_absolute_url()
         return Response(serializer.data)
-
+    
     @swagger_auto_schema(tags=['authors'])
-    def put(self, request, *args, **kwargs):
+    def post(self, request, *args, **kwargs):
         return self.update(request, *args, **kwargs)
 
     @swagger_auto_schema(tags=['authors'])
     def delete(self, request, *args, **kwargs):
         return self.destroy(request, *args, **kwargs)
 
+class public_posts(generics.ListAPIView):
+    queryset = posts = Post.objects.filter(visibility='PUBLIC')
+    serializer_class = PostSerializer
+    permission_classes = [IsAuthenticated]
+    
+    @swagger_auto_schema(tags=['public_posts'])
+    def get(self, request, *args, **kwargs):
+        return self.list(request, *args, **kwargs)
 
 class posts(generics.ListCreateAPIView):
     serializer_class = PostSerializer
@@ -248,10 +257,6 @@ class author_followers_detail(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticatedOrReadOnly]
 
     def check_following(self, author_id, follower_id):
-        author_followers = AuthorFollower.objects.filter(author=author_id)
-        for af in author_followers:
-            if af.follower["id"] == str(follower_id):
-                return True
 
         return False
 
@@ -279,7 +284,6 @@ class author_followers_detail(viewsets.ModelViewSet):
                 json=request.data,
                 headers={"content-type": "application/json"}
             )
-            print(url, response.text, request.data)
             return Response(status=response.status_code)
         except RemoteNode.DoesNotExist:
             return Response("You are not allowed in the cool club", status=status.HTTP_401_UNAUTHORIZED)
@@ -287,16 +291,45 @@ class author_followers_detail(viewsets.ModelViewSet):
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
     def retrieve(self, request, author_id, follower_id):
-        if self.check_following(author_id, follower_id):
-            return Response(status=status.HTTP_200_OK)
+        try:
+            author = Author.objects.get(pk=author_id)
+            author_followers = AuthorFollower.objects.filter(author=author)
+            for af in author_followers:
+                if af.follower["id"] == str(follower_id):
+                    return Response(status=status.HTTP_200_OK)
+        except Author.DoesNotExist:
+            # handle remote follower
+            remote_nodes = RemoteNode.objects.all()
+            for remote_node in remote_nodes:
+                theirFollower = {
+                    "host": remote_node.host,
+                    "id": author_id
+                }
+                ourAuthor = {
+                    "id": follower_id
+                }
+                if check_remote_follow(theirFollower, ourAuthor):
+                    return Response(status=status.HTTP_200_OK)
 
         return Response(status=status.HTTP_404_NOT_FOUND)
 
     def destroy(self, request, author_id, follower_id):
-        author_follower = get_object_or_404(AuthorFollower, author=author_id, follower__id=follower_id)
-        author_follower.delete()
+        try:
+            author_follower = AuthorFollower.objects.get(author=author_id, follower__id=follower_id)
+            author_follower.delete()
+            return Response(status=status.HTTP_204_NO_CONTENT)
+        except AuthorFollower.DoesNotExist:
+            # handle remote follower
+            remote_nodes = RemoteNode.objects.all()
+            for remote_node in remote_nodes:
+                node = RemoteNode.objects.get(host=remote_node.host)
+                url = node.host + "api/author/" + author_id + "/followers/" + follower_id + "/"
+                response = requests.delete(url,
+                    auth=requests.models.HTTPBasicAuth(remote_node.our_user, remote_node.our_password),
+                )
+                return Response(status=response.status_code)
 
-        return Response(status=status.HTTP_204_NO_CONTENT)
+        return Response(status.HTTP_404_NOT_FOUND)
 
     @swagger_auto_schema(tags=['followers'])
     def get(self, request, *args, **kwargs):
@@ -341,7 +374,7 @@ class inbox(generics.GenericAPIView):
         try:
             # handle local author
             inbox = Inbox.objects.get(author_id=kwargs["author_id"])
-            
+
             if request.data["type"] == "like":
                 existing_like = Like.objects.all().filter(author__id=request.data["author"]["id"], object_url=request.data["object"])
                 if len(existing_like) != 0:
@@ -354,7 +387,7 @@ class inbox(generics.GenericAPIView):
                 like_serializer = LikeSerializer(data=formated_data)
                 if like_serializer.is_valid():
                     like_serializer.save()
-                
+
                 inbox_data = {
                     "type": "like",
                     "author": request.data["author"],
@@ -365,7 +398,7 @@ class inbox(generics.GenericAPIView):
             else:
                 inbox.items.append(request.data)
                 inbox.save()
-                
+
             return Response(status=status.HTTP_201_CREATED)
         except Inbox.DoesNotExist:
             # Handle follower being on remote server
