@@ -1,12 +1,16 @@
 import React, { useState } from "react";
+import { connect } from "react-redux";
+import { withRouter } from "react-router-dom";
 import { Card, Container } from "react-bulma-components";
 import { color, font } from "../../styling/ColorFontConfig";
 import Inbox from "./Inbox";
-import { cardStyle } from "../../styling/StyleComponents";
+import { cardStyle, tabStyle, panelStyle, checkBoxStyle } from "../../styling/StyleComponents";
 
 import PostTab from "../stream/posts/PostTab";
-import { panelStyle, tabStyle } from "../../styling/StyleComponents";
+import DeleteButton from "../stream/posts/buttons/DeleteButton";
+import { clearInbox } from "../stream/StreamActions";
 
+// local styling
 var shadowDividorStyle = {
     border:"none",
     width: "100%",
@@ -15,6 +19,16 @@ var shadowDividorStyle = {
     margin: "-40pt auto -15pt",
     backgroundColor: color.backgroundCreamLighter,
 }
+
+var menuDropDownStyle = {
+    borderRadius: "5pt",
+    textAlign: "left",
+    borderWidth: "1pt",
+    padding: "1em",
+    border: "1pt solid" + color.baseLightGrey,
+    backgroundColor: "white",
+    color: color.baseLightGrey,
+  }
 
 function InboxModal (props){
     const [tabSelected, setTabSelected] = useState("like")
@@ -34,21 +48,45 @@ function InboxModal (props){
             break
         }
     }
-    
+
     const SelectionPanel = () => {
-    // custom selection tab
-    // text, markdown, image
-    return (
-        <Container style={{...panelStyle, paddingBottom: "0.25em"}}>
-            <PostTab style={tabStyle} text="Like" active={tabSelected === "like"} action={() => selectTab("like")}/>
-            <PostTab style={tabStyle} text="Follow" active={tabSelected === "follow"} action={() => selectTab("follow")}/>
-            <PostTab style={tabStyle} text="Post"active={tabSelected === "post"} action={() => selectTab("post")}/>
-        </Container>  
-    )
+        // custom selection tab
+        // text, markdown, image
+        return (
+            <Container style={{...panelStyle, paddingBottom: "0.25em", marginRight: "6em"}}>
+                <PostTab style={tabStyle} text="Like" active={tabSelected === "like"} action={() => selectTab("like")}/>
+                <PostTab style={tabStyle} text="Follow" active={tabSelected === "follow"} action={() => selectTab("follow")}/>
+                <PostTab style={tabStyle} text="Post"active={tabSelected === "post"} action={() => selectTab("post")}/>
+            </Container>  
+        )
     }
 
+    
+    const ToolTip = () => {
+        return (
+          <Container style={checkBoxStyle}>
+          <div class="dropdown is-hoverable is-up is-right" >
+            <div class="dropdown-trigger" >
+              <span
+                style={{backgroundColor: "transparent", border: "none", fill: color.baseRed, padding: "0"}}
+              >
+              <DeleteButton action={() => props.clearInbox()}/>
+              </span>
+            </div>
+            <div class="dropdown-menu animate__animated animate__fadeIn animate__faster" style={{minWidth: "250pt", marginBottom: "-8pt"}}>
+              <div class="dropdown-content"style={menuDropDownStyle}>
+                <p>
+                  {"Waring, this action deletes all your inbox messages, this will remove people's old post from your stream"}
+                </p>
+              </div>
+            </div>
+          </div>    
+          </Container>  
+        )
+    }  
+
     return (
-        <Card style={{...cardStyle, backgroundColor: color.backgroundCreamLighter, width: "420pt", height: "440pt"}} className="animate__animated animate__slideInDown">
+        <Card style={{...cardStyle, backgroundColor: color.backgroundCreamLighter, width: "420pt", height: "442pt"}} className="animate__animated animate__slideInDown">
             
             {/* <Container style={inboxIconStyle}>
                 <InboxModalIcon svgScale={"75"}/>
@@ -57,16 +95,24 @@ function InboxModal (props){
                 <p style={inboxTitleStyle}>Inbox</p>
             </Container> */}
             <hr style={{...shadowDividorStyle, marginTop: "-3.2em", backgroundColor: "transparent"}}></hr>
+            
             <Card.Content style={{marginTop: "0.8em", marginBottom: "3.2em"}}>
                 <Inbox selectedTab={tabSelected}/> 
             </Card.Content>
             <hr style={{...shadowDividorStyle, transform: "rotate(180deg)", backgroundColor: "transparent"}}></hr>
             <div style={{marginTop: "-3.7em"}}>
-            <SelectionPanel/>
+            <Container>
+                <SelectionPanel/>
+            </Container>
+            <Container style={{float: "right", marginTop: "-26pt", marginRight: "3em"}}>
+                <ToolTip/>
+            </Container>
             </div>
         </Card>
     )
 }
 
+const mapStateToProps = (state) => ({
+});
 
-export default InboxModal;
+export default connect(mapStateToProps, { clearInbox })(withRouter(InboxModal));

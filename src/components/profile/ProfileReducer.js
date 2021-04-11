@@ -9,6 +9,9 @@ import {
   SEND_FOLLOW_SUBMITTED,
   SEND_FOLLOW_ERROR,
   SEND_FOLLOW_SUCCESS,
+  DELETE_FOLLOW_SUBMITTED,
+  DELETE_FOLLOW_ERROR,
+  DELETE_FOLLOW_SUCCESS,
   CHECK_FOLLOW_SUBMITTED,
   CHECK_FOLLOW_ERROR,
   CHECK_FOLLOW_SUCCESS,
@@ -31,6 +34,7 @@ export const profileReducer = (state = initialState, action) => {
     case CHANGE_PROFILE_SUBMITTED:
     case RETRIEVE_AUTHOR_POSTS_SUBMITTED:
     case SEND_FOLLOW_SUBMITTED:
+    case DELETE_FOLLOW_SUBMITTED:
     case CHECK_FOLLOW_SUBMITTED:
     case RETRIEVE_AUTHOR_SUBMITTED:
       return {
@@ -38,19 +42,17 @@ export const profileReducer = (state = initialState, action) => {
         error: "",
         loading: true,
       };
-
     case CHANGE_PROFILE_ERROR:
     case RETRIEVE_AUTHOR_POSTS_ERROR:
     case RETRIEVE_AUTHOR_ERROR:
     case SEND_FOLLOW_ERROR:
+    case DELETE_FOLLOW_ERROR:
     case CHECK_FOLLOW_ERROR:
       return {
         ...state,
         error: action.errorData,
         loading: false,
       };
-
-    
     case RETRIEVE_AUTHOR_SUCCESS:
       return {
         ...state,
@@ -71,6 +73,13 @@ export const profileReducer = (state = initialState, action) => {
         error: "",
         loading: false,
       };
+    case DELETE_FOLLOW_SUCCESS:
+      return {
+        ...state,
+        error: "",
+        isFollowing: false,
+        loading: false,
+      };
     case CHECK_FOLLOW_SUCCESS:
       return {
         ...state,
@@ -78,7 +87,6 @@ export const profileReducer = (state = initialState, action) => {
         isFollowing: action.payload,
         loading: false,
       };
-
     case CHANGE_PROFILE_SUCCESS:
       return {
         ...state,
