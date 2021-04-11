@@ -71,6 +71,9 @@ button {
 .hideScroll::-webkit-scrollbar {
   display: none;
 }
+.Toastify__toast::-webkit-scrollbar {
+  display: none;
+}
 
 /* Hide scrollbar for IE, Edge and Firefox */
 .hideScroll {
@@ -79,7 +82,10 @@ button {
 } 
 
 .Toastify__toast {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
   border-radius: 6pt;
   padding: 1em;
   word-break: break-word;
+  overflow-y: scroll;
 }
