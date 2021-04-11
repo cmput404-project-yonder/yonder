@@ -244,7 +244,7 @@ class PostForm extends Component {
       if (this.state.imageContent !== "") {
         return (
           <img 
-            src={ "image/png" ? `data:image/png;base64,${this.state.imageContent}` : `data:image/jpeg;base64,${this.state.content}` } 
+            src={this.state.imageContent} 
             style={{borderRadius: "6pt", margin: "auto", objectFit: "cover"}} 
           />
         )
