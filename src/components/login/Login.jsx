@@ -86,7 +86,7 @@ class Login extends Component {
     };
     
     if (userData.username === "") {
-      toast.error("Username cannot be empty");
+      toast.error("Username cannot be empty" );
     }
     else if (userData.password === "") {
       toast.error("Password cannot be empty");
