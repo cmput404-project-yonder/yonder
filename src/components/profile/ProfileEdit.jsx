@@ -19,7 +19,6 @@ import { toast } from "react-toastify";
 
 
 const formContainerStyle = {
-  boxShadow: "0pt 0pt 3pt #B1B1B1",
   borderRadius: "8pt",
   marginLeft: "1.2em",
   marginRight: "1.2em",
@@ -27,7 +26,8 @@ const formContainerStyle = {
   paddingBottom: "0em",
   paddingRight: "0.5em",
   paddingLeft: "0.5em",
-  backgroundColor: color.backgroundGrey,
+  backgroundColor: "white",
+  boxShadow: "0pt 0pt 6pt rgb(0,0,0,0.1)",
 }
 
 
@@ -35,8 +35,8 @@ const formStyle = {
   overall: {
     paddingLeft: "1em",
     paddingRight: "1em",
-    paddingTop: "2em",
-    paddingBottom: "3em",
+    paddingTop: "1em",
+    paddingBottom: "2em",
   },
   label: {
     paddingTop: "0.1em",
@@ -50,7 +50,7 @@ const formStyle = {
 const headingStyle = {
   overall: {
     paddingTop: "1.5em",
-    paddingBottom: "0.5em",
+    paddingBottom: "1em",
     textAlign: "center",
   },
   title: {
@@ -140,7 +140,7 @@ class ProfileEdit extends React.Component {
 
     const { displayName, githubURL } = this.state;
     return (
-      <Card style={cardStyle} className="animate__animated animate__slideInUp">
+      <Card style={{...cardStyle, width: "360pt", borderRadius: "12pt"}} className="animate__animated animate__slideInUp">
         <Container style={headingStyle.overall}>
           <div style={headingStyle.logo.style}>
             <ProfileIcon svgScale={headingStyle.logo.scale} />

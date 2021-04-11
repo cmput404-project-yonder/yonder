@@ -136,7 +136,7 @@ class Profile extends React.Component {
     const profileCard = () => {
       return (
         <div className="post-list animate__animated animate__fadeInUp" style={{marginBottom: "5em"}}>
-          <Card style={{...postStyle, height: "auto", fontSize: "1em", maxWidth: "385pt", borderRadius: "12pt", margin: "auto", paddingBottom: "0.8em"}}>
+          <Card style={{...postStyle, height: "auto", fontSize: "1em", minWidth: "320pt", maxWidth: "385pt", borderRadius: "12pt", margin: "auto", paddingBottom: "0.8em"}}>
             <Container>
               <Container style={{marginTop: "3em", marginBottom: "-1.5em"}}>
                   <Container style={{fill: color.baseLightGrey}}>
