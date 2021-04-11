@@ -45,13 +45,18 @@ class Post extends React.Component {
       sharingPromptIsOpen: false,
       likeCount: 0,
       postURL: "/author/" + this.props.post.author.id + "/posts/" + this.props.post.id + "/",
+      likePolling: null,
     };
   } 
 
   componentDidMount() {
     // set up polling for this post
     this.props.retrievePostLikes(this.props.post, this.postLikeSetter);
-    setInterval(()=>this.props.retrievePostLikes(this.props.post, this.postLikeSetter),30000);
+    this.state["likePolling"] = setInterval(()=>this.props.retrievePostLikes(this.props.post, this.postLikeSetter),30000);
+  }
+
+  componentWillUnmount() {
+    clearInterval(this.state["likePolling"]);
   }
 
   // set states
