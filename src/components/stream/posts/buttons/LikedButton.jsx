@@ -5,7 +5,6 @@
 import { LikedIcon } from "./postSVG";
 import { Container } from "react-bulma-components";
 import { color } from "../../../profile/styling";
-import { useState } from "react";
 
 
 // local styling

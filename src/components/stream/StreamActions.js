@@ -239,7 +239,8 @@ export const retrieveAllAuthors = () => (dispatch, getState) => {
 };
 
 
-export const likePost = (post) => (dispatch, getState) => {
+export const likePost = (post, chainFunction=null) => (dispatch, getState) => {
+  // if chainFunction is given, chainFunction is called when .post success
   const likedPost = {};
   const state = getState();
   const author = state.auth.author;
@@ -260,6 +261,9 @@ export const likePost = (post) => (dispatch, getState) => {
     .post("/author/" + post.author.id + "/inbox/", likedPost)
     .then((response) => {
       dispatch({ type: LIKE_POST_SUCCESS, payload: response.data });
+      if (chainFunction !== null) {
+        chainFunction();
+      }
     })
     .catch((error) => {
       if (error.response) {
