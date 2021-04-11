@@ -90,7 +90,7 @@ export const createPost = (newPost) => (dispatch, getState) => {
     });
 };
 
-export const updatePost = (editedPost) => (dispatch, getState) => {
+export const updatePost = (editedPost, setter=null) => (dispatch, getState) => {
   const state = getState();
   const author = state.auth;
 
@@ -100,7 +100,14 @@ export const updatePost = (editedPost) => (dispatch, getState) => {
   axios
     .put("/author/" + author.id + "/posts/" + editedPost.id + "/", editedPost)
     .then((response) => {
-      dispatch({ type: EDIT_POST_SUCCESS, payload: editedPost });
+      dispatch({ type: EDIT_POST_SUCCESS, payload: response.data });
+
+      if (setter !== null) {
+        setter(response.data);
+      }
+
+
+
     })
     .catch((error) => {
       if (error.response) {

@@ -10,6 +10,7 @@ import {
   RETRIEVE_COMMENT_LIST_SUBMITTED,
   RETRIEVE_COMMENT_LIST_SUCCESS,
   RETRIEVE_COMMENT_LIST_ERROR,
+  UPDATE_RETRIEVED_POST,
 } from "./PostTypes";
 import { setAxiosAuthToken } from "../../../utils/Utils";
 
@@ -93,4 +94,8 @@ export const retrieveCommentList = (authorId, postId) => (dispatch, getState) =>
       }
     });
 };
+
+export const updateRetrivedPost = (newPost) => (dispatch) => {
+  dispatch({type: UPDATE_RETRIEVED_POST, payload: newPost});
+}
 

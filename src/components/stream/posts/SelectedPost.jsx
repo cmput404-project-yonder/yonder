@@ -17,7 +17,7 @@ import { updatePost, deletePost, likePost, sharePost } from '../StreamActions';
 import ReactMde from "react-mde";
 import CommentList from "./CommentList";
 
-import { retrievePost, createComment, retrieveCommentList } from "./PostActions";
+import { retrievePost, createComment, retrieveCommentList,updateRetrivedPost } from "./PostActions";
 
 // local styling
 var postDividorStyle = {
@@ -52,6 +52,7 @@ function DetailedPostList(props) {
   const [sharingPromptIsOpen, setSharingPromptIsOpen] = useState(false);
   const [writtenComment, setWrittenComment] = useState("");
 
+
   // helper functions
   const IsImage = () => {
     if (props.post.contentType === "text/plain") {
@@ -74,11 +75,6 @@ function DetailedPostList(props) {
       console.log("This is a shared post");
       return false;
     }
-  }
-
-  const updateAndReload = (editedPost) => {
-    props.updatePost(editedPost);
-    window.location.reload();
   }
 
   const likedToggle = () => {
@@ -143,7 +139,7 @@ function DetailedPostList(props) {
         <EditPostForm
           setEditModalIsOpen={setEditModalIsOpen}
           post={props.post}
-          updatePost={updateAndReload}
+          updatePost={props.updatePost}
           deletePost={props.deletePost}
         />
       </Modal>
@@ -257,6 +253,9 @@ class SelectedPost extends React.Component {
     this.props.retrieveCommentList(params.athor_id,params.id);
   }
 
+
+
+
   render() {
       
     if (this.props.loading || !this.props.retrievedPost.author) {
@@ -266,6 +265,12 @@ class SelectedPost extends React.Component {
             </div>
         );
     }
+
+
+    const updatePostWrapper = (editedPost) => {
+      this.props.updatePost(editedPost, this.props.updateRetrivedPost);
+    }
+
 
     return (
         <Section style={pageStyle}>
@@ -284,7 +289,7 @@ class SelectedPost extends React.Component {
                 createComment={this.props.createComment} 
                 commentList={this.props.retrievedCommentList} 
                 likePost={this.props.likePost} 
-                updatePost={this.props.updatePost} 
+                updatePost={updatePostWrapper} 
                 sharePost={this.props.sharePost}
                 deletePost={this.props.deletePost} />
               </Columns>
@@ -299,9 +304,11 @@ SelectedPost.propTypes = {
   loggedInAuthor: PropTypes.object.isRequired,
   retrievePost: PropTypes.func.isRequired,
   retrievedPost: PropTypes.object.isRequired,
+  updateRetrivedPost: PropTypes.func.isRequired,
   loading: PropTypes.bool.isRequired,
   retrieveCommentList: PropTypes.func.isRequired,
   retrievedCommentList: PropTypes.array.isRequired,
+
 };
 
 DetailedPostList.propTypes = {
@@ -319,4 +326,4 @@ const mapStateToProps = (state) => ({
   retrievedCommentList: state.post.retrievedCommentList,
 });
 
-export default connect(mapStateToProps, { retrievePost, updatePost, deletePost, likePost, sharePost, createComment, retrieveCommentList })(withRouter(SelectedPost));
+export default connect(mapStateToProps, { updateRetrivedPost, retrievePost, updatePost, deletePost, likePost, sharePost, createComment, retrieveCommentList })(withRouter(SelectedPost));

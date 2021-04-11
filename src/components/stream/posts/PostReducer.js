@@ -8,6 +8,7 @@ import {
     RETRIEVE_COMMENT_LIST_SUBMITTED,
     RETRIEVE_COMMENT_LIST_SUCCESS,
     RETRIEVE_COMMENT_LIST_ERROR,
+    UPDATE_RETRIEVED_POST,
   } from "./PostTypes";
   
   const initialState = {
@@ -39,6 +40,11 @@ import {
           error: "",
           retrievedPost: action.payload,
           loading: false,
+        };
+      case UPDATE_RETRIEVED_POST:
+        return {
+          ...state,
+          retrievedPost: action.payload,
         };
         case NEW_COMMENT_SUBMITTED:
           return {
