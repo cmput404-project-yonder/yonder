@@ -35,7 +35,7 @@ function FollowButton(props) {
                   <path
                     id="Path_128"
                     data-name="Path 128"
-                    class="cls-1"
+                    className="cls-1"
                     d="M336.916,7.126h-5.8v-5.8a1.331,1.331,0,1,0-2.661,0v5.8h-5.8a1.331,1.331,0,0,0,0,2.661h5.8v5.8a1.331,1.331,0,1,0,2.661,0v-5.8h5.8a1.331,1.331,0,0,0,0-2.661Z"
                     transform="translate(-321.334)"
                   />
@@ -46,7 +46,7 @@ function FollowButton(props) {
                   <path
                     id="Path_129"
                     data-name="Path 129"
-                    class="cls-1"
+                    className="cls-1"
                     d="M15.582,321.334A15.6,15.6,0,0,0,0,336.916a1.331,1.331,0,0,0,1.331,1.331h28.5a1.331,1.331,0,0,0,1.331-1.331A15.6,15.6,0,0,0,15.582,321.334Z"
                     transform="translate(0 -321.334)"
                   />
@@ -57,7 +57,7 @@ function FollowButton(props) {
                   <path
                     id="Path_130"
                     data-name="Path 130"
-                    class="cls-1"
+                    className="cls-1"
                     d="M88.79,64.267a8.456,8.456,0,1,0,8.456,8.456A8.466,8.466,0,0,0,88.79,64.267Z"
                     transform="translate(-80.334 -64.267)"
                   />

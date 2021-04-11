@@ -10,6 +10,7 @@ import {
   RETRIEVE_COMMENT_LIST_SUBMITTED,
   RETRIEVE_COMMENT_LIST_SUCCESS,
   RETRIEVE_COMMENT_LIST_ERROR,
+  UPDATE_RETRIEVED_POST,
   RETRIEVE_POSTLIKE_SUBMITTED,
   RETRIEVE_POSTLIKE_ERROR,
   RETRIEVE_POSTLIKE_SUCCESS,
@@ -50,12 +51,12 @@ export const createComment = (comment) => (dispatch, getState) => {
   commentObj["author"] = author;
   commentObj["comment"] = comment;
   commentObj["contentType"] = "text/markdown";
+  
   dispatch({ type: NEW_COMMENT_SUBMITTED });
   axios
     .post("/author/" + state.auth.author.id + "/posts/" + state.post.retrievedPost.id + "/comments/", commentObj)
     .then((response) => {
       dispatch({ type: NEW_COMMENT_SUCCESS, payload: response.data });
-      console.log(commentObj);
     })
     .catch((error) => {
       if (error.response) {
@@ -74,7 +75,6 @@ export const createComment = (comment) => (dispatch, getState) => {
 
 export const retrieveCommentList = (authorId, postId) => (dispatch, getState) => {
   const state = getState();
-  console.log("STATE:",state);
 
   setAxiosAuthToken(state.auth.token);
   dispatch({ type: RETRIEVE_COMMENT_LIST_SUBMITTED });
@@ -97,6 +97,10 @@ export const retrieveCommentList = (authorId, postId) => (dispatch, getState) =>
       }
     });
 };
+
+export const updateRetrivedPost = (newPost) => (dispatch) => {
+  dispatch({type: UPDATE_RETRIEVED_POST, payload: newPost});
+}
 
 export const retrievePostLikes = (post, setterFunction) => (dispatch, getState) => {
   const state = getState();
