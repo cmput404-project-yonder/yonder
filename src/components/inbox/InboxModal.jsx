@@ -7,7 +7,7 @@ import Inbox from "./Inbox";
 import { cardStyle, tabStyle, panelStyle, checkBoxStyle } from "../../styling/StyleComponents";
 
 import PostTab from "../stream/posts/PostTab";
-import DeleteButton from "../stream/posts/buttons/DeleteButton";
+import DeleteButton from "./DeleteButton";
 import { clearInbox } from "../stream/StreamActions";
 
 // local styling
@@ -104,7 +104,7 @@ function InboxModal (props){
             <Container>
                 <SelectionPanel/>
             </Container>
-            <Container style={{float: "right", marginTop: "-26pt", marginRight: "3em"}}>
+            <Container style={{float: "right", marginTop: "-18pt", marginRight: "3em"}}>
                 <ToolTip/>
             </Container>
             </div>
