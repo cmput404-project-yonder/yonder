@@ -9,7 +9,7 @@ import { connect } from "react-redux";
 import { SearchAuthorIcon } from "../../styling/svgIcons";
 import Dividor from "../profile/Dividor";
 import FollowButton from "./FollowButton";
-import DeleteButton from "../stream/posts/buttons/DeleteButton";
+import UnfollowFollowButton from "./UnfollowButton";
 
 
 // local styling
@@ -58,7 +58,7 @@ function ProfileCard(props) {
 
   const unfollowButton = () => {
     return (
-      <DeleteButton action={()=>props.unfollow(props.author)} style={{float: "right", marginTop: "-8pt", marginRight: "-8pt"}}/>
+      <UnfollowFollowButton onClick={()=>props.unfollow(props.author)} style={{float: "right", marginTop: "-8pt", marginRight: "-8pt"}}/>
     )
   }
 
@@ -67,8 +67,8 @@ function ProfileCard(props) {
     return (
       <Container>
         <Card style={profileCardStyle} className="animate__animated animate__fadeIn animate__faster">
-          <p style={{fontSize: "1.4em"}}>{props.author.displayName}</p>
           {props.isFollowing ? unfollowButton() : followButton()}
+          <p style={{fontSize: "1.4em"}}>{props.author.displayName}</p>
           <Dividor style={dividorStyle}/>
           <p style={{fonrSize: "1.4em"}}>{props.author.id}</p>
         </Card> 
