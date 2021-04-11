@@ -12,16 +12,15 @@ import {
   } from "./NavigationTypes";
 
 const initialState = {
-    error: "",
+    error: {},
     allAuthors: [],
-    currentAuthorInbox: {},
     currentInboxPosts: [],
     currentInboxLikes: [],
     currentInboxFollows: [],
 };
 
 
-export const streamReducer = (state = initialState, action) => {
+export const NavigationReducer = (state = initialState, action) => {
     switch (action.type) {
 
         // submitted
@@ -29,7 +28,7 @@ export const streamReducer = (state = initialState, action) => {
         case CLEAR_INBOX_SUBMITTED:
             return {
                 ...state,
-                error: "",
+                error: {},
             };
 
         // error
@@ -48,7 +47,6 @@ export const streamReducer = (state = initialState, action) => {
             const likes = action.payload["items"].filter((m) => m["type"] === "like");
             return {
                 ...state,
-                currentAuthorInbox: action.payload,
                 currentInboxPosts: posts,
                 currentInboxFollows: follows,
                 currentInboxLikes: likes,
@@ -56,7 +54,6 @@ export const streamReducer = (state = initialState, action) => {
         case CLEAR_INBOX_SUCCESS:
             return {
                 ...state,
-                currentAuthorInbox: [],
                 currentInboxPosts: [],
                 currentInboxFollows: [],
                 currentInboxLikes: [],
@@ -64,7 +61,7 @@ export const streamReducer = (state = initialState, action) => {
         case RETRIEVE_ALL_AUTHORS_SUCCESS:
             return {
                 ...state,
-                error: "",
+                error: {},
                 allAuthors: action.payload,
                 loading: false,
             };

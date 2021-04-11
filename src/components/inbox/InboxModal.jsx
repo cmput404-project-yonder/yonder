@@ -8,7 +8,7 @@ import { cardStyle, tabStyle, panelStyle, checkBoxStyle } from "../../styling/St
 
 import PostTab from "../stream/posts/PostTab";
 import DeleteButton from "./DeleteButton";
-import { clearInbox } from "../stream/StreamActions";
+import { clearInbox } from "../NavigationActions";
 
 // local styling
 var shadowDividorStyle = {

@@ -25,7 +25,7 @@ function Inbox(props) {
       );
     } else {
       return (
-        <div className="post-list animate__animated animate__fadeIn animate__faster">
+        <div>
           <List hoverable>{follows}</List>
         </div>
       );
@@ -46,7 +46,7 @@ function Inbox(props) {
       );
     } else {
       return (
-        <div className="post-list animate__animated animate__fadeIn animate__faster">
+        <div>
           <List hoverable>{likes}</List>
         </div>
       );
@@ -66,7 +66,7 @@ function Inbox(props) {
       );
     } else {
       return (
-        <div className="post-list animate__animated animate__fadeIn animate__faster">
+        <div>
           <List hoverable>{posts}</List>
         </div>
       );
@@ -74,7 +74,6 @@ function Inbox(props) {
   };
 
   const RenderSelectedTab = () => {
-    console.log("Hello")
     switch (props.selectedTab) {
       case "like":
         return likeList();
@@ -105,9 +104,9 @@ Inbox.propTypes = {
 
 const mapStateToProps = (state) => ({
   author: state.auth.author,
-  inboxPosts: state.stream.currentInboxPosts,
-  inboxFollows: state.stream.currentInboxFollows,
-  inboxLikes: state.stream.currentInboxLikes,
+  inboxPosts: state.navigation.currentInboxPosts,
+  inboxFollows: state.navigation.currentInboxFollows,
+  inboxLikes: state.navigation.currentInboxLikes,
 });
 
 export default connect(mapStateToProps, { })(

@@ -9,7 +9,7 @@ import PostList from "./posts/PostList";
 import PopupModal from "./posts/modals/PopupModal";
 
 import { buttonLayerContainerStyle, streamLayerContainerStyle, newPostButtonStyle, pageStyle } from "../../styling/StyleComponents";
-import { createPost, updatePost, sharePost, likePost, retrieveLoggedInAuthorPosts, deletePost, retrieveInbox, retrieveAllAuthors } from "./StreamActions";
+import { createPost, updatePost, sharePost, likePost, retrieveLoggedInAuthorPosts, deletePost } from "./StreamActions";
 
 class Stream extends Component {
   componentDidMount() {
@@ -19,10 +19,6 @@ class Stream extends Component {
     }
 
     this.props.retrieveLoggedInAuthorPosts();
-    this.props.retrieveInbox();
-    if (!this.props.allAuthors) {
-      this.props.retrieveAllAuthors();
-    }
   }
 
   render() {
@@ -78,7 +74,6 @@ Stream.propTypes = {
   deletePost: PropTypes.func.isRequired,
   currentAuthorPosts: PropTypes.array.isRequired,
   inboxPosts: PropTypes.array.isRequired,
-  allAuthors: PropTypes.array.isRequired,
   loading: PropTypes.bool.isRequired,
 };
 
@@ -86,9 +81,8 @@ const mapStateToProps = (state) => ({
   author: state.auth.author,
   auth: state.auth,
   currentAuthorPosts: state.stream.currentAuthorPosts,
-  inboxPosts: state.stream.currentInboxPosts,
+  inboxPosts: state.navigation.currentInboxPosts,
   loading: state.stream.loading,
-  allAuthors: state.allAuthors,
 });
 
 export default connect(mapStateToProps, {
@@ -98,6 +92,4 @@ export default connect(mapStateToProps, {
   deletePost,
   likePost,
   retrieveLoggedInAuthorPosts,
-  retrieveAllAuthors,
-  retrieveInbox,
 })(withRouter(Stream));

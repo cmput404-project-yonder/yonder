@@ -42,7 +42,6 @@ export const streamReducer = (state = initialState, action) => {
     case EDIT_POST_ERROR:
     case DELETE_POST_ERROR:
     case NEW_POST_ERROR:
-    case RETRIEVE_ALL_AUTHORS_ERROR:
     case RETRIEVE_POSTS_ERROR:
     case LIKE_POST_ERROR:
     case SHARE_POST_ERROR:

@@ -187,6 +187,12 @@ export const likePost = (post, chainFunction=null) => (dispatch, getState) => {
           case 404:
             toast.error("Author have deleted this post");
             break;
+          case 401:
+            // too deep in the rabbit hole
+            // like polling/like is handled by post.jsx
+            // if 401 happends, then we just ignore it, this error will eventually cought by navigationbar
+            // and redirect user to login.
+            break;
           default:
             toast.error(JSON.stringify(error.response.data));
             break;

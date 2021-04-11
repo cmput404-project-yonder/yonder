@@ -12,7 +12,10 @@ import {
     RETRIEVE_ALL_AUTHORS_SUCCESS,
     RETRIEVE_ALL_AUTHORS_ERROR,
   } from "./NavigationTypes";
-import { setAxiosAuthToken, isEmpty } from "../../utils/Utils";
+import { setAxiosAuthToken } from "../utils/Utils";
+
+
+
 
 export const retrieveInbox = () => (dispatch, getState) => {
 const state = getState();
@@ -30,7 +33,7 @@ axios
         toast.error(JSON.stringify(error.response.data));
         dispatch({
         type: RETRIEVE_INBOX_ERROR,
-        errorData: error.response.data,
+        errorData: error.response,
         });
     } else if (error.message) {
         toast.error(JSON.stringify(error.message));
@@ -56,7 +59,7 @@ axios
         toast.error(JSON.stringify(error.response.data));
         dispatch({
         type: CLEAR_INBOX_ERROR,
-        errorData: error.response.data,
+        errorData: error.response,
         });
     } else if (error.message) {
         toast.error(JSON.stringify(error.message));
@@ -66,26 +69,21 @@ axios
     });
 };
 
-
 export const retrieveAllAuthors = () => (dispatch, getState) => {
-const state = getState();
-const cachedAuthors = JSON.parse(sessionStorage.getItem("allAuthors")); 
+    const state = getState();
 
-if (isEmpty(cachedAuthors)) {
     setAxiosAuthToken(state.auth.token);
-    // No SUMBITTED dispatch, cause retrieving from other servers can take a while;
     axios
     .get("/authors/" + "all/")
     .then((response) => {
         dispatch({ type: RETRIEVE_ALL_AUTHORS_SUCCESS, payload: response.data });
-        sessionStorage.setItem("allAuthors", JSON.stringify(response.data));
     })
     .catch((error) => {
         if (error.response) {
         toast.error(JSON.stringify(error.response.data));
         dispatch({
             type: RETRIEVE_ALL_AUTHORS_ERROR,
-            errorData: error.response.data,
+            errorData: error.response,
         });
         } else if (error.message) {
         toast.error(JSON.stringify(error.message));
@@ -93,7 +91,4 @@ if (isEmpty(cachedAuthors)) {
         toast.error(JSON.stringify(error));
         }
     });
-    } else {
-    dispatch({ type: RETRIEVE_ALL_AUTHORS_SUCCESS, payload: cachedAuthors });
-    }
 };
