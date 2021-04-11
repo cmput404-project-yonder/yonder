@@ -22,10 +22,12 @@ var activeStyle = Object.assign (
     {
         color: color.buttonRed,
         border: "solid",
-        borderWidth: "1.5pt",
+        borderWidth: "1.3pt",
+        borderRadius: "6pt",
         backgroundColor: "transparent",
         fontSize: "1em",
-        height: "1.8em",
+        height: "1.9em",
+        cursor: "pointer",
     }
 )
 
@@ -36,7 +38,8 @@ var inactiveStyle = Object.assign (
         border: "none",
         backgroundColor: "transparent",
         fontSize: "1em",
-        height: "1.8em",
+        height: "1.9em",
+        cursor: "pointer",
     }
 )
 
@@ -44,7 +47,7 @@ class PostTab extends React.Component {
     render() {
         return (
             <Container style={this.props.style}>
-                <Button style={this.props.active ? activeStyle : inactiveStyle}><p onClick={this.props.action}>{this.props.text}</p></Button>
+                <button type="button" style={this.props.active ? activeStyle : inactiveStyle}><p onClick={this.props.action}>{this.props.text}</p></button>
             </Container>
         );
     }

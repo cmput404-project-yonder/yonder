@@ -6,6 +6,9 @@ import {
   RETRIEVE_INBOX_ERROR,
   RETRIEVE_INBOX_SUBMITTED,
   RETRIEVE_INBOX_SUCCESS,
+  CLEAR_INBOX_SUBMITTED,
+  CLEAR_INBOX_ERROR,
+  CLEAR_INBOX_SUCCESS,
   RETRIEVE_POSTS_ERROR,
   RETRIEVE_POSTS_SUBMITTED,
   RETRIEVE_POSTS_SUCCESS,
@@ -35,7 +38,6 @@ const initialState = {
   currentInboxPosts: [],
   currentInboxLikes: [],
   currentInboxFollows: [],
-  currentInboxComments: [],
   loading: false,
 };
 
@@ -46,6 +48,7 @@ export const streamReducer = (state = initialState, action) => {
     case NEW_POST_SUBMITTED:
     case RETRIEVE_POSTS_SUBMITTED:
     case RETRIEVE_INBOX_SUBMITTED:
+    case CLEAR_INBOX_SUBMITTED:
     case SHARE_POST_SUBMITTED:
     return {
       ...state,
@@ -58,6 +61,7 @@ export const streamReducer = (state = initialState, action) => {
     case RETRIEVE_ALL_AUTHORS_ERROR:
     case RETRIEVE_POSTS_ERROR:
     case RETRIEVE_INBOX_ERROR:
+    case CLEAR_INBOX_ERROR:
     case LIKE_POST_ERROR:
     case SHARE_POST_ERROR:
       return {
@@ -76,7 +80,6 @@ export const streamReducer = (state = initialState, action) => {
       const posts = action.payload["items"].filter((m) => m["type"] === "post");
       const follows = action.payload["items"].filter((m) => m["type"] === "follow");
       const likes = action.payload["items"].filter((m) => m["type"] === "like");
-      const comments = action.payload["items"].filter((m) => m["type"] === "comments");
       return {
         ...state,
         retrieveInboxError: "",
@@ -84,7 +87,16 @@ export const streamReducer = (state = initialState, action) => {
         currentInboxPosts: posts,
         currentInboxFollows: follows,
         currentInboxLikes: likes,
-        currentInboxComments: comments,
+        loading: false,
+      };
+    case CLEAR_INBOX_SUCCESS:
+      return {
+        ...state,
+        retrieveInboxError: "",
+        currentAuthorInbox: [],
+        currentInboxPosts: [],
+        currentInboxFollows: [],
+        currentInboxLikes: [],
         loading: false,
       };
     case LIKE_POST_SUCCESS:

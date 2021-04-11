@@ -4,10 +4,10 @@ import { connect } from "react-redux";
 import { withRouter } from "react-router-dom";
 import { Modal, Button, Content, Section, Card,Container,Columns, List } from "react-bulma-components";
 import Dividor from "./Dividor";
-import EditButton from "./EditButton";
-import ShareButton from "./ShareButton";
-import LikeButton from "./LikeButton";
-import LikedButton from "./LikedButton";
+import EditButton from "./buttons/EditButton";
+import ShareButton from "./buttons/ShareButton";
+import LikeButton from "./buttons/LikeButton";
+import LikedButton from "./buttons/LikedButton";
 import { dividorStyle, pageStyle,buttonLayerContainerStyle,newPostButtonStyle, streamLayerContainerStyle, postContainerStyle, postStyle, signatureStyle, postTitleStyle, DescriptionStyle, contentStyle, postContentStyle, categoriesStyle, footerButtonLayoutStyle} from "../../../styling/StyleComponents";
 import { color } from "../../../styling/ColorFontConfig";
 import InboxModalPopUp from "../../inbox/InboxModalPopUp";
@@ -15,10 +15,11 @@ import InboxModalPopUp from "../../inbox/InboxModalPopUp";
 import EditPostForm from "./EditPostForm";
 import SharingPostPrompt from "./SharingPostPrompt";
 import { updatePost, deletePost } from '../StreamActions';
+import ReactMde from "react-mde";
+import Markdown from "react-markdown";
+import CommentList from "./CommentList";
 
-import { retrievePost } from "./PostActions";
-
-
+import { retrievePost, createComment, retrieveCommentList } from "./PostActions";
 
 // local styling
 var postDividorStyle = {
@@ -51,6 +52,8 @@ function DetailedPostList(props) {
   const [isLiked, setIsLiked] = useState(false);
   const [editModalIsOpen, setEditModalIsOpen] = useState(false);
   const [sharingPromptIsOpen, setSharingPromptIsOpen] = useState(false);
+  const [writtenComment, setWrittenComment] = useState("");
+  console.log("PROPS:",props.commentList);
 
   // helper functions
   const IsImage = () => {
@@ -89,10 +92,14 @@ function DetailedPostList(props) {
     )
   }
 
+  // const handleCommentSubmit =() => {
+
+  // }
+
   // 1. title, description, author, timestamp
   const TitleCard = () => {
     return (
-      <Card style={{...postStyle, marginTop: "80pt", marginBottom: "0pt"}}>
+      <Card style={{...postStyle, marginBottom: "0pt"}}>
         <Card.Content style={postContainerStyle}>
           {/* Title */}
           <Container style={signatureStyle}>
@@ -110,9 +117,10 @@ function DetailedPostList(props) {
           </Container>
 
         </Card.Content>
-      </Card>      
+      </Card>
     );
   }
+
 
   const displayFooterButtons = () => {
     return (
@@ -174,35 +182,66 @@ function DetailedPostList(props) {
     )
   }
 
-  // do not delete these lines, will be used in part3 for display comments
-  // const CommentCard = () => {
-  //   // render template of one comment
-  //   // this function is not planned for part2
-  //   return (
-  //     <Card style={postStyle}>
-  //       <Card.Content style={postContainerStyle}>
-  //         {/* author and timestamp */}
-  //         <Container style={signatureStyle}>
-  //         <p style={{ fontWeight: "250" }}>@{props.post.author.displayName}</p>
-  //         <p>·</p>
-  //         <p>{getDateString(Date.parse(props.post.published))}</p>
-  //         </Container>
-  //         <Container style={postTitleStyle}>
-  //         <p style={{color: color.baseBlack}}>Comment</p>
-  //         </Container>
+  const CommentCard = () => {
+    // render template of one comment
+    // this function is not planned for part2
+    // console.log(writtenComment);
+    // const listComments = commentListData.map((d) => <li key={d.comment}>{d.comment}</li>);
+    return (
+      <Card style={postStyle}>
+        <Card.Content style={postContainerStyle}>
+          {/* author and timestamp */}
+          <Container style={signatureStyle}>
+          <p style={{ fontWeight: "250" }}>@{props.post.author.displayName}</p>
+          <p>·</p>
+          <p>{getDateString(Date.parse(props.post.published))}</p>
+          </Container>
+          <Container style={postTitleStyle}>
+          <p style={{color: color.baseBlack}}>Comments</p>
+          </Container>
+          {/* comment section */}
+          <Container style={DescriptionStyle}>
+            {
+              <CommentList commentData={props.commentList} />
+            }
+            {/* {listOfComments.map(comment => (
+              <p 
+                key={comment} 
+                style={{ borderBottomWidth: `1px`, borderTopWidth: 0, borderLeftWidth: 0, borderRightWidth: 0, borderStyle: 'dashed',
+                  marginTop: `3%`, paddingBottom: `4%` }}>
+                {comment.comment}
+              </p>
+            ))} */}
+          </Container>
+        </Card.Content>
+      </Card>
+    )
+  }
 
-  //         {/* comment section */}
-  //         <Container style = {DescriptionStyle}>  
-  //           <p>This is a mockup comment object</p>
-  //         </Container>
-          
-  //       </Card.Content>
-  //     </Card>
-  //   )
-  // }
+  const CommentEditorCard = () => {
+    return (
+      <Card style={postStyle}>
+        <Card.Content style={postContainerStyle}>
+          <ReactMde
+            value={writtenComment}
+            onChange={m => setWrittenComment(m)}
+          />
+          <Button
+            style={{ float: "right", marginRight: `-2px` }}
+            onClick={e => {
+              props.createComment(writtenComment);
+              setWrittenComment("");
+            }}
+          >
+          Comment
+        </Button>
+        </Card.Content>
+      </Card>
+    )
+  }
 
-  // const CommentList = []                                 // add comment to this list
-  const listItems = [TitleCard(), ContentCard()]    // add component to this list for displaying
+  // add comment to this list
+  const listItems = [TitleCard(), ContentCard(), CommentCard(), CommentEditorCard()]    // add component to this list for displaying
   return (
     <div className="post-list animate__animated animate__fadeInDown">
       <List hoverable>{listItems}</List>
@@ -219,33 +258,33 @@ class SelectedPost extends React.Component {
     } = this.props;
 
     this.props.retrievePost(params.author_id,params.id);
+    this.props.retrieveCommentList(params.athor_id,params.id);
   }
 
   render() {
-      
     if (this.props.loading || !this.props.retrievedPost.author) {
-        return (
-            <div class="pageloader is-active">
-                <span class="title">Loading</span>
-            </div>
-        );
+      return (
+        <div class="pageloader is-active">
+          <span class="title">Loading</span>
+        </div>
+      );
     }
 
     return (
-        <Section style={pageStyle}>
-          <div style={buttonLayerContainerStyle}>
-            <Container style={newPostButtonStyle}>
-              {/* add floating buttons here, if needed */}
-            </Container>
-          </div>
-          <div style={streamLayerContainerStyle}>
-            <Container fluid>
-              <Columns centered>
-               <DetailedPostList post={this.props.retrievedPost} loggedInAuthor={this.props.loggedInAuthor}/>
-              </Columns>
-            </Container>
-          </div>
-        </Section>
+      <Section style={pageStyle}>
+        <div style={buttonLayerContainerStyle}>
+          <Container style={newPostButtonStyle}>
+            {/* add floating buttons here, if needed */}
+          </Container>
+        </div>
+        <div style={streamLayerContainerStyle}>
+          <Container fluid>
+            <Columns centered>
+              <DetailedPostList post={this.props.retrievedPost} loggedInAuthor={this.props.loggedInAuthor} comments={this.props.comments} createComment={this.props.createComment} commentList={this.props.retrievedCommentList} />
+            </Columns>
+          </Container>
+        </div>
+      </Section>
     );
   }
 }
@@ -255,12 +294,21 @@ SelectedPost.propTypes = {
   retrievePost: PropTypes.func.isRequired,
   retrievedPost: PropTypes.object.isRequired,
   loading: PropTypes.bool.isRequired,
+  updatePost: PropTypes.func.isRequired,
+  likePost: PropTypes.func.isRequired,
+  retrieveCommentList: PropTypes.func.isRequired,
+  retrievedCommentList: PropTypes.object.isRequired,
 };
+
+DetailedPostList.propTypes = {
+  createComment: PropTypes.func.isRequired,
+}
 
 const mapStateToProps = (state) => ({
   loading: state.post.loading,
   retrievedPost: state.post.retrievedPost,
   loggedInAuthor: state.auth.author,
+  retrievedCommentList: state.post.retrievedCommentList,
 });
 
-export default connect(mapStateToProps, { retrievePost, updatePost, deletePost })(withRouter(SelectedPost));
+export default connect(mapStateToProps, { retrievePost, updatePost, deletePost, createComment, retrieveCommentList })(withRouter(SelectedPost));

@@ -6,29 +6,25 @@ import SharingPostPrompt from "./SharingPostPrompt";
 import { connect } from "react-redux";
 import { withRouter } from "react-router-dom";
 
-import { Card, Content, Container, Button } from "react-bulma-components";
-import Dividor from "./Dividor";
-import { Link } from "react-router-dom";
-import EditButton from "./EditButton";
-import ShareButton from "./ShareButton";
-import LikeButton from "./LikeButton";
-import LikedButton from "./LikedButton";
-import { DescriptionStyle, dividorStyle, postStyle, categoriesStyle, signatureStyle, postContainerStyle,postTitleStyle, postContentStyle, footerButtonLayoutStyle } from "../../../styling/StyleComponents";
+import { Card, Content, Container } from "react-bulma-components";
+import EditButton from "./buttons/EditButton";
+import ShareButton from "./buttons/ShareButton";
+import LikedButton from "./buttons/LikedButton";
+import { DescriptionStyle, postStyle, categoriesStyle, signatureStyle, postContainerStyle,postTitleStyle, postContentStyle, footerButtonLayoutStyle } from "../../../styling/StyleComponents";
 import { color } from "./styling";
-// import { connectAdvanced } from "react-redux";
+
+import { retrievePostLikes } from "./PostActions";
+
 
 // local styling
-var postDividorStyle = {
-  ...dividorStyle,
-  paddingBottom: "0",
-  paddingTop: "0",
-}
-
-var buttonOverrideStyle = {
-  backgroundColor: "transparent",
-  border: "none",
-  marginTop: "-2pt",
-  height: "20pt",
+var shadowDividorStyle = {
+  border:"none",
+  width: "105%",
+  height: "50px",
+  boxShadow:"0 10pt 10pt -15pt rgb(0,0,0,0.3)",
+  margin: "-40pt auto -15pt",
+  marginLeft: "-1em",
+  backgroundColor: color.backgroundCreamLighter,
 }
 
 function getDateString(ms) {
@@ -38,11 +34,12 @@ function getDateString(ms) {
 
 
 
+
+
 function Post(props) {
   const [editModalIsOpen, setEditModalIsOpen] = useState(false);
-  const [isLiked, setIsLiked] = useState(false);
   const [sharingPromptIsOpen, setSharingPromptIsOpen] = useState(false);
-  // console.log(props.post);
+  const [likeCount, setLikeCount] = useState(0);
   
   const postURL = "/author/" + props.post.author.id + "/posts/" + props.post.id + "/";
 
@@ -58,10 +55,17 @@ function Post(props) {
     }
   }
 
+  const postLikeSetter = (likeList) => {
+    setLikeCount(likeList.items.length);
+  }
+
   const likedToggle = () => {
-    isLiked ? setIsLiked(false) : setIsLiked(true)
+    props.retrievePostLikes(props.post, postLikeSetter);
     props.likePost(props.post);
   }
+  
+  props.retrievePostLikes(props.post, postLikeSetter);
+  setInterval(()=>props.retrievePostLikes(props.post, postLikeSetter),30000);
 
   const getCategories = (cat) => {
     let categories =  cat.map((c) => <p>#{c}</p>)
@@ -75,9 +79,7 @@ function Post(props) {
   const editButton = () => {
     if (props.loggedInAuthor.id == props.post.author.id) {
       return  (
-      <Button style={buttonOverrideStyle} onClick={() => setEditModalIsOpen(true)}>
-        <EditButton/>
-      </Button>
+        <EditButton action={() => setEditModalIsOpen(true)}/>
       );
     }
   }
@@ -86,30 +88,31 @@ function Post(props) {
     if (props.interactive ){
       return (
         <div>
-        <Dividor style={postDividorStyle}/>
         <Container style={footerButtonLayoutStyle}>
-        <Button style={buttonOverrideStyle} onClick={() => likedToggle()}>
-          {isLiked ? <LikedButton/> : <LikeButton/>}
-        </Button>
-        <Button style={buttonOverrideStyle} onClick={() => setSharingPromptIsOpen(true)}>
-          <ShareButton/>
-        </Button>
-        {editButton()}
-        <Modal className="animate__animated animate__fadeIn animate__faster" show={editModalIsOpen} onClose={() => setEditModalIsOpen(false)} closeOnBlur closeOnEsc>
-          <EditPostForm
-            setEditModalIsOpen={setEditModalIsOpen}
-            post={props.post}
-            updatePost={props.updatePost}
-            deletePost={props.deletePost}
-          />
-        </Modal>
-        <Modal className="animate__animated animate__fadeIn animate__faster" show={sharingPromptIsOpen} onClose={() => setSharingPromptIsOpen(false)} closeOnBlur closeOnEsc>
-          <SharingPostPrompt
-            setModalIsOpen={setSharingPromptIsOpen}   
-            post={props.post}
-            sharePost={props.sharePost}
-          />
-        </Modal>
+
+          {/* buttons */}
+          <LikedButton count={likeCount} action={() => likedToggle()}/>
+          {editButton()}
+          <ShareButton action={() => setSharingPromptIsOpen(true)}/>
+          
+
+          {/* modal */}
+          <Modal className="animate__animated animate__fadeIn animate__faster" show={editModalIsOpen} onClose={() => setEditModalIsOpen(false)} closeOnBlur closeOnEsc>
+            <EditPostForm
+              setEditModalIsOpen={setEditModalIsOpen}
+              post={props.post}
+              updatePost={props.updatePost}
+              deletePost={props.deletePost}
+            />
+          </Modal>
+          <Modal className="animate__animated animate__fadeIn animate__faster" show={sharingPromptIsOpen} onClose={() => setSharingPromptIsOpen(false)} closeOnBlur closeOnEsc>
+            <SharingPostPrompt
+              setModalIsOpen={setSharingPromptIsOpen}   
+              post={props.post}
+              sharePost={props.sharePost}
+            />
+          </Modal>
+      
       </Container>
       </div>
       );
@@ -121,13 +124,14 @@ function Post(props) {
         <Card.Content style={postContainerStyle}>
 
           {/* Title */}
+          <a href={postURL}>
           <Container style={signatureStyle}>
           <p style={{ fontWeight: "250" }}>@{props.post.author.displayName}</p>
           <p>·</p>
           <p>{getDateString(Date.parse(props.post.published))}</p>
           </Container>
           <Container style={postTitleStyle}>
-          <Link to={`${postURL}`} style={{textDecoration: "none", color: color.baseBlack}}>{props.post.title}</Link>
+          <p style={{textDecoration: "none", color: color.baseBlack}}>{props.post.title}</p>
           </Container>
           
           {/* Description */}
@@ -135,13 +139,15 @@ function Post(props) {
             <p>{ props.post.description }</p>
           </Container>
 
-          <Dividor style={postDividorStyle}/>
+          <hr style={{...shadowDividorStyle, backgroundColor: "transparent", marginBottom: "0.5em", marginTop: "-32pt"}}></hr>
+
+          </a>
           
           {/* Content */}
           <Container style = {postContentStyle}>
           {IsImage() ? (
             <Content style={{textAlign: "center"}}>
-              <img style={{borderRadius: "6pt", maxHeight: "300pt"}}src={`data:${props.post.contentType},${props.post.content}`} /> 
+              <img style={{borderRadius: "6pt", maxHeight: "500pt"}}src={`data:${props.post.contentType},${props.post.content}`} /> 
             </Content>
           ) : <Content>{props.post.content}</Content> }
           </Container>
@@ -162,6 +168,7 @@ Post.propTypes = {
   post: PropTypes.object.isRequired,
   updatePost: PropTypes.func.isRequired,
   likePost: PropTypes.func.isRequired,
+  retrievePostLikes: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = (state) => ({
@@ -169,4 +176,5 @@ const mapStateToProps = (state) => ({
 });
 
 export default connect(mapStateToProps, {
+  retrievePostLikes,
 })(withRouter(Post));

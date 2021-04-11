@@ -1,6 +1,6 @@
 html,
 body {
-  background: #555555;
+  background: #363534;
   font-size: 0.9em;
 }
 
@@ -36,7 +36,7 @@ body {
 /* Stream page */
 .post-list {
   width: 100%;
-  max-width: 470pt;
+  max-width: 500pt;
   margin: auto;
 }
 .list {
