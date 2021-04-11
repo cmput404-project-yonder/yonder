@@ -111,7 +111,14 @@ class ProfileEdit extends React.Component {
     if (newProfile.displayName === "") {
       toast.error("Display Name cannot be empty");
     }
-    else if ((newProfile.github.replace("https://github.com/","") === newProfile.github)||(newProfile.github.replace("https://github.com/","")==="")) {
+    else if 
+      (
+        (newProfile.github !== "")&&
+        (
+          (newProfile.github.replace("https://github.com/","") === newProfile.github)||
+          (newProfile.github.replace("https://github.com/","")==="")
+        )
+      ) {
       toast.error("Github url invalid");
     }
     else {
@@ -137,9 +144,17 @@ class ProfileEdit extends React.Component {
       )
     }
 
+    const keypressHandler = (e) => {
+      // press enter to submitt
+      if (e.charCode === 13) {
+        e.preventDefault();
+        this.confirmEdit();
+      }
+    }
 
     const { displayName, githubURL } = this.state;
     return (
+      
       <Card style={{...cardStyle, width: "360pt", borderRadius: "12pt"}} className="animate__animated animate__slideInUp">
         <Container style={headingStyle.overall}>
           <div style={headingStyle.logo.style}>
@@ -157,6 +172,7 @@ class ProfileEdit extends React.Component {
                 value={displayName}
                 type="text"
                 placeholder={this.props.displayName}
+                onKeyPress={keypressHandler}
               ></Form.Input>
             </Form.Control>
           </Form.Field>
@@ -169,6 +185,7 @@ class ProfileEdit extends React.Component {
                 value={githubURL}
                 type="url"
                 placeholder="Enter your github URL"
+                onKeyPress={keypressHandler}
               ></Form.Input>
             </Form.Control>
           </Form.Field>
