@@ -18,7 +18,7 @@ var buttonStyle = {
 // component
 function LikeButton(props) {
     return (
-        <Container style={buttonStyle.style} class="likeButton">
+        <Container style={buttonStyle.style} className="likeButton">
             <a onClick={props.action}><LikedIcon svgScale={buttonStyle.scale} /></a>
         </Container>
     );

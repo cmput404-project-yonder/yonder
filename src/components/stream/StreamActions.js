@@ -26,6 +26,7 @@ import {
   SHARE_POST_SUCCESS,
 } from "./StreamTypes";
 import { setAxiosAuthToken, isEmpty } from "../../utils/Utils";
+import { push } from "connected-react-router";
 
 
 export const sharePost = (newPost) => (dispatch, getState) => {
@@ -154,6 +155,7 @@ export const deletePost = (aPost) => (dispatch, getState) => {
     .delete("/author/" + author.id + "/posts/" + aPost.id + "/")
     .then((response) => {
       dispatch({ type: DELETE_POST_SUCCESS, payload: aPost.id});
+      dispatch(push("/stream"));
     })
     .catch((error) => {
       if (error.response) {

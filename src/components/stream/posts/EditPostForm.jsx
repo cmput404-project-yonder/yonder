@@ -234,10 +234,10 @@ class EditPostForm extends Component {
 
     const FileUploadForm = () => {
       return (
-        <div class="file is-centered is-boxed">
-          <label class="file-label"style={{width: "100%", height: "38pt"}}>
-            <input class="file-input" type="file" name="resume" onChange={this.handleFileSelected}/>
-            <span class="file-cta">
+        <div className="file is-centered is-boxed">
+          <label className="file-label"style={{width: "100%", height: "38pt"}}>
+            <input className="file-input" type="file" name="resume" onChange={this.handleFileSelected}/>
+            <span className="file-cta">
               <div style={{margin: "auto", marginTop: "-6pt"}}>
               <ImageUploadIcon svgScale={"35"} fill={color.baseBlack}/>
               </div>
@@ -335,16 +335,16 @@ class EditPostForm extends Component {
 
     const DropDown = () => {
       return (
-        <div class="dropdown is-hoverable" style={{ float:"left", marginTop: "1.8em" }}>
-          <div class="dropdown-trigger" >
+        <div className="dropdown is-hoverable" style={{ float:"left", marginTop: "1.8em" }}>
+          <div className="dropdown-trigger" >
             <span
               style={{backgroundColor: "transparent", border: "none", fill: color.baseRed, width: "4em", padding: "0"}}
             >
             <ToolTipIcon svgScale={"25"} />
             </span>
           </div>
-          <div class="dropdown-menu animate__animated animate__fadeIn animate__faster" style={{minWidth: "250pt", marginRight: "-5pt"}}>
-            <div class="dropdown-content"style={menuDropDownStyle}>
+          <div className="dropdown-menu animate__animated animate__fadeIn animate__faster" style={{minWidth: "250pt", marginRight: "-5pt"}}>
+            <div className="dropdown-content"style={menuDropDownStyle}>
             <strong>Friends Only</strong> will only allow friends to view this post. <br></br><strong>Unlisted</strong> will allow this post to only show up on the stream of this post author.
             </div>
           </div>

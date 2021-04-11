@@ -96,8 +96,8 @@ class Profile extends React.Component {
 
     if (this.props.loading) {
       return (
-        <div class="pageloader is-active animate__animated animate__fadeIn animate__faster">
-          <span class="title">Loading</span>
+        <div className="pageloader is-active animate__animated animate__fadeIn animate__faster">
+          <span className="title">Loading</span>
         </div>
       );
     }

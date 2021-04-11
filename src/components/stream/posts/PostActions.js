@@ -42,7 +42,6 @@ export const createComment = (comment) => (dispatch, getState) => {
   const commentObj = {};
   const state = getState();
   const author = state.auth.author;
-  console.log("state:",state);
 
   setAxiosAuthToken(state.auth.token);
   commentObj["author"] = author;
@@ -54,7 +53,6 @@ export const createComment = (comment) => (dispatch, getState) => {
     .post("/author/" + state.auth.author.id + "/posts/" + state.post.retrievedPost.id + "/comments/", commentObj)
     .then((response) => {
       dispatch({ type: NEW_COMMENT_SUCCESS, payload: response.data });
-      console.log(commentObj);
     })
     .catch((error) => {
       if (error.response) {
@@ -73,7 +71,6 @@ export const createComment = (comment) => (dispatch, getState) => {
 
 export const retrieveCommentList = (authorId, postId) => (dispatch, getState) => {
   const state = getState();
-  console.log("state:",state);
 
   setAxiosAuthToken(state.auth.token);
   dispatch({ type: RETRIEVE_COMMENT_LIST_SUBMITTED });
@@ -96,3 +93,4 @@ export const retrieveCommentList = (authorId, postId) => (dispatch, getState) =>
       }
     });
 };
+

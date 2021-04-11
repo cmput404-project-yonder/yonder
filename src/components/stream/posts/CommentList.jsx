@@ -4,14 +4,12 @@ import Pagination from './Pagination';
 
 function CommentList(commentData) {
     const commentList = [].concat(commentData["commentData"]);
-    // console.log("CommentName:",postAuthorName);
     const postAuthorName = commentData["postAuthorName"].displayName;
     const [currentPage, setCurrentPage] = useState(1);
     const [commentsPerPage] = useState(5);
     const indexOfLastComment = currentPage * commentsPerPage;
     const indexOfFirstComment = indexOfLastComment - commentsPerPage;
     const currentPosts = commentList.slice(indexOfFirstComment, indexOfLastComment);
-
     
     const displayFiveItem = currentPosts.map((commentObj) => 
         <div
@@ -20,7 +18,7 @@ function CommentList(commentData) {
             marginTop: `3%`, paddingTop:`3%`, overflowWrap: 'break-word' }}
             >
             <p style={{ float:"right", marginRight:`2%`, fontSize:`13px`, position:"relative", bottom:`10px` }}>
-                by {postAuthorName}
+                by {commentObj.author.displayName}
             </p>
             <div style={{ position:'relative' }}>
                 <p style={{ textAlign:"left", fontSize:`30px` }}>
@@ -51,7 +49,7 @@ function CommentList(commentData) {
             marginTop: `3%`, paddingTop:`3%`, overflowWrap: 'break-word' }}
             >
             <p style={{ float:"right", marginRight:`2%`, fontSize:`13px`, position:"relative", bottom:`10px` }}>
-                by {postAuthorName}
+                by {commentObj.author.displayName}
             </p>
             <div style={{ position:'relative' }}>
                 <p style={{ textAlign:"left", fontSize:`30px` }}>

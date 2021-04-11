@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
-import { withRouter, useLocation } from "react-router-dom";
+import { withRouter } from "react-router-dom";
 import { Modal, Button, Content, Section, Card,Container,Columns, List } from "react-bulma-components";
 import Dividor from "./Dividor";
 import EditButton from "./buttons/EditButton";
@@ -10,13 +10,11 @@ import LikeButton from "./buttons/LikeButton";
 import LikedButton from "./buttons/LikedButton";
 import { dividorStyle, pageStyle,buttonLayerContainerStyle,newPostButtonStyle, streamLayerContainerStyle, postContainerStyle, postStyle, signatureStyle, postTitleStyle, DescriptionStyle, contentStyle, postContentStyle, categoriesStyle, footerButtonLayoutStyle} from "../../../styling/StyleComponents";
 import { color } from "../../../styling/ColorFontConfig";
-import InboxModalPopUp from "../../inbox/InboxModalPopUp";
 
 import EditPostForm from "./EditPostForm";
 import SharingPostPrompt from "./SharingPostPrompt";
-import { updatePost, deletePost } from '../StreamActions';
+import { updatePost, deletePost, likePost, sharePost } from '../StreamActions';
 import ReactMde from "react-mde";
-import Markdown from "react-markdown";
 import CommentList from "./CommentList";
 
 import { retrievePost, createComment, retrieveCommentList } from "./PostActions";
@@ -53,7 +51,6 @@ function DetailedPostList(props) {
   const [editModalIsOpen, setEditModalIsOpen] = useState(false);
   const [sharingPromptIsOpen, setSharingPromptIsOpen] = useState(false);
   const [writtenComment, setWrittenComment] = useState("");
-  console.log("PROPS:", props);
 
   // helper functions
   const IsImage = () => {
@@ -79,8 +76,14 @@ function DetailedPostList(props) {
     }
   }
 
+  const updateAndReload = (editedPost) => {
+    props.updatePost(editedPost);
+    window.location.reload();
+  }
+
   const likedToggle = () => {
     isLiked ? setIsLiked(false) : setIsLiked(true)
+    props.likePost(props.post);
   }
 
   const getCategories = (cat) => {
@@ -140,13 +143,13 @@ function DetailedPostList(props) {
         <EditPostForm
           setEditModalIsOpen={setEditModalIsOpen}
           post={props.post}
-          updatePost={props.updatePost}
+          updatePost={updateAndReload}
           deletePost={props.deletePost}
         />
       </Modal>
       <Modal className="animate__animated animate__fadeIn animate__faster" show={sharingPromptIsOpen} onClose={() => setSharingPromptIsOpen(false)} closeOnBlur closeOnEsc>
         <SharingPostPrompt
-          setModalIsOpen={setSharingPromptIsOpen}   
+          setModalIsOpen={setSharingPromptIsOpen}
           post={props.post}
           sharePost={props.sharePost}
         />
@@ -165,7 +168,7 @@ function DetailedPostList(props) {
             <Container style = {postContentStyle}>
             {IsImage() ? (
               <Content style={{textAlign: "center"}}>
-                <img style={{borderRadius: "6pt"}}src={`data:${props.post.contentType},${props.post.content}`} /> 
+                <img style={{borderRadius: "6pt"}}src={props.post.content} /> 
               </Content>
             ) : <Content>{props.post.content}</Content> }
             </Container>
@@ -204,14 +207,6 @@ function DetailedPostList(props) {
                 <CommentList commentData={props.commentList} postAuthorName={props.loggedInAuthor} />
               </div>
             }
-            {/* {listOfComments.map(comment => (
-              <p 
-                key={comment} 
-                style={{ borderBottomWidth: `1px`, borderTopWidth: 0, borderLeftWidth: 0, borderRightWidth: 0, borderStyle: 'dashed',
-                  marginTop: `3%`, paddingBottom: `4%` }}>
-                {comment.comment}
-              </p>
-            ))} */}
           </Container>
         </Card.Content>
       </Card>
@@ -260,15 +255,14 @@ class SelectedPost extends React.Component {
 
     this.props.retrievePost(params.author_id,params.id);
     this.props.retrieveCommentList(params.athor_id,params.id);
-    console.log("params:",params);
   }
 
   render() {
       
     if (this.props.loading || !this.props.retrievedPost.author) {
         return (
-            <div class="pageloader is-active">
-                <span class="title">Loading</span>
+            <div className="pageloader is-active">
+                <span className="title">Loading</span>
             </div>
         );
     }
@@ -283,7 +277,16 @@ class SelectedPost extends React.Component {
           <div style={streamLayerContainerStyle}>
             <Container fluid>
               <Columns centered>
-               <DetailedPostList post={this.props.retrievedPost} loggedInAuthor={this.props.loggedInAuthor} comments={this.props.comments} createComment={this.props.createComment} commentList={this.props.retrievedCommentList} />
+               <DetailedPostList 
+                post={this.props.retrievedPost} 
+                loggedInAuthor={this.props.loggedInAuthor} 
+                comments={this.props.comments} 
+                createComment={this.props.createComment} 
+                commentList={this.props.retrievedCommentList} 
+                likePost={this.props.likePost} 
+                updatePost={this.props.updatePost} 
+                sharePost={this.props.sharePost}
+                deletePost={this.props.deletePost} />
               </Columns>
             </Container>
           </div>
@@ -297,14 +300,16 @@ SelectedPost.propTypes = {
   retrievePost: PropTypes.func.isRequired,
   retrievedPost: PropTypes.object.isRequired,
   loading: PropTypes.bool.isRequired,
-  updatePost: PropTypes.func.isRequired,
-  likePost: PropTypes.func.isRequired,
   retrieveCommentList: PropTypes.func.isRequired,
   retrievedCommentList: PropTypes.array.isRequired,
 };
 
 DetailedPostList.propTypes = {
   createComment: PropTypes.func.isRequired,
+  likePost: PropTypes.func.isRequired,
+  updatePost: PropTypes.func.isRequired,
+  sharePost: PropTypes.func.isRequired,
+  deletePost: PropTypes.func.isRequired,
 }
 
 const mapStateToProps = (state) => ({
@@ -314,4 +319,4 @@ const mapStateToProps = (state) => ({
   retrievedCommentList: state.post.retrievedCommentList,
 });
 
-export default connect(mapStateToProps, { retrievePost, updatePost, deletePost, createComment, retrieveCommentList })(withRouter(SelectedPost));
+export default connect(mapStateToProps, { retrievePost, updatePost, deletePost, likePost, sharePost, createComment, retrieveCommentList })(withRouter(SelectedPost));

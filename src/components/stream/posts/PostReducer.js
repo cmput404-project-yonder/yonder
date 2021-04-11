@@ -15,6 +15,7 @@ import {
     retrievedPost: {},
     comments: [],
     retrievedCommentList: [],
+    retrievedAuthor: {},
     loading: false,
   };
   
