@@ -154,3 +154,32 @@ export function ProfileIconBoy(props) {
 
     )
 }
+
+export function LoginPageIcon(props) {
+    // https://www.flaticon.com/free-icon/broke_2765369
+    // https://www.flaticon.com/authors/smalllikeart
+    // Flaticon License
+    // Free for personal and commercial purpose with attribution.
+
+    return (
+        <svg xmlns="http://www.w3.org/2000/svg" width={props.svgScale} viewBox="0 0 282.214 282.214">
+        <g id="outline" transform="translate(-2 -2)">
+            <path id="Path_225" data-name="Path 225" d="M260.7,2H25.518V208.957H2v75.257H284.214V208.957H260.7ZM34.925,11.407H251.289V152.514H34.925Zm0,150.514H251.289v47.036H34.925Zm239.882,56.443v56.443H11.407V218.364Z" transform="translate(0 0)"/>
+            <rect id="Rectangle_53" data-name="Rectangle 53" width="10" height="10" transform="translate(44 171.214)"/>
+            <rect id="Rectangle_54" data-name="Rectangle 54" width="10" height="10" transform="translate(63 171.214)"/>
+            <rect id="Rectangle_55" data-name="Rectangle 55" width="10" height="9" transform="translate(44 190.214)"/>
+            <rect id="Rectangle_56" data-name="Rectangle 56" width="10" height="9" transform="translate(63 190.214)"/>
+            <rect id="Rectangle_57" data-name="Rectangle 57" width="9" height="28" transform="translate(21 232.214)"/>
+            <rect id="Rectangle_58" data-name="Rectangle 58" width="9" height="28" transform="translate(40 232.214)"/>
+            <rect id="Rectangle_59" data-name="Rectangle 59" width="10" height="28" transform="translate(58 232.214)"/>
+            <rect id="Rectangle_60" data-name="Rectangle 60" width="10" height="28" transform="translate(77 232.214)"/>
+            <path id="Path_226" data-name="Path 226" d="M30,87.629H161.7V50H30Zm9.407-28.221H152.293V78.221H39.407Z" transform="translate(103.7 177.771)"/>
+            <path id="Path_227" data-name="Path 227" d="M36.111,51A14.111,14.111,0,1,0,50.221,65.111,14.111,14.111,0,0,0,36.111,51Zm0,18.814a4.7,4.7,0,1,1,4.7-4.7A4.7,4.7,0,0,1,36.111,69.814Z" transform="translate(74.071 181.475)"/>
+            <path id="Path_228" data-name="Path 228" d="M45,66.221H73.221V38H45Zm9.407-18.814h9.407v9.407H54.407Z" transform="translate(159.253 133.328)"/>
+            <path id="Path_229" data-name="Path 229" d="M23,66.221h84.664V38H23Zm9.407-18.814h65.85v9.407H32.407Z" transform="translate(77.775 133.328)"/>
+            <path id="Path_230" data-name="Path 230" d="M11,6V128.293H208.55V6ZM170.921,118.886H102.315l34.3-34.3-6.651-6.651L89.013,118.886H59.983l34.3-34.3-6.651-6.651L46.681,118.886H20.407V15.407H170.921Zm9.407-103.478h18.814v9.407h-9.407v9.407h9.407v9.407h-9.407v9.407h9.407v65.85H180.328Z" transform="translate(33.332 14.814)"/>
+        </g>
+        </svg>
+
+    )
+}

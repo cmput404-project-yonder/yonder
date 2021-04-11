@@ -3,7 +3,6 @@ An edit button.
     props.action - onClick event
 */
 
-import { EditButton } from "../ProfileIcons";
 import { Container, Button } from "react-bulma-components";
 import { color } from "../styling";
 

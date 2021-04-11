@@ -3,16 +3,34 @@ import { Container, Button } from "react-bulma-components";
 import { color } from "./styling";
 
 // local styling
+// var buttonStyle = {
+//   scale: "25",
+//   style: {
+//     fill: color.baseRed,
+//     paddingTop: "3pt",
+//     paddingRight: "3pt",
+//   },
+//   button: {
+//     height: "3em",
+//     width: "3em",
+//     borderRadius: "9pt",
+//     backgroundColor: "transparent",
+//     border: "solid",
+//     borderColor: color.baseRed,
+//     borderWidth: "2.2pt"
+//   }
+// };
+
 var buttonStyle = {
   scale: "25",
   style: {
     fill: "white",
-    paddingTop: "3pt",
+    paddingTop: "4pt",
     paddingRight: "3pt",
   },
   button: {
-    height: "3em",
-    width: "3em",
+    height: "3.2em",
+    width: "3.2em",
     borderRadius: "100%",
     backgroundColor: color.baseRed,
     border: "none",

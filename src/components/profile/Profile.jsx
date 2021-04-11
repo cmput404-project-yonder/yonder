@@ -10,7 +10,7 @@ import { retrieveAuthor, retrieveAuthorPosts, sendFollow, deleteFollow, checkFol
 
 // buttons
 import FollowButton from "./buttons/FollowButton";
-import DeleteButton from "../stream/posts/buttons/DeleteButton";
+import UnfollowButton from "./buttons/UnfollowButton";
 import EditProfileButton from "./buttons/EditButton";
 import ProfileEdit from "./ProfileEdit";
 // import FriendButton from "./buttons/FriendButton";
@@ -100,7 +100,7 @@ class Profile extends React.Component {
     }
 
     const unfollowButton = () => {
-      return <DeleteButton action={clickUnfollow}/>
+      return <UnfollowButton onClick={clickUnfollow}/>
     }
 
     const otherAuthor = () => {
@@ -135,8 +135,8 @@ class Profile extends React.Component {
 
     const profileCard = () => {
       return (
-        <div className="post-list animate__animated animate__fadeInUp">
-          <Card style={{...postStyle, height: "auto", fontSize: "1em", maxWidth: "385pt", borderRadius: "12pt", margin: "auto"}}>
+        <div className="post-list animate__animated animate__fadeInUp" style={{marginBottom: "5em"}}>
+          <Card style={{...postStyle, height: "auto", fontSize: "1em", maxWidth: "385pt", borderRadius: "12pt", margin: "auto", paddingBottom: "0.8em"}}>
             <Container>
               <Container style={{marginTop: "3em", marginBottom: "-1.5em"}}>
                   <Container style={{fill: color.baseLightGrey}}>
@@ -180,10 +180,8 @@ class Profile extends React.Component {
       <Section >
         <Columns style={pageStyle}>
 
-        <Columns.Column>
-            <div className="post-list">
-              {profileCard()}
-            </div>
+          <Columns.Column>
+            {profileCard()}
           </Columns.Column>
 
           <Columns.Column>
