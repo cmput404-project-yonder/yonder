@@ -53,7 +53,7 @@ function InboxModal (props){
         // custom selection tab
         // text, markdown, image
         return (
-            <Container style={{...panelStyle, paddingBottom: "0.25em", marginRight: "6em"}}>
+            <Container style={{...panelStyle, paddingBottom: "0.25em", marginRight: "5.5em"}}>
                 <PostTab style={tabStyle} text="Like" active={tabSelected === "like"} action={() => selectTab("like")}/>
                 <PostTab style={tabStyle} text="Follow" active={tabSelected === "follow"} action={() => selectTab("follow")}/>
                 <PostTab style={tabStyle} text="Post"active={tabSelected === "post"} action={() => selectTab("post")}/>
