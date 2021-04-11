@@ -22,7 +22,7 @@ class App extends Component {
     return (
       <div>
         <Root>
-          <ToastContainer style={{marginTop: "60pt", fontSize: "1.2em", width: "auto", maxWidth: "30em"}} hideProgressBar={true} newestOnTop={true} />
+          <ToastContainer style={{margin: "2em", marginTop: "60pt", fontSize: "1.3em", width: "auto", width: "80%",maxWidth: "20em", }} hideProgressBar={true} newestOnTop={true} />
           <NavigationBar/>
           <Switch>
             <div style={{paddingTop: "6em"}}>
