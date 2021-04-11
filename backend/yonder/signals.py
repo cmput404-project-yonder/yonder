@@ -71,12 +71,14 @@ def follow_to_inbox(sender, instance, **kwargs):
 
 @receiver(post_save, sender=Post,dispatch_uid='signal_handler_post_save')
 def create_post(sender, instance, **kwargs):
-    if kwargs["created"]:
-        # Set origin & source on creation
-        instance.source = instance.get_absolute_url()
-        if instance.origin == "":
-            instance.origin = instance.source
 
+    # Set origin & source on creation
+    instance.source = instance.get_absolute_url()
+    if instance.origin == "":
+        instance.origin = instance.source
+        instance.save()
+    
+    if kwargs["created"] and instance.unlisted == False:
         # Get friend/followers
         listeners = []
         if instance.visibility == Post.Visibility.FRIENDS:
@@ -105,9 +107,7 @@ def create_post(sender, instance, **kwargs):
                 print(response.text)
             except RemoteNode.DoesNotExist:
                 print("Unknown Host, WHO ARE YOU???")
-            finally:
-                instance.save()
-
+    
 @receiver(post_save, sender=Author)
 def create_inbox(sender, instance, **kwargs):
     if kwargs["created"]:
