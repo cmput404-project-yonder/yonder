@@ -1,21 +1,29 @@
 import React from "react";
 import { Content, Container } from "react-bulma-components";
 import { YonderLogo, GithubLogo } from "./ProfileIcons";
-import Dividor from "./Dividor";
 
-import { style, color } from "./styling";
+import { color } from "./styling";
 
 
 // local styling of this component
-
+var shadowDividorStyle = {
+  border:"none",
+  width: "110%",
+  height: "50px",
+  boxShadow:"0 10pt 10pt -15pt rgb(0,0,0,0.3)",
+  margin: "-40pt auto -15pt",
+  marginLeft: "-2.5em",
+  backgroundColor: color.backgroundCreamLighter,
+}
 var statusStyle = {
     overall: {},
     displayName: {
       textAlign: "center",
       paddingBottom: "0.5em",
-      paddingTop: "1em",
-      fontSize: "3em",
-      fontWeight: "300",
+      paddingTop: "0.7em",
+      fontSize: "3.4em",
+      fontWeight: "500",
+      color: color.baseGreyHard,
     },
     statusBar: {
       overall: {
@@ -25,8 +33,9 @@ var statusStyle = {
       },
       block: {
         textAlign: "center",
-        fontWeight: "400",
-        fontSize: "1.2em",
+        fontWeight: "500",
+        fontSize: "1.7em",
+        color: color.baseGreyHard,
         width: "100%",
       },
       counter: {
@@ -45,7 +54,8 @@ var statusStyle = {
     },
     banner: {
       display: "flex",
-      fontSize: "1.2em",
+      fontSize: "1.6em",
+      color: color.baseGreyHard,
       alignItems: "center",
       whiteSpace: "nowrap",
       overflow: "hidden",
@@ -53,7 +63,7 @@ var statusStyle = {
   };
   
   var svgIconStyle = {
-    scale: "38",
+    scale: "50",
     style: {
       fill: color.baseBlack,
       padding: "1.1em",
@@ -95,7 +105,10 @@ function ProfileStatusView(props) {
 }
 
 function ProfileInfoView(props) {
-  const hasGithub = (props.githubURL === "") ? false : true;
+  const hasGithub = ((props.githubURL === undefined)||((props.githubURL === ""))) ? false : true;
+  if (hasGithub) {
+    var githubUsername = props.githubURL.replace("https://github.com/","");
+  }
 
   const yonderBanner = (
       <div style={infoStyle.banner}>
@@ -107,7 +120,7 @@ function ProfileInfoView(props) {
   const githubBanner = (!hasGithub) ? null : (
       <div style={infoStyle.banner}>
           <div style={svgIconStyle.style}><GithubLogo svgScale={svgIconStyle.scale} /></div>
-          <div><p>@{props.githubURL}</p></div>
+          <div><p>@{githubUsername}</p></div>
       </div>
   );
 
@@ -133,7 +146,7 @@ class ProfileDetail extends React.Component {
                   followerNum={this.props.followerNum}
                   postNum={this.props.postNum}
               />
-              <Dividor/>
+              <hr style={{...shadowDividorStyle, backgroundColor: "transparent", marginBottom: "0.5em", marginTop: "-32pt"}}></hr>
               <ProfileInfoView
                   UUID={this.props.UUID}
                   githubURL={this.props.githubURL}
