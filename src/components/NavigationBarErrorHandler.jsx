@@ -9,6 +9,7 @@ class NaviPollingErrorHandlerComponent extends React.Component {
       switch (this.props.errorResponse.status) {
         case 401:
             unsetCurrentUser();
+            window.location.pathname = "/";
             break;
         default:
             break;

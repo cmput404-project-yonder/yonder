@@ -12,10 +12,10 @@ import { createPost, updatePost, sharePost, likePost, retrieveLoggedInAuthorPost
 
 class Stream extends Component {
   componentDidMount() {
-    // if (Object.keys(this.props.author).length === 0) {
-    //   // untill author is properly set
-    //   window.location = window.location;
-    // }
+    if (Object.keys(this.props.author).length === 0) {
+      // untill author is properly set
+      window.location = window.location;
+    }
 
     if (this.props.auth.isAuthenticated) {
       this.props.retrieveLoggedInAuthorPosts();
