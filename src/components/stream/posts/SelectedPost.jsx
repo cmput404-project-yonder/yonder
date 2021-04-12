@@ -234,50 +234,78 @@ class CommentCard extends React.Component {
     }
   }
 
-  componentDidMount() {
-    this.props.sendCommentQuery(this.props.post, this.state.commentPageNum, 5, (data)=>console.log(data))
+  requestComments = (page) => {
+
+
+    if (this.props.post.author) {
+      if ((this.props.auth !== undefined)&&(this.props.auth.isAuthenticated)) {
+
+        this.props.sendCommentQuery(this.props.post, page, 5, (data)=>{
+          console.log(data)
+          if (data) {
+            this.setState({
+              comments: data.items,
+              commentPageNum: page,
+              commentsCount: data.count,
+            })
+          }
+        })
+
+      }      
+    }
+
+
   }
 
 
-  // CommentsList = (props) => {
-  //   // this part will rerender when commentState changes
-
-  //   const commentsComponentList = props.commentState.map(
-  //     (acomment) => 
-  //       <CommentContainer
-  //         authorID={acomment.author.id}
-  //         date={acomment.published}
-  //         content={acomment.comment}
-  //       />
-  //   );
-
-  //   return (
-  //     <List>
-  //       {commentsComponentList}
-  //     </List>
-  //   )
-  // }
-
-  // CommentContainer = (props) => {
-  //   // display one comment
-  //   return (
-  //     <Container style={wrapperStyle}>
-  //     <Container>
-  //       {/* Title */}
-  //       <p>{props.authorID}</p>
-        
-  //       {/* Date */}
-  //       <p>{props.date}</p>
-        
-  //       {/* Content */}
-  //       <p>{dateFormat(props.published, "dddd, mmmm dS, yyyy, h:MM TT")}</p>
-        
-  //     </Container>
-  //     </Container>
-  //   )
-  // }
+  componentDidMount() {
+    this.requestComments(this.state.commentPageNum);
+  }
 
   CommentsCard = () => {
+
+    const CommentContainer = (props) => {
+      // display one comment
+      return (
+        <Container style={{...wrapperStyle, marginBottom: "0.6em"}}>
+          <Container style={postContainerStyle}>
+
+            {/* Date */}
+            <p style={{float: "right", color: color.baseLightGrey, fontSize: "0.9em", marginRight: "0.5em"}}>{dateFormat(props.published, "dddd, mmmm dS, yyyy, h:MM TT")}</p>
+            
+            {/* Title */}
+            <p style={{color: color.baseLightGrey, fontSize: "0.9em", marginLeft: "0.4em"}}>@{props.authorName}</p>
+            <hr style={{...shadowDividorStyle, backgroundColor: "transparent", marginBottom: "0.5em", marginTop: "-32pt"}}></hr>
+
+            {/* Content */}
+            <p style={postContentStyle}>{props.content}</p>
+            
+          </Container>
+        </Container>
+      )
+    }
+
+    const CommentsList = (props) => {
+      // this part will rerender when commentState changes
+  
+      const commentsComponentList = props.commentState.map(
+        (acomment) => 
+          <CommentContainer
+            authorName={acomment.author.displayName}
+            published={acomment.published}
+            content={acomment.comment}
+          />
+      );
+  
+      return (
+        <List>
+          {commentsComponentList}
+        </List>
+      )
+    }
+
+
+
     return (
       <Card style={localCardStyle}>
           <Container style={{position: "fixed", right: "10%", marginTop: "2.2em", display: "flex", gap: "0.5em", zIndex: "1"}}>
@@ -287,8 +315,8 @@ class CommentCard extends React.Component {
           <Container style={{fill: color.baseLightGrey,textAlign: "left", width: "100%", padding: "1.2em", paddingLeft: "10%"}}>
             <PostCommentsIcon svgScale={"90"}/>
           </Container>
-          {/* <CommentsList commentState={comments}/>
-          <p style={{textAlign: "center"}}>{commentPageNum}</p> */}
+          <CommentsList commentState={this.state.comments}/>
+          <p style={{textAlign: "center"}}>{this.state.commentPageNum}</p>
 
       </Card>
     )
@@ -408,6 +436,7 @@ class SelectedPost extends React.Component {
                     
                   />
                   <CommentCard 
+                    auth={this.props.auth}
                     post={this.props.retrievedPost} 
                     sendCommentQuery={this.props.sendCommentQuery}
                   />              
