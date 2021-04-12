@@ -26,7 +26,7 @@ import { setAxiosAuthToken, isEmpty } from "../../utils/Utils";
 import { push } from "connected-react-router";
 
 
-export const sharePost = (newPost) => (dispatch, getState) => {
+export const sharePost = (newPost, chainFuc=null) => (dispatch, getState) => {
   /*
   NOTICE: change this before part2 deadline
   for now, sharePost will treat the post as new, and do the samething as createPost.
@@ -43,6 +43,9 @@ export const sharePost = (newPost) => (dispatch, getState) => {
     .post("/author/" + state.auth.author.id + "/posts/", newPost)
     .then((response) => {
       dispatch({ type: SHARE_POST_SUCCESS, payload: response.data });
+      if (chainFuc !== null) {
+        chainFuc();
+      }
     })
     .catch((error) => {
       if (error.response) {
@@ -122,7 +125,7 @@ export const updatePost = (editedPost, setter=null) => (dispatch, getState) => {
 };
 
 
-export const deletePost = (aPost) => (dispatch, getState) => {
+export const deletePost = (aPost, chainFunc=null) => (dispatch, getState) => {
   const state = getState();
   const author = state.auth.author;
 
@@ -133,7 +136,9 @@ export const deletePost = (aPost) => (dispatch, getState) => {
     .delete("/author/" + author.id + "/posts/" + aPost.id + "/")
     .then((response) => {
       dispatch({ type: DELETE_POST_SUCCESS, payload: aPost.id});
-      dispatch(push("/stream"));
+      if (chainFunc!==null) {
+        chainFunc();
+      }
     })
     .catch((error) => {
       if (error.response) {

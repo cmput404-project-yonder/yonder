@@ -15,10 +15,13 @@ import EditProfileButton from "./buttons/EditButton";
 import ProfileEdit from "./ProfileEdit";
 // import FriendButton from "./buttons/FriendButton";
 
-import Dividor from "./Dividor";
 import { color } from "../../styling/ColorFontConfig";
-import { dividorStyle,postStyle } from "../../styling/StyleComponents";
+import { postStyle } from "../../styling/StyleComponents";
 import { ProfileIconBoy } from "../../styling/svgIcons";
+import { Redirect } from "react-router-dom";
+
+import {updatePost, sharePost, likePost, deletePost } from "../stream/StreamActions";
+import { retrieveAllAuthors } from "../NavigationActions";
 
 var pageStyle = {
   margin: "auto",
@@ -176,20 +179,45 @@ class Profile extends React.Component {
       );
     }
 
-    return (
-      <Section >
-        <Columns style={pageStyle}>
+    const updatePostWrapper = (editedPost) => {
+      this.props.updatePost(editedPost, ()=>this.props.retrieveAuthorPosts(this.props.retrievedAuthor.id));
+    }
 
-          <Columns.Column>
-            {profileCard()}
-          </Columns.Column>
+    const sharePostWrapper = (post) => {
+      this.props.sharePost(post, ()=>this.props.retrieveAuthorPosts(this.props.retrievedAuthor.id));
+    }
 
-          <Columns.Column>
-            <PostList posts={this.props.retrievedAuthorPosts} interactive={true}/>
-          </Columns.Column>
-        </Columns>
-      </Section>
-    );
+    const deletePostWrapper = (post) => {
+      this.props.deletePost(post, ()=>this.props.retrieveAuthorPosts(this.props.retrievedAuthor.id));
+    }
+
+    if (!this.props.auth.isAuthenticated)
+      // redirect user to login page if not logged in
+      return <Redirect to="/" />;
+    else
+      return (
+        <Section >
+          <Columns style={pageStyle}>
+
+            <Columns.Column>
+              {profileCard()}
+            </Columns.Column>
+
+            <Columns.Column>
+              <PostList 
+                posts={this.props.retrievedAuthorPosts}
+                
+                updatePost={updatePostWrapper} 
+                deletePost={deletePostWrapper} 
+                likePost={this.props.likePost}
+                sharePost={sharePostWrapper}
+                interactive={true}
+
+              />
+            </Columns.Column>
+          </Columns>
+        </Section>
+      );
   }
 }
 
@@ -204,6 +232,7 @@ Profile.propTypes = {
 };
 
 const mapStateToProps = (state) => ({
+  auth: state.auth,
   loggedInAuthor: state.auth.author,
   loading: state.profile.loading,
   retrievedAuthor: state.profile.retrievedAuthor,
@@ -217,5 +246,10 @@ export default connect(mapStateToProps, {
   sendFollow,
   deleteFollow,
   checkFollowing,
-  editProfile
+  editProfile,
+  updatePost,
+  sharePost,
+  deletePost,
+  likePost,
+
 })(withRouter(Profile));

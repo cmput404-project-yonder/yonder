@@ -86,7 +86,7 @@ function InboxModal (props){
     }  
 
     return (
-        <Card style={{...cardStyle, backgroundColor: color.backgroundCreamLighter, width: "420pt", height: "442pt"}} className="animate__animated animate__slideInDown">
+        <Card style={{...cardStyle, backgroundColor: color.backgroundCreamLighter, width: "420pt", height: "462pt"}} className="animate__animated animate__slideInDown">
             
             {/* <Container style={inboxIconStyle}>
                 <InboxModalIcon svgScale={"75"}/>
@@ -94,7 +94,7 @@ function InboxModal (props){
             <Container>
                 <p style={inboxTitleStyle}>Inbox</p>
             </Container> */}
-            <hr style={{...shadowDividorStyle, marginTop: "-3.2em", backgroundColor: "transparent"}}></hr>
+            <hr style={{...shadowDividorStyle, marginTop: "-1.2em", backgroundColor: "transparent"}}></hr>
             
             <Card.Content style={{marginTop: "0.8em", marginBottom: "3.2em"}}>
                 <Inbox selectedTab={tabSelected}/> 

@@ -160,8 +160,8 @@ function NavigationBar(props) {
     if (props.auth.isAuthenticated) {
       // add entry that require authentication here
       entryList.push(<ProfileButton action={() => window.location.href = "/author/" + props.auth.author.id}/>)
-      entryList.push(<InboxButton action={() => {setInboxModalIsOpen(true);retrieveInboxPolling();}}/>)
-      entryList.push(<SearchButton action={() => {setSearchModalIsOpen(true);retrieveAllAuthorsPolling();}}/>)
+      entryList.push(<InboxButton action={() => {setInboxModalIsOpen(true);retrieveInboxPolling();}}/>)   // event triggers a request
+      entryList.push(<SearchButton action={() => {setSearchModalIsOpen(true);}}/>)
     } 
 
     // add entry that only avalible to stranger here, if needed
