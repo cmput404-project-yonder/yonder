@@ -314,12 +314,17 @@ class CommentCard extends React.Component {
           <Container style={{fill: color.baseLightGrey,textAlign: "left", width: "100%", padding: "1.2em", paddingLeft: "10%"}}>
             <PostCommentsIcon svgScale={"90"}/>
           </Container>
-          <CommentsList commentState={this.state.comments}/>
+          
           {/* <p style={{textAlign: "center"}}>{this.state.commentPageNum}</p> */}
+          <hr style={{...shadowDividorStyle, backgroundColor: "transparent", marginBottom: "10pt", marginTop: "-32pt"}}></hr>
           <PaginationTag
             count={this.state.commentsCount}
             pageSize={this.pageSize}
           />
+          {/* <hr style={{...shadowDividorStyle, backgroundColor: "transparent",transform: "rotate(180deg)", marginBottom: "-12pt", marginTop: "-12pt"}}></hr> */}
+          <Container style={{marginBottom: "1.5em", marginTop: "-0.5em", width: "100%"}}>
+          <CommentsList commentState={this.state.comments}/>
+          </Container>
       </Card>
     )
   }
