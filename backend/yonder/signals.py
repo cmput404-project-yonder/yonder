@@ -118,5 +118,5 @@ def create_inbox(sender, instance, **kwargs):
 
 @receiver(pre_save, sender=User)
 def set_inactive(sender, instance, **kwargs):
-    if instance.pk == None:
+    if instance.pk == None and not instance.is_staff and not instance.is_superuser:
         instance.is_active = False

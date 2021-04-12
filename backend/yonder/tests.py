@@ -24,6 +24,8 @@ class AuthorAccountTests(APITestCase):
             "host": "http://testserver.com"
         }
         user = User.objects.create_user(**self.credentials)
+        user.is_active = True
+        user.save()
         self.author = Author.objects.create(**self.testAuthor, user=user)
         self.testAuthor["id"] = self.author.id
 
@@ -103,6 +105,8 @@ class PublicPostTests(APITestCase):
             "host": "http://testserver.com"
         }
         user = User.objects.create_user(**self.credentials)
+        user.is_active = True
+        user.save()
         self.author = Author.objects.create(**self.testAuthor, user=user)
 
         credBytes= base64.b64encode(f'{self.credentials["username"]}:{self.credentials["password"]}'.encode())
@@ -188,6 +192,8 @@ class PostTests(APITestCase):
             "host": "http://testserver.com"
         }
         user = User.objects.create_user(**self.credentials)
+        user.is_active = True
+        user.save()
         self.author = Author.objects.create(**self.testAuthor, user=user)
 
         credBytes= base64.b64encode(f'{self.credentials["username"]}:{self.credentials["password"]}'.encode())
@@ -321,6 +327,8 @@ class FollowerTests(APITestCase):
             "host": "http://testserver.com"
         }
         user1 = User.objects.create_user(**self.credentials1)
+        user1.is_active = True
+        user1.save()
         self.author1 = Author.objects.create(**self.testAuthor1, user=user1)
         self.authorJSON1 = AuthorSerializer(instance=self.author1).data
 
@@ -334,6 +342,8 @@ class FollowerTests(APITestCase):
             "host": "http://testserver.com"
         }
         user2 = User.objects.create_user(**self.credentials2)
+        user2.is_active = True
+        user2.save()
         self.author2 = Author.objects.create(**self.testAuthor2, user=user2)
         self.authorJSON2 = AuthorSerializer(instance=self.author2).data
 
@@ -465,6 +475,8 @@ class InboxTests(APITestCase):
             "host": "http://testserver.com"
         }
         user = User.objects.create_user(**self.credentials)
+        user.is_active = True
+        user.save()
         self.author = Author.objects.create(**self.testAuthor, user=user)
 
         credBytes= base64.b64encode(f'{self.credentials["username"]}:{self.credentials["password"]}'.encode())
@@ -538,6 +550,8 @@ class SignalTests(TestCase):
             "host": "http://testserver.com/"
         }
         user1 = User.objects.create_user(**self.credentials1)
+        user1.is_active = True
+        user1.save()
         self.author1 = Author.objects.create(**self.testAuthor1, user=user1)
         self.authorJSON1 = AuthorSerializer(instance=self.author1).data
 
@@ -551,6 +565,8 @@ class SignalTests(TestCase):
             "host": "http://testserver.com/"
         }
         user2 = User.objects.create_user(**self.credentials2)
+        user2.is_active = True
+        user2.save()
         self.author2 = Author.objects.create(**self.testAuthor2, user=user2)
         self.authorJSON2 = AuthorSerializer(instance=self.author2).data
         
@@ -632,6 +648,10 @@ class LikeTests(APITestCase):
         }
         user1 = User.objects.create_user(**self.credentials1)
         user2 = User.objects.create_user(**self.credentials2)
+        user1.is_active = True
+        user1.save()
+        user2.is_active = True
+        user2.save()
         self.author1 = Author.objects.create(**self.testAuthor1, user=user1)
         self.author2 = Author.objects.create(**self.testAuthor2, user=user2)
 
@@ -748,6 +768,10 @@ class CommentTests(APITestCase):
         }
         user1 = User.objects.create_user(**self.credentials1)
         user2 = User.objects.create_user(**self.credentials2)
+        user1.is_active = True
+        user1.save()
+        user2.is_active = True
+        user2.save()
         self.author1 = Author.objects.create(**self.testAuthor1, user=user1)
         self.author2 = Author.objects.create(**self.testAuthor2, user=user2)
 
