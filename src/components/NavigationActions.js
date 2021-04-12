@@ -14,9 +14,6 @@ import {
   } from "./NavigationTypes";
 import { setAxiosAuthToken } from "../utils/Utils";
 
-
-
-
 export const retrieveInbox = () => (dispatch, getState) => {
 const state = getState();
 const authorId = state.auth.author.id;
@@ -29,17 +26,18 @@ axios
     dispatch({ type: RETRIEVE_INBOX_SUCCESS, payload: response.data });
     })
     .catch((error) => {
-    if (error.response) {
+      console.log(error);
+      if (error.response) {
         toast.error(JSON.stringify(error.response.data));
         dispatch({
-        type: RETRIEVE_INBOX_ERROR,
-        errorData: error.response,
+          type: RETRIEVE_INBOX_ERROR,
+          errorData: error.response,
         });
-    } else if (error.message) {
+      } else if (error.message) {
         toast.error(JSON.stringify(error.message));
-    } else {
+      } else {
         toast.error(JSON.stringify(error));
-    }
+      }
     });
 };
 
@@ -79,16 +77,16 @@ export const retrieveAllAuthors = () => (dispatch, getState) => {
         dispatch({ type: RETRIEVE_ALL_AUTHORS_SUCCESS, payload: response.data });
     })
     .catch((error) => {
-        if (error.response) {
+      if (error.response) {
         toast.error(JSON.stringify(error.response.data));
         dispatch({
-            type: RETRIEVE_ALL_AUTHORS_ERROR,
-            errorData: error.response,
+          type: RETRIEVE_ALL_AUTHORS_ERROR,
+          errorData: error.response,
         });
-        } else if (error.message) {
+      } else if (error.message) {
         toast.error(JSON.stringify(error.message));
-        } else {
+      } else {
         toast.error(JSON.stringify(error));
-        }
+      }
     });
 };
