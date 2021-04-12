@@ -309,7 +309,7 @@ class CommentCard extends React.Component {
       <Card style={localCardStyle}>
           <Container style={{position: "fixed", right: "10%", marginTop: "2.2em", display: "flex", gap: "0.5em", zIndex: "1"}}>
             <p style={{color: color.baseLightGrey, fontSize: "1.2em", fontWeight: "450", marginTop: "0.5em"}}>Write comment</p>
-            <CommentModal/>
+            <CommentModal afterDone={()=>this.requestComments(this.state.commentPageNum)}/>
           </Container>
           <Container style={{fill: color.baseLightGrey,textAlign: "left", width: "100%", padding: "1.2em", paddingLeft: "10%"}}>
             <PostCommentsIcon svgScale={"90"}/>

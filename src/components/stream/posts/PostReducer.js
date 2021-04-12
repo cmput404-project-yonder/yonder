@@ -46,44 +46,25 @@ import {
           ...state,
           retrievedPost: action.payload,
         };
-        case NEW_COMMENT_SUBMITTED:
-          return {
-            ...state,
-            error: "",
-            loading: true,
-          };
-        case NEW_COMMENT_SUCCESS:
-          return {
-            ...state,
-            error: action.errorData,
-            loading: false,
-          };
-        case NEW_COMMENT_ERROR:
-          return {
-            ...state,
-            error: "",
-            comments: action.payload,
-            loading: false,
-          };
-        case RETRIEVE_COMMENT_LIST_SUBMITTED:
-          return {
-            ...state,
-            error: "",
-            loading: true,
-          };
-        case RETRIEVE_COMMENT_LIST_ERROR:
-          return {
-            ...state,
-            error: action.errorData,
-            loading: false,
-          };
-        case RETRIEVE_COMMENT_LIST_SUCCESS:
-          return {
-            ...state,
-            error: "",
-            retrievedCommentList: action.payload,
-            loading: false,
-          };
+      case RETRIEVE_COMMENT_LIST_SUBMITTED:
+        return {
+          ...state,
+          error: "",
+          loading: true,
+        };
+      case RETRIEVE_COMMENT_LIST_ERROR:
+        return {
+          ...state,
+          error: action.errorData,
+          loading: false,
+        };
+      case RETRIEVE_COMMENT_LIST_SUCCESS:
+        return {
+          ...state,
+          error: "",
+          retrievedCommentList: action.payload,
+          loading: false,
+        };
       default:
         return state;
     }
