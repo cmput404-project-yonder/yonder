@@ -3,12 +3,10 @@ import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { withRouter } from "react-router-dom";
 import { Modal, Button, Content, Section, Card,Container,Columns, List } from "react-bulma-components";
-import Dividor from "./Dividor";
 import EditButton from "./buttons/EditButton";
 import ShareButton from "./buttons/ShareButton";
-import LikeButton from "./buttons/LikeButton";
 import LikedButton from "./buttons/LikedButton";
-import { dividorStyle, pageStyle,buttonLayerContainerStyle,newPostButtonStyle, streamLayerContainerStyle, postContainerStyle, postStyle, signatureStyle, postTitleStyle, DescriptionStyle, contentStyle, postContentStyle, categoriesStyle, footerButtonLayoutStyle} from "../../../styling/StyleComponents";
+import { pageStyle,buttonLayerContainerStyle,newPostButtonStyle, streamLayerContainerStyle, postContainerStyle, postStyle, signatureStyle, postTitleStyle, DescriptionStyle, contentStyle, postContentStyle, categoriesStyle, footerButtonLayoutStyle} from "../../../styling/StyleComponents";
 import { color } from "../../../styling/ColorFontConfig";
 
 import EditPostForm from "./EditPostForm";
@@ -22,7 +20,6 @@ import { DetailedPostIcon,PostCommentsIcon } from "../../../styling/svgIcons";
 import { retrievePostLikes } from "./PostActions";
 import { toast } from "react-toastify";
 
-import ReactMde from "react-mde";
 import PaginationTag from "./Pagination";
 
 import dateFormat from 'dateformat';
@@ -63,7 +60,6 @@ function DetailedPostList(props) {
 
   const [editModalIsOpen, setEditModalIsOpen] = useState(false)
   const [sharingPromptIsOpen, setSharingPromptIsOpen] = useState(false)
-  const [writtenComment, setWrittenComment] = useState("")
 
 
   // helper functions
@@ -126,54 +122,6 @@ function DetailedPostList(props) {
     );
   }
 
-  // const CommentCard = () => {
-  //   return (
-  //     <Card style={postStyle}>
-  //       <Card.Content style={postContainerStyle}>
-  //         {/* author and timestamp */}
-  //         <Container style={signatureStyle}>
-  //         <p>·</p>
-  //         </Container>
-  //         <Container style={postTitleStyle}>
-  //         <p style={{color: color.baseBlack}}>Comment</p>
-  //         </Container>
-  //         {/* comment section */}
-  //         <Container style={DescriptionStyle}>
-  //           {
-  //             <div >
-  //               <CommentList commentData={props.commentList} postAuthorName={props.loggedInAuthor} />
-  //             </div>
-  //           }
-  //         </Container>
-  //       </Card.Content>
-  //     </Card>
-  //   )
-  // }
-
-  const CommentEditorCard = () => {
-    return (
-      <Card style={postStyle}>
-        <Card.Content style={postContainerStyle}>
-          <ReactMde
-            value={writtenComment}
-            onChange={m => setWrittenComment(m)}
-          />
-          <Button
-            style={{ float: "right", marginRight: `-2px` }}
-            onClick={e => {
-              props.createComment(writtenComment);
-              setWrittenComment("");
-              window.location.reload();
-            }}
-          >
-          Comment
-        </Button>
-        </Card.Content>
-      </Card>
-    )
-  }
-
-
   const PostCard = () => {
     return (
       <Card style={localCardStyle}>
@@ -216,7 +164,6 @@ function DetailedPostList(props) {
           </Card.Content> 
         </Container>
         {displayFooterButtons()}
-        {CommentEditorCard()}
       </Card>
     )
   }
@@ -307,13 +254,13 @@ class CommentCard extends React.Component {
 
     return (
       <Card style={localCardStyle}>
-          <Container style={{position: "fixed", right: "10%", marginTop: "2.2em", display: "flex", gap: "0.5em", zIndex: "1"}}>
-            <p style={{color: color.baseLightGrey, fontSize: "1.2em", fontWeight: "450", marginTop: "0.5em"}}>Write comment</p>
+          <Container style={{marginTop: "1.8em", marginBottom: "1.2em", marginLeft: "-2em", display: "flex", justifyContent: "flex-end", width: "100%", gap: "0.5em", zIndex: "1"}}>
+            <p style={{color: color.baseLightGrey, fontSize: "1.2em", fontWeight: "450", marginTop: "0.5em"}}>Leave a comment</p>
             <CommentModal afterDone={()=>this.requestComments(this.state.commentPageNum)}/>
           </Container>
-          <Container style={{fill: color.baseLightGrey,textAlign: "left", width: "100%", padding: "1.2em", paddingLeft: "10%"}}>
+          {/* <Container style={{fill: color.baseLightGrey,textAlign: "left", width: "100%", padding: "1.2em", paddingLeft: "10%"}}>
             <PostCommentsIcon svgScale={"90"}/>
-          </Container>
+          </Container> */}
           
           {/* <p style={{textAlign: "center"}}>{this.state.commentPageNum}</p> */}
           <hr style={{...shadowDividorStyle, backgroundColor: "transparent", marginBottom: "10pt", marginTop: "-32pt"}}></hr>
