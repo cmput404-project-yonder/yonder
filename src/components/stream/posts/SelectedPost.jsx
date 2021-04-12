@@ -22,6 +22,7 @@ import { DetailedPostIcon,PostCommentsIcon } from "../../../styling/svgIcons";
 import { retrievePostLikes } from "./PostActions";
 import { toast } from "react-toastify";
 
+import ReactMde from "react-mde";
 import PaginationTag from "./Pagination";
 
 import dateFormat from 'dateformat';
@@ -62,6 +63,8 @@ function DetailedPostList(props) {
 
   const [editModalIsOpen, setEditModalIsOpen] = useState(false)
   const [sharingPromptIsOpen, setSharingPromptIsOpen] = useState(false)
+  const [writtenComment, setWrittenComment] = useState("")
+
 
   // helper functions
   const IsImage = () => {
@@ -147,28 +150,28 @@ function DetailedPostList(props) {
   //   )
   // }
 
-  // const CommentEditorCard = () => {
-  //   return (
-  //     <Card style={postStyle}>
-  //       <Card.Content style={postContainerStyle}>
-  //         <ReactMde
-  //           value={writtenComment}
-  //           onChange={m => setWrittenComment(m)}
-  //         />
-  //         <Button
-  //           style={{ float: "right", marginRight: `-2px` }}
-  //           onClick={e => {
-  //             props.createComment(writtenComment);
-  //             setWrittenComment("");
-  //             window.location.reload();
-  //           }}
-  //         >
-  //         Comment
-  //       </Button>
-  //       </Card.Content>
-  //     </Card>
-  //   )
-  // }
+  const CommentEditorCard = () => {
+    return (
+      <Card style={postStyle}>
+        <Card.Content style={postContainerStyle}>
+          <ReactMde
+            value={writtenComment}
+            onChange={m => setWrittenComment(m)}
+          />
+          <Button
+            style={{ float: "right", marginRight: `-2px` }}
+            onClick={e => {
+              props.createComment(writtenComment);
+              setWrittenComment("");
+              window.location.reload();
+            }}
+          >
+          Comment
+        </Button>
+        </Card.Content>
+      </Card>
+    )
+  }
 
 
   const PostCard = () => {
@@ -213,6 +216,7 @@ function DetailedPostList(props) {
           </Card.Content> 
         </Container>
         {displayFooterButtons()}
+        {CommentEditorCard()}
       </Card>
     )
   }
