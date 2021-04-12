@@ -214,25 +214,48 @@ class comments(generics.ListCreateAPIView):
 
     @swagger_auto_schema(tags=['comments'])
     def get(self, request, *args, **kwargs):
-        comments = Comment.objects.filter(post_id=kwargs["post_id"]).order_by('published')
+        comments = Comment.objects.filter(post_id=kwargs["post_id"]).order_by('-published')
         page_number = 1 if 'page' not in request.query_params else request.query_params.get('page')
-        page_size = 50 if 'size' not in request.query_params else request.query_params.get('size')
+        page_size = 5 if 'size' not in request.query_params else request.query_params.get('size')
         paginator = Paginator(comments, page_size)
         page = paginator.page(page_number)
-        serialized_comments = [self.serializer_class(comment).data for comment in page.object_list]
+        
+        if page.object_list.count() == 0:
+            return Response(status=status.HTTP_204_NO_CONTENT)
 
-        return Response(serialized_comments, status=status.HTTP_200_OK)
+        items = [self.serializer_class(comment).data for comment in page.object_list]
+        data = {
+            "type": "comments",
+            "count": comments.count(),
+            "items": items
+        }
+
+        return Response(data, status=status.HTTP_200_OK)
 
     @swagger_auto_schema(tags=['comments'])
     def post(self, request, *args, **kwargs):
-        post = get_object_or_404(Post, id=kwargs["post_id"])
-        request.data['post'] = post.id
-        comment_serializer = self.serializer_class(data=request.data)
-        if not comment_serializer.is_valid():
-            return Response(status=status.HTTP_400_BAD_REQUEST)
+        try:
+            post = Post.objects.get(id=kwargs["post_id"])
+            request.data['post'] = post.id
+            comment_serializer = self.serializer_class(data=request.data)
+            if comment_serializer.is_valid():
+                comment_serializer.save()
+                return Response(comment_serializer.data, status=status.HTTP_201_CREATED)
+        except Post.DoesNotExist:
+            # handle comment on a remote post
+            host = request.data["post"]["author"]["host"]
+            node = get_object_or_404(RemoteNode, host=host)
+            url = node.host + request.data["post"]["author"]["id"] + \
+                "/posts/" + request.data["post"]["id"] + "/comments/"
+            response = requests.post(url, 
+                auth=requests.models.HTTPBasicAuth(node.our_user, node.our_password), 
+                json=request.data,
+                headers={"content-type": "application/json"}
+            )
+            return Response(response.content, status=response.status_code)
 
-        comment_serializer.save()
-        return Response(status=status.HTTP_201_CREATED)
+
+        return Response(status=status.HTTP_400_BAD_REQUEST)
 
 
 class comment_detail(generics.RetrieveUpdateDestroyAPIView):
@@ -371,15 +394,10 @@ class inbox(generics.GenericAPIView):
         inbox = get_object_or_404(Inbox, author_id=kwargs["author_id"])
         author = get_object_or_404(Author, id=kwargs["author_id"])
 
-        page_number = 1 if 'page' not in request.query_params else request.query_params.get('page')
-        page_size = 50 if 'size' not in request.query_params else request.query_params.get('size')
-        paginator = Paginator(inbox.items, page_size)
-        page = paginator.page(page_number)
-
         data = {
             "type": "inbox",
             "author": author.get_absolute_url(),
-            "items": page.object_list
+            "items": inbox.items
         }
 
         return Response(data, status=status.HTTP_200_OK)

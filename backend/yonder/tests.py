@@ -845,13 +845,11 @@ class CommentTests(APITestCase):
             "post": self.author2_post,
             "author": AuthorSerializer(self.author1).data,
             "comment": "cool post dude",
-            "published": "2015-03-09T13:07:04+00:00"
         }
         self.author1_second_comment = {
             "post": self.author2_post,
             "author": AuthorSerializer(self.author1).data,
             "comment": "can i reshare it?",
-            "published": "2015-03-09T13:07:04+00:00"
         }
         self.author1_first_comment = Comment.objects.create(**self.author1_first_comment)
         self.author1_second_comment = Comment.objects.create(**self.author1_second_comment)
@@ -866,7 +864,6 @@ class CommentTests(APITestCase):
                 "github": self.author1.github
             },
             "comment":"Sick Olde English",
-            "published": "2015-03-09T13:07:04+00:00"
         }
         self.comment_like_data_from_author_1_json = json.dumps(comment_like_data_from_author_1)
 
@@ -876,8 +873,8 @@ class CommentTests(APITestCase):
     def test_get_comments(self):
         url = reverse('comments', args=[self.author2.id, self.author2_post.id])
         response = self.client.get(url)
-        self.assertEqual(len(response.data), 2)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data["count"], 2)
     
     def test_post_comment(self):
         # author1 comments on author2 post
@@ -887,5 +884,5 @@ class CommentTests(APITestCase):
         
         url = reverse('comments', args=[self.author2.id, self.author2_post.id])
         response = self.client.get(url)
-        self.assertEqual(len(response.data), 3)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data["count"], 3)
