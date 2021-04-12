@@ -50,7 +50,9 @@ class signup(generics.GenericAPIView):
     @swagger_auto_schema(tags=['authentication'])
     def post(self, request, *args, **kwargs):
         author_data = {
-            "displayName": request.data["displayName"], "github": request.data["github"]}
+            "displayName": request.data["displayName"], 
+            "github": request.data["github"],
+        }
         user_serializer = self.get_serializer(data=request.data)
         user_serializer.is_valid(raise_exception=True)
         user = user_serializer.save()

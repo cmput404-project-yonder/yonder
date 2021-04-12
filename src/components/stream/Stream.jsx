@@ -18,10 +18,20 @@ class Stream extends Component {
       window.location = window.location;
     }
 
-    this.props.retrieveLoggedInAuthorPosts();
+    if (!this.props.auth.isAuthenticated) {
+      this.props.retrieveLoggedInAuthorPosts();
+      this.props.retrieveInbox();
+      if (!this.props.allAuthors) {
+        this.props.retrieveAllAuthors();
+      }
+    }
   }
 
   render() {
+    if (!this.props.auth.isAuthenticated) {
+      return <Redirect to="/login" />
+    }
+
     if (this.props.loading) {
       return (
         <div className="pageloader is-active animate__animated animate__fadeIn animate__faster">
