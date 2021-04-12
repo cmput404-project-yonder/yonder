@@ -2,7 +2,7 @@ import React from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { withRouter } from "react-router-dom";
-import { Modal, Container, Columns, Section } from "react-bulma-components";
+import { Modal, Container, Columns, Section, Card } from "react-bulma-components";
 
 import PostList from "../stream/posts/PostList";
 import ProfileDetail from "./ProfileDetail";
@@ -10,37 +10,33 @@ import { retrieveAuthor, retrieveAuthorPosts, sendFollow, deleteFollow, checkFol
 
 // buttons
 import FollowButton from "./buttons/FollowButton";
-import DeleteButton from "../stream/posts/buttons/DeleteButton";
+import UnfollowButton from "./buttons/UnfollowButton";
 import EditProfileButton from "./buttons/EditButton";
 import ProfileEdit from "./ProfileEdit";
 // import FriendButton from "./buttons/FriendButton";
 
 import { color } from "../../styling/ColorFontConfig";
-import Dividor from "./Dividor";
-import { dividorStyle } from "../../styling/StyleComponents";
+import { postStyle } from "../../styling/StyleComponents";
+import { ProfileIconBoy } from "../../styling/svgIcons";
+import { Redirect } from "react-router-dom";
+
+import {updatePost, sharePost, likePost, deletePost } from "../stream/StreamActions";
+import { retrieveAllAuthors } from "../NavigationActions";
 
 var pageStyle = {
   margin: "auto",
-  maxWidth: "820pt",
+  maxWidth: "980pt",
   minWidth: "400pt",
-
 }
 
 var profileDetailContainerStyle = {
   paddingBottom: "0em",
   paddingLeft: "1.5em",
   paddingRight: "1.5em",
-
 }
-
 var profileInfoContainer = {
-  boxShadow: "0pt 0pt 8pt rgb(0,0,0,0.5)",
-  borderRadius: "8pt",
-  marginTop: "0.5em",
-  marginBottom: "2em",
-  marginRight: "1.5em",
-  marginLeft: "1.5em",
-  backgroundColor: color.backgroundCreamLighter,
+  margin: "0em",
+  backgroundColor: "transparent",
 }
 
 var profileListStyle ={
@@ -107,16 +103,13 @@ class Profile extends React.Component {
     }
 
     const unfollowButton = () => {
-      return (
-        <DeleteButton action={clickUnfollow}
-        />
-      )
+      return <UnfollowButton onClick={clickUnfollow}/>
     }
 
     const otherAuthor = () => {
       return (
         <Container>
-          <Dividor style={dividorStyle}/>
+          {/* <hr style={{...shadowDividorStyle, transform: "rotate(180deg)", backgroundColor: "transparent"}}></hr> */}
           <Container style={buttonLayoutStyle}>
             {this.state.isFollowing ? unfollowButton() : followButton()}
           </Container>
@@ -127,7 +120,7 @@ class Profile extends React.Component {
     const loggedAuthor = () => {
       return (
           <Container>
-            <Dividor style={dividorStyle}/>
+          {/* <hr style={{...shadowDividorStyle, transform: "rotate(180deg)", backgroundColor: "transparent", marginTop: "1em",}}></hr> */}
           <Container style={buttonLayoutStyle}>
             <EditProfileButton onClick={()=>showEditModal(true)}/>
             <Modal className="animate__animated animate__fadeIn animate__faster" show={this.state.editProfileModalIsOpen} onClose={()=>showEditModal(false)} closeOnBlur closeOnEsc>
@@ -143,6 +136,41 @@ class Profile extends React.Component {
       );
     };
 
+    const profileCard = () => {
+      return (
+        <div className="post-list animate__animated animate__fadeInUp" style={{marginBottom: "5em"}}>
+          <Card style={{...postStyle, height: "auto", fontSize: "1em", minWidth: "320pt", maxWidth: "385pt", borderRadius: "12pt", margin: "auto", paddingBottom: "0.8em"}}>
+            <Container>
+              <Container style={{marginTop: "3em", marginBottom: "-1.5em"}}>
+                  <Container style={{fill: color.baseLightGrey}}>
+                    <ProfileIconBoy svgScale={"160"}/>  
+                  </Container>
+                  {/* <p style={{fontSize: "2.8em", fontWeight: "450", color: color.baseLightGrey}}>Author Profile</p> */}
+              </Container>
+            </Container>
+
+            <Container style={profileInfoContainer}>
+                <Container style={profileDetailContainerStyle}>
+                <ProfileDetail 
+                  displayName={this.props.retrievedAuthor.displayName}
+                  UUID={this.props.retrievedAuthor.id}
+                  githubURL={this.props.retrievedAuthor.github}
+                  followerNum={64}
+                  followingNum={32}
+                  postNum={this.props.retrievedAuthorPosts.length}
+                />
+                </Container>
+                {this.props.match.params.id === this.props.loggedInAuthor.id ? loggedAuthor() : otherAuthor()}
+
+              </Container>
+
+          </Card>
+        </div>        
+      )
+
+    }
+
+
     if (this.props.loading) {
       return (
         <div class="pageloader is-active animate__animated animate__fadeIn animate__faster">
@@ -151,33 +179,45 @@ class Profile extends React.Component {
       );
     }
 
-    return (
-      <Section >
-        <Columns style={pageStyle}>
-          <Columns.Column>
-            <div className="post-list" style={profileListStyle}>
-                <Container style={profileInfoContainer}>
-                  <Container style={profileDetailContainerStyle}>
-                  <ProfileDetail 
-                    displayName={this.props.retrievedAuthor.displayName}
-                    UUID={this.props.retrievedAuthor.id}
-                    githubURL={this.props.retrievedAuthor.github}
-                    followerNum={64}
-                    followingNum={32}
-                    postNum={this.props.retrievedAuthorPosts.length}
-                  />
-                  </Container>
-                  {this.props.match.params.id === this.props.loggedInAuthor.id ? loggedAuthor() : otherAuthor()}
+    const updatePostWrapper = (editedPost) => {
+      this.props.updatePost(editedPost, ()=>this.props.retrieveAuthorPosts(this.props.retrievedAuthor.id));
+    }
 
-                </Container>
-            </div>
-          </Columns.Column>
-          <Columns.Column>
-            <PostList posts={this.props.retrievedAuthorPosts} interactive={true}/>
-          </Columns.Column>
-        </Columns>
-      </Section>
-    );
+    const sharePostWrapper = (post) => {
+      this.props.sharePost(post, ()=>this.props.retrieveAuthorPosts(this.props.retrievedAuthor.id));
+    }
+
+    const deletePostWrapper = (post) => {
+      this.props.deletePost(post, ()=>this.props.retrieveAuthorPosts(this.props.retrievedAuthor.id));
+    }
+
+    if (!this.props.auth.isAuthenticated)
+      // redirect user to login page if not logged in
+      return <Redirect to="/" />;
+    else
+      return (
+        <Section >
+          <Columns style={pageStyle}>
+
+            <Columns.Column>
+              {profileCard()}
+            </Columns.Column>
+
+            <Columns.Column>
+              <PostList 
+                posts={this.props.retrievedAuthorPosts}
+                
+                updatePost={updatePostWrapper} 
+                deletePost={deletePostWrapper} 
+                likePost={this.props.likePost}
+                sharePost={sharePostWrapper}
+                interactive={true}
+
+              />
+            </Columns.Column>
+          </Columns>
+        </Section>
+      );
   }
 }
 
@@ -192,6 +232,7 @@ Profile.propTypes = {
 };
 
 const mapStateToProps = (state) => ({
+  auth: state.auth,
   loggedInAuthor: state.auth.author,
   loading: state.profile.loading,
   retrievedAuthor: state.profile.retrievedAuthor,
@@ -205,5 +246,10 @@ export default connect(mapStateToProps, {
   sendFollow,
   deleteFollow,
   checkFollowing,
-  editProfile
+  editProfile,
+  updatePost,
+  sharePost,
+  deletePost,
+  likePost,
+
 })(withRouter(Profile));

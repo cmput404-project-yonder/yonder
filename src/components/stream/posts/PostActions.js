@@ -17,7 +17,7 @@ import {
 } from "./PostTypes";
 import { setAxiosAuthToken } from "../../../utils/Utils";
 
-export const retrievePost = (authorId, postId) => (dispatch, getState) => {
+export const retrievePost = (authorId, postId, chainFunc=null) => (dispatch, getState) => {
   const state = getState();
 
   setAxiosAuthToken(state.auth.token);
@@ -26,6 +26,9 @@ export const retrievePost = (authorId, postId) => (dispatch, getState) => {
     .get("/author/" + authorId + "/posts/" + postId + "/")
     .then((response) => {
       dispatch({ type: RETRIEVE_POST_SUCCESS, payload: response.data });
+      if (chainFunc !== null) {
+        chainFunc();
+      }
     })
     .catch((error) => {
       if (error.response) {
@@ -98,6 +101,30 @@ export const retrieveCommentList = (authorId, postId) => (dispatch, getState) =>
     });
 };
 
+export const sendCommentQuery = (post, page, size, setter) => (dispatch, getState) => {
+  // this function doesnt dispatch action
+  // no global state for comment
+  // it does the query, return result to setter
+  const state = getState();
+
+  setAxiosAuthToken(state.auth.token);
+  axios
+    .get("/author/" + post.author.id + "/posts/" + post.id + "/comments/" + "?" + "page=" + page + "&" + "size=" + size)
+    .then((response) => {
+      // call setter
+      setter(response.data);
+    })
+    .catch((error) => {
+      if (error.response) {
+        toast.error(JSON.stringify(error.response));
+      } else if (error.message) {
+        toast.error(JSON.stringify(error.message));
+      } else {
+        toast.error(JSON.stringify(error));
+      }
+    });
+}
+
 export const updateRetrivedPost = (newPost) => (dispatch) => {
   dispatch({type: UPDATE_RETRIEVED_POST, payload: newPost});
 }
@@ -106,11 +133,9 @@ export const retrievePostLikes = (post, setterFunction) => (dispatch, getState) 
   const state = getState();
 
   setAxiosAuthToken(state.auth.token);
-  dispatch({ type:  RETRIEVE_POSTLIKE_SUBMITTED});
   axios
     .get("/author/" + post.author.id + "/posts/" + post.id + "/likes/")
     .then((response) => {
-      dispatch({ type: RETRIEVE_POST_SUCCESS, payload: response.data});
       // debug
       // console.log("retrievePostLikes - response data: ");
       // console.log(post);
@@ -124,6 +149,12 @@ export const retrievePostLikes = (post, setterFunction) => (dispatch, getState) 
         // handles specific status code
         switch (error.response.status) {
           case 404:
+            break;
+          case 401:
+            // too deep in the rabbit hole
+            // like polling is handled by post.jsx
+            // if 401 happends, then we just ignore it, this error will eventually cought by navigationbar
+            // and redirect user to login.
             break;
           default:
             toast.error(JSON.stringify(error.response.data));

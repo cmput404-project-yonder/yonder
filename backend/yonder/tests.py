@@ -138,6 +138,16 @@ class PublicPostTests(APITestCase):
             "visibility": "PRIVATE",
             "unlisted": False
         }
+        self.post3 = {
+            "title": "A public unlisted post",
+            "description": "private post",
+            "contentType": "text/plain",
+            "content": "Not everyone can see this",
+            "author": self.testAuthor,
+            "categories": ["web", "tutorial"],
+            "visibility": "PRIVATE",
+            "unlisted": True
+        }
 
         def test_get(self):
             #Create two public posts and a private post
@@ -148,6 +158,21 @@ class PublicPostTests(APITestCase):
 
             get_url = reverse('public_posts')
             response = self.client.get(get_url)
+            #Returns two public posts that were created
+            self.assertEqual(len(response), 2)
+
+        def test_get_with_unlisted(self):
+            post_url = reverse('posts', args=[self.author.id])
+            self.client.post(post_url, data=self.post1, format='json')
+            self.client.post(post_url, data=self.post2, format='json')
+
+            #should not be retrieved since private
+            self.client.post(post_url, data=self.post3, format='json')
+            #should not be retrieved since unlisted
+            self.client.post(post_url, data=self.post4, format='json')
+            get_url = reverse('public_posts')
+            response = self.client.get(get_url)
+
             #Returns two public posts that were created
             self.assertEqual(len(response), 2)
 
@@ -168,6 +193,41 @@ class PostTests(APITestCase):
         credBytes= base64.b64encode(f'{self.credentials["username"]}:{self.credentials["password"]}'.encode())
         self.client.credentials(HTTP_AUTHORIZATION='Basic ' + credBytes.decode())
 
+        self.credentials2 = {
+            'username': 'testUser2',
+            'password': 'testPassword2'
+        }
+        self.testAuthor2 = {
+            "displayName": "testAuthor2",
+            "github": "https://github.com/cmput404-project-yonder/yonder",
+            "host": "http://testserver.com"
+        }
+
+        user2 = User.objects.create_user(**self.credentials2)
+        self.author2 = Author.objects.create(**self.testAuthor2, user=user2)
+
+        self.authorJSON1 = AuthorSerializer(instance=self.author).data
+        self.authorJSON2 = AuthorSerializer(instance=self.author2).data
+
+        self.followJSON1 = {"actor": self.authorJSON2, "object": self.authorJSON1}
+        self.followJSON2 = {"actor": self.authorJSON1, "object": self.authorJSON2}
+
+        credBytes= base64.b64encode(f'{self.credentials["username"]}:{self.credentials["password"]}'.encode())
+        self.client.credentials(HTTP_AUTHORIZATION='Basic ' + credBytes.decode())
+
+        self.credentials3 = {
+            'username': 'testUser3',
+            'password': 'testPassword3'
+        }
+        self.testAuthor3 = {
+            "displayName": "testAuthor3",
+            "github": "https://github.com/cmput404-project-yonder/yonder",
+            "host": "http://testserver.com"
+        }
+
+        user3 = User.objects.create_user(**self.credentials3)
+        self.author3 = Author.objects.create(**self.testAuthor3, user=user3)
+
         self.post = {
             "title": "A post title about a post about web dev",
             "description": "This post discusses stuff -- brief",
@@ -179,7 +239,26 @@ class PostTests(APITestCase):
             "unlisted": False
         }
 
-    def test_create(self):
+        self.postFriends = {
+            "title": "A post title about a post about web dev",
+            "description": "This post discusses stuff -- brief",
+            "contentType": "text/plain",
+            "content": "Þā wæs on burgum Bēowulf Scyldinga",
+            "author": self.testAuthor2,
+            "categories": ["web", "tutorial"],
+            "visibility": "FRIENDS",
+            "unlisted": False
+        }
+        self.testFollow = {
+            "author": self.author,
+            "follower": self.authorJSON2
+        }
+        self.testFollow2 = {
+            "author": self.author2,
+            "follower": self.authorJSON1
+        }
+
+    def test_create_post(self):
         url = reverse('posts', args=[self.author.id])
         response = self.client.post(
             url, data=self.post, format='json')
@@ -187,6 +266,48 @@ class PostTests(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertIsNotNone(Post.objects.get(
             title=self.post["title"]))
+
+    def test_get_post(self):
+
+        url = reverse('posts', args=[self.author.id])
+        self.client.post(url, data=self.post, format='json')
+        post_id = Post.objects.get(title=self.post["title"]).id
+        post_url = url + str(post_id) + "/"
+        response = self.client.get(post_url)
+
+        #tests if getting post was successful 
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+    def test_get_post_friends(self):
+
+        AuthorFollower.objects.create(**self.testFollow)
+        AuthorFollower.objects.create(**self.testFollow2)
+
+        url = reverse('posts', args=[self.author2.id])
+        self.client.post(url, data=self.postFriends, format='json')
+        post_id = Post.objects.get(title=self.postFriends["title"]).id
+        post_url = url + str(post_id) + "/"
+
+        #login as user1
+        self.client.login(username=self.credentials["username"], password=self.credentials["password"])
+
+        response = self.client.get(post_url)
+
+        #tests if getting post was successful 
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+        #logout
+        self.client.logout()
+
+        #login as user3
+        self.client.login(username=self.credentials3["username"], password=self.credentials3["password"])
+
+        response2 = self.client.get(post_url)
+
+        #tests if getting post was not successful 
+        self.assertNotEqual(response2.status_code, status.HTTP_200_OK)
+
+
 
 class FollowerTests(APITestCase):
     def setUp(self):
@@ -218,7 +339,7 @@ class FollowerTests(APITestCase):
 
         self.followJSON1 = {"actor": self.authorJSON2, "object": self.authorJSON1}
         self.followJSON2 = {"actor": self.authorJSON1, "object": self.authorJSON2}
-
+    
         credBytes= base64.b64encode(f'{self.credentials1["username"]}:{self.credentials1["password"]}'.encode())
         self.client.credentials(HTTP_AUTHORIZATION='Basic ' + credBytes.decode())
 
@@ -295,11 +416,15 @@ class FollowerTests(APITestCase):
         url = reverse('followers', args=[self.author2.id, self.author1.id])
         response = self.client.put(url, data=self.followJSON2, format='json')
 
-        self.author1.refresh_from_db()
-        self.author2.refresh_from_db()
+        url = reverse('friend_list', args=[self.author1.id])
+        friendData1 = self.client.get(url).json()
+        url = reverse('friend_list', args=[self.author2.id])
+        friendData2 = self.client.get(url).json()
 
-        self.assertEqual(1, AuthorFriend.objects.filter(author=self.author1, friend=self.authorJSON2).count())
-        self.assertEqual(1, AuthorFriend.objects.filter(author=self.author2, friend=self.authorJSON1).count())
+        self.assertEqual(1, len(friendData1))
+        self.assertEqual(self.author2.displayName, friendData1[0]["displayName"])
+        self.assertEqual(1, len(friendData2))
+        self.assertEqual(self.author1.displayName, friendData2[0]["displayName"])
 
     def test_friends_post_inbox_negative(self):
         # Only friend post should not be sent to followers
@@ -440,6 +565,16 @@ class SignalTests(TestCase):
             "visibility": "PUBLIC",
             "unlisted": False
         }
+        self.post_unlisted = {
+            "title": "A post testing post save signal",
+            "description": "This post discusses stuff -- brief",
+            "contentType": "text/plain",
+            "content": "Þā wæs on burgum Bēowulf Scyldinga",
+            "author": self.author1,
+            "categories": ["web", "tutorial"],
+            "visibility": "PUBLIC",
+            "unlisted": True
+        }
         self.like = {
             "author": self.author2,
             "object_url": ""
@@ -454,10 +589,18 @@ class SignalTests(TestCase):
         AuthorFollower.objects.create(**self.testFollow)
         Post.objects.create(**self.post)
         inbox_item1 = Inbox.objects.filter(author=self.author1).count()
-        inbox_item2= Inbox.objects.filter(author=self.author2).count()
+        inbox_item2 = Inbox.objects.filter(author=self.author2).count()
         #one inbox for each author, one for creating follower and one for creating post
         self.assertEqual(inbox_item1,1)
         self.assertEqual(inbox_item2,1)
+
+    def test_create_unlisted_post(self):
+        AuthorFollower.objects.create(**self.testFollow)
+        Post.objects.create(**self.post_unlisted)
+
+        inbox_item = len(Inbox.objects.get(author=self.author2).items)
+        #Inbox should contain no items since the post was unlisted
+        self.assertEqual(inbox_item,0)
 
     def test_follow_to_inbox(self):
         #author2 follows author1 and sends the data to followee's inbox
@@ -492,7 +635,7 @@ class LikeTests(APITestCase):
         self.author1 = Author.objects.create(**self.testAuthor1, user=user1)
         self.author2 = Author.objects.create(**self.testAuthor2, user=user2)
 
-        # create post and comment
+        # create post 
         self.author2_post = {
             "title": "A post title about a post about web dev",
             "description": "This post discusses stuff -- brief",
@@ -504,15 +647,8 @@ class LikeTests(APITestCase):
             "unlisted": False
         }
         self.author2_post = Post.objects.create(**self.author2_post)
-        self.author1_comment = {
-            "post": self.author2_post,
-            "author": AuthorSerializer(self.author1).data,
-            "comment": "cool post dude",
-            "published": "2015-03-09T13:07:04+00:00"
-        }
-        self.author1_comment = Comment.objects.create(**self.author1_comment)
 
-        # request post and comment data
+        # request post data
         post_like_data_from_author_1 = {
             "type": "like",
             "author":{
@@ -525,34 +661,8 @@ class LikeTests(APITestCase):
             },
             "object": self.author2_post.get_absolute_url()
         }
-        comment_like_data_from_author_1 = {
-            "type": "like",
-            "author":{
-                "type":"author",
-                "id": str(self.author1.id),
-                "host": self.author1.host,
-                "displayName": self.author1.displayName,
-                "url": self.author1.get_absolute_url(),
-                "github": self.author1.github
-            },
-            "object": self.author1_comment.get_absolute_url()
-        }
-        comment_like_data_from_author_2 = {
-            "type": "like",
-            "author":{
-                "type":"author",
-                "id": str(self.author2.id),
-                "host": self.author2.host,
-                "displayName": self.author2.displayName,
-                "url": self.author2.get_absolute_url(),
-                "github": self.author2.github
-            },
-            "object": self.author1_comment.get_absolute_url()
-        }
 
         self.post_like_data_from_author_1_json = json.dumps(post_like_data_from_author_1)
-        self.comment_like_data_from_author_2_json = json.dumps(comment_like_data_from_author_2)
-        self.comment_like_data_from_author_1_json = json.dumps(comment_like_data_from_author_1)
 
         credBytes= base64.b64encode(f'{self.credentials1["username"]}:{self.credentials1["password"]}'.encode())
         self.client.credentials(HTTP_AUTHORIZATION='Basic ' + credBytes.decode())
@@ -592,26 +702,20 @@ class LikeTests(APITestCase):
         self.assertEqual(data_json["items"][0]["author"]["id"], str(self.author1.id))
         self.assertEqual(data_json["items"][0]["object_url"], self.author2_post.get_absolute_url())
     
-    def test_get_comment_likes(self):
-        # author2 sends like to author1_comment
-        url = reverse('inbox', args=[self.author1.id])
-        response = self.client.post(url, content_type='application/json', data=self.comment_like_data_from_author_2_json)
-        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+    def test_get_post_likes_count(self):
+        # author1 sends like to author2_post
+        url = reverse('inbox', args=[self.author2.id])
+        response = self.client.post(url, content_type='application/json', data=self.post_like_data_from_author_1_json)
 
-        # confirm author1_comment has like from author2
-        url = reverse('comment_likes', args=[self.author2.id, self.author2_post.id, self.author1_comment.id])
+        url = reverse('post_likes_count', args=[self.author2.id, self.author2_post.id])
         response = self.client.get(url)
-        data_json = response.json()
+
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(data_json["items"][0]["author"]["id"], str(self.author2.id))
-        self.assertEqual(data_json["items"][0]["object_url"], self.author1_comment.get_absolute_url())
+
+        data_json = response.json()
+        self.assertEqual(1, data_json)
 
     def test_get_liked(self):
-        # author1 sends like to author1_comment
-        url = reverse('inbox', args=[self.author2.id])
-        response = self.client.post(url, content_type='application/json', data=self.comment_like_data_from_author_1_json)
-        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
-        
         # author1 sends like to author2_post
         url = reverse('inbox', args=[self.author2.id])
         response = self.client.post(url, content_type='application/json', data=self.post_like_data_from_author_1_json)
@@ -620,7 +724,7 @@ class LikeTests(APITestCase):
         url = reverse('likes', args=[self.author1.id])
         response = self.client.get(url)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(len(response.data["items"]), 2)
+        self.assertEqual(len(response.data["items"]), 1)
 
 class CommentTests(APITestCase):
     def setUp(self):
@@ -663,13 +767,11 @@ class CommentTests(APITestCase):
             "post": self.author2_post,
             "author": AuthorSerializer(self.author1).data,
             "comment": "cool post dude",
-            "published": "2015-03-09T13:07:04+00:00"
         }
         self.author1_second_comment = {
             "post": self.author2_post,
             "author": AuthorSerializer(self.author1).data,
             "comment": "can i reshare it?",
-            "published": "2015-03-09T13:07:04+00:00"
         }
         self.author1_first_comment = Comment.objects.create(**self.author1_first_comment)
         self.author1_second_comment = Comment.objects.create(**self.author1_second_comment)
@@ -684,7 +786,6 @@ class CommentTests(APITestCase):
                 "github": self.author1.github
             },
             "comment":"Sick Olde English",
-            "published": "2015-03-09T13:07:04+00:00"
         }
         self.comment_like_data_from_author_1_json = json.dumps(comment_like_data_from_author_1)
 
@@ -694,8 +795,8 @@ class CommentTests(APITestCase):
     def test_get_comments(self):
         url = reverse('comments', args=[self.author2.id, self.author2_post.id])
         response = self.client.get(url)
-        self.assertEqual(len(response.data), 2)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data["count"], 2)
     
     def test_post_comment(self):
         # author1 comments on author2 post
@@ -705,5 +806,5 @@ class CommentTests(APITestCase):
         
         url = reverse('comments', args=[self.author2.id, self.author2_post.id])
         response = self.client.get(url)
-        self.assertEqual(len(response.data), 3)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data["count"], 3)

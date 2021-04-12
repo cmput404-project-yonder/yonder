@@ -6,6 +6,8 @@ import { loginReducer } from "./components/login/LoginReducer";
 import { streamReducer } from "./components/stream/StreamReducer";
 import { profileReducer } from "./components/profile/ProfileReducer";
 import { postReducer } from "./components/stream/posts/PostReducer";
+import { NavigationReducer } from "./components/NavigationReducer";
+
 
 const createRootReducer = (history) =>
   combineReducers({
@@ -15,6 +17,7 @@ const createRootReducer = (history) =>
     stream: streamReducer,
     profile: profileReducer,
     post: postReducer,
+    navigation: NavigationReducer,
   });
 
 export default createRootReducer;
