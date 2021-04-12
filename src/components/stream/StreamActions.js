@@ -125,7 +125,7 @@ export const updatePost = (editedPost, setter=null) => (dispatch, getState) => {
 };
 
 
-export const deletePost = (aPost) => (dispatch, getState) => {
+export const deletePost = (aPost, chainFunc=null) => (dispatch, getState) => {
   const state = getState();
   const author = state.auth.author;
 
@@ -136,7 +136,9 @@ export const deletePost = (aPost) => (dispatch, getState) => {
     .delete("/author/" + author.id + "/posts/" + aPost.id + "/")
     .then((response) => {
       dispatch({ type: DELETE_POST_SUCCESS, payload: aPost.id});
-      dispatch(push("/stream"));
+      if (chainFunc!==null) {
+        chainFunc();
+      }
     })
     .catch((error) => {
       if (error.response) {

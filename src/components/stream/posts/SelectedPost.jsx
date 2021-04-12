@@ -223,6 +223,11 @@ function DetailedPostList(props) {
     )
   }
 
+  const CommentsCard = () => {
+
+  }
+
+
   const listItems = [PostCard()]
   return (
     <div className="post-list animate__animated animate__fadeInDown">
@@ -304,6 +309,9 @@ class SelectedPost extends React.Component {
       this.props.sharePost(post, ()=>toast.success("This post is now added to your stream"));
     }
 
+    const deletePostWrapper = (post) => {
+      this.props.deletePost(post, ()=>window.location.pathname="/");
+    }
 
     if (!this.props.auth.isAuthenticated)
       // redirect user to login page if not logged in
@@ -330,7 +338,7 @@ class SelectedPost extends React.Component {
                 likedToggle={this.likedToggle}
                 updatePost={updatePostWrapper} 
                 sharePost={sharePostWrapper}
-                deletePost={this.props.deletePost} />
+                deletePost={deletePostWrapper} />
               </Columns>
             </Container>
           </div>

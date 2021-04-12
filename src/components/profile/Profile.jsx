@@ -15,12 +15,13 @@ import EditProfileButton from "./buttons/EditButton";
 import ProfileEdit from "./ProfileEdit";
 // import FriendButton from "./buttons/FriendButton";
 
-import Dividor from "./Dividor";
 import { color } from "../../styling/ColorFontConfig";
-import { dividorStyle,postStyle } from "../../styling/StyleComponents";
+import { postStyle } from "../../styling/StyleComponents";
 import { ProfileIconBoy } from "../../styling/svgIcons";
 import { Redirect } from "react-router-dom";
 
+import {updatePost, sharePost, likePost, deletePost } from "../stream/StreamActions";
+import { retrieveAllAuthors } from "../NavigationActions";
 
 var pageStyle = {
   margin: "auto",
@@ -178,6 +179,17 @@ class Profile extends React.Component {
       );
     }
 
+    const updatePostWrapper = (editedPost) => {
+      this.props.updatePost(editedPost, ()=>this.props.retrieveAuthorPosts(this.props.retrievedAuthor.id));
+    }
+
+    const sharePostWrapper = (post) => {
+      this.props.sharePost(post, ()=>this.props.retrieveAuthorPosts(this.props.retrievedAuthor.id));
+    }
+
+    const deletePostWrapper = (post) => {
+      this.props.deletePost(post, ()=>this.props.retrieveAuthorPosts(this.props.retrievedAuthor.id));
+    }
 
     if (!this.props.auth.isAuthenticated)
       // redirect user to login page if not logged in
@@ -192,7 +204,16 @@ class Profile extends React.Component {
             </Columns.Column>
 
             <Columns.Column>
-              <PostList posts={this.props.retrievedAuthorPosts} interactive={true}/>
+              <PostList 
+                posts={this.props.retrievedAuthorPosts}
+                
+                updatePost={updatePostWrapper} 
+                deletePost={deletePostWrapper} 
+                likePost={this.props.likePost}
+                sharePost={sharePostWrapper}
+                interactive={true}
+
+              />
             </Columns.Column>
           </Columns>
         </Section>
@@ -225,5 +246,10 @@ export default connect(mapStateToProps, {
   sendFollow,
   deleteFollow,
   checkFollowing,
-  editProfile
+  editProfile,
+  updatePost,
+  sharePost,
+  deletePost,
+  likePost,
+
 })(withRouter(Profile));
