@@ -18,6 +18,8 @@ import ReactMde from "react-mde";
 import CommentList from "./CommentList";
 
 import { retrievePost, createComment, retrieveCommentList,updateRetrivedPost } from "./PostActions";
+import { Redirect } from "react-router-dom";
+
 
 // local styling
 var postDividorStyle = {
@@ -243,7 +245,6 @@ function DetailedPostList(props) {
 }
 
 class SelectedPost extends React.Component {
-
   componentDidMount() {
     const {
       match: { params },
@@ -252,9 +253,6 @@ class SelectedPost extends React.Component {
     this.props.retrievePost(params.author_id,params.id);
     this.props.retrieveCommentList(params.athor_id,params.id);
   }
-
-
-
 
   render() {
     if (this.props.loading || !this.props.retrievedPost.author) {
@@ -269,9 +267,11 @@ class SelectedPost extends React.Component {
     const updatePostWrapper = (editedPost) => {
       this.props.updatePost(editedPost, this.props.updateRetrivedPost);
     }
-
-
-    return (
+    if (!this.props.auth.isAuthenticated)
+      // redirect user to login page if not logged in
+      return <Redirect to="/" />;
+    else
+      return (
         <Section style={pageStyle}>
           <div style={buttonLayerContainerStyle}>
             <Container style={newPostButtonStyle}>
@@ -281,7 +281,7 @@ class SelectedPost extends React.Component {
           <div style={streamLayerContainerStyle}>
             <Container fluid>
               <Columns centered>
-               <DetailedPostList 
+              <DetailedPostList 
                 post={this.props.retrievedPost} 
                 loggedInAuthor={this.props.loggedInAuthor} 
                 comments={this.props.comments} 
@@ -295,7 +295,7 @@ class SelectedPost extends React.Component {
             </Container>
           </div>
         </Section>
-    );
+      );
   }
 }
 
@@ -319,6 +319,7 @@ DetailedPostList.propTypes = {
 }
 
 const mapStateToProps = (state) => ({
+  auth: state.auth,
   loading: state.post.loading,
   retrievedPost: state.post.retrievedPost,
   loggedInAuthor: state.auth.author,

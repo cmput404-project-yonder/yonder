@@ -19,6 +19,8 @@ import Dividor from "./Dividor";
 import { color } from "../../styling/ColorFontConfig";
 import { dividorStyle,postStyle } from "../../styling/StyleComponents";
 import { ProfileIconBoy } from "../../styling/svgIcons";
+import { Redirect } from "react-router-dom";
+
 
 var pageStyle = {
   margin: "auto",
@@ -176,20 +178,25 @@ class Profile extends React.Component {
       );
     }
 
-    return (
-      <Section >
-        <Columns style={pageStyle}>
 
-          <Columns.Column>
-            {profileCard()}
-          </Columns.Column>
+    if (!this.props.auth.isAuthenticated)
+      // redirect user to login page if not logged in
+      return <Redirect to="/" />;
+    else
+      return (
+        <Section >
+          <Columns style={pageStyle}>
 
-          <Columns.Column>
-            <PostList posts={this.props.retrievedAuthorPosts} interactive={true}/>
-          </Columns.Column>
-        </Columns>
-      </Section>
-    );
+            <Columns.Column>
+              {profileCard()}
+            </Columns.Column>
+
+            <Columns.Column>
+              <PostList posts={this.props.retrievedAuthorPosts} interactive={true}/>
+            </Columns.Column>
+          </Columns>
+        </Section>
+      );
   }
 }
 
@@ -204,6 +211,7 @@ Profile.propTypes = {
 };
 
 const mapStateToProps = (state) => ({
+  auth: state.auth,
   loggedInAuthor: state.auth.author,
   loading: state.profile.loading,
   retrievedAuthor: state.profile.retrievedAuthor,
