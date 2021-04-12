@@ -52,7 +52,7 @@ class Post extends React.Component {
   componentDidMount() {
     // set up polling for this post
     this.likePollingCall(this.props.post, this.postLikeSetter);
-    this.state["likePolling"] = setInterval(()=>this.likePollingCall(this.props.post, this.postLikeSetter), 5 * 1000);
+    this.state["likePolling"] = setInterval(()=>this.likePollingCall(this.props.post, this.postLikeSetter), 20 * 1000);
   }
 
   componentWillUnmount() {
