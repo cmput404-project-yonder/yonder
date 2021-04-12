@@ -2,8 +2,6 @@ import React from 'react';
 import { Modal, Button, Content, Section, Card,Container,Columns, List } from "react-bulma-components";
 import { color } from '../../../styling/ColorFontConfig';
 
-
-
 var pagiButtonStyle = {
     selected: {
         cursor: "pointer",
@@ -14,70 +12,122 @@ var pagiButtonStyle = {
         color: color.baseRed,
         backgroundColor: "transparent",
         fontSize: "1.3em",
-        fontWeight: "500",    
+        fontWeight: "500",  
+        marginLeft: "0.1em",
+        marginRight: "0.1em",  
     },
     unselected: {
         cursor: "pointer",
         borderRadius: "7pt",
         borderWidth: "1.5pt",
-        border: "none",
-        borderColor: color.baseRed,
+        border: "solid",
+        borderColor: "transparent",
         color: color.baseLightGrey,
         backgroundColor: "transparent",
         fontSize: "1.3em",
         fontWeight: "500",  
-        marginLeft: "0",
-        marginRight: "0",
+        marginLeft: "0.1em",
+        marginRight: "0.1em",
     }
-
 }
 
 var pagiStyle = {
     display: "flex",
     gap: "0.4em",
+    justifyContent: "center",
     margin: "auto", 
     paddingBottom: "1em", 
     marginTop: "-0.5em",
 }
 
-
-function PagiButton (props) {
-    return (
-        <button type="button" style={(props.selected)?pagiButtonStyle.selected:pagiButtonStyle.unselected} onClick={props.onClick}>
-            {props.page}
-        </button>
-    )
-}
-
-function PagiHellip (props) {
-    return (
-        <p style={{fontSize: "1.3em", marginTop: "3pt",color: color.baseLightGrey}}>
-            &hellip;
-        </p>
-    )
-}
-
-
 function PaginationTag(props) {
-      
-    let totalPageNum = Math.ceil(props.count / props.pageSize);
-    let currentPageNum = props.pageNum;
 
-    console.log(totalPageNum);
-    console.log(props.count);
+    var totalPageNum = Math.ceil(props.count / props.pageSize);
 
-    return (
-        <Container style={pagiStyle}>
-            <PagiButton selected={false} page={"1"}/>
-            <PagiHellip/>
-            <PagiButton selected={false} page={"31"}/>
-            <PagiButton selected={true} page={"32"}/>
-            <PagiButton selected={false} page={"33"}/>
-            <PagiHellip/>
-            <PagiButton selected={false} page={"79"}/>
-            
-        </Container>
-    )
+    const pagiButton = (page) => {
+        // only returns if page <= total page
+        if (page <= totalPageNum) {
+            return (
+                <button type="button" style={(page === props.pageNum)?pagiButtonStyle.selected:pagiButtonStyle.unselected} onClick={()=>props.onClick(page)}>
+                    {page}
+                </button>
+            )        
+        }
+    }
+
+
+    const pagiHellip = () => {
+        return (
+            <p style={{fontSize: "1.3em", marginTop: "3pt",color: color.baseLightGrey}}>
+                &hellip;
+            </p>
+        )
+    }
+
+    // two major case:
+    // 1. <= 6
+    // 2. >= 6
+    //      2.1 >=6 but user is within first 6 pages
+    //      2.2 >=6 but user is within last 6 pages
+    //      2.3 general case, in the middle
+
+    if (totalPageNum <= 6) {
+        return (
+            <Container style={pagiStyle}>
+                {pagiButton(1)}
+                {pagiButton(2)}
+                {pagiButton(3)}
+                {pagiButton(4)}
+                {pagiButton(5)}
+                {pagiButton(6)}
+            </Container>
+        )        
+    } else {
+        if (props.pageNum <= 4) {
+            // 1 2 3 4 5 ... 7
+            return (
+                <Container style={pagiStyle}>
+                    {pagiButton(1)}
+                    {pagiButton(2)}
+                    {pagiButton(3)}
+                    {pagiButton(4)}
+                    {pagiButton(5)}
+                    {pagiHellip()}
+                    {pagiButton(totalPageNum)}
+                </Container>
+            )      
+        } else if (totalPageNum - props.pageNum < 4) {
+            // 1 ... 3 4 5 6 7
+            return (
+                <Container style={pagiStyle}>
+                    {pagiButton(1)}
+                    {pagiHellip()}
+                    {pagiButton(totalPageNum-4)}
+                    {pagiButton(totalPageNum-3)}
+                    {pagiButton(totalPageNum-2)}
+                    {pagiButton(totalPageNum-1)}
+                    {pagiButton(totalPageNum)}
+                </Container>
+            )
+        } else {
+            // general case
+            // 1 ... 43 44 45 ... 128
+            return (
+                <Container style={pagiStyle}>
+                    {pagiButton(1)}
+                    {pagiHellip()}
+                    {pagiButton(props.pageNum-1)}
+                    {pagiButton(props.pageNum)}
+                    {pagiButton(props.pageNum+1)}
+                    {pagiHellip()}
+                    {pagiButton(totalPageNum)}
+                </Container>
+            )
+        }
+    }
+
+
+
 }
 
   export default PaginationTag;
