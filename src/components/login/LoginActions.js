@@ -72,6 +72,5 @@ export const logout = () => (dispatch) => {
     })
     .catch((error) => {
       dispatch(unsetCurrentUser());
-      toastOnError(error);
     });
 };

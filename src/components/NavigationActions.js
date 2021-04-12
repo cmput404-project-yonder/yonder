@@ -28,7 +28,6 @@ axios
     .catch((error) => {
       console.log(error);
       if (error.response) {
-        toast.error(JSON.stringify(error.response.data));
         dispatch({
           type: RETRIEVE_INBOX_ERROR,
           errorData: error.response,
@@ -78,7 +77,6 @@ export const retrieveAllAuthors = () => (dispatch, getState) => {
     })
     .catch((error) => {
       if (error.response) {
-        toast.error(JSON.stringify(error.response.data));
         dispatch({
           type: RETRIEVE_ALL_AUTHORS_ERROR,
           errorData: error.response,
