@@ -101,6 +101,30 @@ export const retrieveCommentList = (authorId, postId) => (dispatch, getState) =>
     });
 };
 
+export const sendCommentQuery = (post, page, size, setter) => (dispatch, getState) => {
+  // this function doesnt dispatch action
+  // no global state for comment
+  // it does the query, return result to setter
+  const state = getState();
+
+  setAxiosAuthToken(state.auth.token);
+  axios
+    .get("/author/" + post.author.id + "/posts/" + post.id + "/comments/" + "?" + "page=" + page + "&" + "size=" + size)
+    .then((response) => {
+      // call setter
+      setter(response.data);
+    })
+    .catch((error) => {
+      if (error.response) {
+        toast.error(JSON.stringify(error.response));
+      } else if (error.message) {
+        toast.error(JSON.stringify(error.message));
+      } else {
+        toast.error(JSON.stringify(error));
+      }
+    });
+}
+
 export const updateRetrivedPost = (newPost) => (dispatch) => {
   dispatch({type: UPDATE_RETRIEVED_POST, payload: newPost});
 }

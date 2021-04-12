@@ -17,12 +17,16 @@ import { updatePost, deletePost, likePost, sharePost } from '../StreamActions';
 import ReactMde from "react-mde";
 import CommentList from "./CommentList";
 
-import { retrievePost, createComment, retrieveCommentList,updateRetrivedPost } from "./PostActions";
+import { retrievePost, createComment, retrieveCommentList,updateRetrivedPost, sendCommentQuery } from "./PostActions";
 import { Redirect } from "react-router-dom";
 
 import { DetailedPostIcon,PostCommentsIcon } from "../../../styling/svgIcons";
 import { retrievePostLikes } from "./PostActions";
 import { toast } from "react-toastify";
+
+
+import dateFormat from 'dateformat';
+import CommentModal from "./modals/CommentModal";
 
 // local styling
 var localCardStyle = {
@@ -34,7 +38,7 @@ var localCardStyle = {
 var wrapperStyle = {
   marginLeft: "0.6em",
   marginRight: "0.6em",
-  marginBottom: "0.7em",
+  marginBottom: "0.2em",
   boxShadow: "0pt 0pt 6pt rgb(0,0,0,0.1)",
   borderRadius: "10pt",
   backgroundColor: "white",
@@ -53,6 +57,24 @@ var shadowDividorStyle = {
 function getDateString(ms) {
   let date = new Date(ms);
   return date.toLocaleDateString();
+}
+
+
+function CommentContainer(props) {
+  // display one comment
+  return (
+    <Container>
+      {/* Title */}
+      <p>{props.title}</p>
+      
+      {/* Date */}
+      <p>{props.date}</p>
+      
+      {/* Content */}
+      <p>{dateFormat(props.published, "dddd, mmmm dS, yyyy, h:MM TT")}</p>
+      
+    </Container>
+  )
 }
 
 function DetailedPostList(props) {
@@ -124,10 +146,6 @@ function DetailedPostList(props) {
   }
 
   const CommentCard = () => {
-    // render template of one comment
-    // this function is not planned for part2
-    // console.log(writtenComment);
-    // const listComments = commentListData.map((d) => <li key={d.comment}>{d.comment}</li>);
     return (
       <Card style={postStyle}>
         <Card.Content style={postContainerStyle}>
@@ -180,7 +198,7 @@ function DetailedPostList(props) {
 
     return (
       <Card style={localCardStyle}>
-        <Container style={{fill: color.baseLightGrey,textAlign: "center", width: "100%", padding: "1em", paddingRight: "2em"}}>
+        <Container style={{fill: color.baseLightGrey,textAlign: "center", width: "100%", padding: "1.2em"}}>
           <DetailedPostIcon svgScale={"80"}/>
         </Container>
         <Container style={wrapperStyle}>
@@ -223,12 +241,37 @@ function DetailedPostList(props) {
     )
   }
 
-  const CommentsCard = () => {
+
+  const CommentsList = (page) => {
+    // size is 3
+
 
   }
 
 
-  const listItems = [PostCard()]
+
+
+  const CommentsCard = () => {
+    return (
+      <Card style={localCardStyle}>
+          <Container style={{position: "fixed", right: "10%", marginTop: "2.2em", display: "flex", gap: "0.5em", zIndex: "1"}}>
+            <p style={{color: color.baseLightGrey, fontSize: "1.2em", fontWeight: "450", marginTop: "0.5em"}}>Write comment</p>
+            <CommentModal/>
+          </Container>
+          <Container style={{fill: color.baseLightGrey,textAlign: "left", width: "100%", padding: "1.2em", paddingLeft: "10%"}}>
+            <PostCommentsIcon svgScale={"90"}/>
+          </Container>
+
+          <Container style={wrapperStyle}>
+
+          </Container>
+      </Card>
+    )
+
+  }
+
+
+  const listItems = [PostCard(), CommentsCard()]
   return (
     <div className="post-list animate__animated animate__fadeInDown">
       <List hoverable>{listItems}</List>
@@ -275,6 +318,9 @@ class SelectedPost extends React.Component {
   likedToggle = () => {
     // like a post, and trigger a event to retrive likes after backend responded.
     this.likePostCall(this.props.retrievedPost, () => this.likePollingCall(this.props.retrievedPost, this.postLikeSetter));
+    this.props.sendCommentQuery(this.props.retrievedPost, 1, 5, (data)=>console.log(data))
+  
+  
   }
 
   componentDidMount() {
@@ -375,4 +421,15 @@ const mapStateToProps = (state) => ({
   retrievedCommentList: state.post.retrievedCommentList,
 });
 
-export default connect(mapStateToProps, { retrievePostLikes, updateRetrivedPost, retrievePost, updatePost, deletePost, likePost, sharePost, createComment, retrieveCommentList })(withRouter(SelectedPost));
+export default connect(mapStateToProps, {
+  sendCommentQuery, 
+  retrievePostLikes, 
+  updateRetrivedPost, 
+  retrievePost, 
+  updatePost, 
+  deletePost, 
+  likePost, 
+  sharePost, 
+  createComment, 
+  retrieveCommentList
+})(withRouter(SelectedPost));
