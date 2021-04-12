@@ -59,30 +59,10 @@ function getDateString(ms) {
   return date.toLocaleDateString();
 }
 
-
-function CommentContainer(props) {
-  // display one comment
-  return (
-    <Container>
-      {/* Title */}
-      <p>{props.title}</p>
-      
-      {/* Date */}
-      <p>{props.date}</p>
-      
-      {/* Content */}
-      <p>{dateFormat(props.published, "dddd, mmmm dS, yyyy, h:MM TT")}</p>
-      
-    </Container>
-  )
-}
-
 function DetailedPostList(props) {
 
   const [editModalIsOpen, setEditModalIsOpen] = useState(false)
   const [sharingPromptIsOpen, setSharingPromptIsOpen] = useState(false)
-  const [writtenComment, setWrittenComment] = useState("");
-
 
   // helper functions
   const IsImage = () => {
@@ -96,7 +76,6 @@ function DetailedPostList(props) {
       return true;
     }
   }
-
   const getCategories = (cat) => {
     let categories =  cat.map((c) => <p>#{c}</p>)
     return (
@@ -145,57 +124,55 @@ function DetailedPostList(props) {
     );
   }
 
-  const CommentCard = () => {
-    return (
-      <Card style={postStyle}>
-        <Card.Content style={postContainerStyle}>
-          {/* author and timestamp */}
-          <Container style={signatureStyle}>
-          <p>·</p>
-          </Container>
-          <Container style={postTitleStyle}>
-          <p style={{color: color.baseBlack}}>Comment</p>
-          </Container>
-          {/* comment section */}
-          <Container style={DescriptionStyle}>
-            {
-              <div >
-                <CommentList commentData={props.commentList} postAuthorName={props.loggedInAuthor} />
-              </div>
-            }
-          </Container>
-        </Card.Content>
-      </Card>
-    )
-  }
+  // const CommentCard = () => {
+  //   return (
+  //     <Card style={postStyle}>
+  //       <Card.Content style={postContainerStyle}>
+  //         {/* author and timestamp */}
+  //         <Container style={signatureStyle}>
+  //         <p>·</p>
+  //         </Container>
+  //         <Container style={postTitleStyle}>
+  //         <p style={{color: color.baseBlack}}>Comment</p>
+  //         </Container>
+  //         {/* comment section */}
+  //         <Container style={DescriptionStyle}>
+  //           {
+  //             <div >
+  //               <CommentList commentData={props.commentList} postAuthorName={props.loggedInAuthor} />
+  //             </div>
+  //           }
+  //         </Container>
+  //       </Card.Content>
+  //     </Card>
+  //   )
+  // }
 
-  const CommentEditorCard = () => {
-    return (
-      <Card style={postStyle}>
-        <Card.Content style={postContainerStyle}>
-          <ReactMde
-            value={writtenComment}
-            onChange={m => setWrittenComment(m)}
-          />
-          <Button
-            style={{ float: "right", marginRight: `-2px` }}
-            onClick={e => {
-              props.createComment(writtenComment);
-              setWrittenComment("");
-              window.location.reload();
-            }}
-          >
-          Comment
-        </Button>
-        </Card.Content>
-      </Card>
-    )
-  }
+  // const CommentEditorCard = () => {
+  //   return (
+  //     <Card style={postStyle}>
+  //       <Card.Content style={postContainerStyle}>
+  //         <ReactMde
+  //           value={writtenComment}
+  //           onChange={m => setWrittenComment(m)}
+  //         />
+  //         <Button
+  //           style={{ float: "right", marginRight: `-2px` }}
+  //           onClick={e => {
+  //             props.createComment(writtenComment);
+  //             setWrittenComment("");
+  //             window.location.reload();
+  //           }}
+  //         >
+  //         Comment
+  //       </Button>
+  //       </Card.Content>
+  //     </Card>
+  //   )
+  // }
 
 
   const PostCard = () => {
-
-
     return (
       <Card style={localCardStyle}>
         <Container style={{fill: color.baseLightGrey,textAlign: "center", width: "100%", padding: "1.2em"}}>
@@ -240,18 +217,67 @@ function DetailedPostList(props) {
       </Card>
     )
   }
+  
+  return PostCard();
+
+}
 
 
-  const CommentsList = (page) => {
-    // size is 3
+class CommentCard extends React.Component {
+  constructor(props) {
+    super(props);
 
+    this.state = {
+      comments: [],
+      commentsCount: 0,
+      commentPageNum: 1,
+    }
+  }
 
+  componentDidMount() {
+    this.props.sendCommentQuery(this.props.post, this.state.commentPageNum, 5, (data)=>console.log(data))
   }
 
 
+  // CommentsList = (props) => {
+  //   // this part will rerender when commentState changes
 
+  //   const commentsComponentList = props.commentState.map(
+  //     (acomment) => 
+  //       <CommentContainer
+  //         authorID={acomment.author.id}
+  //         date={acomment.published}
+  //         content={acomment.comment}
+  //       />
+  //   );
 
-  const CommentsCard = () => {
+  //   return (
+  //     <List>
+  //       {commentsComponentList}
+  //     </List>
+  //   )
+  // }
+
+  // CommentContainer = (props) => {
+  //   // display one comment
+  //   return (
+  //     <Container style={wrapperStyle}>
+  //     <Container>
+  //       {/* Title */}
+  //       <p>{props.authorID}</p>
+        
+  //       {/* Date */}
+  //       <p>{props.date}</p>
+        
+  //       {/* Content */}
+  //       <p>{dateFormat(props.published, "dddd, mmmm dS, yyyy, h:MM TT")}</p>
+        
+  //     </Container>
+  //     </Container>
+  //   )
+  // }
+
+  CommentsCard = () => {
     return (
       <Card style={localCardStyle}>
           <Container style={{position: "fixed", right: "10%", marginTop: "2.2em", display: "flex", gap: "0.5em", zIndex: "1"}}>
@@ -261,24 +287,19 @@ function DetailedPostList(props) {
           <Container style={{fill: color.baseLightGrey,textAlign: "left", width: "100%", padding: "1.2em", paddingLeft: "10%"}}>
             <PostCommentsIcon svgScale={"90"}/>
           </Container>
+          {/* <CommentsList commentState={comments}/>
+          <p style={{textAlign: "center"}}>{commentPageNum}</p> */}
 
-          <Container style={wrapperStyle}>
-
-          </Container>
       </Card>
     )
-
   }
 
 
-  const listItems = [PostCard(), CommentsCard()]
-  return (
-    <div className="post-list animate__animated animate__fadeInDown">
-      <List hoverable>{listItems}</List>
-    </div>
-  )
-
+  render() {
+    return this.CommentsCard();
+  }
 }
+
 
 class SelectedPost extends React.Component {
 
@@ -294,7 +315,6 @@ class SelectedPost extends React.Component {
   likePollingCall = (post, setter) => {
     // this function is safe measure (wrapper) for preventing situation where auth is not set, but the webpage is still open
     // polling will only be done if auth is set
-    console.log("polled");
     if (this.props.retrievedPost.author) {
       if ((this.props.auth !== undefined)&&(this.props.auth.isAuthenticated)) {
         this.props.retrievePostLikes(post, setter);
@@ -318,9 +338,6 @@ class SelectedPost extends React.Component {
   likedToggle = () => {
     // like a post, and trigger a event to retrive likes after backend responded.
     this.likePostCall(this.props.retrievedPost, () => this.likePollingCall(this.props.retrievedPost, this.postLikeSetter));
-    this.props.sendCommentQuery(this.props.retrievedPost, 3, 3, (data)=>console.log(data))
-  
-  
   }
 
   componentDidMount() {
@@ -331,7 +348,7 @@ class SelectedPost extends React.Component {
     this.props.retrievePost(params.author_id,params.id, ()=>this.likePollingCall(this.props.retrievedPost, this.postLikeSetter));
     this.props.retrieveCommentList(params.athor_id,params.id);
     
-    this.state["likePolling"] = setInterval(()=>this.likePollingCall(this.props.retrievedPost, this.postLikeSetter), 15 * 1000);  
+    this.state["likePolling"] = setInterval(()=>this.likePollingCall(this.props.retrievedPost, this.postLikeSetter), 15 * 1000);
   }
 
   componentWillUnmount() {
@@ -373,18 +390,29 @@ class SelectedPost extends React.Component {
           <div style={streamLayerContainerStyle}>
             <Container fluid>
               <Columns centered>
-              <DetailedPostList 
-                post={this.props.retrievedPost} 
-                loggedInAuthor={this.props.loggedInAuthor} 
-                comments={this.props.comments} 
-                createComment={this.props.createComment} 
-                commentList={this.props.retrievedCommentList} 
-                likePost={this.props.likePost} 
-                likeCount={this.state.likeCount}
-                likedToggle={this.likedToggle}
-                updatePost={updatePostWrapper} 
-                sharePost={sharePostWrapper}
-                deletePost={deletePostWrapper} />
+
+              <div className="post-list animate__animated animate__fadeInDown">
+                <List hoverable>
+                  <DetailedPostList 
+                    post={this.props.retrievedPost} 
+                    loggedInAuthor={this.props.loggedInAuthor} 
+                    comments={this.props.comments} 
+                    createComment={this.props.createComment} 
+                    commentList={this.props.retrievedCommentList} 
+                    likePost={this.props.likePost} 
+                    likeCount={this.state.likeCount}
+                    likedToggle={this.likedToggle}
+                    updatePost={updatePostWrapper} 
+                    sharePost={sharePostWrapper}
+                    deletePost={deletePostWrapper}
+                    
+                  />
+                  <CommentCard 
+                    post={this.props.retrievedPost} 
+                    sendCommentQuery={this.props.sendCommentQuery}
+                  />              
+                </List>
+              </div>
               </Columns>
             </Container>
           </div>
