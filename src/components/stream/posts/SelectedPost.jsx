@@ -14,8 +14,6 @@ import { color } from "../../../styling/ColorFontConfig";
 import EditPostForm from "./EditPostForm";
 import SharingPostPrompt from "./SharingPostPrompt";
 import { updatePost, deletePost, likePost, sharePost } from '../StreamActions';
-import ReactMde from "react-mde";
-import CommentList from "./CommentList";
 
 import { retrievePost, createComment, retrieveCommentList,updateRetrivedPost, sendCommentQuery } from "./PostActions";
 import { Redirect } from "react-router-dom";
@@ -24,6 +22,7 @@ import { DetailedPostIcon,PostCommentsIcon } from "../../../styling/svgIcons";
 import { retrievePostLikes } from "./PostActions";
 import { toast } from "react-toastify";
 
+import PaginationTag from "./Pagination";
 
 import dateFormat from 'dateformat';
 import CommentModal from "./modals/CommentModal";
@@ -227,11 +226,13 @@ class CommentCard extends React.Component {
   constructor(props) {
     super(props);
 
+    this.pageSize = 5;
+
     this.state = {
       comments: [],
       commentsCount: 0,
       commentPageNum: 1,
-    }
+    };
   }
 
   requestComments = (page) => {
@@ -240,7 +241,7 @@ class CommentCard extends React.Component {
     if (this.props.post.author) {
       if ((this.props.auth !== undefined)&&(this.props.auth.isAuthenticated)) {
 
-        this.props.sendCommentQuery(this.props.post, page, 5, (data)=>{
+        this.props.sendCommentQuery(this.props.post, page, this.pageSize, (data)=>{
           console.log(data)
           if (data) {
             this.setState({
@@ -304,8 +305,6 @@ class CommentCard extends React.Component {
       )
     }
 
-
-
     return (
       <Card style={localCardStyle}>
           <Container style={{position: "fixed", right: "10%", marginTop: "2.2em", display: "flex", gap: "0.5em", zIndex: "1"}}>
@@ -316,8 +315,11 @@ class CommentCard extends React.Component {
             <PostCommentsIcon svgScale={"90"}/>
           </Container>
           <CommentsList commentState={this.state.comments}/>
-          <p style={{textAlign: "center"}}>{this.state.commentPageNum}</p>
-
+          {/* <p style={{textAlign: "center"}}>{this.state.commentPageNum}</p> */}
+          <PaginationTag
+            count={this.state.commentsCount}
+            pageSize={this.pageSize}
+          />
       </Card>
     )
   }
@@ -419,7 +421,7 @@ class SelectedPost extends React.Component {
             <Container fluid>
               <Columns centered>
 
-              <div className="post-list animate__animated animate__fadeInDown">
+              <div className="post-list animate__animated animate__fadeInUp">
                 <List hoverable>
                   <DetailedPostList 
                     post={this.props.retrievedPost} 
