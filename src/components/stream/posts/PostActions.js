@@ -45,7 +45,7 @@ export const retrievePost = (authorId, postId, chainFunc=null) => (dispatch, get
     });
 };
 
-export const createComment = (comment) => (dispatch, getState) => {
+export const createComment = (comment, chainFunc=null) => (dispatch, getState) => {
   const commentObj = {};
   const state = getState();
   const author = state.auth.author;
@@ -55,19 +55,20 @@ export const createComment = (comment) => (dispatch, getState) => {
   commentObj["comment"] = comment;
   commentObj["contentType"] = "text/markdown";
   
-  dispatch({ type: NEW_COMMENT_SUBMITTED });
   axios
     .post("/author/" + state.auth.author.id + "/posts/" + state.post.retrievedPost.id + "/comments/", commentObj)
     .then((response) => {
-      dispatch({ type: NEW_COMMENT_SUCCESS, payload: response.data });
+
+      console.log("RESPONSE DONE");
+      console.log(response.data);
+
+      if (chainFunc !== null) {
+        chainFunc();
+      }
     })
     .catch((error) => {
       if (error.response) {
         toast.error(JSON.stringify(error.response.data));
-        dispatch({
-          type: NEW_COMMENT_ERROR,
-          errorData: error.response.data,
-        });
       } else if (error.message) {
         toast.error(JSON.stringify(error.message));
       } else {
