@@ -17,7 +17,7 @@ import {
 } from "./PostTypes";
 import { setAxiosAuthToken } from "../../../utils/Utils";
 
-export const retrievePost = (authorId, postId) => (dispatch, getState) => {
+export const retrievePost = (authorId, postId, chainFunc=null) => (dispatch, getState) => {
   const state = getState();
 
   setAxiosAuthToken(state.auth.token);
@@ -26,6 +26,9 @@ export const retrievePost = (authorId, postId) => (dispatch, getState) => {
     .get("/author/" + authorId + "/posts/" + postId + "/")
     .then((response) => {
       dispatch({ type: RETRIEVE_POST_SUCCESS, payload: response.data });
+      if (chainFunc !== null) {
+        chainFunc();
+      }
     })
     .catch((error) => {
       if (error.response) {
@@ -106,11 +109,9 @@ export const retrievePostLikes = (post, setterFunction) => (dispatch, getState) 
   const state = getState();
 
   setAxiosAuthToken(state.auth.token);
-  dispatch({ type:  RETRIEVE_POSTLIKE_SUBMITTED});
   axios
     .get("/author/" + post.author.id + "/posts/" + post.id + "/likes/")
     .then((response) => {
-      dispatch({ type: RETRIEVE_POST_SUCCESS, payload: response.data});
       // debug
       // console.log("retrievePostLikes - response data: ");
       // console.log(post);

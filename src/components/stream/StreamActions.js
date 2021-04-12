@@ -26,7 +26,7 @@ import { setAxiosAuthToken, isEmpty } from "../../utils/Utils";
 import { push } from "connected-react-router";
 
 
-export const sharePost = (newPost) => (dispatch, getState) => {
+export const sharePost = (newPost, chainFuc=null) => (dispatch, getState) => {
   /*
   NOTICE: change this before part2 deadline
   for now, sharePost will treat the post as new, and do the samething as createPost.
@@ -43,6 +43,9 @@ export const sharePost = (newPost) => (dispatch, getState) => {
     .post("/author/" + state.auth.author.id + "/posts/", newPost)
     .then((response) => {
       dispatch({ type: SHARE_POST_SUCCESS, payload: response.data });
+      if (chainFuc !== null) {
+        chainFuc();
+      }
     })
     .catch((error) => {
       if (error.response) {

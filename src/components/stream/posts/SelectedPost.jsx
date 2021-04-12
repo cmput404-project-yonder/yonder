@@ -20,19 +20,34 @@ import CommentList from "./CommentList";
 import { retrievePost, createComment, retrieveCommentList,updateRetrivedPost } from "./PostActions";
 import { Redirect } from "react-router-dom";
 
+import { DetailedPostIcon,PostCommentsIcon } from "../../../styling/svgIcons";
+import { retrievePostLikes } from "./PostActions";
+import { toast } from "react-toastify";
 
 // local styling
-var postDividorStyle = {
-  ...dividorStyle,
-  paddingBottom: "0",
-  paddingTop: "0",
+var localCardStyle = {
+  ...postStyle,
+  minWidth: "400pt",
+  borderRadius: "12pt",
 }
 
-var buttonOverrideStyle = {
-  backgroundColor: "transparent",
-  border: "none",
-  marginTop: "-2pt",
-  height: "20pt",
+var wrapperStyle = {
+  marginLeft: "0.6em",
+  marginRight: "0.6em",
+  marginBottom: "0.7em",
+  boxShadow: "0pt 0pt 6pt rgb(0,0,0,0.1)",
+  borderRadius: "10pt",
+  backgroundColor: "white",
+}
+
+var shadowDividorStyle = {
+  border:"none",
+  width: "105%",
+  height: "50px",
+  boxShadow:"0 10pt 10pt -15pt rgb(0,0,0,0.3)",
+  margin: "-40pt auto -15pt",
+  marginLeft: "-1em",
+  backgroundColor: color.backgroundCreamLighter,
 }
 
 function getDateString(ms) {
@@ -41,17 +56,9 @@ function getDateString(ms) {
 }
 
 function DetailedPostList(props) {
-  // this component seprate a post into three part
-  // and put these parts into the list
-  // 1. title, description, author, timestamp
-  // 2. content (with/without action buttons)
-  // 3. comment section
 
-  // liked state, currently only a placeholder, copied from post
-  // remenber to udpate this
-  const [isLiked, setIsLiked] = useState(false);
-  const [editModalIsOpen, setEditModalIsOpen] = useState(false);
-  const [sharingPromptIsOpen, setSharingPromptIsOpen] = useState(false);
+  const [editModalIsOpen, setEditModalIsOpen] = useState(false)
+  const [sharingPromptIsOpen, setSharingPromptIsOpen] = useState(false)
   const [writtenComment, setWrittenComment] = useState("");
 
 
@@ -68,22 +75,6 @@ function DetailedPostList(props) {
     }
   }
 
-  const IsOwnPost = () => {
-    if (props.loggedInAuthor.id === props.post.author.id) {
-      console.log("This is your own post");
-      return true;
-    }
-    else {
-      console.log("This is a shared post");
-      return false;
-    }
-  }
-
-  const likedToggle = () => {
-    isLiked ? setIsLiked(false) : setIsLiked(true)
-    props.likePost(props.post);
-  }
-
   const getCategories = (cat) => {
     let categories =  cat.map((c) => <p>#{c}</p>)
     return (
@@ -92,95 +83,44 @@ function DetailedPostList(props) {
       </Container>
     )
   }
-
-  // const handleCommentSubmit =() => {
-
-  // }
-
-  // 1. title, description, author, timestamp
-  const TitleCard = () => {
-    return (
-      <Card style={{...postStyle, marginBottom: "0pt"}}>
-        <Card.Content style={postContainerStyle}>
-          {/* Title */}
-          <Container style={signatureStyle}>
-          <p style={{ fontWeight: "250" }}>@{props.post.author.displayName}</p>
-          <p>·</p>
-          <p>{getDateString(Date.parse(props.post.published))}</p>
-          </Container>
-          <Container style={postTitleStyle}>
-          <p style={{textDecoration: "none", color: color.baseBlack}}>{props.post.title}</p>
-          </Container>
-
-          {/* Description */}
-          <Container style = {DescriptionStyle}>  
-            <p>{ props.post.description }</p>
-          </Container>
-
-        </Card.Content>
-      </Card>
-    );
-  }
-
-
   const displayFooterButtons = () => {
+    let editButton = () => {
+      // edit button
+      if (props.loggedInAuthor.id == props.post.author.id) {
+        return  (
+          <EditButton action={() => setEditModalIsOpen(true)}/>
+        );
+      }
+    }
+
     return (
       <div>
-      <Dividor style={postDividorStyle}/>
-      <Container style={footerButtonLayoutStyle}>
-      <Button style={buttonOverrideStyle} onClick={() => likedToggle()}>
-        {isLiked ? <LikedButton/> : <LikeButton/>}
-      </Button>
-      <Button style={buttonOverrideStyle} onClick={() => setSharingPromptIsOpen(true)}>
-        <ShareButton/>
-      </Button>
-      <Button style={buttonOverrideStyle} onClick={() => setEditModalIsOpen(true)}>
-        <EditButton/>
-      </Button>
-      <Modal className="animate__animated animate__fadeIn animate__faster" show={editModalIsOpen} onClose={() => setEditModalIsOpen(false)} closeOnBlur closeOnEsc>
-        <EditPostForm
-          setEditModalIsOpen={setEditModalIsOpen}
-          post={props.post}
-          updatePost={props.updatePost}
-          deletePost={props.deletePost}
-        />
-      </Modal>
-      <Modal className="animate__animated animate__fadeIn animate__faster" show={sharingPromptIsOpen} onClose={() => setSharingPromptIsOpen(false)} closeOnBlur closeOnEsc>
-        <SharingPostPrompt
-          setModalIsOpen={setSharingPromptIsOpen}
-          post={props.post}
-          sharePost={props.sharePost}
-        />
-      </Modal>
-    </Container>
-    </div>
+        <Container style={{...footerButtonLayoutStyle, height: "2.8em"}}>
+          {/* buttons */}
+          <LikedButton count={props.likeCount} action={() => props.likedToggle()}/>
+          {editButton()}
+          <ShareButton action={() => setSharingPromptIsOpen(true)}/>
+          
+          {/* modal */}
+          <Modal className="animate__animated animate__fadeIn animate__faster" show={editModalIsOpen} onClose={() => setEditModalIsOpen(false)} closeOnBlur closeOnEsc>
+            <EditPostForm
+              setEditModalIsOpen={setEditModalIsOpen}
+              post={props.post}
+              updatePost={props.updatePost}
+              deletePost={props.deletePost}
+            />
+          </Modal>
+          <Modal className="animate__animated animate__fadeIn animate__faster" show={sharingPromptIsOpen} onClose={() => setSharingPromptIsOpen(false)} closeOnBlur closeOnEsc>
+            <SharingPostPrompt
+              setModalIsOpen={setSharingPromptIsOpen}   
+              post={props.post}
+              sharePost={props.sharePost}
+            />
+          </Modal>
+      
+      </Container>
+      </div>
     );
-  }
-
-  const ContentCard = () => {
-    return (
-      <Card style={postStyle}>
-        <Card.Content style={{...postContainerStyle, marginTop: "0.3em"}}>
-            
-            {/* Content */}
-            <Container style = {postContentStyle}>
-            {IsImage() ? (
-              <Content style={{textAlign: "center"}}>
-                <img style={{borderRadius: "6pt"}}src={props.post.content} /> 
-              </Content>
-            ) : <Content>{props.post.content}</Content> }
-            </Container>
-
-            {/* categories */}
-            <Container style={postContentStyle}>
-              {getCategories(props.post.categories)}
-            </Container>
-            
-            {/* action buttons*/}
-            {IsOwnPost()? displayFooterButtons():null}
-        </Card.Content>
-      </Card>      
-    )
   }
 
   const CommentCard = () => {
@@ -234,8 +174,56 @@ function DetailedPostList(props) {
     )
   }
 
-  // add comment to this list
-  const listItems = [TitleCard(), ContentCard(), CommentCard(), CommentEditorCard()]    // add component to this list for displaying
+
+  const PostCard = () => {
+
+
+    return (
+      <Card style={localCardStyle}>
+        <Container style={{fill: color.baseLightGrey,textAlign: "center", width: "100%", padding: "1em", paddingRight: "2em"}}>
+          <DetailedPostIcon svgScale={"80"}/>
+        </Container>
+        <Container style={wrapperStyle}>
+          <Card.Content style={postContainerStyle}>
+
+              {/* Title */}
+              <Container style={signatureStyle}>
+                <p style={{ fontWeight: "250" }}>@{props.post.author.displayName}</p>
+                <p>·</p>
+                <p>{getDateString(Date.parse(props.post.published))}</p>
+              </Container>
+              <Container style={postTitleStyle}>
+                <p style={{textDecoration: "none", color: color.baseBlack}}>{props.post.title}</p>
+              </Container>
+              
+              {/* Description */}
+              <Container style = {DescriptionStyle}>  
+                <p>{props.post.description }</p>
+              </Container>
+
+              <hr style={{...shadowDividorStyle, backgroundColor: "transparent", marginBottom: "0.5em", marginTop: "-32pt"}}></hr>
+            
+            {/* Content */}
+            <Container style = {postContentStyle}>
+            {IsImage() ? (
+              <Content style={{textAlign: "center"}}>
+                <img style={{borderRadius: "6pt", maxHeight: "500pt"}}src={props.post.content} /> 
+              </Content>
+            ) : <Content>{props.post.content}</Content> }
+            </Container>
+            
+            {/* categories */}
+            <Container style={postContentStyle}>
+              {getCategories(props.post.categories)}
+            </Container>
+          </Card.Content> 
+        </Container>
+        {displayFooterButtons()}
+      </Card>
+    )
+  }
+
+  const listItems = [PostCard()]
   return (
     <div className="post-list animate__animated animate__fadeInDown">
       <List hoverable>{listItems}</List>
@@ -245,13 +233,58 @@ function DetailedPostList(props) {
 }
 
 class SelectedPost extends React.Component {
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      likeCount: 0,
+      likePolling: null,
+    }
+  }
+
+  // polling handler
+  likePollingCall = (post, setter) => {
+    // this function is safe measure (wrapper) for preventing situation where auth is not set, but the webpage is still open
+    // polling will only be done if auth is set
+    console.log("polled");
+    if (this.props.retrievedPost.author) {
+      if ((this.props.auth !== undefined)&&(this.props.auth.isAuthenticated)) {
+        this.props.retrievePostLikes(post, setter);
+      }      
+    }
+  }
+
+  likePostCall = (post, setter=null) => {
+    // same as likePollingCall
+    // call this function to like a post
+    if ((this.props.auth !== undefined)&&(this.props.auth.isAuthenticated)) {
+      this.props.likePost(post, setter);
+    }
+  }
+  setLikeCount = (s) => {
+    this.setState({likeCount: s});
+  }
+  postLikeSetter = (likeList) => {
+    this.setLikeCount(likeList.items.length);
+  }
+  likedToggle = () => {
+    // like a post, and trigger a event to retrive likes after backend responded.
+    this.likePostCall(this.props.retrievedPost, () => this.likePollingCall(this.props.retrievedPost, this.postLikeSetter));
+  }
+
   componentDidMount() {
     const {
       match: { params },
     } = this.props;
 
-    this.props.retrievePost(params.author_id,params.id);
+    this.props.retrievePost(params.author_id,params.id, ()=>this.likePollingCall(this.props.retrievedPost, this.postLikeSetter));
     this.props.retrieveCommentList(params.athor_id,params.id);
+    
+    this.state["likePolling"] = setInterval(()=>this.likePollingCall(this.props.retrievedPost, this.postLikeSetter), 15 * 1000);  
+  }
+
+  componentWillUnmount() {
+    clearInterval(this.state["likePolling"]);
   }
 
   render() {
@@ -263,10 +296,15 @@ class SelectedPost extends React.Component {
         );
     }
 
-
     const updatePostWrapper = (editedPost) => {
       this.props.updatePost(editedPost, this.props.updateRetrivedPost);
     }
+
+    const sharePostWrapper = (post) => {
+      this.props.sharePost(post, ()=>toast.success("This post is now added to your stream"));
+    }
+
+
     if (!this.props.auth.isAuthenticated)
       // redirect user to login page if not logged in
       return <Redirect to="/" />;
@@ -288,8 +326,10 @@ class SelectedPost extends React.Component {
                 createComment={this.props.createComment} 
                 commentList={this.props.retrievedCommentList} 
                 likePost={this.props.likePost} 
+                likeCount={this.state.likeCount}
+                likedToggle={this.likedToggle}
                 updatePost={updatePostWrapper} 
-                sharePost={this.props.sharePost}
+                sharePost={sharePostWrapper}
                 deletePost={this.props.deletePost} />
               </Columns>
             </Container>
@@ -307,7 +347,7 @@ SelectedPost.propTypes = {
   loading: PropTypes.bool.isRequired,
   retrieveCommentList: PropTypes.func.isRequired,
   retrievedCommentList: PropTypes.array.isRequired,
-
+  retrievePostLikes: PropTypes.func.isRequired,
 };
 
 DetailedPostList.propTypes = {
@@ -316,6 +356,7 @@ DetailedPostList.propTypes = {
   updatePost: PropTypes.func.isRequired,
   sharePost: PropTypes.func.isRequired,
   deletePost: PropTypes.func.isRequired,
+  
 }
 
 const mapStateToProps = (state) => ({
@@ -326,4 +367,4 @@ const mapStateToProps = (state) => ({
   retrievedCommentList: state.post.retrievedCommentList,
 });
 
-export default connect(mapStateToProps, { updateRetrivedPost, retrievePost, updatePost, deletePost, likePost, sharePost, createComment, retrieveCommentList })(withRouter(SelectedPost));
+export default connect(mapStateToProps, { retrievePostLikes, updateRetrivedPost, retrievePost, updatePost, deletePost, likePost, sharePost, createComment, retrieveCommentList })(withRouter(SelectedPost));
