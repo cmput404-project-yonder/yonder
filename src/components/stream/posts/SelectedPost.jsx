@@ -318,7 +318,7 @@ class SelectedPost extends React.Component {
   likedToggle = () => {
     // like a post, and trigger a event to retrive likes after backend responded.
     this.likePostCall(this.props.retrievedPost, () => this.likePollingCall(this.props.retrievedPost, this.postLikeSetter));
-    this.props.sendCommentQuery(this.props.retrievedPost, 1, 5, (data)=>console.log(data))
+    this.props.sendCommentQuery(this.props.retrievedPost, 3, 3, (data)=>console.log(data))
   
   
   }
