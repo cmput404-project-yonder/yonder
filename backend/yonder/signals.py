@@ -33,7 +33,8 @@ def create_friend(sender, instance, **kwargs):
         authorA_json = AuthorSerializer(instance=authorA).data
         try:
             authorB = Author.objects.get(pk=uuid.UUID(authorB_id))
-            authorB_follow = AuthorFollower.objects.get(author=authorB, follower=authorA_json)
+            # Check if the follow relationship is 2-way
+            _ = AuthorFollower.objects.get(author=authorB, follower=authorA_json)
             # Create the friendship both ways
             authorA_friend_serializer = AuthorFriendSerializer(data={
                 "author": authorA.id,
@@ -55,7 +56,8 @@ def create_friend(sender, instance, **kwargs):
                     "author": authorA.id,
                     "friend": instance.follower
                 })
-                authorA_friend_serializer.save()
+                if authorA_friend_serializer.is_valid():
+                    authorA_friend_serializer.save()
         except AuthorFollower.DoesNotExist:
             # The relationship is only one-way, so ignore
             return

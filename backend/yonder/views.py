@@ -275,19 +275,21 @@ class author_followers_detail(viewsets.ModelViewSet):
     serializer_class = AuthorFollowerSerializer
     permission_classes = [IsAuthenticatedOrReadOnly]
 
-    def check_following(self, author_id, follower_id):
-
+    def check_following(self, author, follower_id):
+        author_followers = AuthorFollower.objects.filter(author=author)
+        for af in author_followers:
+            if af.follower["id"] == str(follower_id):
+                return Response(status=status.HTTP_200_OK)
         return False
 
     def create(self, request, author_id, follower_id):
         if author_id == follower_id:
             return Response("You can't follow yourself :/", status=status.HTTP_400_BAD_REQUEST)
 
-        if self.check_following(author_id, follower_id):
-            return Response("Already following", status=status.HTTP_409_CONFLICT)
-
         try:
-            Author.objects.get(pk=author_id)
+            author = Author.objects.get(pk=author_id)
+            if self.check_following(author, follower_id):
+                return Response("Already following", status=status.HTTP_409_CONFLICT)
             author_follower_data = {"author": author_id, "follower": request.data["actor"]}
             serializer = self.get_serializer(data=author_follower_data)
             if not serializer.is_valid():
@@ -312,10 +314,8 @@ class author_followers_detail(viewsets.ModelViewSet):
     def retrieve(self, request, author_id, follower_id):
         try:
             author = Author.objects.get(pk=author_id)
-            author_followers = AuthorFollower.objects.filter(author=author)
-            for af in author_followers:
-                if af.follower["id"] == str(follower_id):
-                    return Response(status=status.HTTP_200_OK)
+            if self.check_following(author, follower_id):
+                return Response(status=status.HTTP_200_OK)
         except Author.DoesNotExist:
             # handle remote follower
             remote_nodes = RemoteNode.objects.all()
