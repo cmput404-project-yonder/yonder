@@ -13,10 +13,6 @@ import {
     RETRIEVE_ALL_AUTHORS_ERROR,
   } from "./NavigationTypes";
 import { setAxiosAuthToken } from "../utils/Utils";
-import { unsetCurrentUser } from "./login/LoginActions.js";
-
-
-
 
 export const retrieveInbox = () => (dispatch, getState) => {
 const state = getState();
@@ -32,10 +28,6 @@ axios
     .catch((error) => {
       console.log(error);
       if (error.response) {
-        if (error.response.status === 401) {
-          // Invalidated token, clear storage
-          unsetCurrentUser();
-        }
         toast.error(JSON.stringify(error.response.data));
         dispatch({
           type: RETRIEVE_INBOX_ERROR,

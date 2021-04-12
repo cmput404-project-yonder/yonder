@@ -29,7 +29,7 @@ class App extends Component {
             <div style={{paddingTop: "8em"}}>
             <Page path="/signup" component={Signup} title="Signup"/>
             <Page path="/login" component={Login} title="Login"/>
-            <Page path="/" component={requireAuth(Stream)} title="Stream"/>
+            <Page exact path="/" component={requireAuth(Stream)} title="Stream"/>
             <Page exact path="/author/:id" component={requireAuth(Profile)} title="Profile"/>
             <Page exact path="/author/:author_id/posts/:id" component={requireAuth(SelectedPost)} title="View Post"/>
             </div>

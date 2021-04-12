@@ -101,7 +101,7 @@ class NaviPollingComponent extends React.Component {
     // interval
     this.state["inboxPolling"] = setInterval(()=>this.props.retrieveInbox(),this.INBOX_POLLING_INTERVAL);
     this.state["searchAuthorPolling"] = setInterval(()=>this.props.retrieveAllAuthors(), this.ALLAU_POLLING_INTERVAL);
-    // this.state["windowsOnChangePolling"] = setInterval(()=>this.onWindowChange(), this.WINDO_POLLING_INTERVAL);
+    this.state["windowsOnChangePolling"] = setInterval(()=>this.onWindowChange(), this.WINDO_POLLING_INTERVAL);
   }
 
   componentWillUnmount() {
@@ -142,7 +142,7 @@ function NavigationBar(props) {
     if (props.auth.isAuthenticated) {
       props.logout();
     } else {
-      window.location.href = '/'
+      window.location.href = '/login';
     }
   }
 

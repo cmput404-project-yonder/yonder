@@ -3,7 +3,6 @@ import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { withRouter } from "react-router-dom";
 import { Container, Columns, Section } from "react-bulma-components";
-import { Redirect } from "react-router-dom";
 
 import PostList from "./posts/PostList";
 import PopupModal from "./posts/modals/PopupModal";
@@ -13,25 +12,17 @@ import { createPost, updatePost, sharePost, likePost, retrieveLoggedInAuthorPost
 
 class Stream extends Component {
   componentDidMount() {
-    if (Object.keys(this.props.author).length === 0) {
-      // untill author is properly set
-      window.location = window.location;
-    }
+    // if (Object.keys(this.props.author).length === 0) {
+    //   // untill author is properly set
+    //   window.location = window.location;
+    // }
 
-    if (!this.props.auth.isAuthenticated) {
+    if (this.props.auth.isAuthenticated) {
       this.props.retrieveLoggedInAuthorPosts();
-      this.props.retrieveInbox();
-      if (!this.props.allAuthors) {
-        this.props.retrieveAllAuthors();
-      }
     }
   }
 
   render() {
-    if (!this.props.auth.isAuthenticated) {
-      return <Redirect to="/login" />
-    }
-
     if (this.props.loading) {
       return (
         <div className="pageloader is-active animate__animated animate__fadeIn animate__faster">
@@ -41,36 +32,32 @@ class Stream extends Component {
     }
 
     const posts = [].concat(this.props.currentAuthorPosts, this.props.inboxPosts);
-    if (!this.props.auth.isAuthenticated)
-      // redirect user to login page if not logged in
-      return <Redirect to="/" />;
-    else 
-      return (
-        <Section style={pageStyle}>
-          <div style={buttonLayerContainerStyle}>
-            <Container style={newPostButtonStyle}>
-              <PopupModal createPost={this.props.createPost} />
-            </Container>
-          </div>
-          <div style={streamLayerContainerStyle}>
-            <Container fluid>
-                <Columns centered>
-                  <Columns.Column>
-                    <PostList
-                      posts={posts}
-                      createPost={this.props.createPost}
-                      updatePost={this.props.updatePost}
-                      deletePost={this.props.deletePost}
-                      sharePost={this.props.sharePost}
-                      likePost={this.props.likePost}
-                      interactive={true}
-                    />
-                  </Columns.Column>
-                </Columns>
-              </Container>
-          </div>
-        </Section>
-      );
+    return (
+      <Section style={pageStyle}>
+        <div style={buttonLayerContainerStyle}>
+          <Container style={newPostButtonStyle}>
+            <PopupModal createPost={this.props.createPost} />
+          </Container>
+        </div>
+        <div style={streamLayerContainerStyle}>
+          <Container fluid>
+            <Columns centered>
+              <Columns.Column>
+                <PostList
+                  posts={posts}
+                  createPost={this.props.createPost}
+                  updatePost={this.props.updatePost}
+                  deletePost={this.props.deletePost}
+                  sharePost={this.props.sharePost}
+                  likePost={this.props.likePost}
+                  interactive={true}
+                />
+              </Columns.Column>
+            </Columns>
+          </Container>
+        </div>
+      </Section>
+    );
   }
 }
 
