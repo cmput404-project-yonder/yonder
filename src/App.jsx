@@ -14,6 +14,7 @@ import Profile from "./components/profile/Profile";
 import SelectedPost from "./components/stream/posts/SelectedPost";
 import Home from "./components/Home";
 import NavigationBar from "./components/NavigationBar";
+import requireAuth from "./utils/RequireAuth.js";
 
 axios.defaults.baseURL= process.env.NODE_ENV === "production" ? "https://yonder.moe/api" : "http://localhost:8000/api";
 
@@ -28,10 +29,9 @@ class App extends Component {
             <div style={{paddingTop: "8em"}}>
             <Page path="/signup" component={Signup} title="Signup"/>
             <Page path="/login" component={Login} title="Login"/>
-            <Page path="/stream" component={Stream} title="Stream"/>
-            <Page exact path="/author/:id" component={Profile} title="Profile"/>
-            <Page exact path="/author/:author_id/posts/:id" component={SelectedPost} title="View Post"/>
-            <Page exact path="/" component={Home} />
+            <Page exact path="/" component={requireAuth(Stream)} title="Stream"/>
+            <Page exact path="/author/:id" component={requireAuth(Profile)} title="Profile"/>
+            <Page exact path="/author/:author_id/posts/:id" component={requireAuth(SelectedPost)} title="View Post"/>
             </div>
           </Switch>
         </Root>

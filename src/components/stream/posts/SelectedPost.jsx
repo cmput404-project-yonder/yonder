@@ -240,8 +240,6 @@ class CommentCard extends React.Component {
   }
 
   requestComments = (page) => {
-
-
     if (this.props.post.author) {
       if ((this.props.auth !== undefined)&&(this.props.auth.isAuthenticated)) {
 
@@ -258,8 +256,6 @@ class CommentCard extends React.Component {
 
       }      
     }
-
-
   }
 
 
@@ -324,6 +320,8 @@ class CommentCard extends React.Component {
           <PaginationTag
             count={this.state.commentsCount}
             pageSize={this.pageSize}
+            pageNum={this.state.commentPageNum}
+            onClick={(page)=>this.requestComments(page)}
           />
           {/* <hr style={{...shadowDividorStyle, backgroundColor: "transparent",transform: "rotate(180deg)", marginBottom: "-12pt", marginTop: "-12pt"}}></hr> */}
           <Container style={{marginBottom: "1.5em", marginTop: "-0.5em", width: "100%"}}>

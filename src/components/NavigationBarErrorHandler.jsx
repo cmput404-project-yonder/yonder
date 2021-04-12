@@ -1,5 +1,6 @@
 import React from "react";
 import { connect } from "react-redux";
+import { unsetCurrentUser } from "./login/LoginActions.js";
 
 class NaviPollingErrorHandlerComponent extends React.Component {
     // handles error in state.navigation
@@ -7,7 +8,7 @@ class NaviPollingErrorHandlerComponent extends React.Component {
     componentDidUpdate = () => {
       switch (this.props.errorResponse.status) {
         case 401:
-            window.location.pathname = "/";
+            unsetCurrentUser();
             break;
         default:
             break;
@@ -23,4 +24,4 @@ const mapStateToProps = (state) => ({
     errorResponse: state.navigation.error,
 });
 
-export default connect(mapStateToProps)(NaviPollingErrorHandlerComponent);
+export default connect(mapStateToProps, { unsetCurrentUser })(NaviPollingErrorHandlerComponent);
