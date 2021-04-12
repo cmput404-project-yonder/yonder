@@ -416,11 +416,15 @@ class FollowerTests(APITestCase):
         url = reverse('followers', args=[self.author2.id, self.author1.id])
         response = self.client.put(url, data=self.followJSON2, format='json')
 
-        self.author1.refresh_from_db()
-        self.author2.refresh_from_db()
+        url = reverse('friend_list', args=[self.author1.id])
+        friendData1 = self.client.get(url).json()
+        url = reverse('friend_list', args=[self.author2.id])
+        friendData2 = self.client.get(url).json()
 
-        self.assertEqual(1, AuthorFriend.objects.filter(author=self.author1, friend=self.authorJSON2).count())
-        self.assertEqual(1, AuthorFriend.objects.filter(author=self.author2, friend=self.authorJSON1).count())
+        self.assertEqual(1, len(friendData1))
+        self.assertEqual(self.author2.displayName, friendData1[0]["displayName"])
+        self.assertEqual(1, len(friendData2))
+        self.assertEqual(self.author1.displayName, friendData2[0]["displayName"])
 
     def test_friends_post_inbox_negative(self):
         # Only friend post should not be sent to followers
@@ -755,6 +759,20 @@ class LikeTests(APITestCase):
         data_json = response.json()
         self.assertEqual(data_json["items"][0]["author"]["id"], str(self.author1.id))
         self.assertEqual(data_json["items"][0]["object_url"], self.author2_post.get_absolute_url())
+    
+    def test_get_post_likes_count(self):
+        # author1 sends like to author2_post
+        url = reverse('inbox', args=[self.author2.id])
+        response = self.client.post(url, content_type='application/json', data=self.post_like_data_from_author_1_json)
+
+        url = reverse('post_likes_count', args=[self.author2.id, self.author2_post.id])
+        response = self.client.get(url)
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+        data_json = response.json()
+        self.assertEqual(1, data_json)
+    
     
     def test_get_comment_likes(self):
         # author2 sends like to author1_comment
