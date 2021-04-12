@@ -5,14 +5,14 @@ import { List,Container,Card } from "react-bulma-components";
 import Post from "./Post";
 import { color } from "../../../styling/ColorFontConfig";
 
-import { postStyle,postContainerStyle } from "../../../styling/StyleComponents";
+import { postStyle } from "../../../styling/StyleComponents";
 import { EmptyFeedIcon } from "../../../styling/svgIcons";
 
 import PopupModal from "./modals/PopupModal";
 
 function PostList(props) {
 
-  props.posts.sort((postA,postB) => Date.parse(postB["published"])-Date.parse(postA["published"]));
+  // props.posts.sort((postA,postB) => new Date(postB["published"]) - new Date(postA["published"]));
   const postList = props.posts.map((post) => <Post interactive={props.interactive} post={post} updatePost={props.updatePost} deletePost={props.deletePost} likePost={props.likePost} sharePost={props.sharePost}/>);
 
 
