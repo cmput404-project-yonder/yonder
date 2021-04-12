@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { withRouter, Link } from "react-router-dom";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
-import { Container, Button, Form, Heading, Section } from "react-bulma-components";
+import { Container, Form, Section } from "react-bulma-components";
 import { Redirect } from "react-router-dom";
 import { login } from "./LoginActions.js";
 import { color } from "../../styling/ColorFontConfig";
@@ -108,10 +108,11 @@ class Login extends Component {
       }
     }
 
-
     if (this.props.auth.isAuthenticated) {
-      return <Redirect to="/stream" />
-    } else return (
+      return <Redirect to="/" />
+    }
+    
+    return (
       <Section>
         <Container className="animate__animated animate__fadeInUp animate_faster" style={loginCardStyle}>
           <Container style={loginContentContainer}>

@@ -21,7 +21,6 @@ import { ProfileIconBoy } from "../../styling/svgIcons";
 import { Redirect } from "react-router-dom";
 
 import {updatePost, sharePost, likePost, deletePost } from "../stream/StreamActions";
-import { retrieveAllAuthors } from "../NavigationActions";
 
 var pageStyle = {
   margin: "auto",
@@ -80,7 +79,7 @@ class Profile extends React.Component {
     const clickFollow = () => {
       if (this.props.loggedInAuthor.id === undefined) {
         // redirect to login
-        window.location.href = '/'
+        window.location.href = '/login'
       } else {
         const status_code = this.props.sendFollow(this.props.retrievedAuthor);
         if (status_code === 201) {
@@ -191,33 +190,29 @@ class Profile extends React.Component {
       this.props.deletePost(post, ()=>this.props.retrieveAuthorPosts(this.props.retrievedAuthor.id));
     }
 
-    if (!this.props.auth.isAuthenticated)
-      // redirect user to login page if not logged in
-      return <Redirect to="/" />;
-    else
-      return (
-        <Section >
-          <Columns style={pageStyle}>
+    return (
+      <Section >
+        <Columns style={pageStyle}>
 
-            <Columns.Column>
-              {profileCard()}
-            </Columns.Column>
+          <Columns.Column>
+            {profileCard()}
+          </Columns.Column>
 
-            <Columns.Column>
-              <PostList 
-                posts={this.props.retrievedAuthorPosts}
-                
-                updatePost={updatePostWrapper} 
-                deletePost={deletePostWrapper} 
-                likePost={this.props.likePost}
-                sharePost={sharePostWrapper}
-                interactive={true}
+          <Columns.Column>
+            <PostList 
+              posts={this.props.retrievedAuthorPosts}
+              
+              updatePost={updatePostWrapper} 
+              deletePost={deletePostWrapper} 
+              likePost={this.props.likePost}
+              sharePost={sharePostWrapper}
+              interactive={true}
 
-              />
-            </Columns.Column>
-          </Columns>
-        </Section>
-      );
+            />
+          </Columns.Column>
+        </Columns>
+      </Section>
+    );
   }
 }
 

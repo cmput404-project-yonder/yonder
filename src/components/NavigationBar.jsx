@@ -142,7 +142,7 @@ function NavigationBar(props) {
     if (props.auth.isAuthenticated) {
       props.logout();
     } else {
-      window.location.href = '/'
+      window.location.href = '/login';
     }
   }
 
