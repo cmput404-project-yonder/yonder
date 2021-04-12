@@ -452,6 +452,15 @@ class post_likes(generics.GenericAPIView):
         }
         return Response(data=data, status=status.HTTP_200_OK)
 
+class post_likes_count(generics.GenericAPIView):
+    permission_classes = [IsAuthenticated]
+
+    @swagger_auto_schema(tags=['likes'])
+    def get(self, request, *args, **kwargs):
+        post = get_object_or_404(Post, id=kwargs["post_id"])
+        likes_count = Like.objects.filter(object_url=post.get_absolute_url()).count()
+        return Response(likes_count, status=status.HTTP_200_OK)
+
 class comment_likes(generics.GenericAPIView):
     permission_classes = [IsAuthenticated]
 
@@ -479,3 +488,21 @@ class likes(generics.GenericAPIView):
             "items": serialized_likes
         }
         return Response(data=data, status=status.HTTP_200_OK)
+
+class author_friends(generics.ListAPIView):
+    serializer_class = AuthorFriendSerializer
+    permission_classes = [IsAuthenticated]
+
+    def list(self, request, *args, **kwargs):
+        author_followers = AuthorFriend.objects.filter(author_id=kwargs["author_id"])
+        if author_followers.count() > 0:
+            followers_data = []
+            for af in author_followers:
+                followers_data.append(af.friend)
+            return Response(followers_data, status=status.HTTP_200_OK)
+
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+    @swagger_auto_schema(tags=['friends'])
+    def get(self, request, *args, **kwargs):
+        return self.list(request, *args, **kwargs)

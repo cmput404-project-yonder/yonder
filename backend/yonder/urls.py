@@ -30,6 +30,11 @@ urlpatterns = [
         name="follower_list"
     ),
     path(
+        'author/<str:author_id>/friends/',
+        views.author_friends.as_view(),
+        name="friend_list"
+    ),
+    path(
         'author/<str:author_id>/followers/<str:follower_id>/',
         views.author_followers_detail.as_view({'get': 'retrieve', 'put': 'create', 'delete': 'destroy'}),
         name="followers"
@@ -43,6 +48,11 @@ urlpatterns = [
         'author/<uuid:author_id>/posts/<uuid:post_id>/likes/',
         views.post_likes.as_view(),
         name="post_likes"
+    ),
+    path(
+        'author/<uuid:author_id>/posts/<uuid:post_id>/likes/count/',
+        views.post_likes_count.as_view(),
+        name="post_likes_count"
     ),
     path(
         'author/<uuid:author_id>/posts/<uuid:post_id>/comments/<uuid:comment_id>/likes/',
