@@ -214,43 +214,48 @@ class comments(generics.ListCreateAPIView):
 
     @swagger_auto_schema(tags=['comments'])
     def get(self, request, *args, **kwargs):
-        comments = Comment.objects.filter(post_id=kwargs["post_id"]).order_by('published')
+        comments = Comment.objects.filter(post_id=kwargs["post_id"]).order_by('-published')
         page_number = 1 if 'page' not in request.query_params else request.query_params.get('page')
-        page_size = 50 if 'size' not in request.query_params else request.query_params.get('size')
+        page_size = 5 if 'size' not in request.query_params else request.query_params.get('size')
         paginator = Paginator(comments, page_size)
         page = paginator.page(page_number)
-        serialized_comments = [self.serializer_class(comment).data for comment in page.object_list]
+        
+        if page.object_list.count() == 0:
+            return Response(status=status.HTTP_204_NO_CONTENT)
 
-        return Response(serialized_comments, status=status.HTTP_200_OK)
+        items = [self.serializer_class(comment).data for comment in page.object_list]
+        data = {
+            "type": "comments",
+            "count": comments.count(),
+            "items": items
+        }
+
+        return Response(data, status=status.HTTP_200_OK)
 
     @swagger_auto_schema(tags=['comments'])
     def post(self, request, *args, **kwargs):
-        post = get_object_or_404(Post, id=kwargs["post_id"])
-        request.data['post'] = post.id
-        comment_serializer = self.serializer_class(data=request.data)
-        if not comment_serializer.is_valid():
-            return Response(status=status.HTTP_400_BAD_REQUEST)
+        try:
+            post = Post.objects.get(id=kwargs["post_id"])
+            request.data['post'] = post.id
+            comment_serializer = self.serializer_class(data=request.data)
+            if comment_serializer.is_valid():
+                comment_serializer.save()
+                return Response(comment_serializer.data, status=status.HTTP_201_CREATED)
+        except Post.DoesNotExist:
+            # handle comment on a remote post
+            host = request.data["post"]["author"]["host"]
+            node = get_object_or_404(RemoteNode, host=host)
+            url = node.host + request.data["post"]["author"]["id"] + \
+                "/posts/" + request.data["post"]["id"] + "/comments/"
+            response = requests.post(url, 
+                auth=requests.models.HTTPBasicAuth(node.our_user, node.our_password), 
+                json=request.data,
+                headers={"content-type": "application/json"}
+            )
+            return Response(response.content, status=response.status_code)
 
-        comment_serializer.save()
-        return Response(status=status.HTTP_201_CREATED)
 
-
-class comment_detail(generics.RetrieveUpdateDestroyAPIView):
-    queryset = Comment.objects.all()
-    serializer_class = CommentSerializer
-    permission_classes = [IsAuthenticatedOrReadOnly]
-
-    @swagger_auto_schema(tags=['comments'])
-    def get(self, request, *args, **kwargs):
-        return self.retrieve(request, *args, **kwargs)
-
-    @swagger_auto_schema(tags=['comments'])
-    def put(self, request, *args, **kwargs):
-        return self.update(request, *args, **kwargs)
-
-    @swagger_auto_schema(tags=['comments'])
-    def delete(self, request, *args, **kwargs):
-        return self.destroy(request, *args, **kwargs)
+        return Response(status=status.HTTP_400_BAD_REQUEST)
 
 class author_followers(viewsets.ModelViewSet):
     queryset = AuthorFollower.objects.all()
@@ -371,15 +376,10 @@ class inbox(generics.GenericAPIView):
         inbox = get_object_or_404(Inbox, author_id=kwargs["author_id"])
         author = get_object_or_404(Author, id=kwargs["author_id"])
 
-        page_number = 1 if 'page' not in request.query_params else request.query_params.get('page')
-        page_size = 50 if 'size' not in request.query_params else request.query_params.get('size')
-        paginator = Paginator(inbox.items, page_size)
-        page = paginator.page(page_number)
-
         data = {
             "type": "inbox",
             "author": author.get_absolute_url(),
-            "items": page.object_list
+            "items": inbox.items
         }
 
         return Response(data, status=status.HTTP_200_OK)
@@ -452,19 +452,14 @@ class post_likes(generics.GenericAPIView):
         }
         return Response(data=data, status=status.HTTP_200_OK)
 
-class comment_likes(generics.GenericAPIView):
+class post_likes_count(generics.GenericAPIView):
     permission_classes = [IsAuthenticated]
 
     @swagger_auto_schema(tags=['likes'])
     def get(self, request, *args, **kwargs):
-        comment = get_object_or_404(Comment, id=kwargs["comment_id"])
-        likes = Like.objects.filter(object_url=comment.get_absolute_url()) 
-        serialized_data = [LikeSerializer(like).data for like in likes]
-        data = {
-            "type": "likes",
-            "items": serialized_data
-        }
-        return Response(data=data, status=status.HTTP_200_OK)
+        post = get_object_or_404(Post, id=kwargs["post_id"])
+        likes_count = Like.objects.filter(object_url=post.get_absolute_url()).count()
+        return Response(likes_count, status=status.HTTP_200_OK)
 
 class likes(generics.GenericAPIView):
     permission_classes = [IsAuthenticated]
@@ -479,3 +474,21 @@ class likes(generics.GenericAPIView):
             "items": serialized_likes
         }
         return Response(data=data, status=status.HTTP_200_OK)
+
+class author_friends(generics.ListAPIView):
+    serializer_class = AuthorFriendSerializer
+    permission_classes = [IsAuthenticated]
+
+    def list(self, request, *args, **kwargs):
+        author_followers = AuthorFriend.objects.filter(author_id=kwargs["author_id"])
+        if author_followers.count() > 0:
+            followers_data = []
+            for af in author_followers:
+                followers_data.append(af.friend)
+            return Response(followers_data, status=status.HTTP_200_OK)
+
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+    @swagger_auto_schema(tags=['friends'])
+    def get(self, request, *args, **kwargs):
+        return self.list(request, *args, **kwargs)
