@@ -45,7 +45,7 @@ export const retrievePost = (authorId, postId, chainFunc=null) => (dispatch, get
     });
 };
 
-export const createComment = (comment, postPath, chainFunc=null) => (dispatch, getState) => {
+export const createComment = (comment, post, chainFunc=null) => (dispatch, getState) => {
   const commentObj = {};
   const state = getState();
   const author = state.auth.author;
@@ -54,7 +54,7 @@ export const createComment = (comment, postPath, chainFunc=null) => (dispatch, g
   commentObj["author"] = author;
   commentObj["comment"] = comment;
   commentObj["contentType"] = "text/markdown";
-  commentObj["post"] = postPath;
+  commentObj["post"] = post;
   
   axios
     .post("/author/" + state.auth.author.id + "/posts/" + state.post.retrievedPost.id + "/comments/", commentObj)
