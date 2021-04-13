@@ -264,6 +264,8 @@ class comments(generics.ListCreateAPIView):
             node = get_object_or_404(RemoteNode, host=host)
             url = node.host + "api/author/" + request.data["post"]["author"]["id"] + \
                 "/posts/" + request.data["post"]["id"] + "/comments/"
+            del request.data["post"]
+
             response = requests.post(url, 
                 auth=requests.models.HTTPBasicAuth(node.our_user, node.our_password), 
                 json=request.data,
