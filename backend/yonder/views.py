@@ -482,37 +482,82 @@ class post_likes(generics.GenericAPIView):
 
     @swagger_auto_schema(tags=['likes'])
     def get(self, request, *args, **kwargs):
-        post = get_object_or_404(Post, id=kwargs["post_id"])
-        likes = Like.objects.filter(object_url=post.get_absolute_url()) 
-        serialized_data = [LikeSerializer(like).data for like in likes]
-        data = {
-            "type": "likes",
-            "items": serialized_data
-        }
-        return Response(data=data, status=status.HTTP_200_OK)
+        try:
+            post = Post.objects.get(Post, id=kwargs["post_id"])
+            likes = Like.objects.filter(object_url=post.get_absolute_url()) 
+            serialized_data = [LikeSerializer(like).data for like in likes]
+            data = {
+                "type": "likes",
+                "items": serialized_data
+            }
+            return Response(data=data, status=status.HTTP_200_OK)
+        except Post.DoesNotExist:
+            # handle get likes for remote post 
+            remote_nodes = RemoteNode.objects.all()
+            for remote_node in remote_nodes:
+                node = RemoteNode.objects.get(host=remote_node.host)
+                url = node.host + request.path
+                response = requests.get(
+                    url,
+                    auth=requests.models.HTTPBasicAuth(remote_node.our_user, remote_node.our_password),
+                )
+                if response == 200:
+                    return Response(response.json(), status=response.status_code)
+        
+        return Response(status=status.HTTP_404_NOT_FOUND)
 
 class post_likes_count(generics.GenericAPIView):
     permission_classes = [IsAuthenticated]
 
     @swagger_auto_schema(tags=['likes'])
     def get(self, request, *args, **kwargs):
-        post = get_object_or_404(Post, id=kwargs["post_id"])
-        likes_count = Like.objects.filter(object_url=post.get_absolute_url()).count()
-        return Response(likes_count, status=status.HTTP_200_OK)
+        try:
+            post = Post.objects.get(id=kwargs["post_id"])
+            likes_count = Like.objects.filter(object_url=post.get_absolute_url()).count()
+            return Response(likes_count, status=status.HTTP_200_OK)
+        except Post.DoesNotExist:
+            # handle get likes for remote post 
+            remote_nodes = RemoteNode.objects.all()
+            for remote_node in remote_nodes:
+                node = RemoteNode.objects.get(host=remote_node.host)
+                url = node.host + request.path
+                response = requests.get(
+                    url,
+                    auth=requests.models.HTTPBasicAuth(remote_node.our_user, remote_node.our_password),
+                )
+                if response == 200:
+                    return Response(response.json(), status=response.status_code)
+        
+        return Response(status=status.HTTP_404_NOT_FOUND)
 
 class likes(generics.GenericAPIView):
     permission_classes = [IsAuthenticated]
 
     @swagger_auto_schema(tags=['likes'])
     def get(self, request, *args, **kwargs):
-        author = get_object_or_404(Author, id=kwargs["author_id"])
-        likes = Like.objects.all().filter(author__id=str(author.id)) 
-        serialized_likes = [LikeSerializer(like).data for like in likes]
-        data = {
-            "type": "liked",
-            "items": serialized_likes
-        }
-        return Response(data=data, status=status.HTTP_200_OK)
+        try:
+            author = Author.objects.get(id=kwargs["author_id"])
+            likes = Like.objects.all().filter(author__id=str(author.id)) 
+            serialized_likes = [LikeSerializer(like).data for like in likes]
+            data = {
+                "type": "liked",
+                "items": serialized_likes
+            }
+            return Response(data=data, status=status.HTTP_200_OK)
+        except Author.DoesNotExist:
+            # handle get likes for remote post 
+            remote_nodes = RemoteNode.objects.all()
+            for remote_node in remote_nodes:
+                node = RemoteNode.objects.get(host=remote_node.host)
+                url = node.host + request.path
+                response = requests.get(
+                    url,
+                    auth=requests.models.HTTPBasicAuth(remote_node.our_user, remote_node.our_password),
+                )
+                if response == 200:
+                    return Response(response.json(), status=response.status_code)
+        
+        return Response(status=status.HTTP_404_NOT_FOUND)
 
 class author_friends(generics.ListAPIView):
     serializer_class = AuthorFriendSerializer
