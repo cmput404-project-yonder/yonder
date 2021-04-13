@@ -23,7 +23,7 @@ function CommentModal(props) {
     <div className="post-form-modal">
       <AddButton isFlat={true} action={() => setModalIsOpen(true)}/>
       <Modal className="animate__animated animate__fadeIn animate__faster" show={modalIsOpen} onClose={() => setModalIsOpen(false)} closeOnBlur closeOnEsc>
-        <CommentForm sendComment={(content) => props.createComment(content, post, () => afterCommentSent())} />
+        <CommentForm sendComment={(content) => props.createComment(content, props.post, () => afterCommentSent())} />
       </Modal>
     </div>
   );
