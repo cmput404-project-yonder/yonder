@@ -195,11 +195,13 @@ class Profile extends React.Component {
         <Columns style={pageStyle}>
 
           <Columns.Column>
+          <div style={{marginTop: "5.5em"}}>
             {profileCard()}
+          </div>
           </Columns.Column>
 
           <Columns.Column>
-            <div className="post-list animate__animated animate__fadeInUp">
+            <div className="post-list animate__animated animate__fadeInUp" style={{marginTop: "-4em"}}>
             <PostList 
               posts={this.props.retrievedAuthorPosts}
               

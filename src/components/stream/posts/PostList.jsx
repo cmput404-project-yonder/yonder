@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import PropTypes from "prop-types";
 import { List,Container,Card } from "react-bulma-components";
 
@@ -9,19 +9,26 @@ import { postStyle } from "../../../styling/StyleComponents";
 import { EmptyFeedIcon } from "../../../styling/svgIcons";
 
 import PopupModal from "./modals/PopupModal";
-import { connect } from "react-redux";
 
 import InBoxPostWrapper from "./InBoxPostWrapper";
+import PaginationTag from "./Pagination";
+
+
 
 function PostList(props) {
-  
-
-
+  const [pageNum, setPageNum] = useState(1);
+  var pageSize = 5;
+  var pageCount = 0;
 
   props.posts.sort((postA,postB) => Date.parse(postB["published"])-Date.parse(postA["published"]));
+  pageCount = props.posts.length;
+
+
+  let postsSliced = props.posts.slice(pageSize*(pageNum-1), pageSize*(pageNum-1)+pageSize)
+  console.log(pageSize*pageNum);
 
   if (props.hasInbox !== true) {
-    var postList = props.posts.map((post) => {
+    var postList = postsSliced.map((post) => {
       return (
         <Post 
           interactive={props.interactive} 
@@ -34,7 +41,7 @@ function PostList(props) {
       )
     });    
   } else {
-    var postList = props.posts.map((post) => {
+    var postList = postsSliced.map((post) => {
 
       if (props.authorID === post.author.id) {
         return (
@@ -64,6 +71,7 @@ function PostList(props) {
 
 
 
+
   const createNewPostGuide = () => {
     if (props.createPost !== undefined) {
       return (
@@ -76,7 +84,7 @@ function PostList(props) {
   }
 
 
-  if (postList.length === 0) {
+  if (props.posts.length === 0) {
     return (
         <Card style={{...postStyle, height: "auto", fontSize: "1em", minWidth: "400pt"}}>
           <Container>
@@ -93,9 +101,33 @@ function PostList(props) {
     );
   } else {
     return (
-        <List style={{minWidth: "400pt"}} hoverable>
+      <div>
+        <Container style={{fontSize: "1.5em", margin: "1em"}}>
+          <PaginationTag
+              count={pageCount}
+              pageSize={pageSize}
+              pageNum={pageNum}
+              onClick={(page)=>{setPageNum(page)}}
+              primaryColor={"white"}
+              secondaryColor={color.baseLightGrey}
+            />
+        </Container>
+          <div class="animate__animated animate__fadeIn animate__fast" key={pageNum}>
+          <List style={{minWidth: "400pt"}} hoverable>
           {postList}
-        </List>
+          </List>
+          </div>
+        <Container style={{fontSize: "1.5em", margin: "1em"}}>
+          <PaginationTag
+              count={pageCount}
+              pageSize={pageSize}
+              pageNum={pageNum}
+              onClick={(page)=>{setPageNum(page)}}
+              primaryColor={"white"}
+              secondaryColor={color.baseLightGrey}
+            />
+        </Container>
+      </div>
     );    
   }
 

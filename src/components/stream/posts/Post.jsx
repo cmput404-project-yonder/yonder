@@ -185,7 +185,7 @@ class Post extends React.Component {
   }
   render() {
     return (
-        <Card style={{...postStyle,...this.props.style}}>
+        <Card style={{...postStyle,...this.props.style}} className={(this.props.interactive)?"animate__animated animate__headShake":""} key={this.props.post.title+this.props.post.content+this.props.post.description+this.props.post.author.displayName}>
           <Card.Content style={postContainerStyle}>
             
             <a href={"/author/" + this.props.post.author.id + "/posts/" + this.props.post.id + "/"}>

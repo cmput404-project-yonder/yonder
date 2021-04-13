@@ -62,7 +62,7 @@ class InboxPostWrapper extends React.Component {
         if (this.state.truePost === null) {
             if (this.dead) {
                 return (
-                    <Card style={{...postStyle,...this.props.style}} className={(this.props.interactive)?"animate__animated animate__pulse animate__faster":""} key={this.props.post.id}>
+                    <Card style={{...postStyle,...this.props.style}} className={(this.props.interactive)?"animate__animated animate__headShake":""} key={this.props.post.id}>
                         <Container style={{margin: "1em", marginLeft: "2em",fill: color.baseLightGrey, color: color.baseLightGrey}}>
                         <DeletedPostIcon svgScale={80}/>
                         <Container style={{float: "right", fontSize: "0.9em", marginTop: "0.8em", marginRight: "1.1em"}}>

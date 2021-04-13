@@ -2,35 +2,6 @@ import React from 'react';
 import { Modal, Button, Content, Section, Card,Container,Columns, List } from "react-bulma-components";
 import { color } from '../../../styling/ColorFontConfig';
 
-var pagiButtonStyle = {
-    selected: {
-        cursor: "pointer",
-        borderRadius: "7pt",
-        borderWidth: "1.5pt",
-        border: "solid",
-        borderColor: color.baseRed,
-        color: color.baseRed,
-        backgroundColor: "transparent",
-        fontSize: "1.3em",
-        fontWeight: "500",  
-        marginLeft: "0.1em",
-        marginRight: "0.1em",  
-    },
-    unselected: {
-        cursor: "pointer",
-        borderRadius: "7pt",
-        borderWidth: "1.5pt",
-        border: "solid",
-        borderColor: "transparent",
-        color: color.baseLightGrey,
-        backgroundColor: "transparent",
-        fontSize: "1.3em",
-        fontWeight: "500",  
-        marginLeft: "0.1em",
-        marginRight: "0.1em",
-    }
-}
-
 var pagiStyle = {
     display: "flex",
     gap: "0.4em",
@@ -41,6 +12,35 @@ var pagiStyle = {
 }
 
 function PaginationTag(props) {
+
+    var pagiButtonStyle = {
+        selected: {
+            cursor: "pointer",
+            borderRadius: "7pt",
+            borderWidth: "1.5pt",
+            border: "solid",
+            borderColor: props.primaryColor,
+            color: props.primaryColor,
+            backgroundColor: "transparent",
+            fontSize: "1.3em",
+            fontWeight: "500",  
+            marginLeft: "0.1em",
+            marginRight: "0.1em",  
+        },
+        unselected: {
+            cursor: "pointer",
+            borderRadius: "7pt",
+            borderWidth: "1.5pt",
+            border: "solid",
+            borderColor: "transparent",
+            color: props.secondaryColor,
+            backgroundColor: "transparent",
+            fontSize: "1.3em",
+            fontWeight: "500",  
+            marginLeft: "0.1em",
+            marginRight: "0.1em",
+        }
+    }
 
     var totalPageNum = Math.ceil(props.count / props.pageSize);
 
@@ -58,7 +58,7 @@ function PaginationTag(props) {
 
     const pagiHellip = () => {
         return (
-            <p style={{fontSize: "1.3em", marginTop: "3pt",color: color.baseLightGrey}}>
+            <p style={{fontSize: "1.3em", marginTop: "3pt",color: props.secondaryColor}}>
                 &hellip;
             </p>
         )
