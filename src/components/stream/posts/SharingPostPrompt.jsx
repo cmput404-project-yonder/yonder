@@ -67,7 +67,15 @@ class SharingPostPromptCard extends React.Component {
             // this function implement the sharing functionility
 
             // send the entire post to backend.
-            this.props.sharePost(this.props.post);
+
+
+            // other server can have category with empty string. our server doesnt allow that
+            // so. here are some processing
+            var sharedPost = this.props.post;
+            sharedPost["categories"] = this.props.post.categories.filter((cate)=>{return cate.length > 0});
+
+
+            this.props.sharePost(sharedPost);
             this.props.setModalIsOpen(false);
         }
 
