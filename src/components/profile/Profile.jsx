@@ -199,6 +199,7 @@ class Profile extends React.Component {
           </Columns.Column>
 
           <Columns.Column>
+            <div className="post-list animate__animated animate__fadeInUp">
             <PostList 
               posts={this.props.retrievedAuthorPosts}
               
@@ -209,6 +210,7 @@ class Profile extends React.Component {
               interactive={true}
 
             />
+            </div>
           </Columns.Column>
         </Columns>
       </Section>
