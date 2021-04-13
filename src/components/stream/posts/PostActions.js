@@ -54,7 +54,7 @@ export const createComment = (comment, postPath, chainFunc=null) => (dispatch, g
   commentObj["author"] = author;
   commentObj["comment"] = comment;
   commentObj["contentType"] = "text/markdown";
-  commentObj["post"] = postPath.slice(1);
+  commentObj["post"] = postPath;
   
   axios
     .post("/author/" + state.auth.author.id + "/posts/" + state.post.retrievedPost.id + "/comments/", commentObj)
