@@ -11,10 +11,58 @@ import { EmptyFeedIcon } from "../../../styling/svgIcons";
 import PopupModal from "./modals/PopupModal";
 import { connect } from "react-redux";
 
+import InBoxPostWrapper from "./InBoxPostWrapper";
+
 function PostList(props) {
   
+
+
+
   props.posts.sort((postA,postB) => Date.parse(postB["published"])-Date.parse(postA["published"]));
-  const postList = props.posts.map((post) => <Post interactive={props.interactive} post={post} updatePost={props.updatePost} deletePost={props.deletePost} likePost={props.likePost} sharePost={props.sharePost}/>);
+
+  if (props.hasInbox !== true) {
+    var postList = props.posts.map((post) => {
+      return (
+        <Post 
+          interactive={props.interactive} 
+          post={post} 
+          updatePost={props.updatePost} 
+          deletePost={props.deletePost} 
+          likePost={props.likePost} 
+          sharePost={props.sharePost}
+        />
+      )
+    });    
+  } else {
+    var postList = props.posts.map((post) => {
+
+      if (props.authorID === post.author.id) {
+        return (
+          <Post 
+            interactive={props.interactive} 
+            post={post} 
+            updatePost={props.updatePost} 
+            deletePost={props.deletePost} 
+            likePost={props.likePost} 
+            sharePost={props.sharePost}
+          />
+        )  
+      } else {
+        return (
+          <InBoxPostWrapper
+            post={post} 
+            interactive={props.interactive}
+            updatePost={props.updatePost} 
+            deletePost={props.deletePost} 
+            likePost={props.likePost} 
+            sharePost={props.sharePost}
+          />
+        )
+      }
+    }); 
+  }
+
+
 
   const createNewPostGuide = () => {
     if (props.createPost !== undefined) {

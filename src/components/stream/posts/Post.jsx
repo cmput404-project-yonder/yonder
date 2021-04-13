@@ -15,7 +15,6 @@ import { color } from "./styling";
 
 import { retrievePostLikes } from "./PostActions";
 
-
 // local styling
 var shadowDividorStyle = {
   border:"none",

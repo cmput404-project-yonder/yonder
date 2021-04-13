@@ -131,6 +131,26 @@ export const updateRetrivedPost = (newPost) => (dispatch) => {
   dispatch({type: UPDATE_RETRIEVED_POST, payload: newPost});
 }
 
+
+export const checkInboxPostValid = (inboxPost, responseHandler) => (dispatch, getState) => {
+  // basically same as 
+  const state = getState();
+
+  setAxiosAuthToken(state.auth.token);
+  axios
+    .get("/author/" + inboxPost.author.id + "/posts/" + inboxPost.id + "/")
+    .then((response) => {
+      // post exist, grab the nestest
+      // console.log("Called");
+      responseHandler(response.data);
+    })
+    .catch((error) => {
+      // dead post
+      responseHandler(null);    // indicating this post is dead
+    });
+}
+
+
 export const retrievePostLikes = (post, setterFunction) => (dispatch, getState) => {
   const state = getState();
 
