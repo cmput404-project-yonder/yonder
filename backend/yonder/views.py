@@ -496,7 +496,8 @@ class post_likes(generics.GenericAPIView):
             remote_nodes = RemoteNode.objects.all()
             for remote_node in remote_nodes:
                 node = RemoteNode.objects.get(host=remote_node.host)
-                url = node.host + request.path
+                url = node.host + request.path[1:]
+                print("GET Like from:", url)
                 response = requests.get(
                     url,
                     auth=requests.models.HTTPBasicAuth(remote_node.our_user, remote_node.our_password),
@@ -534,7 +535,7 @@ class likes(generics.GenericAPIView):
             remote_nodes = RemoteNode.objects.all()
             for remote_node in remote_nodes:
                 node = RemoteNode.objects.get(host=remote_node.host)
-                url = node.host + request.path
+                url = node.host + request.path[1:]
                 response = requests.get(
                     url,
                     auth=requests.models.HTTPBasicAuth(remote_node.our_user, remote_node.our_password),
