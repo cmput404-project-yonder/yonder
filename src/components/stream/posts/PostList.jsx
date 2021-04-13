@@ -11,7 +11,7 @@ import { EmptyFeedIcon } from "../../../styling/svgIcons";
 import PopupModal from "./modals/PopupModal";
 
 import InBoxPostWrapper from "./InBoxPostWrapper";
-import PaginationTag from "./Pagination";
+import PaginationTag from "./PaginationFlat";
 
 
 
@@ -86,7 +86,7 @@ function PostList(props) {
 
   if (props.posts.length === 0) {
     return (
-        <Card style={{...postStyle, height: "auto", fontSize: "1em", minWidth: "400pt", marginTop: (props.createPost !== undefined)?"3.5em":"7.5em"}}>
+        <Card style={{...postStyle, height: "auto", fontSize: "1em", minWidth: "400pt", marginTop: (props.createPost !== undefined)?"3.5em":"5.7em"}}>
           <Container>
             <Container style={{textAlign: "center", marginTop: "12em", marginBottom: "9em"}}>
                 <Container style={{fill: color.baseLightGrey}}>
@@ -102,14 +102,14 @@ function PostList(props) {
   } else {
     return (
       <div>
-        <Container style={{fontSize: "1.5em", margin: "0.2em", marginBottom: "-0.2em"}}>
+        <Container style={{fontSize: "1.4em", margin: "0.2em", marginBottom: "-0.2em"}}>
           <PaginationTag
               count={pageCount}
               pageSize={pageSize}
               pageNum={pageNum}
               onClick={(page)=>{setPageNum(page)}}
-              primaryColor={color.backgroundGrey}
-              secondaryColor={color.baseLightGrey}
+              primaryColor={color.baseLightGrey}
+              secondaryColor={color.backgroundGrey}
             />
         </Container>
           <div class="animate__animated animate__fadeIn animate__fast" key={pageNum}>
@@ -117,14 +117,14 @@ function PostList(props) {
           {postList}
           </List>
           </div>
-        <Container style={{fontSize: "1.5em", margin: "0.2em", marginTop: "1em"}}>
+        <Container style={{fontSize: "1.4em", margin: "0.2em", marginTop: "1em"}}>
           <PaginationTag
               count={pageCount}
               pageSize={pageSize}
               pageNum={pageNum}
               onClick={(page)=>{setPageNum(page)}}
-              primaryColor={color.backgroundGrey}
-              secondaryColor={color.baseLightGrey}
+              primaryColor={color.baseLightGrey}
+              secondaryColor={color.backgroundGrey}
             />
         </Container>
       </div>
