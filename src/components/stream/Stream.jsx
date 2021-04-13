@@ -45,12 +45,14 @@ class Stream extends Component {
               <div className="post-list animate__animated animate__fadeInUp">
                 <PostList
                   posts={[...this.props.currentAuthorPosts, ...this.props.inboxPosts]}
+                  authorID={this.props.author.id}
                   createPost={this.props.createPost}
                   updatePost={this.props.updatePost}
                   deletePost={this.props.deletePost}
                   sharePost={this.props.sharePost}
                   likePost={this.props.likePost}
                   interactive={true}
+                  hasInbox={true}
                 />
                 </div>
               </Columns.Column>

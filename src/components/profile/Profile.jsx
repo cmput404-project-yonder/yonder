@@ -208,6 +208,7 @@ class Profile extends React.Component {
               likePost={this.props.likePost}
               sharePost={sharePostWrapper}
               interactive={true}
+              hasInbox={false}
 
             />
             </div>

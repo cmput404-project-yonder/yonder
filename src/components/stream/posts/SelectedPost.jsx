@@ -58,10 +58,65 @@ function getDateString(ms) {
   return date.toLocaleDateString();
 }
 
+
+class PostLikeButtonPolling extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      likeCount: 0,
+      likePolling: null,
+    }
+  }
+
+  // polling handler
+  likePollingCall = (post, setter) => {
+    // this function is safe measure (wrapper) for preventing situation where auth is not set, but the webpage is still open
+    // polling will only be done if auth is set
+    if (this.props.retrievedPost.author) {
+      if ((this.props.auth !== undefined)&&(this.props.auth.isAuthenticated)) {
+        this.props.retrievePostLikes(post, setter);
+      }      
+    }
+  }
+
+  likePostCall = (post, setter=null) => {
+    // same as likePollingCall
+    // call this function to like a post
+    if ((this.props.auth !== undefined)&&(this.props.auth.isAuthenticated)) {
+      this.props.likePost(post, setter);
+    }
+  }
+  setLikeCount = (s) => {
+    this.setState({likeCount: s});
+  }
+  postLikeSetter = (likeList) => {
+    this.setLikeCount(likeList.items.length);
+  }
+  likedToggle = () => {
+    // like a post, and trigger a event to retrive likes after backend responded.
+    this.likePostCall(this.props.retrievedPost, () => this.likePollingCall(this.props.retrievedPost, this.postLikeSetter));
+  }
+
+  componentDidMount() {
+    this.likePollingCall(this.props.retrievedPost, this.postLikeSetter);
+    this.state["likePolling"] = setInterval(()=>this.likePollingCall(this.props.retrievedPost, this.postLikeSetter), 10 * 1000);
+  }
+  componentWillUnmount() {
+    clearInterval(this.state["likePolling"]);
+  }
+
+  render() {
+    return (
+      <LikedButton count={this.state.likeCount} action={() => this.likedToggle()}/>
+    )
+  }
+
+}
+
 function DetailedPostList(props) {
 
-  const [editModalIsOpen, setEditModalIsOpen] = useState(false)
-  const [sharingPromptIsOpen, setSharingPromptIsOpen] = useState(false)
+  const [editModalIsOpen, setEditModalIsOpen] = useState(false);
+  const [sharingPromptIsOpen, setSharingPromptIsOpen] = useState(false);
 
 
   // helper functions
@@ -117,7 +172,14 @@ function DetailedPostList(props) {
       <div>
         <Container style={{...footerButtonLayoutStyle, height: "2.8em"}}>
           {/* buttons */}
-          <LikedButton count={props.likeCount} action={() => props.likedToggle()}/>
+
+          <PostLikeButtonPolling
+            retrievedPost={props.post}
+            auth={props.auth}
+            retrievePostLikes={props.retrievePostLikes}
+            likePost={props.likePost}
+
+          />
           {editButton()}
           <ShareButton action={() => setSharingPromptIsOpen(true)}/>
           
@@ -269,7 +331,7 @@ class CommentCard extends React.Component {
       );
   
       return (
-        <div className="animate__animated animate__fadeIn">
+        <div className="animate__animated animate__slideInUp animate__fast ">
         <List>
           {commentsComponentList}
         </List>
@@ -312,56 +374,13 @@ class CommentCard extends React.Component {
 
 class SelectedPost extends React.Component {
 
-  constructor(props) {
-    super(props);
-    this.state = {
-      likeCount: 0,
-      likePolling: null,
-    }
-  }
-
-  // polling handler
-  likePollingCall = (post, setter) => {
-    // this function is safe measure (wrapper) for preventing situation where auth is not set, but the webpage is still open
-    // polling will only be done if auth is set
-    if (this.props.retrievedPost.author) {
-      if ((this.props.auth !== undefined)&&(this.props.auth.isAuthenticated)) {
-        this.props.retrievePostLikes(post, setter);
-      }      
-    }
-  }
-
-  likePostCall = (post, setter=null) => {
-    // same as likePollingCall
-    // call this function to like a post
-    if ((this.props.auth !== undefined)&&(this.props.auth.isAuthenticated)) {
-      this.props.likePost(post, setter);
-    }
-  }
-  setLikeCount = (s) => {
-    this.setState({likeCount: s});
-  }
-  postLikeSetter = (likeList) => {
-    this.setLikeCount(likeList.items.length);
-  }
-  likedToggle = () => {
-    // like a post, and trigger a event to retrive likes after backend responded.
-    this.likePostCall(this.props.retrievedPost, () => this.likePollingCall(this.props.retrievedPost, this.postLikeSetter));
-  }
-
   componentDidMount() {
     const {
       match: { params },
     } = this.props;
 
-    this.props.retrievePost(params.author_id,params.id, ()=>this.likePollingCall(this.props.retrievedPost, this.postLikeSetter));
+    this.props.retrievePost(params.author_id,params.id);
     this.props.retrieveCommentList(params.author_id,params.id);
-    
-    this.state["likePolling"] = setInterval(()=>this.likePollingCall(this.props.retrievedPost, this.postLikeSetter), 15 * 1000);
-  }
-
-  componentWillUnmount() {
-    clearInterval(this.state["likePolling"]);
   }
 
   render() {
@@ -409,8 +428,8 @@ class SelectedPost extends React.Component {
                     createComment={this.props.createComment} 
                     commentList={this.props.retrievedCommentList} 
                     likePost={this.props.likePost} 
-                    likeCount={this.state.likeCount}
-                    likedToggle={this.likedToggle}
+                    retrievePostLikes={this.props.retrievePostLikes}
+                    auth={this.props.auth}
                     updatePost={updatePostWrapper} 
                     sharePost={sharePostWrapper}
                     deletePost={deletePostWrapper}
