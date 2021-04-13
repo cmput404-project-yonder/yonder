@@ -12,7 +12,9 @@ import { retrieveAuthor, retrieveAuthorPosts, sendFollow, deleteFollow, checkFol
 import FollowButton from "./buttons/FollowButton";
 import UnfollowButton from "./buttons/UnfollowButton";
 import EditProfileButton from "./buttons/EditButton";
+import FollowManagerButton from "./buttons/FollowManagerButton";
 import ProfileEdit from "./ProfileEdit";
+import FollwoManager from "./FollowManager";
 // import FriendButton from "./buttons/FriendButton";
 
 import { color } from "../../styling/ColorFontConfig";
@@ -21,6 +23,9 @@ import { ProfileIconBoy } from "../../styling/svgIcons";
 import { Redirect } from "react-router-dom";
 
 import {updatePost, sharePost, likePost, deletePost} from "../stream/StreamActions";
+import FollowManager from "./FollowManager";
+
+
 
 var pageStyle = {
   margin: "auto",
@@ -55,8 +60,12 @@ class Profile extends React.Component {
   constructor(props) {
     super(props);
 
+    this.followers = [];
+    this.friends = [];
+
     this.state = {
       editProfileModalIsOpen: false,
+      followManagerIsOpen: false,
       isFollowing: false,
       friendCount: "",
       followerCount: "",
@@ -82,8 +91,10 @@ class Profile extends React.Component {
     // count and maybe used in the future for following management panel
     if (data === null) {
       this.setState({friendCount: "Unknown"});
+      this.friends = [];
     } else {
       this.setState({friendCount: this.getDisplayNum(data.length)});
+      this.friends = data;
     }
   }
 
@@ -91,9 +102,20 @@ class Profile extends React.Component {
     // count and maybe used in the future for following management panel
     if (data === null) {
       this.setState({followerCount: "Unknown"});
+      this.followers = [];
     } else {
       this.setState({followerCount: this.getDisplayNum(data.length)});
+      this.followers = data;
     }
+  }
+
+  getFriendsLocally = () => {
+    // without trigger rerender
+    return this.friends;
+  }
+
+  getFollowersLocally = () => {
+    return this.followers;
   }
   
 
@@ -135,6 +157,10 @@ class Profile extends React.Component {
       this.setState({editProfileModalIsOpen: modalState})
     };
 
+    const showFollowManager = (modalState) => {
+      this.setState({followManagerIsOpen: modalState})
+    };
+
     const followButton = () => {
       return <FollowButton onClick={() => clickFollow()}/>
     }
@@ -158,8 +184,9 @@ class Profile extends React.Component {
       return (
           <Container>
           {/* <hr style={{...shadowDividorStyle, transform: "rotate(180deg)", backgroundColor: "transparent", marginTop: "1em",}}></hr> */}
-          <Container style={buttonLayoutStyle}>
+          <Container style={{...buttonLayoutStyle, width: "50%"}}>
             <EditProfileButton onClick={()=>showEditModal(true)}/>
+            <FollowManagerButton onClick={()=>showFollowManager(true)}/>
             <Modal className="animate__animated animate__fadeIn animate__faster" show={this.state.editProfileModalIsOpen} onClose={()=>showEditModal(false)} closeOnBlur closeOnEsc>
               <ProfileEdit
                 onCancel={()=>showEditModal(false)}
@@ -167,7 +194,20 @@ class Profile extends React.Component {
                 displayName={this.props.retrievedAuthor.displayName}
                 githubURL={this.props.retrievedAuthor.github}
               />
+              </Modal>
+
+
+            <Modal className="animate__animated animate__fadeIn animate__faster" show={this.state.followManagerIsOpen} onClose={()=>showFollowManager(false)} closeOnBlur closeOnEsc>
+              <FollowManager
+                onCancel={()=>showFollowManager(false)}
+                deleteFollow={this.props.deleteFollow} 
+                getFollowers={this.getFollowersLocally}
+                getFriends={this.getFriendsLocally}
+              />
             </Modal>
+
+
+
           </Container>
           </Container>
       );
