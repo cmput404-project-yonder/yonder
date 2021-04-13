@@ -483,7 +483,7 @@ class post_likes(generics.GenericAPIView):
     @swagger_auto_schema(tags=['likes'])
     def get(self, request, *args, **kwargs):
         try:
-            post = Post.objects.get(Post, id=kwargs["post_id"])
+            post = Post.objects.get(id=kwargs["post_id"])
             likes = Like.objects.filter(object_url=post.get_absolute_url()) 
             serialized_data = [LikeSerializer(like).data for like in likes]
             data = {
