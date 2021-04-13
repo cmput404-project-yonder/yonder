@@ -5,6 +5,10 @@ import React from "react";
 import { connect } from "react-redux";
 import Post from "./Post";
 import { checkInboxPostValid } from "./PostActions";
+import { DeletedPostIcon } from "../../../styling/svgIcons";
+import { Card, Container } from "react-bulma-components";
+import { postStyle } from "../../../styling/StyleComponents";
+import { color } from "../../../styling/ColorFontConfig";
 
 class InboxPostWrapper extends React.Component {
     
@@ -26,8 +30,9 @@ class InboxPostWrapper extends React.Component {
             this.props.checkInboxPostValid(this.props.post, (data)=> {
                 if (data === null) {
                     this.dead = true;
+                    this.setState({truePost: data});        // triggers one update
                 } else {
-                    this.setState({truePost: data})
+                    this.setState({truePost: data});
                 }
             }); 
         }
@@ -55,7 +60,22 @@ class InboxPostWrapper extends React.Component {
 
     render() {
         if (this.state.truePost === null) {
-            return (<span></span>); // dead af
+            if (this.dead) {
+                return (
+                    <Card style={{...postStyle,...this.props.style}} className={(this.props.interactive)?"animate__animated animate__pulse animate__faster":""} key={this.props.post.id}>
+                        <Container style={{margin: "1em", marginLeft: "2em",fill: color.baseLightGrey, color: color.baseLightGrey}}>
+                        <DeletedPostIcon svgScale={80}/>
+                        <Container style={{float: "right", fontSize: "0.9em", marginTop: "0.8em", marginRight: "1.1em"}}>
+                            <p> This post was deleted by original author</p>
+                            <p>{this.props.post.author.id}</p>
+                        </Container>
+                        </Container>
+                    </Card>
+                )                
+            } else {
+                return (<span></span>)
+            }
+
         } else {
             return (
                 <Post
