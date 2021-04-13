@@ -5,8 +5,6 @@ import { color } from "./../../../styling/ColorFontConfig";
 
 import { SharingPostIcon } from "./buttons/postSVG";
 
-
-import CancelButton from "./buttons/CancelButton";
 import ConfirmButton from "./buttons/ConfirmButton";
 
 import { cardStyle } from "../../../styling/StyleComponents";

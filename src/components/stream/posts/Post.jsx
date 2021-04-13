@@ -37,7 +37,6 @@ function getDateString(ms) {
  
 
 class Post extends React.Component {
-
   constructor(props) {
     super(props);
     this.state = {
@@ -49,10 +48,14 @@ class Post extends React.Component {
   } 
 
   componentDidMount() {
-    // set up polling for this post
     this.likePollingCall(this.props.post, this.postLikeSetter);
     this.state["likePolling"] = setInterval(()=>this.likePollingCall(this.props.post, this.postLikeSetter), 20 * 1000);
-    this.postURL = "/author/" + this.props.post.author.id + "/posts/" + this.props.post.id + "/";
+  }
+
+  componentDidUpdate() {
+    clearInterval(this.state["likePolling"]);
+    this.state["likePolling"] = setInterval(()=>this.likePollingCall(this.props.post, this.postLikeSetter), 20 * 1000);
+    this.likePollingCall(this.props.post, this.postLikeSetter);
   }
 
   componentWillUnmount() {
@@ -160,7 +163,7 @@ class Post extends React.Component {
         <Card style={{...postStyle,...this.props.style}}>
           <Card.Content style={postContainerStyle}>
             
-            <a href={this.postURL}>
+            <a href={"/author/" + this.props.post.author.id + "/posts/" + this.props.post.id + "/"}>
               {/* Title */}
               <Container style={signatureStyle}>
                 <p style={{ fontWeight: "250" }}>@{this.props.post.author.displayName}</p>

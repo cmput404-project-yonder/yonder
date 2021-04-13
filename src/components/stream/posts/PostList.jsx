@@ -5,16 +5,21 @@ import { List,Container,Card } from "react-bulma-components";
 import Post from "./Post";
 import { color } from "../../../styling/ColorFontConfig";
 
-import { postStyle,postContainerStyle } from "../../../styling/StyleComponents";
+import { postStyle } from "../../../styling/StyleComponents";
 import { EmptyFeedIcon } from "../../../styling/svgIcons";
 
 import PopupModal from "./modals/PopupModal";
+import { connect } from "react-redux";
 
 function PostList(props) {
 
-  props.posts.sort((postA,postB) => Date.parse(postB["published"])-Date.parse(postA["published"]));
-  const postList = props.posts.map((post) => <Post interactive={props.interactive} post={post} updatePost={props.updatePost} deletePost={props.deletePost} likePost={props.likePost} sharePost={props.sharePost}/>);
 
+
+
+  var allpost = [...props.posts, ...props.inboxPosts];
+  allpost.sort((postA,postB) => Date.parse(postB["published"])-Date.parse(postA["published"]));
+  
+  const postList = allpost.map((post) => <Post interactive={props.interactive} post={post} updatePost={props.updatePost} deletePost={props.deletePost} likePost={props.likePost} sharePost={props.sharePost}/>);
 
   const createNewPostGuide = () => {
     if (props.createPost !== undefined) {
@@ -60,6 +65,13 @@ PostList.propTypes = {
   updatePost: PropTypes.func.isRequired,
   deletePost: PropTypes.func.isRequired,
   likePost: PropTypes.func.isRequired,
+  inboxPosts: PropTypes.array.isRequired,
 };
 
-export default PostList;
+const mapStateToProps = (state) => ({
+  inboxPosts: state.navigation.currentInboxPosts,
+})
+
+export default connect(mapStateToProps)(PostList);
+
+
