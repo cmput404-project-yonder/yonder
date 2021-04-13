@@ -259,7 +259,7 @@ class CommentCard extends React.Component {
       <Card style={localCardStyle}>
           <Container style={{marginTop: "1.8em", marginBottom: "1.2em", marginLeft: "-2em", display: "flex", justifyContent: "flex-end", width: "100%", gap: "0.5em", zIndex: "1"}}>
             <p style={{color: color.baseLightGrey, fontSize: "1.2em", fontWeight: "450", marginTop: "0.5em"}}>Leave a comment</p>
-            <CommentModal afterDone={()=>this.requestComments(this.state.commentPageNum)}/>
+            <CommentModal post={this.props.post} afterDone={()=>this.requestComments(this.state.commentPageNum)}/>
           </Container>
           {/* <Container style={{fill: color.baseLightGrey,textAlign: "left", width: "100%", padding: "1.2em", paddingLeft: "10%"}}>
             <PostCommentsIcon svgScale={"90"}/>
@@ -333,7 +333,7 @@ class SelectedPost extends React.Component {
     } = this.props;
 
     this.props.retrievePost(params.author_id,params.id, ()=>this.likePollingCall(this.props.retrievedPost, this.postLikeSetter));
-    this.props.retrieveCommentList(params.athor_id,params.id);
+    this.props.retrieveCommentList(params.author_id,params.id);
     
     this.state["likePolling"] = setInterval(()=>this.likePollingCall(this.props.retrievedPost, this.postLikeSetter), 15 * 1000);
   }
