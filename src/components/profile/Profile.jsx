@@ -195,10 +195,13 @@ class Profile extends React.Component {
         <Columns style={pageStyle}>
 
           <Columns.Column>
+          <div style={{marginTop: "5.5em"}}>
             {profileCard()}
+          </div>
           </Columns.Column>
 
           <Columns.Column>
+            <div className="post-list animate__animated animate__fadeInUp" style={{marginTop: "-4em"}}>
             <PostList 
               posts={this.props.retrievedAuthorPosts}
               
@@ -207,8 +210,10 @@ class Profile extends React.Component {
               likePost={this.props.likePost}
               sharePost={sharePostWrapper}
               interactive={true}
+              hasInbox={false}
 
             />
+            </div>
           </Columns.Column>
         </Columns>
       </Section>

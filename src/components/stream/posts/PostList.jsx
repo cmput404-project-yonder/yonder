@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import PropTypes from "prop-types";
 import { List,Container,Card } from "react-bulma-components";
 
@@ -9,17 +9,68 @@ import { postStyle } from "../../../styling/StyleComponents";
 import { EmptyFeedIcon } from "../../../styling/svgIcons";
 
 import PopupModal from "./modals/PopupModal";
-import { connect } from "react-redux";
+
+import InBoxPostWrapper from "./InBoxPostWrapper";
+import PaginationTag from "./Pagination";
+
+
 
 function PostList(props) {
+  const [pageNum, setPageNum] = useState(1);
+  var pageSize = 5;
+  var pageCount = 0;
+
+  props.posts.sort((postA,postB) => Date.parse(postB["published"])-Date.parse(postA["published"]));
+  pageCount = props.posts.length;
+
+
+  let postsSliced = props.posts.slice(pageSize*(pageNum-1), pageSize*(pageNum-1)+pageSize)
+  console.log(pageSize*pageNum);
+
+  if (props.hasInbox !== true) {
+    var postList = postsSliced.map((post) => {
+      return (
+        <Post 
+          interactive={props.interactive} 
+          post={post} 
+          updatePost={props.updatePost} 
+          deletePost={props.deletePost} 
+          likePost={props.likePost} 
+          sharePost={props.sharePost}
+        />
+      )
+    });    
+  } else {
+    var postList = postsSliced.map((post) => {
+
+      if (props.authorID === post.author.id) {
+        return (
+          <Post 
+            interactive={props.interactive} 
+            post={post} 
+            updatePost={props.updatePost} 
+            deletePost={props.deletePost} 
+            likePost={props.likePost} 
+            sharePost={props.sharePost}
+          />
+        )  
+      } else {
+        return (
+          <InBoxPostWrapper
+            post={post} 
+            interactive={props.interactive}
+            updatePost={props.updatePost} 
+            deletePost={props.deletePost} 
+            likePost={props.likePost} 
+            sharePost={props.sharePost}
+          />
+        )
+      }
+    }); 
+  }
 
 
 
-
-  var allpost = [...props.posts, ...props.inboxPosts];
-  allpost.sort((postA,postB) => Date.parse(postB["published"])-Date.parse(postA["published"]));
-  
-  const postList = allpost.map((post) => <Post interactive={props.interactive} post={post} updatePost={props.updatePost} deletePost={props.deletePost} likePost={props.likePost} sharePost={props.sharePost}/>);
 
   const createNewPostGuide = () => {
     if (props.createPost !== undefined) {
@@ -33,9 +84,8 @@ function PostList(props) {
   }
 
 
-  if (postList.length === 0) {
+  if (props.posts.length === 0) {
     return (
-      <div className="post-list animate__animated animate__fadeInUp">
         <Card style={{...postStyle, height: "auto", fontSize: "1em", minWidth: "400pt"}}>
           <Container>
             <Container style={{textAlign: "center", marginTop: "12em", marginBottom: "9em"}}>
@@ -48,30 +98,41 @@ function PostList(props) {
           {createNewPostGuide()}
 
         </Card>
-      </div>
     );
   } else {
     return (
-      <div className="post-list animate__animated animate__fadeInUp">
-        <List style={{minWidth: "400pt"}} hoverable>{postList}</List>
+      <div>
+        <Container style={{fontSize: "1.5em", margin: "1em"}}>
+          <PaginationTag
+              count={pageCount}
+              pageSize={pageSize}
+              pageNum={pageNum}
+              onClick={(page)=>{setPageNum(page)}}
+              primaryColor={"white"}
+              secondaryColor={color.baseLightGrey}
+            />
+        </Container>
+          <div class="animate__animated animate__fadeIn animate__fast" key={pageNum}>
+          <List style={{minWidth: "400pt"}} hoverable>
+          {postList}
+          </List>
+          </div>
+        <Container style={{fontSize: "1.5em", margin: "1em"}}>
+          <PaginationTag
+              count={pageCount}
+              pageSize={pageSize}
+              pageNum={pageNum}
+              onClick={(page)=>{setPageNum(page)}}
+              primaryColor={"white"}
+              secondaryColor={color.baseLightGrey}
+            />
+        </Container>
       </div>
     );    
   }
 
 }
 
-PostList.propTypes = {
-  posts: PropTypes.array.isRequired,
-  updatePost: PropTypes.func.isRequired,
-  deletePost: PropTypes.func.isRequired,
-  likePost: PropTypes.func.isRequired,
-  inboxPosts: PropTypes.array.isRequired,
-};
-
-const mapStateToProps = (state) => ({
-  inboxPosts: state.navigation.currentInboxPosts,
-})
-
-export default connect(mapStateToProps)(PostList);
+export default PostList;
 
 

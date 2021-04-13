@@ -5,6 +5,7 @@ import EditPostForm from "./EditPostForm";
 import SharingPostPrompt from "./SharingPostPrompt";
 import { connect } from "react-redux";
 import { withRouter } from "react-router-dom";
+import Markdown from "react-markdown";
 
 import { Card, Content, Container } from "react-bulma-components";
 import EditButton from "./buttons/EditButton";
@@ -14,7 +15,6 @@ import { DescriptionStyle, categoriesStyle, signatureStyle, postContainerStyle,p
 import { color } from "./styling";
 
 import { retrievePostLikes } from "./PostActions";
-
 
 // local styling
 var shadowDividorStyle = {
@@ -102,6 +102,26 @@ class Post extends React.Component {
     let isMark = (this.props.post.contentType === "text/markdown");
     return ((isText||isMark)?false:true)
   }
+
+  isMarkdown = () => {
+    if (this.props.post.contentType === "text/markdown") {
+      return (
+        <Content>
+          <Markdown>
+            {this.props.post.content}
+          </Markdown>
+        </Content>
+      )
+    }
+    else if (this.props.post.contentType === "text/plain") {
+      return (
+        <Content>
+          {this.props.post.content}
+        </Content>
+      )
+    }
+  }
+
   postLikeSetter = (likeList) => {
     this.setLikeCount(likeList.items.length);
   }
@@ -165,7 +185,7 @@ class Post extends React.Component {
   }
   render() {
     return (
-        <Card style={{...postStyle,...this.props.style}}>
+        <Card style={{...postStyle,...this.props.style}} className={(this.props.interactive)?"animate__animated animate__headShake":""} key={this.props.post.title+this.props.post.content+this.props.post.description+this.props.post.author.displayName}>
           <Card.Content style={postContainerStyle}>
             
             <a href={"/author/" + this.props.post.author.id + "/posts/" + this.props.post.id + "/"}>
@@ -193,7 +213,7 @@ class Post extends React.Component {
               <Content style={{textAlign: "center"}}>
                 <img style={{borderRadius: "6pt", maxHeight: "500pt"}}src={this.props.post.content} /> 
               </Content>
-            ) : <Content>{this.props.post.content}</Content> }
+            ) : this.isMarkdown() }
             </Container>
             
             {/* categories */}

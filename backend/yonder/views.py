@@ -507,14 +507,35 @@ class post_likes(generics.GenericAPIView):
         
         return Response(status=status.HTTP_404_NOT_FOUND)
 
-class post_likes_count(generics.GenericAPIView):
+class comment_likes(generics.GenericAPIView):
     permission_classes = [IsAuthenticated]
 
     @swagger_auto_schema(tags=['likes'])
     def get(self, request, *args, **kwargs):
-        post = get_object_or_404(Post, id=kwargs["post_id"])
-        likes_count = Like.objects.filter(object_url=post.get_absolute_url()).count()
-        return Response(likes_count, status=status.HTTP_200_OK)
+        try:
+            comment = Comment.objects.get(id=kwargs["comment_id"])
+            likes = Like.objects.filter(object_url=comment.get_absolute_url()) 
+            serialized_data = [LikeSerializer(like).data for like in likes]
+            data = {
+                "type": "likes",
+                "items": serialized_data
+            }
+            return Response(data=data, status=status.HTTP_200_OK)
+        except Comment.DoesNotExist:
+            # handle get likes for remote comment 
+            remote_nodes = RemoteNode.objects.all()
+            for remote_node in remote_nodes:
+                node = RemoteNode.objects.get(host=remote_node.host)
+                url = node.host + request.path[1:]
+                print("GET Like from:", url)
+                response = requests.get(
+                    url,
+                    auth=requests.models.HTTPBasicAuth(remote_node.our_user, remote_node.our_password),
+                )
+                if response.status_code == 200:
+                    return Response(response.json(), status=response.status_code)
+        
+        return Response(status=status.HTTP_404_NOT_FOUND)
 
 class likes(generics.GenericAPIView):
     permission_classes = [IsAuthenticated]

@@ -108,7 +108,6 @@ export function InboxEmptyIcon(props) {
 }
 
 export function EmptyFeedIcon(props) {
-    // https://www.flaticon.com/free-icon/broke_2765369
     // https://www.flaticon.com/authors/smalllikeart
     // Flaticon License
     // Free for personal and commercial purpose with attribution.
@@ -135,7 +134,6 @@ export function EmptyFeedIcon(props) {
 }
 
 export function ProfileIconBoy(props) {
-    // https://www.flaticon.com/free-icon/broke_2765369
     // https://www.flaticon.com/authors/smalllikeart
     // Flaticon License
     // Free for personal and commercial purpose with attribution.
@@ -156,7 +154,6 @@ export function ProfileIconBoy(props) {
 }
 
 export function LoginPageIcon(props) {
-    // https://www.flaticon.com/free-icon/broke_2765369
     // https://www.flaticon.com/authors/smalllikeart
     // Flaticon License
     // Free for personal and commercial purpose with attribution.
@@ -185,7 +182,6 @@ export function LoginPageIcon(props) {
 }
 
 export function DetailedPostIcon(props) {
-    // https://www.flaticon.com/free-icon/broke_2765369
     // https://www.flaticon.com/authors/smalllikeart
     // Flaticon License
     // Free for personal and commercial purpose with attribution.
@@ -208,7 +204,6 @@ export function DetailedPostIcon(props) {
 }
 
 export function PostCommentsIcon(props) {
-    // https://www.flaticon.com/free-icon/broke_2765369
     // https://www.flaticon.com/authors/smalllikeart
     // Flaticon License
     // Free for personal and commercial purpose with attribution.
@@ -233,5 +228,26 @@ export function PostCommentsIcon(props) {
             <path id="Path_302" data-name="Path 302" d="M24,42h2v2H24Z"/>
         </g>
         </svg>
+    )
+}
+
+export function DeletedPostIcon(props) {
+    // https://www.flaticon.com/authors/smalllikeart
+    // Flaticon License
+    // Free for personal and commercial purpose with attribution.
+    return (
+        <svg xmlns="http://www.w3.org/2000/svg" width={props.svgScale} viewBox="0 0 60 60">
+        <g id="outline" transform="translate(-2 -2)">
+            <path id="Path_355" data-name="Path 355" d="M61,50H55.46A5.969,5.969,0,0,0,57,46a.925.925,0,0,0-.02-.2l-1.932-9.663,2.852-5.69A1,1,0,0,0,57,29H54a9.937,9.937,0,0,0-.408-2.82,5.361,5.361,0,0,0,.918.083,4.123,4.123,0,0,0,2.338-.679C58.276,24.617,59,22.744,59,20.016a1,1,0,0,0-.89-1,6.057,6.057,0,0,0-4.334,1.341,5.259,5.259,0,0,0-1.589,2.928A10.122,10.122,0,0,0,50,21.013V10a1,1,0,0,0-.386-.789l-9-7A1,1,0,0,0,40,2H24a1,1,0,0,0-.614.211l-9,7A1,1,0,0,0,14,10V42H9a1,1,0,0,0-1,1v7H3a1,1,0,0,0-1,1V61a1,1,0,0,0,1,1H61a1,1,0,0,0,1-1V51a1,1,0,0,0-1-1ZM55.1,21.862a3.52,3.52,0,0,1,1.857-.811,3.779,3.779,0,0,1-1.22,2.871,2.4,2.4,0,0,1-1.7.309A3.6,3.6,0,0,1,55.1,21.862ZM50,23.73A7.972,7.972,0,0,1,52,29H50ZM55.382,31,53.1,35.553a1,1,0,0,0-.085.643l1.98,9.9a4,4,0,0,1-8,0l1.979-9.9a1,1,0,0,0-.085-.643L46.618,31ZM16,10.489,24.343,4H39.657L48,10.489v9.358a9.858,9.858,0,0,0-2.275-.7A3.094,3.094,0,0,0,46,18a3,3,0,0,0-3-3,4.038,4.038,0,0,0-2,.72A4.038,4.038,0,0,0,39,15a3,3,0,0,0-2.816,2H20v2H36.209a5.253,5.253,0,0,0,.51,1A4.042,4.042,0,0,0,36,22H20v2H36.78A2.985,2.985,0,0,0,39,25a4.038,4.038,0,0,0,2-.72A4.038,4.038,0,0,0,43,25a3,3,0,0,0,3-3,2.688,2.688,0,0,0-.141-.774A7.92,7.92,0,0,1,48,22.081V29H45a1,1,0,0,0-.9,1.447l2.847,5.694L45.02,45.8A.925.925,0,0,0,45,46a5.969,5.969,0,0,0,1.54,4H17.974a4.954,4.954,0,0,0,.925-2H37V46H29.234a4.273,4.273,0,0,0-.65-2.849C27.617,41.724,25.744,41,23.016,41a1,1,0,0,0-1,.89A6.182,6.182,0,0,0,23.2,46H18.9A5.014,5.014,0,0,0,16,42.424ZM43.342,20.753A2.792,2.792,0,0,1,44,22a1,1,0,0,1-1,1,2.814,2.814,0,0,1-1.249-.658,1,1,0,0,0-1.5,0A2.816,2.816,0,0,1,39,23a1,1,0,0,1-1-1,2.79,2.79,0,0,1,.658-1.248,1,1,0,0,0,0-1.506A2.792,2.792,0,0,1,38,18a1,1,0,0,1,1-1,2.814,2.814,0,0,1,1.249.658,1.028,1.028,0,0,0,1.5,0A2.816,2.816,0,0,1,43,17a1,1,0,0,1,1,1,2.79,2.79,0,0,1-.658,1.248,1,1,0,0,0,0,1.506ZM24.05,43.044a3.775,3.775,0,0,1,2.871,1.22,2.4,2.4,0,0,1,.31,1.7,3.593,3.593,0,0,1-2.369-1.06,3.516,3.516,0,0,1-.812-1.86ZM17,47a3,3,0,0,1-3,3H11.7s4.974-4.279,4.991-4.3A2.971,2.971,0,0,1,17,47Zm-3-3a2.968,2.968,0,0,1,1.282.3L13.36,45.946,11.414,44Zm-4,1.414,1.837,1.837L10,48.826ZM60,60H4V52H60Z"/>
+            <path id="Path_356" data-name="Path 356" d="M52,54h2v2H52Z"/>
+            <path id="Path_357" data-name="Path 357" d="M56,56h2v2H56Z"/>
+            <path id="Path_358" data-name="Path 358" d="M31,15h2V10h2V8H33V6H31V8H29v2h2Z"/>
+            <path id="Path_359" data-name="Path 359" d="M26,28H38v2H26Z"/>
+            <path id="Path_360" data-name="Path 360" d="M26,32H38v2H26Z"/>
+            <path id="Path_361" data-name="Path 361" d="M20,37H44v2H20Z"/>
+        </g>
+        </svg>
+
+
     )
 }

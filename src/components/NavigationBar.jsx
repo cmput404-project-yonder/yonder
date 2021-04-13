@@ -69,7 +69,7 @@ class NaviPollingComponent extends React.Component {
     super(props);
 
     // constants
-    this.INBOX_POLLING_INTERVAL = 10 * 1000    // 10 seconds
+    this.INBOX_POLLING_INTERVAL = 30 * 1000    // 10 seconds
     this.ALLAU_POLLING_INTERVAL = 120 * 1000   // 120 seconds, basically disabled.
     this.WINDO_POLLING_INTERVAL = 5 * 100   // 0.5 seconds, detect window change, should be small, very lightweight, dont worry about performance
 
@@ -82,13 +82,20 @@ class NaviPollingComponent extends React.Component {
     }
   }
 
+  delayedInboxRetrive = (seconds) => {
+    var inboxRetrive = setInterval(()=>{
+      this.props.retrieveInbox();
+      clearInterval(inboxRetrive);
+    }, seconds * 1000);
+  }
+
   onWindowChange = () => {
     // when URL changes
 
     if (window.location.pathname !== this.state.windowsPATH) {
       this.state.windowsPATH = window.location.pathname;
+      this.delayedInboxRetrive(1);
       this.props.retrieveAllAuthors();
-      this.props.retrieveInbox();
     }
 
     // this function can be used to dynamicly monitor the state of the webpage
