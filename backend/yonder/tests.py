@@ -507,6 +507,31 @@ class InboxTests(APITestCase):
         }
         self.data_json = json.dumps(data, sort_keys=True)
 
+        data_unlisted = {
+            "type": "post",
+            "title": "A Friendly post title about a post about web dev",
+            "id": "http://127.0.0.1:5454/author/9de17f29c12e8f97bcbbd34cc908f1baba40658e/posts/764efa883dda1e11db47671c4a3bbd9e",
+            "source": "http://lastplaceigotthisfrom.com/posts/yyyyy",
+            "origin": "http://whereitcamefrom.com/posts/zzzzz",
+            "description": "This post discusses stuff -- brief",
+            "contentType": "text/plain",
+            "content": "Þā wæs on burgum Bēowulf Scd ccan",
+            "author": {
+                "type": "author",
+                "id": "http://127.0.0.1:5454/author/9de17f29c12e8f97bcbbd34cc908f1baba40658e",
+                "host": "http://127.0.0.1:5454/",
+                "displayName": "Lara Croft",
+                "url": "http://127.0.0.1:5454/author/9de17f29c12e8f97bcbbd34cc908f1baba40658e",
+                "github": "http://github.com/laracroft"
+            },
+            "categories": ["web", "tutorial"],
+            "comments": "http://127.0.0.1:5454/author/9de17f29c12e8f97bcbbd34cc908f1baba40658e/posts/de305d54-75b4-431b-adb2-eb6b9e546013/comments",
+            "published": "2015-03-09T13:07:04+00:00",
+            "visibility": "FRIENDS",
+            "unlisted": True
+        }
+        self.data_unlisted_json = json.dumps(data, sort_keys=True)
+
     def test_get_inbox(self):
         url = reverse('inbox', args=[self.author.id])
         response = self.client.get(url)
@@ -655,7 +680,7 @@ class LikeTests(APITestCase):
         self.author1 = Author.objects.create(**self.testAuthor1, user=user1)
         self.author2 = Author.objects.create(**self.testAuthor2, user=user2)
 
-        # create post 
+        # create post and comment
         self.author2_post = {
             "title": "A post title about a post about web dev",
             "description": "This post discusses stuff -- brief",
@@ -667,8 +692,15 @@ class LikeTests(APITestCase):
             "unlisted": False
         }
         self.author2_post = Post.objects.create(**self.author2_post)
+        self.author1_comment = {
+            "post": self.author2_post,
+            "author": AuthorSerializer(self.author1).data,
+            "comment": "cool post dude",
+            "published": "2015-03-09T13:07:04+00:00"
+        }
+        self.author1_comment = Comment.objects.create(**self.author1_comment)
 
-        # request post data
+        # request post and comment data
         post_like_data_from_author_1 = {
             "type": "like",
             "author":{
@@ -681,8 +713,34 @@ class LikeTests(APITestCase):
             },
             "object": self.author2_post.get_absolute_url()
         }
+        comment_like_data_from_author_1 = {
+            "type": "like",
+            "author":{
+                "type":"author",
+                "id": str(self.author1.id),
+                "host": self.author1.host,
+                "displayName": self.author1.displayName,
+                "url": self.author1.get_absolute_url(),
+                "github": self.author1.github
+            },
+            "object": self.author1_comment.get_absolute_url()
+        }
+        comment_like_data_from_author_2 = {
+            "type": "like",
+            "author":{
+                "type":"author",
+                "id": str(self.author2.id),
+                "host": self.author2.host,
+                "displayName": self.author2.displayName,
+                "url": self.author2.get_absolute_url(),
+                "github": self.author2.github
+            },
+            "object": self.author1_comment.get_absolute_url()
+        }
 
         self.post_like_data_from_author_1_json = json.dumps(post_like_data_from_author_1)
+        self.comment_like_data_from_author_2_json = json.dumps(comment_like_data_from_author_2)
+        self.comment_like_data_from_author_1_json = json.dumps(comment_like_data_from_author_1)
 
         credBytes= base64.b64encode(f'{self.credentials1["username"]}:{self.credentials1["password"]}'.encode())
         self.client.credentials(HTTP_AUTHORIZATION='Basic ' + credBytes.decode())
@@ -734,8 +792,28 @@ class LikeTests(APITestCase):
 
         data_json = response.json()
         self.assertEqual(1, data_json)
+    
+    
+    def test_get_comment_likes(self):
+        # author2 sends like to author1_comment
+        url = reverse('inbox', args=[self.author1.id])
+        response = self.client.post(url, content_type='application/json', data=self.comment_like_data_from_author_2_json)
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+
+        # confirm author1_comment has like from author2
+        url = reverse('comment_likes', args=[self.author2.id, self.author2_post.id, self.author1_comment.id])
+        response = self.client.get(url)
+        data_json = response.json()
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(data_json["items"][0]["author"]["id"], str(self.author2.id))
+        self.assertEqual(data_json["items"][0]["object_url"], self.author1_comment.get_absolute_url())
 
     def test_get_liked(self):
+        # author1 sends like to author1_comment
+        url = reverse('inbox', args=[self.author2.id])
+        response = self.client.post(url, content_type='application/json', data=self.comment_like_data_from_author_1_json)
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        
         # author1 sends like to author2_post
         url = reverse('inbox', args=[self.author2.id])
         response = self.client.post(url, content_type='application/json', data=self.post_like_data_from_author_1_json)
@@ -744,7 +822,7 @@ class LikeTests(APITestCase):
         url = reverse('likes', args=[self.author1.id])
         response = self.client.get(url)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(len(response.data["items"]), 1)
+        self.assertEqual(len(response.data["items"]), 2)
 
 class CommentTests(APITestCase):
     def setUp(self):

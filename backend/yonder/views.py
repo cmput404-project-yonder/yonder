@@ -296,6 +296,24 @@ class comments(generics.ListCreateAPIView):
 
         return Response(status=status.HTTP_400_BAD_REQUEST)
 
+
+class comment_detail(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Comment.objects.all()
+    serializer_class = CommentSerializer
+    permission_classes = [IsAuthenticatedOrReadOnly]
+
+    @swagger_auto_schema(tags=['comments'])
+    def get(self, request, *args, **kwargs):
+        return self.retrieve(request, *args, **kwargs)
+
+    @swagger_auto_schema(tags=['comments'])
+    def put(self, request, *args, **kwargs):
+        return self.update(request, *args, **kwargs)
+
+    @swagger_auto_schema(tags=['comments'])
+    def delete(self, request, *args, **kwargs):
+        return self.destroy(request, *args, **kwargs)
+
 class author_followers(viewsets.ModelViewSet):
     queryset = AuthorFollower.objects.all()
     serializer_class = AuthorFollowerSerializer
@@ -515,6 +533,20 @@ class post_likes_count(generics.GenericAPIView):
         post = get_object_or_404(Post, id=kwargs["post_id"])
         likes_count = Like.objects.filter(object_url=post.get_absolute_url()).count()
         return Response(likes_count, status=status.HTTP_200_OK)
+
+class comment_likes(generics.GenericAPIView):
+    permission_classes = [IsAuthenticated]
+
+    @swagger_auto_schema(tags=['likes'])
+    def get(self, request, *args, **kwargs):
+        comment = get_object_or_404(Comment, id=kwargs["comment_id"])
+        likes = Like.objects.filter(object_url=comment.get_absolute_url()) 
+        serialized_data = [LikeSerializer(like).data for like in likes]
+        data = {
+            "type": "likes",
+            "items": serialized_data
+        }
+        return Response(data=data, status=status.HTTP_200_OK)
 
 class likes(generics.GenericAPIView):
     permission_classes = [IsAuthenticated]
