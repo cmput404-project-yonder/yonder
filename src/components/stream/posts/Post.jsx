@@ -130,7 +130,7 @@ class Post extends React.Component {
     }
   }
   displayFooterButtons = () => {
-    if (this.props.interactive ){
+    if (this.props.interactive){
       return (
         <div>
         <Container style={footerButtonLayoutStyle}>
@@ -165,15 +165,15 @@ class Post extends React.Component {
   }
   render() {
     return (
-        <Card style={{...postStyle,...this.props.style}}>
-          <Card.Content style={postContainerStyle}>
+        <Card style={{...postStyle,...this.props.style}} className={(this.props.interactive)?"animate__animated animate__pulse animate__faster":""} key={this.props.post.id}>
+          <Card.Content style={postContainerStyle} >
             
             <a href={"/author/" + this.props.post.author.id + "/posts/" + this.props.post.id + "/"}>
               {/* Title */}
               <Container style={signatureStyle}>
                 <p style={{ fontWeight: "250" }}>@{this.props.post.author.displayName}</p>
                 <p>·</p>
-                <p>{getDateString(Date.parse(this.props.post.published))}</p>
+                <p >{getDateString(Date.parse(this.props.post.published))}</p>
               </Container>
               <Container style={postTitleStyle}>
                 <p style={{textDecoration: "none", color: color.baseBlack}}>{this.props.post.title}</p>

@@ -95,6 +95,7 @@ class NaviPollingComponent extends React.Component {
     if (window.location.pathname !== this.state.windowsPATH) {
       this.state.windowsPATH = window.location.pathname;
       this.delayedInboxRetrive(1);
+      this.props.retrieveAllAuthors();
     }
 
     // this function can be used to dynamicly monitor the state of the webpage

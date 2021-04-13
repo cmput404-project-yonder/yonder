@@ -39,6 +39,7 @@ var wrapperStyle = {
   boxShadow: "0pt 0pt 6pt rgb(0,0,0,0.1)",
   borderRadius: "10pt",
   backgroundColor: "white",
+  zIndex: "1",
 }
 
 var shadowDividorStyle = {
@@ -128,7 +129,7 @@ function DetailedPostList(props) {
         <Container style={{fill: color.baseLightGrey,textAlign: "center", width: "100%", padding: "1.2em"}}>
           <DetailedPostIcon svgScale={"80"}/>
         </Container>
-        <Container style={wrapperStyle} className="animate__animated animate__fadeInUp">
+        <Container style={wrapperStyle}>
           <Card.Content style={postContainerStyle}>
 
               {/* Title */}
@@ -246,9 +247,11 @@ class CommentCard extends React.Component {
       );
   
       return (
+        <div className="animate__animated animate__fadeIn">
         <List>
           {commentsComponentList}
         </List>
+        </div>
       )
     }
 
@@ -375,7 +378,7 @@ class SelectedPost extends React.Component {
             <Container fluid>
               <Columns centered>
 
-              <div className="post-list animate__animated animate__fadeInUp">
+              <div className="post-list animate__animated animate__fadeInUp animate__fast">
                 <List hoverable>
                   <DetailedPostList 
                     post={this.props.retrievedPost} 
