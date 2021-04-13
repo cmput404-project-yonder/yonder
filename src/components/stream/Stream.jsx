@@ -12,10 +12,10 @@ import { createPost, updatePost, sharePost, likePost, retrieveLoggedInAuthorPost
 
 class Stream extends Component {
   componentDidMount() {
-    // if (Object.keys(this.props.author).length === 0) {
-    //   // untill author is properly set
-    //   window.location = window.location;
-    // }
+    if (Object.keys(this.props.author).length === 0) {
+      // untill author is properly set
+      window.location = window.location;
+    }
 
     if (this.props.auth.isAuthenticated) {
       this.props.retrieveLoggedInAuthorPosts();
@@ -31,7 +31,6 @@ class Stream extends Component {
       );
     }
 
-    const posts = [].concat(this.props.currentAuthorPosts, this.props.inboxPosts);
     return (
       <Section style={pageStyle}>
         <div style={buttonLayerContainerStyle}>
@@ -44,7 +43,7 @@ class Stream extends Component {
             <Columns centered>
               <Columns.Column>
                 <PostList
-                  posts={posts}
+                  posts={this.props.currentAuthorPosts}
                   createPost={this.props.createPost}
                   updatePost={this.props.updatePost}
                   deletePost={this.props.deletePost}
@@ -70,7 +69,7 @@ Stream.propTypes = {
   retrieveLoggedInAuthorPosts: PropTypes.func.isRequired,
   deletePost: PropTypes.func.isRequired,
   currentAuthorPosts: PropTypes.array.isRequired,
-  inboxPosts: PropTypes.array.isRequired,
+  
   loading: PropTypes.bool.isRequired,
 };
 
@@ -78,7 +77,7 @@ const mapStateToProps = (state) => ({
   author: state.auth.author,
   auth: state.auth,
   currentAuthorPosts: state.stream.currentAuthorPosts,
-  inboxPosts: state.navigation.currentInboxPosts,
+  // inboxPosts: state.navigation.currentInboxPosts,
   loading: state.stream.loading,
 });
 

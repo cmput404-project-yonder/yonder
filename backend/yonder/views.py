@@ -180,25 +180,40 @@ class post_detail(generics.RetrieveUpdateDestroyAPIView):
     @swagger_auto_schema(tags=['posts'])
     def get(self, request, *args, **kwargs):
         
-        post = get_object_or_404(Post, id=self.kwargs["pk"])
-        postJSON = PostSerializer(instance=post).data
-        if post.visibility == "FRIENDS":
-            req_user = get_object_or_404(User, username=request.user)
-            requestor = get_object_or_404(Author, user=req_user)
-            follows = AuthorFollower.objects.filter(author_id=post.author.id)
-            for follow in follows:
-                if follow.follower["id"] == str(requestor.id):
-                    _follows = AuthorFollower.objects.filter(author_id=requestor.id)
-                    for _follow in _follows:
-                        if _follow.follower["id"] == self.kwargs["author_id"]:
-                            return Response(postJSON, status=status.HTTP_200_OK)
-            return Response(status=status.HTTP_401_UNAUTHORIZED)
+        try:
+            post = Post.objects.get(id=kwargs["pk"])
+            postJSON = PostSerializer(instance=post).data
+            if post.visibility == "FRIENDS":
+                req_user = get_object_or_404(User, username=request.user)
+                requestor = get_object_or_404(Author, user=req_user)
+                follows = AuthorFollower.objects.filter(author_id=post.author.id)
+                for follow in follows:
+                    if follow.follower["id"] == str(requestor.id):
+                        _follows = AuthorFollower.objects.filter(author_id=requestor.id)
+                        for _follow in _follows:
+                            if _follow.follower["id"] == self.kwargs["author_id"]:
+                                return Response(postJSON, status=status.HTTP_200_OK)
+                return Response(status=status.HTTP_401_UNAUTHORIZED)
 
-        elif post.visibility == "PUBLIC":
-            return Response(postJSON, status=status.HTTP_200_OK)
+            elif post.visibility == "PUBLIC":
+                return Response(postJSON, status=status.HTTP_200_OK)
 
-        else:
-            return Response(status=status.HTTP_400_BAD_REQUEST)
+        except Post.DoesNotExist:
+            # handle remote Posts
+            remote_nodes = RemoteNode.objects.all()
+            for remote_node in remote_nodes:
+                node = RemoteNode.objects.get(host=remote_node.host)
+                url = node.host + "api/author/" + kwargs["author_id"] + "/posts/" + kwargs["pk"] + "/"
+                response = requests.get(
+                    url,
+                    auth=requests.models.HTTPBasicAuth(node.our_user, node.our_password)
+                )
+                if (response.status_code == 200):
+                    return Response(response.json(), status=response.status_code)
+                else:
+                    return Response(response.content, response.status_code)
+
+        return Response(status=status.HTTP_400_BAD_REQUEST)
 
     @swagger_auto_schema(tags=['posts'])
     def put(self, request, *args, **kwargs):
@@ -216,23 +231,43 @@ class comments(generics.ListCreateAPIView):
 
     @swagger_auto_schema(tags=['comments'])
     def get(self, request, *args, **kwargs):
-        comments = Comment.objects.filter(post_id=kwargs["post_id"]).order_by('-published')
         page_number = 1 if 'page' not in request.query_params else request.query_params.get('page')
         page_size = 5 if 'size' not in request.query_params else request.query_params.get('size')
-        paginator = Paginator(comments, page_size)
-        page = paginator.page(page_number)
-        
-        if page.object_list.count() == 0:
-            return Response(status=status.HTTP_204_NO_CONTENT)
 
-        items = [self.serializer_class(comment).data for comment in page.object_list]
-        data = {
-            "type": "comments",
-            "count": comments.count(),
-            "items": items
-        }
+        try:
+            _ = Post.objects.get(id=kwargs["post_id"])
+            comments = Comment.objects.filter(post_id=kwargs["post_id"]).order_by('-published')
+            paginator = Paginator(comments, page_size)
+            page = paginator.page(page_number)
+            
+            if page.object_list.count() == 0:
+                return Response(status=status.HTTP_204_NO_CONTENT)
 
-        return Response(data, status=status.HTTP_200_OK)
+            items = [self.serializer_class(comment).data for comment in page.object_list]
+            data = {
+                "type": "comments",
+                "count": comments.count(),
+                "items": items
+            }
+
+            return Response(data, status=status.HTTP_200_OK)
+        except Post.DoesNotExist:
+            # handle remote post comments
+            remote_nodes = RemoteNode.objects.all()
+            for remote_node in remote_nodes:
+                node = RemoteNode.objects.get(host=remote_node.host)
+                url = node.host + "api/author/" + str(kwargs["author_id"]) + "/posts/" + str(kwargs["post_id"]) + "/comments/?" + str(page_number) + "&" + str(page_size)
+                response = requests.get(
+                    url,
+                    auth=requests.models.HTTPBasicAuth(remote_node.our_user, remote_node.our_password),
+                )
+                if response.status_code == 200:
+                    return Response(response.json(), status=response.status_code)
+                if response.status_code == 204:
+                    return Response(status=response.status_code)
+
+        return Response(status=status.HTTP_400_BAD_REQUEST)
+
 
     @swagger_auto_schema(tags=['comments'])
     def post(self, request, *args, **kwargs):
@@ -247,8 +282,10 @@ class comments(generics.ListCreateAPIView):
             # handle comment on a remote post
             host = request.data["post"]["author"]["host"]
             node = get_object_or_404(RemoteNode, host=host)
-            url = node.host + request.data["post"]["author"]["id"] + \
+            url = node.host + "api/author/" + request.data["post"]["author"]["id"] + \
                 "/posts/" + request.data["post"]["id"] + "/comments/"
+            del request.data["post"]
+
             response = requests.post(url, 
                 auth=requests.models.HTTPBasicAuth(node.our_user, node.our_password), 
                 json=request.data,
@@ -445,14 +482,30 @@ class post_likes(generics.GenericAPIView):
 
     @swagger_auto_schema(tags=['likes'])
     def get(self, request, *args, **kwargs):
-        post = get_object_or_404(Post, id=kwargs["post_id"])
-        likes = Like.objects.filter(object_url=post.get_absolute_url()) 
-        serialized_data = [LikeSerializer(like).data for like in likes]
-        data = {
-            "type": "likes",
-            "items": serialized_data
-        }
-        return Response(data=data, status=status.HTTP_200_OK)
+        try:
+            post = Post.objects.get(id=kwargs["post_id"])
+            likes = Like.objects.filter(object_url=post.get_absolute_url()) 
+            serialized_data = [LikeSerializer(like).data for like in likes]
+            data = {
+                "type": "likes",
+                "items": serialized_data
+            }
+            return Response(data=data, status=status.HTTP_200_OK)
+        except Post.DoesNotExist:
+            # handle get likes for remote post 
+            remote_nodes = RemoteNode.objects.all()
+            for remote_node in remote_nodes:
+                node = RemoteNode.objects.get(host=remote_node.host)
+                url = node.host + request.path[1:]
+                print("GET Like from:", url)
+                response = requests.get(
+                    url,
+                    auth=requests.models.HTTPBasicAuth(remote_node.our_user, remote_node.our_password),
+                )
+                if response.status_code == 200:
+                    return Response(response.json(), status=response.status_code)
+        
+        return Response(status=status.HTTP_404_NOT_FOUND)
 
 class post_likes_count(generics.GenericAPIView):
     permission_classes = [IsAuthenticated]
@@ -468,14 +521,29 @@ class likes(generics.GenericAPIView):
 
     @swagger_auto_schema(tags=['likes'])
     def get(self, request, *args, **kwargs):
-        author = get_object_or_404(Author, id=kwargs["author_id"])
-        likes = Like.objects.all().filter(author__id=str(author.id)) 
-        serialized_likes = [LikeSerializer(like).data for like in likes]
-        data = {
-            "type": "liked",
-            "items": serialized_likes
-        }
-        return Response(data=data, status=status.HTTP_200_OK)
+        try:
+            author = Author.objects.get(id=kwargs["author_id"])
+            likes = Like.objects.all().filter(author__id=str(author.id)) 
+            serialized_likes = [LikeSerializer(like).data for like in likes]
+            data = {
+                "type": "liked",
+                "items": serialized_likes
+            }
+            return Response(data=data, status=status.HTTP_200_OK)
+        except Author.DoesNotExist:
+            # handle get likes for remote post 
+            remote_nodes = RemoteNode.objects.all()
+            for remote_node in remote_nodes:
+                node = RemoteNode.objects.get(host=remote_node.host)
+                url = node.host + request.path[1:]
+                response = requests.get(
+                    url,
+                    auth=requests.models.HTTPBasicAuth(remote_node.our_user, remote_node.our_password),
+                )
+                if response.status_code == 200:
+                    return Response(response.json(), status=response.status_code)
+        
+        return Response(status=status.HTTP_404_NOT_FOUND)
 
 class author_friends(generics.ListAPIView):
     serializer_class = AuthorFriendSerializer
