@@ -6,7 +6,7 @@ import { Modal, Container, Columns, Section, Card } from "react-bulma-components
 
 import PostList from "../stream/posts/PostList";
 import ProfileDetail from "./ProfileDetail";
-import { retrieveAuthor, retrieveAuthorPosts, sendFollow, deleteFollow, checkFollowing, editProfile } from "./ProfileActions";
+import { retrieveAuthor, retrieveAuthorPosts, sendFollow, deleteFollow, checkFollowing, editProfile, getFollowers, getFriends } from "./ProfileActions";
 
 // buttons
 import FollowButton from "./buttons/FollowButton";
@@ -20,7 +20,7 @@ import { postStyle } from "../../styling/StyleComponents";
 import { ProfileIconBoy } from "../../styling/svgIcons";
 import { Redirect } from "react-router-dom";
 
-import {updatePost, sharePost, likePost, deletePost } from "../stream/StreamActions";
+import {updatePost, sharePost, likePost, deletePost} from "../stream/StreamActions";
 
 var pageStyle = {
   margin: "auto",
@@ -57,9 +57,45 @@ class Profile extends React.Component {
 
     this.state = {
       editProfileModalIsOpen: false,
-      isFollowing: false
+      isFollowing: false,
+      friendCount: "",
+      followerCount: "",
     };
   }
+
+  getDisplayNum = (num) => {
+    if (num >= 10**9) {
+        // no one is that famous
+        return Math.floor(num/10**9) + 'b';
+    }
+    if (num >= 10**6) {
+        return Math.floor(num/10**6) + 'm';
+    }
+    if (num >= 10**3) {
+        return Math.floor(num/10**3) + 'k';
+    }
+
+    return num;
+}
+
+  setFriends = (data) => {
+    // count and maybe used in the future for following management panel
+    if (data === null) {
+      this.setState({friendCount: "Unknown"});
+    } else {
+      this.setState({friendCount: this.getDisplayNum(data.length)});
+    }
+  }
+
+  setFollows = (data) => {
+    // count and maybe used in the future for following management panel
+    if (data === null) {
+      this.setState({followerCount: "Unknown"});
+    } else {
+      this.setState({followerCount: this.getDisplayNum(data.length)});
+    }
+  }
+  
 
   componentDidMount() {
     const {
@@ -69,6 +105,8 @@ class Profile extends React.Component {
     this.props.retrieveAuthor(params.id);
     this.props.retrieveAuthorPosts(params.id);
     this.props.checkFollowing(params.id);
+    this.props.getFollowers(params.id, this.setFollows);
+    this.props.getFriends(params.id, this.setFriends)
   }
 
   render() {
@@ -154,9 +192,9 @@ class Profile extends React.Component {
                   displayName={this.props.retrievedAuthor.displayName}
                   UUID={this.props.retrievedAuthor.id}
                   githubURL={this.props.retrievedAuthor.github}
-                  followerNum={64}
-                  followingNum={32}
-                  postNum={this.props.retrievedAuthorPosts.length}
+                  followerNum={this.state.followerCount}
+                  friendNum={this.state.friendCount}
+                  postNum={this.getDisplayNum(this.props.retrievedAuthorPosts.length)}
                 />
                 </Container>
                 {this.props.match.params.id === this.props.loggedInAuthor.id ? loggedAuthor() : otherAuthor()}
@@ -251,5 +289,7 @@ export default connect(mapStateToProps, {
   sharePost,
   deletePost,
   likePost,
+  getFollowers,
+  getFriends,
 
 })(withRouter(Profile));
