@@ -235,7 +235,7 @@ class comments(generics.ListCreateAPIView):
         page_size = 5 if 'size' not in request.query_params else request.query_params.get('size')
 
         try:
-            _ = Post.objects.get(id=kwargs["post_id"])
+            _ = Post.objects.get(id=str(kwargs["post_id"]))
             comments = Comment.objects.filter(post_id=kwargs["post_id"]).order_by('-published')
             paginator = Paginator(comments, page_size)
             page = paginator.page(page_number)
