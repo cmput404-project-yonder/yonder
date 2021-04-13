@@ -330,7 +330,7 @@ class SelectedPost extends React.Component {
     } = this.props;
 
     this.props.retrievePost(params.author_id,params.id, ()=>this.likePollingCall(this.props.retrievedPost, this.postLikeSetter));
-    this.props.retrieveCommentList(params.athor_id,params.id);
+    this.props.retrieveCommentList(params.author_id,params.id);
     
     this.state["likePolling"] = setInterval(()=>this.likePollingCall(this.props.retrievedPost, this.postLikeSetter), 15 * 1000);
   }

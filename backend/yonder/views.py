@@ -203,7 +203,7 @@ class post_detail(generics.RetrieveUpdateDestroyAPIView):
             remote_nodes = RemoteNode.objects.all()
             for remote_node in remote_nodes:
                 node = RemoteNode.objects.get(host=remote_node.host)
-                url = node.host + "author/" + kwargs["author_id"] + "/posts/" + kwargs["pk"] + "/"
+                url = node.host + "api/author/" + kwargs["author_id"] + "/posts/" + kwargs["pk"] + "/"
                 response = requests.get(
                     url,
                     auth=requests.models.HTTPBasicAuth(node.our_user, node.our_password)
@@ -262,7 +262,7 @@ class comments(generics.ListCreateAPIView):
             # handle comment on a remote post
             host = request.data["post"]["author"]["host"]
             node = get_object_or_404(RemoteNode, host=host)
-            url = node.host + request.data["post"]["author"]["id"] + \
+            url = node.host + "api/author/" + request.data["post"]["author"]["id"] + \
                 "/posts/" + request.data["post"]["id"] + "/comments/"
             response = requests.post(url, 
                 auth=requests.models.HTTPBasicAuth(node.our_user, node.our_password), 
