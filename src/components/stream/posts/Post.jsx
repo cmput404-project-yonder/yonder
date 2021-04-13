@@ -32,14 +32,12 @@ function getDateString(ms) {
   return date.toLocaleDateString();
 }
 
-
-
- 
-
 class Post extends React.Component {
-
   constructor(props) {
     super(props);
+
+    this.likePollingRate = 30;
+
     this.state = {
       editModalIsOpen: false,
       sharingPromptIsOpen: false,
@@ -49,10 +47,17 @@ class Post extends React.Component {
   } 
 
   componentDidMount() {
-    // set up polling for this post
     this.likePollingCall(this.props.post, this.postLikeSetter);
-    this.state["likePolling"] = setInterval(()=>this.likePollingCall(this.props.post, this.postLikeSetter), 20 * 1000);
-    this.postURL = "/author/" + this.props.post.author.id + "/posts/" + this.props.post.id + "/";
+    this.state["likePolling"] = setInterval(()=>this.likePollingCall(this.props.post, this.postLikeSetter), this.likePollingRate * 1000);
+  }
+
+  componentDidUpdate(prevProps) {
+    // when post is changed, but compoent is reused
+    if (prevProps.post.id !== this.props.post.id) {
+      clearInterval(this.state["likePolling"]);
+      this.likePollingCall(this.props.post, this.postLikeSetter);
+      this.state["likePolling"] = setInterval(()=>this.likePollingCall(this.props.post, this.postLikeSetter), this.likePollingRate * 1000);
+    }
   }
 
   componentWillUnmount() {
@@ -67,7 +72,9 @@ class Post extends React.Component {
     this.setState({sharingPromptIsOpen: s});
   }
   setLikeCount = (s) => {
-    this.setState({likeCount: s});
+    if (this.state.likeCount !== s) {
+      this.setState({likeCount: s});
+    }
   }
 
 
@@ -75,7 +82,8 @@ class Post extends React.Component {
   likePollingCall = (post, setter) => {
     // this function is safe measure (wrapper) for preventing situation where auth is not set, but the webpage is still open
     // polling will only be done if auth is set
-    if ((this.props.auth !== undefined)&&(this.props.auth.isAuthenticated)) {
+    
+    if ((this.props.auth !== undefined)&&(this.props.auth.isAuthenticated)&&(this.props.interactive)) {
       this.props.retrievePostLikes(post, setter);
     }
   }
@@ -83,7 +91,7 @@ class Post extends React.Component {
   likePostCall = (post, setter=null) => {
     // same as likePollingCall
     // call this function to like a post
-    if ((this.props.auth !== undefined)&&(this.props.auth.isAuthenticated)) {
+    if ((this.props.auth !== undefined)&&(this.props.auth.isAuthenticated)&&(this.props.interactive)) {
       this.props.likePost(post, setter);
     }
   }
@@ -160,7 +168,7 @@ class Post extends React.Component {
         <Card style={{...postStyle,...this.props.style}}>
           <Card.Content style={postContainerStyle}>
             
-            <a href={this.postURL}>
+            <a href={"/author/" + this.props.post.author.id + "/posts/" + this.props.post.id + "/"}>
               {/* Title */}
               <Container style={signatureStyle}>
                 <p style={{ fontWeight: "250" }}>@{this.props.post.author.displayName}</p>
