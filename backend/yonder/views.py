@@ -231,23 +231,41 @@ class comments(generics.ListCreateAPIView):
 
     @swagger_auto_schema(tags=['comments'])
     def get(self, request, *args, **kwargs):
-        comments = Comment.objects.filter(post_id=kwargs["post_id"]).order_by('-published')
         page_number = 1 if 'page' not in request.query_params else request.query_params.get('page')
         page_size = 5 if 'size' not in request.query_params else request.query_params.get('size')
-        paginator = Paginator(comments, page_size)
-        page = paginator.page(page_number)
-        
-        if page.object_list.count() == 0:
-            return Response(status=status.HTTP_204_NO_CONTENT)
 
-        items = [self.serializer_class(comment).data for comment in page.object_list]
-        data = {
-            "type": "comments",
-            "count": comments.count(),
-            "items": items
-        }
+        try:
+            _ = Post.objects.get(id=kwargs["post_id"])
+            comments = Comment.objects.filter(post_id=kwargs["post_id"]).order_by('-published')
+            paginator = Paginator(comments, page_size)
+            page = paginator.page(page_number)
+            
+            if page.object_list.count() == 0:
+                return Response(status=status.HTTP_204_NO_CONTENT)
 
-        return Response(data, status=status.HTTP_200_OK)
+            items = [self.serializer_class(comment).data for comment in page.object_list]
+            data = {
+                "type": "comments",
+                "count": comments.count(),
+                "items": items
+            }
+
+            return Response(data, status=status.HTTP_200_OK)
+        except Post.DoesNotExist:
+            # handle remote post comments
+            remote_nodes = RemoteNode.objects.all()
+            for remote_node in remote_nodes:
+                node = RemoteNode.objects.get(host=remote_node.host)
+                url = node.host + "api/author/" + kwargs["author_id"] + "/posts/" + kwargs["post_id"] + "/comments/?" + page_number + "&" + page_size
+                response = requests.get(
+                    url,
+                    auth=requests.models.HTTPBasicAuth(remote_node.our_user, remote_node.our_password),
+                )
+                if response.status_code <= 204:
+                    return Response(status=response.status_code)
+
+        return Response(status=status.HTTP_400_BAD_REQUEST)
+
 
     @swagger_auto_schema(tags=['comments'])
     def post(self, request, *args, **kwargs):
