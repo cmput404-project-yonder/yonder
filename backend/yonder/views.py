@@ -261,7 +261,9 @@ class comments(generics.ListCreateAPIView):
                     url,
                     auth=requests.models.HTTPBasicAuth(remote_node.our_user, remote_node.our_password),
                 )
-                if response.status_code <= 204:
+                if response.status_code == 200:
+                    return Response(response.json(), status=response.status_code)
+                if response.status_code == 204:
                     return Response(status=response.status_code)
 
         return Response(status=status.HTTP_400_BAD_REQUEST)
