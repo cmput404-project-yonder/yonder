@@ -180,25 +180,40 @@ class post_detail(generics.RetrieveUpdateDestroyAPIView):
     @swagger_auto_schema(tags=['posts'])
     def get(self, request, *args, **kwargs):
         
-        post = get_object_or_404(Post, id=self.kwargs["pk"])
-        postJSON = PostSerializer(instance=post).data
-        if post.visibility == "FRIENDS":
-            req_user = get_object_or_404(User, username=request.user)
-            requestor = get_object_or_404(Author, user=req_user)
-            follows = AuthorFollower.objects.filter(author_id=post.author.id)
-            for follow in follows:
-                if follow.follower["id"] == str(requestor.id):
-                    _follows = AuthorFollower.objects.filter(author_id=requestor.id)
-                    for _follow in _follows:
-                        if _follow.follower["id"] == self.kwargs["author_id"]:
-                            return Response(postJSON, status=status.HTTP_200_OK)
-            return Response(status=status.HTTP_401_UNAUTHORIZED)
+        try:
+            post = Post.objects.get(id=kwargs["pk"])
+            postJSON = PostSerializer(instance=post).data
+            if post.visibility == "FRIENDS":
+                req_user = get_object_or_404(User, username=request.user)
+                requestor = get_object_or_404(Author, user=req_user)
+                follows = AuthorFollower.objects.filter(author_id=post.author.id)
+                for follow in follows:
+                    if follow.follower["id"] == str(requestor.id):
+                        _follows = AuthorFollower.objects.filter(author_id=requestor.id)
+                        for _follow in _follows:
+                            if _follow.follower["id"] == self.kwargs["author_id"]:
+                                return Response(postJSON, status=status.HTTP_200_OK)
+                return Response(status=status.HTTP_401_UNAUTHORIZED)
 
-        elif post.visibility == "PUBLIC":
-            return Response(postJSON, status=status.HTTP_200_OK)
+            elif post.visibility == "PUBLIC":
+                return Response(postJSON, status=status.HTTP_200_OK)
 
-        else:
-            return Response(status=status.HTTP_400_BAD_REQUEST)
+        except Post.DoesNotExist:
+            # handle remote Posts
+            remote_nodes = RemoteNode.objects.all()
+            for remote_node in remote_nodes:
+                node = RemoteNode.objects.get(host=remote_node.host)
+                url = node.host + "author/" + kwargs["author_id"] + "/posts/" + kwargs["pk"] + "/"
+                response = requests.get(
+                    url,
+                    auth=requests.models.HTTPBasicAuth(node.our_user, node.our_password)
+                )
+                if (response.status_code == 200):
+                    return Response(response.json(), status=response.status_code)
+                else:
+                    return Response(response.content, response.status_code)
+
+        return Response(status=status.HTTP_400_BAD_REQUEST)
 
     @swagger_auto_schema(tags=['posts'])
     def put(self, request, *args, **kwargs):
