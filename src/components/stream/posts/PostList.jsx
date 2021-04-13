@@ -25,7 +25,7 @@ function PostList(props) {
 
 
   let postsSliced = props.posts.slice(pageSize*(pageNum-1), pageSize*(pageNum-1)+pageSize)
-  console.log(pageSize*pageNum);
+  // console.log(pageSize*pageNum);
 
   if (props.hasInbox !== true) {
     var postList = postsSliced.map((post) => {

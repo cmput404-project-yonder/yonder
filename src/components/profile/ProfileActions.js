@@ -148,7 +148,7 @@ export const checkFollowing = (otherAuthorId) => (dispatch, getState) => {
     })
     .catch((error) => {
       dispatch({ type: CHECK_FOLLOW_SUCCESS, payload: false });
-      console.log(error.message);
+      // console.log(error.message);
     });
 };
 
@@ -186,8 +186,8 @@ export const getFollowers = (authorID, setter) => (dispatch, getState) => {
   axios
     .get("/author/" + authorID + "/followers/")
     .then((response) => {
-      console.log("followers");
-      console.log(response.data);
+      // console.log("followers");
+      // console.log(response.data);
         setter(response.data);
     })
     .catch((error) => {
@@ -205,8 +205,8 @@ export const getFriends = (authorID, setter) => (dispatch, getState) => {
   axios
     .get("/author/" + authorID + "/friends/")
     .then((response) => {
-      console.log("friends");
-      console.log(response.data);
+      // console.log("friends");
+      // console.log(response.data);
         setter(response.data);
     })
     .catch((error) => {

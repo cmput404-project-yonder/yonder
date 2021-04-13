@@ -29,9 +29,9 @@ var buttonStyle = {
 function UnfollowButton(props) {
   return (
     <Container style={props.style}>
-      <Button onClick={props.onClick} style={buttonStyle.button}>
+      <Button onClick={props.onClick} style={{...buttonStyle.button, ...props.buttonStyle}}>
         <Container style={buttonStyle.style}>
-          <svg xmlns="http://www.w3.org/2000/svg" width={buttonStyle.scale}  viewBox="0 0 219.068 187.633">
+          <svg xmlns="http://www.w3.org/2000/svg" width={(props.svgScale !== undefined)? props.svgScale : buttonStyle.scale}  viewBox="0 0 219.068 187.633">
             <g id="follower" transform="translate(0 -19)">
               <g id="Group_94" data-name="Group 94" transform="translate(0 19)">
                 <g id="Group_93" data-name="Group 93">
