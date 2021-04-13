@@ -216,6 +216,66 @@ export const likePost = (post, chainFunction=null) => (dispatch, getState) => {
     });
   };
 
+// export const likeComment = (comment) => (dispatch, getState) => {
+//   const likedComment = {};
+//   const state = getState();
+//   const author = state.auth.author;
+//   setAxiosAuthToken(state.auth.token);
+
+//   likedPost["type"] = "like";
+//   likedPost["author"] = 
+//   {...author,
+//     "type": "author",
+//     "id": author.id,
+//     "url": author.host + "api/author/" + author.id,
+//   };
+//   likedPost["object"] = post.author.host + "api/author/" + post.author.id + "/posts/" + post.id + "/";
+//   likedPost["host"] = post.author.host;
+
+//   dispatch({ type: LIKE_POST_SUBMITTED });
+//   axios
+//     .post("/author/" + post.author.id + "/inbox/", likedPost)
+//     .then((response) => {
+//       dispatch({ type: LIKE_POST_SUCCESS, payload: response.data });
+//       if (chainFunction !== null) {
+//         chainFunction();
+//       }
+//     })
+//     .catch((error) => {
+//       if (error.response) {
+
+//         // handles specific status code
+//         switch (error.response.status) {
+//           case 409:
+//             toast.error("You already liked this post");
+//             break;
+//           case 404:
+//             toast.error("Author have deleted this post");
+//             break;
+//           case 401:
+//             // too deep in the rabbit hole
+//             // like polling/like is handled by post.jsx
+//             // if 401 happends, then we just ignore it, this error will eventually cought by navigationbar
+//             // and redirect user to login.
+//             break;
+//           default:
+//             toast.error(JSON.stringify(error.response.data));
+//             break;
+//         }
+
+//         dispatch({
+//           type: LIKE_POST_ERROR,
+//           errorData: error.response.data,
+//         });
+
+//       } else if (error.message) {
+//         toast.error(JSON.stringify(error.message));
+//       } else {
+//         toast.error(JSON.stringify(error));
+//       }
+//     });
+//   };
+
 export const retrieveLoggedInAuthorPosts = () => (dispatch, getState) => {
   const state = getState();
   const author = state.auth.author;

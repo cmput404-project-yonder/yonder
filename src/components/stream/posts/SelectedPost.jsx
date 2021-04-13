@@ -266,15 +266,25 @@ class CommentCard extends React.Component {
       comments: [],
       commentsCount: 0,
       commentPageNum: 1,
+      commentLikeCount: 0,
+      commentHasBeenLiked: false,
     };
+    console.log("props:", props);
+    console.log("state:", this.state);
   }
+
+  // likeComment = (comment) => {
+  //   if (this.props.commentLikeCount > 0 && this.props.commentHasBeenLiked) {
+      
+  //   } 
+  // }
+
 
   requestComments = (page) => {
     if (this.props.post.author) {
       if ((this.props.auth !== undefined)&&(this.props.auth.isAuthenticated)) {
 
         this.props.sendCommentQuery(this.props.post, page, this.pageSize, (data)=>{
-          console.log(data)
           if (data) {
             this.setState({
               comments: data.items,
@@ -296,7 +306,6 @@ class CommentCard extends React.Component {
   CommentsCard = () => {
 
     const CommentContainer = (props) => {
-      console.log("props:", props);
       // display one comment
       return (
         <Container style={{...wrapperStyle, marginBottom: "0.6em"}}>
@@ -307,11 +316,10 @@ class CommentCard extends React.Component {
             
             {/* Title */}
             <p style={{color: color.baseLightGrey, fontSize: "0.9em", marginLeft: "0.4em"}}>@{props.authorName}</p>
+            <LikedButton />
             <hr style={{...shadowDividorStyle, backgroundColor: "transparent", marginBottom: "0.5em", marginTop: "-32pt"}}></hr>
-
             {/* Content */}
             <p style={postContentStyle}><Markdown>{props.content}</Markdown></p>
-            
           </Container>
         </Container>
       )
