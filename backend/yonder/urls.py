@@ -20,11 +20,6 @@ urlpatterns = [
         name="comments"
     ),
     path(
-        'author/<str:author_id>/posts/<str:post_id>/comments/<str:pk>/',
-        views.comment_detail.as_view(),
-        name="comment_detail"
-    ),
-    path(
         'author/<str:author_id>/followers/',
         views.author_followers.as_view({'get': 'list'}),
         name="follower_list"

@@ -296,24 +296,6 @@ class comments(generics.ListCreateAPIView):
 
         return Response(status=status.HTTP_400_BAD_REQUEST)
 
-
-class comment_detail(generics.RetrieveUpdateDestroyAPIView):
-    queryset = Comment.objects.all()
-    serializer_class = CommentSerializer
-    permission_classes = [IsAuthenticatedOrReadOnly]
-
-    @swagger_auto_schema(tags=['comments'])
-    def get(self, request, *args, **kwargs):
-        return self.retrieve(request, *args, **kwargs)
-
-    @swagger_auto_schema(tags=['comments'])
-    def put(self, request, *args, **kwargs):
-        return self.update(request, *args, **kwargs)
-
-    @swagger_auto_schema(tags=['comments'])
-    def delete(self, request, *args, **kwargs):
-        return self.destroy(request, *args, **kwargs)
-
 class author_followers(viewsets.ModelViewSet):
     queryset = AuthorFollower.objects.all()
     serializer_class = AuthorFollowerSerializer
