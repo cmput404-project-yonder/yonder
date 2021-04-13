@@ -11,7 +11,7 @@ var color = {
     buttonBlue: "#54B2E9",
     buttonIndigo: "#7D99F5",
     postIcon: "#8fc9eb",
-    backgroundGrey: "#FFFFFF",
+    backgroundGrey: "#C3C3C3",
     backgroundCream: "#FFF4E2",             // this one is actually ligter
     backgroundCreamLighter: "#FFF3DC",
     textLightGreyOnCream: "#9B9285",

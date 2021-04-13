@@ -17,7 +17,7 @@ import PaginationTag from "./Pagination";
 
 function PostList(props) {
   const [pageNum, setPageNum] = useState(1);
-  var pageSize = 5;
+  var pageSize = 6;
   var pageCount = 0;
 
   props.posts.sort((postA,postB) => Date.parse(postB["published"])-Date.parse(postA["published"]));
@@ -86,7 +86,7 @@ function PostList(props) {
 
   if (props.posts.length === 0) {
     return (
-        <Card style={{...postStyle, height: "auto", fontSize: "1em", minWidth: "400pt"}}>
+        <Card style={{...postStyle, height: "auto", fontSize: "1em", minWidth: "400pt", marginTop: (props.createPost !== undefined)?"3.5em":"7.5em"}}>
           <Container>
             <Container style={{textAlign: "center", marginTop: "12em", marginBottom: "9em"}}>
                 <Container style={{fill: color.baseLightGrey}}>
@@ -102,13 +102,13 @@ function PostList(props) {
   } else {
     return (
       <div>
-        <Container style={{fontSize: "1.5em", margin: "1em"}}>
+        <Container style={{fontSize: "1.5em", margin: "0.2em", marginBottom: "-0.2em"}}>
           <PaginationTag
               count={pageCount}
               pageSize={pageSize}
               pageNum={pageNum}
               onClick={(page)=>{setPageNum(page)}}
-              primaryColor={color.baseLightGrey}
+              primaryColor={color.backgroundGrey}
               secondaryColor={color.baseLightGrey}
             />
         </Container>
@@ -117,13 +117,13 @@ function PostList(props) {
           {postList}
           </List>
           </div>
-        <Container style={{fontSize: "1.5em", margin: "1em"}}>
+        <Container style={{fontSize: "1.5em", margin: "0.2em", marginTop: "1em"}}>
           <PaginationTag
               count={pageCount}
               pageSize={pageSize}
               pageNum={pageNum}
               onClick={(page)=>{setPageNum(page)}}
-              primaryColor={color.baseLightGrey}
+              primaryColor={color.backgroundGrey}
               secondaryColor={color.baseLightGrey}
             />
         </Container>

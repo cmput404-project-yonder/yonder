@@ -245,7 +245,7 @@ export const formContainerStyle = {
     paddingBottom: "1em",
     paddingRight: "1.5em",
     paddingLeft: "1.5em",
-    backgroundColor: color.backgroundGrey,
+    backgroundColor: color.baseWhite,
   }
   
 export const labelStyle = {
