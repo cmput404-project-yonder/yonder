@@ -501,7 +501,7 @@ class post_likes(generics.GenericAPIView):
                     url,
                     auth=requests.models.HTTPBasicAuth(remote_node.our_user, remote_node.our_password),
                 )
-                if response == 200:
+                if response.status_code == 200:
                     return Response(response.json(), status=response.status_code)
         
         return Response(status=status.HTTP_404_NOT_FOUND)
@@ -511,24 +511,9 @@ class post_likes_count(generics.GenericAPIView):
 
     @swagger_auto_schema(tags=['likes'])
     def get(self, request, *args, **kwargs):
-        try:
-            post = Post.objects.get(id=kwargs["post_id"])
-            likes_count = Like.objects.filter(object_url=post.get_absolute_url()).count()
-            return Response(likes_count, status=status.HTTP_200_OK)
-        except Post.DoesNotExist:
-            # handle get likes for remote post 
-            remote_nodes = RemoteNode.objects.all()
-            for remote_node in remote_nodes:
-                node = RemoteNode.objects.get(host=remote_node.host)
-                url = node.host + request.path
-                response = requests.get(
-                    url,
-                    auth=requests.models.HTTPBasicAuth(remote_node.our_user, remote_node.our_password),
-                )
-                if response == 200:
-                    return Response(response.json(), status=response.status_code)
-        
-        return Response(status=status.HTTP_404_NOT_FOUND)
+        post = get_object_or_404(Post, id=kwargs["post_id"])
+        likes_count = Like.objects.filter(object_url=post.get_absolute_url()).count()
+        return Response(likes_count, status=status.HTTP_200_OK)
 
 class likes(generics.GenericAPIView):
     permission_classes = [IsAuthenticated]
@@ -554,7 +539,7 @@ class likes(generics.GenericAPIView):
                     url,
                     auth=requests.models.HTTPBasicAuth(remote_node.our_user, remote_node.our_password),
                 )
-                if response == 200:
+                if response.status_code == 200:
                     return Response(response.json(), status=response.status_code)
         
         return Response(status=status.HTTP_404_NOT_FOUND)
