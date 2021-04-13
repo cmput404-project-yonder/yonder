@@ -195,7 +195,7 @@ class Profile extends React.Component {
         <Columns style={pageStyle}>
 
           <Columns.Column>
-          <div style={{marginTop: "5.5em"}}>
+          <div style={{marginTop: "3em"}}>
             {profileCard()}
           </div>
           </Columns.Column>

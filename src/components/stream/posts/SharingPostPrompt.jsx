@@ -36,14 +36,14 @@ var postIconStyle = {
 }
 
 var postCardDisplayStyle = {
-    boxShadow: "0pt 0pt 3pt #B1B1B1",
+    boxShadow: "0pt 0pt 4pt rgb(0,0,0,0.1)",
     borderRadius: "8pt",
     fontSize: "1.3em",
     marginLeft: "1em",
     marginRight: "1em",
     marginBottom: "0.5em",
     marginTop: "0.1em",
-    backgroundColor: color.backgroundGrey,
+    backgroundColor: color.baseWhite,
 }
 
 var createPostHeaderStype = {
