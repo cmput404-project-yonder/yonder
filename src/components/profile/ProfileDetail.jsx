@@ -96,8 +96,8 @@ function ProfileStatusView(props) {
               </div>
               <div style={statusStyle.statusBar.block}>
                   <p>
-                      Following<br/>
-                      <span style={statusStyle.statusBar.counter}>{props.followingNum}</span>
+                      Friend<br/>
+                      <span style={statusStyle.statusBar.counter}>{props.friendNum}</span>
                   </p>
               </div>
           </Content>
@@ -143,7 +143,7 @@ class ProfileDetail extends React.Component {
           <Container>
               <ProfileStatusView 
                   displayName={this.props.displayName}
-                  followingNum={this.props.followingNum}
+                  friendNum={this.props.friendNum}
                   followerNum={this.props.followerNum}
                   postNum={this.props.postNum}
               />

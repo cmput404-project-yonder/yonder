@@ -178,3 +178,42 @@ export const editProfile = (newProfile) => (dispatch, getState) => {
       }
     });
 };
+
+export const getFollowers = (authorID, setter) => (dispatch, getState) => {
+  const state = getState();
+  
+  setAxiosAuthToken(state.auth.token);
+  axios
+    .get("/author/" + authorID + "/followers/")
+    .then((response) => {
+      console.log("followers");
+      console.log(response.data);
+        setter(response.data);
+    })
+    .catch((error) => {
+      if (error.response) {
+        // 
+        setter(null);
+      }
+    });
+}
+
+export const getFriends = (authorID, setter) => (dispatch, getState) => {
+  const state = getState();
+  
+  setAxiosAuthToken(state.auth.token);
+  axios
+    .get("/author/" + authorID + "/friends/")
+    .then((response) => {
+      console.log("friends");
+      console.log(response.data);
+        setter(response.data);
+    })
+    .catch((error) => {
+      if (error.response) {
+        // 
+        setter(null);
+      }
+    });
+}
+
