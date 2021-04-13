@@ -108,7 +108,7 @@ function PostList(props) {
               pageSize={pageSize}
               pageNum={pageNum}
               onClick={(page)=>{setPageNum(page)}}
-              primaryColor={"white"}
+              primaryColor={color.baseLightGrey}
               secondaryColor={color.baseLightGrey}
             />
         </Container>
@@ -123,7 +123,7 @@ function PostList(props) {
               pageSize={pageSize}
               pageNum={pageNum}
               onClick={(page)=>{setPageNum(page)}}
-              primaryColor={"white"}
+              primaryColor={color.baseLightGrey}
               secondaryColor={color.baseLightGrey}
             />
         </Container>
