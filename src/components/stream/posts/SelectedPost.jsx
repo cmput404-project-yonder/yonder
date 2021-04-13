@@ -8,6 +8,7 @@ import ShareButton from "./buttons/ShareButton";
 import LikedButton from "./buttons/LikedButton";
 import { pageStyle,buttonLayerContainerStyle,newPostButtonStyle, streamLayerContainerStyle, postContainerStyle, postStyle, signatureStyle, postTitleStyle, DescriptionStyle, contentStyle, postContentStyle, categoriesStyle, footerButtonLayoutStyle} from "../../../styling/StyleComponents";
 import { color } from "../../../styling/ColorFontConfig";
+import Markdown from "react-markdown";
 
 import EditPostForm from "./EditPostForm";
 import SharingPostPrompt from "./SharingPostPrompt";
@@ -130,6 +131,25 @@ function DetailedPostList(props) {
       return true;
     }
   }
+
+  const isMarkdown = () => {
+    if (props.post.contentType === "text/markdown") {
+      return (
+        <Content>
+          <Markdown>
+            {props.post.content}
+          </Markdown>
+        </Content>
+      )
+    }
+    else if (props.post.contentType === "text/plain") {
+      return (
+        <Content>
+          {props.post.content}
+        </Content>
+      )
+    }
+  }
   const getCategories = (cat) => {
     let categories =  cat.map((c) => <p>#{c}</p>)
     return (
@@ -217,7 +237,7 @@ function DetailedPostList(props) {
               <Content style={{textAlign: "center"}}>
                 <img style={{borderRadius: "6pt", maxHeight: "500pt"}}src={props.post.content} /> 
               </Content>
-            ) : <Content>{props.post.content}</Content> }
+            ) : isMarkdown() }
             </Container>
             
             {/* categories */}
@@ -276,6 +296,7 @@ class CommentCard extends React.Component {
   CommentsCard = () => {
 
     const CommentContainer = (props) => {
+      console.log("props:", props);
       // display one comment
       return (
         <Container style={{...wrapperStyle, marginBottom: "0.6em"}}>
@@ -289,7 +310,7 @@ class CommentCard extends React.Component {
             <hr style={{...shadowDividorStyle, backgroundColor: "transparent", marginBottom: "0.5em", marginTop: "-32pt"}}></hr>
 
             {/* Content */}
-            <p style={postContentStyle}>{props.content}</p>
+            <p style={postContentStyle}><Markdown>{props.content}</Markdown></p>
             
           </Container>
         </Container>
@@ -298,6 +319,7 @@ class CommentCard extends React.Component {
 
     const CommentsList = (props) => {
       // this part will rerender when commentState changes
+      // const 
   
       const commentsComponentList = props.commentState.map(
         (acomment) => 
