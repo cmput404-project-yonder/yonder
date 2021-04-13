@@ -82,13 +82,19 @@ class NaviPollingComponent extends React.Component {
     }
   }
 
+  delayedInboxRetrive = (seconds) => {
+    var inboxRetrive = setInterval(()=>{
+      this.props.retrieveInbox();
+      clearInterval(inboxRetrive);
+    }, seconds * 1000);
+  }
+
   onWindowChange = () => {
     // when URL changes
 
     if (window.location.pathname !== this.state.windowsPATH) {
       this.state.windowsPATH = window.location.pathname;
-      this.props.retrieveAllAuthors();
-      this.props.retrieveInbox();
+      this.delayedInboxRetrive(1);
     }
 
     // this function can be used to dynamicly monitor the state of the webpage

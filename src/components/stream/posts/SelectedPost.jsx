@@ -128,7 +128,7 @@ function DetailedPostList(props) {
         <Container style={{fill: color.baseLightGrey,textAlign: "center", width: "100%", padding: "1.2em"}}>
           <DetailedPostIcon svgScale={"80"}/>
         </Container>
-        <Container style={wrapperStyle}>
+        <Container style={wrapperStyle} className="animate__animated animate__fadeInUp">
           <Card.Content style={postContainerStyle}>
 
               {/* Title */}

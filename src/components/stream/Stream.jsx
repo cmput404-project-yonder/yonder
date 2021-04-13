@@ -42,8 +42,9 @@ class Stream extends Component {
           <Container fluid>
             <Columns centered>
               <Columns.Column>
+              <div className="post-list animate__animated animate__fadeInUp">
                 <PostList
-                  posts={this.props.currentAuthorPosts}
+                  posts={[...this.props.currentAuthorPosts, ...this.props.inboxPosts]}
                   createPost={this.props.createPost}
                   updatePost={this.props.updatePost}
                   deletePost={this.props.deletePost}
@@ -51,6 +52,7 @@ class Stream extends Component {
                   likePost={this.props.likePost}
                   interactive={true}
                 />
+                </div>
               </Columns.Column>
             </Columns>
           </Container>
@@ -69,7 +71,7 @@ Stream.propTypes = {
   retrieveLoggedInAuthorPosts: PropTypes.func.isRequired,
   deletePost: PropTypes.func.isRequired,
   currentAuthorPosts: PropTypes.array.isRequired,
-  
+  inboxPosts: PropTypes.array.isRequired,
   loading: PropTypes.bool.isRequired,
 };
 
@@ -77,7 +79,7 @@ const mapStateToProps = (state) => ({
   author: state.auth.author,
   auth: state.auth,
   currentAuthorPosts: state.stream.currentAuthorPosts,
-  // inboxPosts: state.navigation.currentInboxPosts,
+  inboxPosts: state.navigation.currentInboxPosts,
   loading: state.stream.loading,
 });
 
