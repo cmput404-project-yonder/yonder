@@ -11,10 +11,12 @@ import { Card, Content, Container } from "react-bulma-components";
 import EditButton from "./buttons/EditButton";
 import ShareButton from "./buttons/ShareButton";
 import LikedButton from "./buttons/LikedButton";
-import { DescriptionStyle, categoriesStyle, signatureStyle, postContainerStyle,postTitleStyle, postContentStyle, footerButtonLayoutStyle,postStyle } from "../../../styling/StyleComponents";
+import { DescriptionStyle, categoriesStyle, signatureStyle, postContainerStyle,postTitleStyle, postContentStyle, footerButtonLayoutStyle,postStyle, checkBoxStyle } from "../../../styling/StyleComponents";
 import { color } from "./styling";
 
+import { InfoIcon } from "../../../styling/svgIcons";
 import { retrievePostLikes } from "./PostActions";
+import dateFormat from 'dateformat';
 
 // local styling
 var shadowDividorStyle = {
@@ -25,6 +27,17 @@ var shadowDividorStyle = {
   margin: "-40pt auto -15pt",
   marginLeft: "-1em",
   backgroundColor: color.backgroundCreamLighter,
+}
+
+var menuDropDownStyle = {
+  borderRadius: "5pt",
+  textAlign: "left",
+  fontSize: "0.7em",
+  padding: "0.7em",
+  paddingBottom: "0.9em",
+  backgroundColor: "white",
+  color: color.baseLightGrey,
+  fontWeight: "400",
 }
 
 function getDateString(ms) {
@@ -184,28 +197,66 @@ class Post extends React.Component {
     }
   }
   render() {
-    return (
-        <Card style={{...postStyle,...this.props.style}} className={(this.props.interactive)?"animate__animated animate__headShake":""} key={this.props.post.title+this.props.post.content+this.props.post.description+this.props.post.author.displayName}>
-          <Card.Content style={postContainerStyle}>
-            
-            <a href={"/author/" + this.props.post.author.id + "/posts/" + this.props.post.id + "/"}>
-              {/* Title */}
+
+
+
+
+    const TitleWithDropDown = () => {
+      // show author id , post id, and displayname
+      return (
+        <Container style={{width: "100%"}}>
+        <div class="dropdown is-hoverable is-right" style={{width: "100%"}} >
+          <div class="dropdown-trigger" style={{width: "100%"}}>
+            <span
+              style={{backgroundColor: "transparent", border: "none", fill: color.baseRed, padding: "0", width: "100%"}}
+            >
+              
               <Container style={signatureStyle}>
                 <p style={{ fontWeight: "250" }}>@{this.props.post.author.displayName}</p>
                 <p>·</p>
                 <p>{getDateString(Date.parse(this.props.post.published))}</p>
               </Container>
+
+              <a href={"/author/" + this.props.post.author.id + "/posts/" + this.props.post.id + "/"}>
               <Container style={postTitleStyle}>
                 <p style={{textDecoration: "none", color: color.baseBlack}}>{this.props.post.title}</p>
               </Container>
-              
-              {/* Description */}
-              <Container style = {DescriptionStyle}>  
-                <p>{this.props.post.description }</p>
-              </Container>
+              </a>
 
-              <hr style={{...shadowDividorStyle, backgroundColor: "transparent", marginBottom: "0.5em", marginTop: "-32pt"}}></hr>
-            </a>
+
+            </span>
+          </div>
+          <div class="dropdown-menu animate__animated animate__fadeIn animate__faster" style={{minWidth: "300pt", marginBottom: "6pt", marginLeft: "-10pt"}}>
+            <div class="dropdown-content"style={menuDropDownStyle}>
+              <Container style={{float: "left", fill: color.baseLightGrey, padding: "0.2em", paddingRight: "1em"}}>
+                <InfoIcon svgScale={"60"}/>
+              </Container>
+              <p>  
+                Author ID: {this.props.post.author.id} <br></br>
+                Post ID: {this.props.post.id}<br></br>
+                {dateFormat(this.props.post.published, "dddd, mmmm dS, yyyy, h:MM TT")}
+              </p>
+            </div>
+          </div>
+        </div>    
+        </Container>  
+      )
+    }
+
+    return (
+        <Card style={{...postStyle,...this.props.style}} className={(this.props.interactive)?"animate__animated animate__headShake":""} key={this.props.post.title+this.props.post.content+this.props.post.description+this.props.post.author.displayName}>
+          <Card.Content style={postContainerStyle}>
+            
+            
+            {/* Title */}
+            <TitleWithDropDown/>
+            
+            {/* Description */}
+            <Container style = {DescriptionStyle}>  
+              <p>{this.props.post.description }</p>
+            </Container>
+
+            <hr style={{...shadowDividorStyle, backgroundColor: "transparent", marginBottom: "0.5em", marginTop: "-32pt"}}></hr>
             
             {/* Content */}
             <Container style = {postContentStyle}>

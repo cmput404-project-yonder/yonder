@@ -251,3 +251,36 @@ export function DeletedPostIcon(props) {
 
     )
 }
+
+export function InfoIcon(props) {
+    // https://www.flaticon.com/authors/smalllikeart
+    // Flaticon License
+    // Free for personal and commercial purpose with attribution.
+    return (
+        <svg xmlns="http://www.w3.org/2000/svg" width={props.svgScale} viewBox="0 0 60 60">
+        <g id="view" transform="translate(-2 -2)">
+            <path id="Path_400" data-name="Path 400" d="M6,6H8V8H6Z"/>
+            <path id="Path_401" data-name="Path 401" d="M10,6h2V8H10Z"/>
+            <path id="Path_402" data-name="Path 402" d="M14,6h2V8H14Z"/>
+            <path id="Path_403" data-name="Path 403" d="M56,48H8a1,1,0,0,0-1,1v4a1,1,0,0,0,1,1H56a1,1,0,0,0,1-1V49A1,1,0,0,0,56,48ZM9,50H41v2H9Zm46,2H43V50H55Z"/>
+            <path id="Path_404" data-name="Path 404" d="M55,44h2v2H55Z"/>
+            <path id="Path_405" data-name="Path 405" d="M51,44h2v2H51Z"/>
+            <path id="Path_406" data-name="Path 406" d="M47,44h2v2H47Z"/>
+            <path id="Path_407" data-name="Path 407" d="M43,44h2v2H43Z"/>
+            <path id="Path_408" data-name="Path 408" d="M57,14H7a1,1,0,0,0-1,1V41a1,1,0,0,0,1,1H57a1,1,0,0,0,1-1V15A1,1,0,0,0,57,14ZM56,40H8V16H56Z"/>
+            <path id="Path_409" data-name="Path 409" d="M61,2H3A1,1,0,0,0,2,3V61a1,1,0,0,0,1,1H61a1,1,0,0,0,1-1V3A1,1,0,0,0,61,2Zm-1,8H20V4H60ZM4,4H18v6H4ZM4,60V12H60V60Z"/>
+            <path id="Path_410" data-name="Path 410" d="M7,56H28v2H7Z"/>
+            <path id="Path_411" data-name="Path 411" d="M30,56h6v2H30Z"/>
+            <path id="Path_412" data-name="Path 412" d="M38,56H57v2H38Z"/>
+            <path id="Path_413" data-name="Path 413" d="M32,22c-6.407,0-10.6,5.156-10.781,5.375a1,1,0,0,0,0,1.25C21.4,28.844,25.593,34,32,34s10.6-5.156,10.781-5.375a1,1,0,0,0,0-1.25C42.6,27.156,38.407,22,32,22Zm0,10c-4.2,0-7.4-2.739-8.646-4C24.6,26.734,27.783,24,32,24c4.2,0,7.4,2.739,8.646,4C39.4,29.266,36.217,32,32,32Z"/>
+            <path id="Path_414" data-name="Path 414" d="M36,28a4,4,0,1,0-4,4A4,4,0,0,0,36,28Zm-4,2a2,2,0,1,1,2-2A2,2,0,0,1,32,30Z"/>
+            <path id="Path_415" data-name="Path 415" d="M17,38H47a1,1,0,0,0,1-1V19a1,1,0,0,0-1-1H17a1,1,0,0,0-1,1V37A1,1,0,0,0,17,38Zm1-18H46V36H18Z"/>
+            <path id="Path_416" data-name="Path 416" d="M12,20h2V18H11a1,1,0,0,0-1,1v7h2Z"/>
+            <path id="Path_417" data-name="Path 417" d="M10,28h2v2H10Z"/>
+            <path id="Path_418" data-name="Path 418" d="M54,37V32H52v4H50v2h3A1,1,0,0,0,54,37Z"/>
+            <path id="Path_419" data-name="Path 419" d="M52,18h2v2H52Z"/>
+        </g>
+        </svg>
+
+    )
+}

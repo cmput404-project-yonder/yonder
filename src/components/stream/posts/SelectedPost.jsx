@@ -113,6 +113,46 @@ class PostLikeButtonPolling extends React.Component {
 
 }
 
+// class CommentLikeNoPolling extends React.Component {
+//   constructor(props) {
+//     super(props);
+//     this.state = {
+//       likeCount: 0,
+//     }
+//   }
+
+//   setLikeCount = (s) => {
+//     this.setState({likeCount: s});
+//   }
+
+//   likeCommentCall = (comment) => {
+//     // like a comment, then return the newest like count
+
+//     if ((this.props.auth !== undefined)&&(this.props.auth.isAuthenticated)) {
+//       // call the action here
+
+//       // request(comment, (length)=>setLikeCount)
+
+//     }
+//   }
+
+
+
+//   commentLikeSetter = (likeList) => {
+//     this.setLikeCount(likeList.items.length);
+//   }
+
+//   likedToggle = () => {
+//     // like a post, and trigger a event to retrive likes after backend responded.
+//     this.likeCommentCall(this.props.comment, () => this.likeCommentCall(this.props.comment, this.commentLikeSetter));
+//   }
+
+//   componentDidMount() {
+//     this.likeCommentCall
+//   }
+
+// }
+
 function DetailedPostList(props) {
 
   const [editModalIsOpen, setEditModalIsOpen] = useState(false);
