@@ -1,6 +1,7 @@
 from django.urls import reverse
 from django.test import TestCase
 from django.db.models import signals
+from django.shortcuts import get_object_or_404
 from rest_framework import status
 from rest_framework.test import APITestCase
 from rest_framework.authtoken.models import Token
@@ -625,6 +626,12 @@ class SignalTests(TestCase):
             "follower": self.authorJSON2
         }
 
+        self.testFollow2 = {
+            "author": self.author2,
+            "follower": self.authorJSON1
+        }
+
+
     def test_create_post(self):
         #author1 creates a post and sends the data to followers' inbox
         AuthorFollower.objects.create(**self.testFollow)
@@ -649,6 +656,29 @@ class SignalTests(TestCase):
         inbox_item = Inbox.objects.filter(author=self.author1).count()
         #one inbox for author1 sent from author2's follow
         self.assertEqual(inbox_item,1)
+    
+    def test_delete_friend_unfollow(self):
+        AuthorFollower.objects.create(**self.testFollow)
+        AuthorFollower.objects.create(**self.testFollow2)
+
+        #check if friend relationship was created
+        friendship = AuthorFriend.objects.filter(author_id = self.author1.id).count()
+        self.assertEqual(friendship, 1)
+
+        followA = AuthorFollower.objects.get(author_id = self.author1.id)
+
+        followA.delete()
+
+        #check if friend relationship got deleted
+        friendship = AuthorFriend.objects.filter(author_id = self.author1.id).count()
+        self.assertEqual(friendship, 0)
+
+
+
+
+
+
+
         
 
 class LikeTests(APITestCase):
