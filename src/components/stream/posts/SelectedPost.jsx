@@ -17,7 +17,7 @@ import { updatePost, deletePost, likePost, sharePost } from '../StreamActions';
 import { retrievePost, createComment, retrieveCommentList,updateRetrivedPost, sendCommentQuery,likeComment,retrieveCommentLikes } from "./PostActions";
 import { Redirect } from "react-router-dom";
 
-import { DetailedPostIcon,PostCommentsIcon } from "../../../styling/svgIcons";
+import { DetailedPostIcon,InfoIcon } from "../../../styling/svgIcons";
 import { retrievePostLikes } from "./PostActions";
 import { toast } from "react-toastify";
 
@@ -31,6 +31,19 @@ var localCardStyle = {
   ...postStyle,
   minWidth: "400pt",
   borderRadius: "12pt",
+}
+
+var menuDropDownStyle = {
+  borderRadius: "5pt",
+  textAlign: "left",
+  fontSize: "0.7em",
+  padding: "0.7em",
+  paddingBottom: "0.9em",
+  backgroundColor: "white",
+  color: color.baseLightGrey,
+  fontWeight: "400",
+  borderWidth: "1pt",
+  border: "1pt solid" + color.baseLightGrey,
 }
 
 var wrapperStyle = {
@@ -273,6 +286,48 @@ function DetailedPostList(props) {
   }
 
   const PostCard = () => {
+
+
+    const TitleWithDropDown = () => {
+      // show author id , post id, and displayname
+      return (
+        <Container style={{width: "100%"}}>
+        <div class="dropdown is-hoverable is-right is-up" style={{width: "100%"}} >
+          <div class="dropdown-trigger" style={{width: "100%"}}>
+            <span
+              style={{backgroundColor: "transparent", border: "none", fill: color.baseRed, padding: "0", width: "100%"}}
+            >
+              
+              <Container style={signatureStyle}>
+                <p style={{ fontWeight: "250" }}>@{props.post.author.displayName}</p>
+                <p>·</p>
+                <p>{getDateString(Date.parse(props.post.published))}</p>
+              </Container>
+              <Container style={postTitleStyle}>
+                <p style={{textDecoration: "none", color: color.baseBlack}}>{props.post.title}</p>
+              </Container>
+
+
+            </span>
+          </div>
+          <div class="dropdown-menu animate__animated animate__fadeIn animate__faster" style={{minWidth: "22em", marginBottom: "0pt", marginLeft: "-10pt"}}>
+            <div class="dropdown-content"style={menuDropDownStyle}>
+              <Container style={{float: "left", fill: color.baseLightGrey, padding: "0.2em", paddingRight: "1em"}}>
+                <InfoIcon svgScale={"55"}/>
+              </Container>
+              <p>  
+                Author ID: {props.post.author.id} <br></br>
+                Post ID: {props.post.id}<br></br>
+                {dateFormat(props.post.published, "dddd, mmmm dS, yyyy, h:MM TT")}
+              </p>
+            </div>
+          </div>
+        </div>    
+        </Container>  
+      )
+    }
+
+
     return (
       <Card style={localCardStyle}>
         <Container style={{fill: color.baseLightGrey,textAlign: "center", width: "100%", padding: "1.2em"}}>
@@ -282,14 +337,7 @@ function DetailedPostList(props) {
           <Card.Content style={postContainerStyle}>
 
               {/* Title */}
-              <Container style={signatureStyle}>
-                <p style={{ fontWeight: "250" }}>@{props.post.author.displayName}</p>
-                <p>·</p>
-                <p>{getDateString(Date.parse(props.post.published))}</p>
-              </Container>
-              <Container style={postTitleStyle}>
-                <p style={{textDecoration: "none", color: color.baseBlack}}>{props.post.title}</p>
-              </Container>
+              <TitleWithDropDown/>
               
               {/* Description */}
               <Container style = {DescriptionStyle}>  
@@ -365,7 +413,7 @@ class CommentCard extends React.Component {
       console.log("props:", props);
       // display one comment
       return (
-        <Container style={{...wrapperStyle, marginBottom: "0.6em"}}>
+        <Container style={{...wrapperStyle, marginBottom: "0.9em", marginTop: "0.2em"}}>
           <Container style={postContainerStyle}>
 
             {/* Date */}
@@ -379,13 +427,15 @@ class CommentCard extends React.Component {
             <p style={postContentStyle}><Markdown>{props.content}</Markdown></p>
             
           </Container>
-          <CommentLikeNoPolling
-            retrieveCommentLikes={this.props.retrieveCommentLikes}
-            likeComment={this.props.likeComment}
-            comment={props.comment}
-            post={this.props.post}
-            auth={this.props.auth}
-          />
+          <Container style={{textAlign: "right", marginRight: "-1em", marginTop: "-1.2em"}}>
+            <CommentLikeNoPolling
+              retrieveCommentLikes={this.props.retrieveCommentLikes}
+              likeComment={this.props.likeComment}
+              comment={props.comment}
+              post={this.props.post}
+              auth={this.props.auth}
+            />
+          </Container>
         </Container>
       )
     }

@@ -152,7 +152,7 @@ export const checkFollowing = (otherAuthorId) => (dispatch, getState) => {
     });
 };
 
-export const editProfile = (newProfile) => (dispatch, getState) => {
+export const editProfile = (newProfile, chainFunc=null) => (dispatch, getState) => {
   const state = getState();
   const author = state.auth.author;
 
@@ -162,6 +162,12 @@ export const editProfile = (newProfile) => (dispatch, getState) => {
     .put("/author/" + author.id + "/", newProfile)
     .then((response) => {
       dispatch({ type: CHANGE_PROFILE_SUCCESS , payload: response.data});
+      localStorage.setItem("author", JSON.stringify(response.data));
+      
+      if (chainFunc !== null) {
+        chainFunc();
+      }
+
       toast.success("You profile is changed");
     })
     .catch((error) => {

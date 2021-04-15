@@ -31,6 +31,16 @@ var itemMsgStyle = {
   fontSize: "1.7em",
 }
 
+var shadowDividorStyle = {
+  border:"none",
+  width: "105%",
+  height: "50px",
+  boxShadow:"0 10pt 10pt -15pt rgb(0,0,0,0.3)",
+  margin: "-40pt auto -15pt",
+  marginLeft: "-1em",
+  backgroundColor: color.backgroundCreamLighter,
+}
+
 export function Post(props) {
   return (
     <Card style={itemCardStyle}>
@@ -70,7 +80,8 @@ export function Like(props) {
         {/* message */}
         <Container style={itemMsgStyle}>
           <p style={{ fontWeight: "250" }}>@{props.like.author.displayName}</p>
-          <p>·</p>
+          
+          <hr style={{...shadowDividorStyle, backgroundColor: "transparent", marginBottom: "0.5em", marginTop: "-32pt"}}></hr>
           <p>liked your post</p>
         </Container>
       </Card>

@@ -25,6 +25,7 @@ export const login = (userData, redirectTo) => (dispatch) => {
 
 export const setCurrentUser = (user) => (dispatch) => {
   localStorage.setItem("user", JSON.stringify(user));
+
   dispatch({
     type: SET_CURRENT_USER,
     payload: user,
@@ -33,6 +34,7 @@ export const setCurrentUser = (user) => (dispatch) => {
 
 export const setCurrentAuthor = (author, redirectTo) => (dispatch) => {
   localStorage.setItem("author", JSON.stringify(author));
+  
   dispatch({
     type: SET_CURRENT_AUTHOR,
     payload: author,

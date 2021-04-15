@@ -22,6 +22,7 @@ export const postContentStyle = {
   paddingBottom: "2pt",
   paddingTop: "3pt",
   fontSize: "1em",
+  overflowWrap: "break-word"
 }
 
 

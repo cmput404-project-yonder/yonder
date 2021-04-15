@@ -38,6 +38,8 @@ var menuDropDownStyle = {
   backgroundColor: "white",
   color: color.baseLightGrey,
   fontWeight: "400",
+  borderWidth: "1pt",
+  border: "1pt solid" + color.baseLightGrey,
 }
 
 function getDateString(ms) {
@@ -226,10 +228,10 @@ class Post extends React.Component {
 
             </span>
           </div>
-          <div class="dropdown-menu animate__animated animate__fadeIn animate__faster" style={{minWidth: "300pt", marginBottom: "6pt", marginLeft: "-10pt"}}>
+          <div class="dropdown-menu animate__animated animate__fadeIn animate__faster" style={{minWidth: "22em", marginBottom: "6pt", marginLeft: "-10pt"}}>
             <div class="dropdown-content"style={menuDropDownStyle}>
               <Container style={{float: "left", fill: color.baseLightGrey, padding: "0.2em", paddingRight: "1em"}}>
-                <InfoIcon svgScale={"60"}/>
+                <InfoIcon svgScale={"55"}/>
               </Container>
               <p>  
                 Author ID: {this.props.post.author.id} <br></br>
