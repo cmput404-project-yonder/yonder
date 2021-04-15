@@ -12,7 +12,8 @@ import { color } from "../../styling/ColorFontConfig";
 
 function Inbox(props) {
 
-  const follows = props.inboxFollows.map((follow) => <Follow key={follow.displayName} follower={follow} />);
+  const follows = props.inboxFollows.map((follow) => <Follow key={follow.id} follower={follow} />);
+  follows.reverse();
   const followList = () => {
     if (follows.length === 0) {
       return (
@@ -32,7 +33,8 @@ function Inbox(props) {
     }
   };
 
-  const likes = props.inboxLikes.map((like) => <Like key={like.id} like={like} />);
+  const likes = props.inboxLikes.map((like) => <Like key={like.id} like={like}/>);
+  likes.reverse();
   const likeList = () => {
 
     if (likes.length === 0) {
@@ -53,7 +55,8 @@ function Inbox(props) {
     }
   };
 
-  const posts = props.inboxPosts.map((post) => <Post key={post.id} post={post} />);
+  const posts = props.inboxPosts.reverse().map((post) => <Post key={post.id} post={post} />);
+  posts.reverse();
   const postList = () => {
     if (posts.length === 0) {
       return (

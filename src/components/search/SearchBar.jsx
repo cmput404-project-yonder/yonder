@@ -5,9 +5,13 @@ import { font, color } from "../../styling/ColorFontConfig";
 
 function SearchBar(props) {
 
-  const items = props.authors.map((p, i) => {
+  let items = props.authors.map((p, i) => {
       return {id: i, name: p.displayName}
   });
+
+  items = [...items, ...props.authors.map((p, i) => {
+    return {id: i, name: p.id}
+  })];
 
   const handleOnSelect = (item) => {
     // the item selected
@@ -43,7 +47,8 @@ function SearchBar(props) {
         styling={{
           borderRadius: "5pt",
           height: "28pt",
-          hoverBackgroundColor: "transparent",
+          hoverBackgroundColor: color.backgroundCream,
+          backgroundColor: color.backgroundCream,
           boxShadow: "none",
           fontSize: "1.1em",
           fontFamily: font.segoeUI,

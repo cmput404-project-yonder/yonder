@@ -133,26 +133,36 @@ export const deleteFollow = (otherAuthor) => (dispatch, getState) => {
     });
 };
 
-export const checkFollowing = (otherAuthorId) => (dispatch, getState) => {
+export const checkFollowing = (otherAuthorId, setter=null) => (dispatch, getState) => {
   const state = getState();
   const author = state.auth.author;
 
   setAxiosAuthToken(state.auth.token);
-  dispatch({ type: CHECK_FOLLOW_SUBMITTED });
+  if (setter===null) {
+    dispatch({ type: CHECK_FOLLOW_SUBMITTED });
+  }
   axios
     .get("/author/" + otherAuthorId + "/followers/" + author.id + "/")
     .then((response) => {
-      if (response.status === 200) {
-        dispatch({ type: CHECK_FOLLOW_SUCCESS, payload: true });
+
+      if (setter===null) {
+        dispatch({ type: CHECK_FOLLOW_SUCCESS, payload: true }); 
+      } else {
+        setter(true);
       }
+
+
     })
     .catch((error) => {
-      dispatch({ type: CHECK_FOLLOW_SUCCESS, payload: false });
-      // console.log(error.message);
+      if (setter===null) {
+        dispatch({ type: CHECK_FOLLOW_SUCCESS, payload: false });
+      }else {
+        setter(false);
+      }
     });
 };
 
-export const editProfile = (newProfile) => (dispatch, getState) => {
+export const editProfile = (newProfile, chainFunc=null) => (dispatch, getState) => {
   const state = getState();
   const author = state.auth.author;
 
@@ -162,6 +172,12 @@ export const editProfile = (newProfile) => (dispatch, getState) => {
     .put("/author/" + author.id + "/", newProfile)
     .then((response) => {
       dispatch({ type: CHANGE_PROFILE_SUCCESS , payload: response.data});
+      localStorage.setItem("author", JSON.stringify(response.data));
+      
+      if (chainFunc !== null) {
+        chainFunc();
+      }
+
       toast.success("You profile is changed");
     })
     .catch((error) => {

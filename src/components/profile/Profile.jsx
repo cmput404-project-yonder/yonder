@@ -190,7 +190,7 @@ class Profile extends React.Component {
             <Modal className="animate__animated animate__fadeIn animate__faster" show={this.state.editProfileModalIsOpen} onClose={()=>showEditModal(false)} closeOnBlur closeOnEsc>
               <ProfileEdit
                 onCancel={()=>showEditModal(false)}
-                editProfile={this.props.editProfile} 
+                editProfile={(newprofile) => {this.props.editProfile(newprofile, () => this.props.retrieveAuthorPosts(this.props.retrievedAuthor.id));}} 
                 displayName={this.props.retrievedAuthor.displayName}
                 githubURL={this.props.retrievedAuthor.github}
               />

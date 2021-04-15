@@ -10,6 +10,7 @@ import { SearchAuthorIcon } from "../../styling/svgIcons";
 import Dividor from "../profile/Dividor";
 import FollowButton from "./FollowButton";
 import UnfollowFollowButton from "./UnfollowButton";
+import { color } from "../../styling/ColorFontConfig";
 
 
 // local styling
@@ -23,6 +24,16 @@ var searchIconStyle = {
     zIndex: "5",
 }
 
+var shadowDividorStyle = {
+  border:"none",
+  width: "105%",
+  height: "50px",
+  boxShadow:"0 10pt 10pt -15pt rgb(0,0,0,0.3)",
+  margin: "-40pt auto -15pt",
+  marginLeft: "-1em",
+  backgroundColor: "transparent",
+}
+
 var searchTitleDivStyle = {
     height: "3em",
 }
@@ -33,20 +44,23 @@ var searchBarWrapperStyle = {
 
 var profileCardStyle = {
     padding: "1em",
+    paddingBottom: "1.5em",
     borderRadius: "8pt",
     boxShadow: "0pt 0pt 5pt rgb(0,0,0,0.1)",
     width: "80%",
     margin: "auto",
     marginTop: "0.1em",
     marginBottom: "2em",
+    backgroundColor: color.backgroundCream,
 }
 
 
 function ProfileCard(props) {
+  const[isFollowing, setIsFollowing] = useState(false);
 
   useEffect(() => {
     if (props.author) {
-      props.checkFollowing(props.author.id);
+      props.checkFollowing(props.author.id, setIsFollowing);
     }
   }, [props.author])
 
@@ -67,12 +81,13 @@ function ProfileCard(props) {
     return (
       <Container>
         <Card style={profileCardStyle} className="animate__animated animate__fadeIn animate__faster">
-          {props.isFollowing ? unfollowButton() : followButton()}
-          <p style={{fontSize: "1.4em"}}>{props.author.displayName}</p>
-          <Dividor style={dividorStyle}/>
-          <p style={{fonrSize: "1.4em"}}>{props.author.id}</p>
+          {isFollowing ? unfollowButton() : followButton()}
+          <p style={{fontSize: "1.6em"}}>@{props.author.displayName}</p>
+          
+          <p style={{fonrSize: "1.6em"}}>{props.author.id}</p>
+          <p style={{fonrSize: "1.6em"}}>{props.author.host}</p>
         </Card> 
-        <Dividor style={{...dividorStyle}}/> 
+        <hr style={{...shadowDividorStyle, marginTop: "-3em", marginBottom: "1em", backgroundColor: "transparent"}}></hr>
       </Container>
     )
   } else {
@@ -87,7 +102,7 @@ function SearchModalView(props) {
   const [selectedAuthor, setSelectedAuthor] = useState(null);
 
   return (
-    <Card style={{...cardStyle, minWidth: "18em", maxWidth: "32em", marginTop: "-20%", paddingBottom: "2.5em"}}>
+    <Card style={{...cardStyle, boxShadow: "0pt 0pt 6pt rgb(0,0,0,0.5)", position: "fixed", top: "10%", width: "88%", maxWidth: "47em", paddingBottom: "2.5em", backgroundColor: "#D17878"}} className="animate__animated animate__slideInDown">
       <Container style={searchTitleDivStyle}>
         <Container style= {searchIconStyle}>
           <SearchAuthorIcon svgScale={"55"}/>
@@ -110,7 +125,6 @@ function SearchModalView(props) {
 
 const mapStateToProps = (state) => ({
   allAuthors: state.navigation.allAuthors,
-  isFollowing: state.profile.isFollowing,
 });
 
 export default connect(mapStateToProps, { sendFollow, deleteFollow, checkFollowing })(withRouter(SearchModalView));

@@ -1,3 +1,4 @@
+import { color } from "./ColorFontConfig"
 
 export function ImageUploadIcon(props) {
     return (
@@ -61,14 +62,14 @@ export function SearchAuthorIcon(props) {
     return (
         <svg xmlns="http://www.w3.org/2000/svg" width={props.svgScale}  viewBox="0 0 103 103">
         <g id="Group_77" data-name="Group 77" transform="translate(-430.628 -45.581)">
-            <circle id="Ellipse_32" data-name="Ellipse 32" cx="51.5" cy="51.5" r="51.5" transform="translate(430.628 45.581)" fill="#e47171"/>
+            <circle id="Ellipse_32" data-name="Ellipse 32" cx="51.5" cy="51.5" r="51.5" transform="translate(430.628 45.581)" fill={color.backgroundCreamLighter}/>
             <g id="online-resume" transform="translate(452.56 67.513)">
-            <path id="Path_175" data-name="Path 175" d="M57.4,9.24H52.091V8.663A8.672,8.672,0,0,0,43.429,0H8.778A1.733,1.733,0,0,0,7.046,1.733V9.24H1.733A1.733,1.733,0,0,0,0,10.973V47.933a1.733,1.733,0,0,0,1.733,1.733h18.7l-1.465,6.006h-2.1a1.733,1.733,0,0,0,0,3.465h25.41a1.733,1.733,0,1,0,0-3.465h-2.1L38.7,49.666H57.4a1.733,1.733,0,0,0,1.733-1.733V10.973A1.733,1.733,0,0,0,57.4,9.24ZM45.161,3.763A5.222,5.222,0,0,1,48.328,6.93H45.161Zm-34.651-.3H41.7v5.2A1.733,1.733,0,0,0,43.429,10.4h5.2V39.271H10.511Zm-7.046,9.24H7.046V39.271H3.465ZM22.534,55.672,24,49.666H35.138L36.6,55.672ZM55.672,46.2H3.465V42.736H55.672Zm0-6.93H52.091V12.705h3.581Z" fill="#f9dddd"/>
-            <path id="Path_176" data-name="Path 176" d="M122.733,78.1h18.48a1.733,1.733,0,0,0,1.733-1.733,10.983,10.983,0,0,0-5.9-9.726,6.93,6.93,0,1,0-10.151,0,10.983,10.983,0,0,0-5.9,9.726A1.733,1.733,0,0,0,122.733,78.1Zm9.24-19.635a3.465,3.465,0,1,1-3.465,3.465A3.469,3.469,0,0,1,131.973,58.465Zm0,10.4a7.521,7.521,0,0,1,7.306,5.775H124.667A7.521,7.521,0,0,1,131.973,68.86Z" transform="translate(-107.024 -48.647)" fill="#f9dddd"/>
-            <path id="Path_177" data-name="Path 177" d="M337.353,115h-4.62a1.733,1.733,0,1,0,0,3.465h4.62a1.733,1.733,0,0,0,0-3.465Z" transform="translate(-292.769 -101.717)" fill="#f9dddd"/>
-            <path id="Path_178" data-name="Path 178" d="M337.353,170h-4.62a1.733,1.733,0,1,0,0,3.465h4.62a1.733,1.733,0,0,0,0-3.465Z" transform="translate(-292.769 -150.365)" fill="#f9dddd"/>
-            <path id="Path_179" data-name="Path 179" d="M337.353,225h-4.62a1.733,1.733,0,1,0,0,3.465h4.62a1.733,1.733,0,0,0,0-3.465Z" transform="translate(-292.769 -199.012)" fill="#f9dddd"/>
-            <path id="Path_180" data-name="Path 180" d="M142.763,280h-30.03a1.733,1.733,0,1,0,0,3.465h30.03a1.733,1.733,0,1,0,0-3.465Z" transform="translate(-98.179 -247.659)" fill="#f9dddd"/>
+            <path id="Path_175" data-name="Path 175" d="M57.4,9.24H52.091V8.663A8.672,8.672,0,0,0,43.429,0H8.778A1.733,1.733,0,0,0,7.046,1.733V9.24H1.733A1.733,1.733,0,0,0,0,10.973V47.933a1.733,1.733,0,0,0,1.733,1.733h18.7l-1.465,6.006h-2.1a1.733,1.733,0,0,0,0,3.465h25.41a1.733,1.733,0,1,0,0-3.465h-2.1L38.7,49.666H57.4a1.733,1.733,0,0,0,1.733-1.733V10.973A1.733,1.733,0,0,0,57.4,9.24ZM45.161,3.763A5.222,5.222,0,0,1,48.328,6.93H45.161Zm-34.651-.3H41.7v5.2A1.733,1.733,0,0,0,43.429,10.4h5.2V39.271H10.511Zm-7.046,9.24H7.046V39.271H3.465ZM22.534,55.672,24,49.666H35.138L36.6,55.672ZM55.672,46.2H3.465V42.736H55.672Zm0-6.93H52.091V12.705h3.581Z" fill={color.baseLightGrey}/>
+            <path id="Path_176" data-name="Path 176" d="M122.733,78.1h18.48a1.733,1.733,0,0,0,1.733-1.733,10.983,10.983,0,0,0-5.9-9.726,6.93,6.93,0,1,0-10.151,0,10.983,10.983,0,0,0-5.9,9.726A1.733,1.733,0,0,0,122.733,78.1Zm9.24-19.635a3.465,3.465,0,1,1-3.465,3.465A3.469,3.469,0,0,1,131.973,58.465Zm0,10.4a7.521,7.521,0,0,1,7.306,5.775H124.667A7.521,7.521,0,0,1,131.973,68.86Z" transform="translate(-107.024 -48.647)" fill={color.baseLightGrey}/>
+            <path id="Path_177" data-name="Path 177" d="M337.353,115h-4.62a1.733,1.733,0,1,0,0,3.465h4.62a1.733,1.733,0,0,0,0-3.465Z" transform="translate(-292.769 -101.717)" fill={color.baseLightGrey}/>
+            <path id="Path_178" data-name="Path 178" d="M337.353,170h-4.62a1.733,1.733,0,1,0,0,3.465h4.62a1.733,1.733,0,0,0,0-3.465Z" transform="translate(-292.769 -150.365)" fill={color.baseLightGrey}/>
+            <path id="Path_179" data-name="Path 179" d="M337.353,225h-4.62a1.733,1.733,0,1,0,0,3.465h4.62a1.733,1.733,0,0,0,0-3.465Z" transform="translate(-292.769 -199.012)" fill={color.baseLightGrey}/>
+            <path id="Path_180" data-name="Path 180" d="M142.763,280h-30.03a1.733,1.733,0,1,0,0,3.465h30.03a1.733,1.733,0,1,0,0-3.465Z" transform="translate(-98.179 -247.659)" fill={color.baseLightGrey}/>
             </g>
         </g>
         </svg>
@@ -248,6 +249,39 @@ export function DeletedPostIcon(props) {
         </g>
         </svg>
 
+
+    )
+}
+
+export function InfoIcon(props) {
+    // https://www.flaticon.com/authors/smalllikeart
+    // Flaticon License
+    // Free for personal and commercial purpose with attribution.
+    return (
+        <svg xmlns="http://www.w3.org/2000/svg" width={props.svgScale} viewBox="0 0 60 60">
+        <g id="view" transform="translate(-2 -2)">
+            <path id="Path_400" data-name="Path 400" d="M6,6H8V8H6Z"/>
+            <path id="Path_401" data-name="Path 401" d="M10,6h2V8H10Z"/>
+            <path id="Path_402" data-name="Path 402" d="M14,6h2V8H14Z"/>
+            <path id="Path_403" data-name="Path 403" d="M56,48H8a1,1,0,0,0-1,1v4a1,1,0,0,0,1,1H56a1,1,0,0,0,1-1V49A1,1,0,0,0,56,48ZM9,50H41v2H9Zm46,2H43V50H55Z"/>
+            <path id="Path_404" data-name="Path 404" d="M55,44h2v2H55Z"/>
+            <path id="Path_405" data-name="Path 405" d="M51,44h2v2H51Z"/>
+            <path id="Path_406" data-name="Path 406" d="M47,44h2v2H47Z"/>
+            <path id="Path_407" data-name="Path 407" d="M43,44h2v2H43Z"/>
+            <path id="Path_408" data-name="Path 408" d="M57,14H7a1,1,0,0,0-1,1V41a1,1,0,0,0,1,1H57a1,1,0,0,0,1-1V15A1,1,0,0,0,57,14ZM56,40H8V16H56Z"/>
+            <path id="Path_409" data-name="Path 409" d="M61,2H3A1,1,0,0,0,2,3V61a1,1,0,0,0,1,1H61a1,1,0,0,0,1-1V3A1,1,0,0,0,61,2Zm-1,8H20V4H60ZM4,4H18v6H4ZM4,60V12H60V60Z"/>
+            <path id="Path_410" data-name="Path 410" d="M7,56H28v2H7Z"/>
+            <path id="Path_411" data-name="Path 411" d="M30,56h6v2H30Z"/>
+            <path id="Path_412" data-name="Path 412" d="M38,56H57v2H38Z"/>
+            <path id="Path_413" data-name="Path 413" d="M32,22c-6.407,0-10.6,5.156-10.781,5.375a1,1,0,0,0,0,1.25C21.4,28.844,25.593,34,32,34s10.6-5.156,10.781-5.375a1,1,0,0,0,0-1.25C42.6,27.156,38.407,22,32,22Zm0,10c-4.2,0-7.4-2.739-8.646-4C24.6,26.734,27.783,24,32,24c4.2,0,7.4,2.739,8.646,4C39.4,29.266,36.217,32,32,32Z"/>
+            <path id="Path_414" data-name="Path 414" d="M36,28a4,4,0,1,0-4,4A4,4,0,0,0,36,28Zm-4,2a2,2,0,1,1,2-2A2,2,0,0,1,32,30Z"/>
+            <path id="Path_415" data-name="Path 415" d="M17,38H47a1,1,0,0,0,1-1V19a1,1,0,0,0-1-1H17a1,1,0,0,0-1,1V37A1,1,0,0,0,17,38Zm1-18H46V36H18Z"/>
+            <path id="Path_416" data-name="Path 416" d="M12,20h2V18H11a1,1,0,0,0-1,1v7h2Z"/>
+            <path id="Path_417" data-name="Path 417" d="M10,28h2v2H10Z"/>
+            <path id="Path_418" data-name="Path 418" d="M54,37V32H52v4H50v2h3A1,1,0,0,0,54,37Z"/>
+            <path id="Path_419" data-name="Path 419" d="M52,18h2v2H52Z"/>
+        </g>
+        </svg>
 
     )
 }

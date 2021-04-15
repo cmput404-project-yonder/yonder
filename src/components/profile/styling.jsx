@@ -63,7 +63,7 @@ var style = {
 };
 
 var font = {
-  segoeUI: "Segoe UI,Frutiger,Frutiger Linotype,Dejavu Sans,Helvetica Neue,Arial,sans-serif",
+  segoeUI: "Arial",
 }
 
 export { color, style,font };

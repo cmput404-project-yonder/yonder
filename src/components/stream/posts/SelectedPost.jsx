@@ -14,10 +14,10 @@ import EditPostForm from "./EditPostForm";
 import SharingPostPrompt from "./SharingPostPrompt";
 import { updatePost, deletePost, likePost, sharePost } from '../StreamActions';
 
-import { retrievePost, createComment, retrieveCommentList,updateRetrivedPost, sendCommentQuery } from "./PostActions";
+import { retrievePost, createComment, retrieveCommentList,updateRetrivedPost, sendCommentQuery,likeComment,retrieveCommentLikes } from "./PostActions";
 import { Redirect } from "react-router-dom";
 
-import { DetailedPostIcon,PostCommentsIcon } from "../../../styling/svgIcons";
+import { DetailedPostIcon,InfoIcon } from "../../../styling/svgIcons";
 import { retrievePostLikes } from "./PostActions";
 import { toast } from "react-toastify";
 
@@ -31,6 +31,19 @@ var localCardStyle = {
   ...postStyle,
   minWidth: "400pt",
   borderRadius: "12pt",
+}
+
+var menuDropDownStyle = {
+  borderRadius: "5pt",
+  textAlign: "left",
+  fontSize: "0.7em",
+  padding: "0.7em",
+  paddingBottom: "0.9em",
+  backgroundColor: "white",
+  color: color.baseLightGrey,
+  fontWeight: "400",
+  borderWidth: "1pt",
+  border: "1pt solid" + color.baseLightGrey,
 }
 
 var wrapperStyle = {
@@ -110,6 +123,73 @@ class PostLikeButtonPolling extends React.Component {
       <LikedButton count={this.state.likeCount} action={() => this.likedToggle()}/>
     )
   }
+
+}
+
+class CommentLikeNoPolling extends React.Component {
+  // props.comment
+  // props.post
+  // props.likeComment()
+  // props.retrieveCommentLikes()
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      likeCount: 0,
+    }
+  }
+
+  likeCommentCall = () => {
+    // like a comment, then return the newest like count
+
+    if ((this.props.auth !== undefined)&&(this.props.auth.isAuthenticated)) {
+      // call the action here
+      this.props.likeComment(
+        this.props.post, 
+        this.props.comment,
+        ()=>{
+          this.props.retrieveCommentLikes(
+            this.props.comment,
+            (dataList)=> {
+              this.setState({likeCount: dataList.items.length});
+            }
+          )
+        }
+      )
+    }
+  }
+
+  likeButtonAction = () => {
+    // like a post, and trigger a event to retrive likes after backend responded.
+    this.likeCommentCall();
+  }
+
+  componentDidMount() {
+    this.props.retrieveCommentLikes(
+      this.props.comment,
+      (dataList)=> {
+        this.setState({likeCount: dataList.items.length});
+      }
+    )
+  }
+
+  componentDidUpdate(prevProps) {
+    if (prevProps.comment.id !== this.props.comment.id) {
+      this.props.retrieveCommentLikes(
+        this.props.comment,
+        (dataList)=> {
+          this.setState({likeCount: dataList.items.length});
+        }
+      )
+    }
+  }
+
+  render() {
+    return (
+      <LikedButton count={this.state.likeCount} action={() => this.likeButtonAction()}/>
+    )
+  }
+
 
 }
 
@@ -206,6 +286,48 @@ function DetailedPostList(props) {
   }
 
   const PostCard = () => {
+
+
+    const TitleWithDropDown = () => {
+      // show author id , post id, and displayname
+      return (
+        <Container style={{width: "100%"}}>
+        <div class="dropdown is-hoverable is-right is-up" style={{width: "100%"}} >
+          <div class="dropdown-trigger" style={{width: "100%"}}>
+            <span
+              style={{backgroundColor: "transparent", border: "none", fill: color.baseRed, padding: "0", width: "100%"}}
+            >
+              
+              <Container style={signatureStyle}>
+                <p style={{ fontWeight: "250" }}>@{props.post.author.displayName}</p>
+                <p>·</p>
+                <p>{getDateString(Date.parse(props.post.published))}</p>
+              </Container>
+              <Container style={postTitleStyle}>
+                <p style={{textDecoration: "none", color: color.baseBlack}}>{props.post.title}</p>
+              </Container>
+
+
+            </span>
+          </div>
+          <div class="dropdown-menu animate__animated animate__fadeIn animate__faster" style={{minWidth: "22em", marginBottom: "0pt", marginLeft: "-10pt"}}>
+            <div class="dropdown-content"style={menuDropDownStyle}>
+              <Container style={{float: "left", fill: color.baseLightGrey, padding: "0.2em", paddingRight: "1em"}}>
+                <InfoIcon svgScale={"55"}/>
+              </Container>
+              <p>  
+                Author ID: {props.post.author.id} <br></br>
+                Post ID: {props.post.id}<br></br>
+                {dateFormat(props.post.published, "dddd, mmmm dS, yyyy, h:MM TT")}
+              </p>
+            </div>
+          </div>
+        </div>    
+        </Container>  
+      )
+    }
+
+
     return (
       <Card style={localCardStyle}>
         <Container style={{fill: color.baseLightGrey,textAlign: "center", width: "100%", padding: "1.2em"}}>
@@ -215,14 +337,7 @@ function DetailedPostList(props) {
           <Card.Content style={postContainerStyle}>
 
               {/* Title */}
-              <Container style={signatureStyle}>
-                <p style={{ fontWeight: "250" }}>@{props.post.author.displayName}</p>
-                <p>·</p>
-                <p>{getDateString(Date.parse(props.post.published))}</p>
-              </Container>
-              <Container style={postTitleStyle}>
-                <p style={{textDecoration: "none", color: color.baseBlack}}>{props.post.title}</p>
-              </Container>
+              <TitleWithDropDown/>
               
               {/* Description */}
               <Container style = {DescriptionStyle}>  
@@ -255,7 +370,6 @@ function DetailedPostList(props) {
 
 }
 
-
 class CommentCard extends React.Component {
   constructor(props) {
     super(props);
@@ -274,7 +388,6 @@ class CommentCard extends React.Component {
       if ((this.props.auth !== undefined)&&(this.props.auth.isAuthenticated)) {
 
         this.props.sendCommentQuery(this.props.post, page, this.pageSize, (data)=>{
-          console.log(data)
           if (data) {
             this.setState({
               comments: data.items,
@@ -299,7 +412,7 @@ class CommentCard extends React.Component {
       console.log("props:", props);
       // display one comment
       return (
-        <Container style={{...wrapperStyle, marginBottom: "0.6em"}}>
+        <Container style={{...wrapperStyle, marginBottom: "0.9em", marginTop: "0.2em"}}>
           <Container style={postContainerStyle}>
 
             {/* Date */}
@@ -312,6 +425,15 @@ class CommentCard extends React.Component {
             {/* Content */}
             <p style={postContentStyle}><Markdown>{props.content}</Markdown></p>
             
+          </Container>
+          <Container style={{textAlign: "right", marginRight: "-1em", marginTop: "-1.2em"}}>
+            <CommentLikeNoPolling
+              retrieveCommentLikes={this.props.retrieveCommentLikes}
+              likeComment={this.props.likeComment}
+              comment={props.comment}
+              post={this.props.post}
+              auth={this.props.auth}
+            />
           </Container>
         </Container>
       )
@@ -327,6 +449,7 @@ class CommentCard extends React.Component {
             authorName={acomment.author.displayName}
             published={acomment.published}
             content={acomment.comment}
+            comment={acomment}
           />
       );
   
@@ -441,6 +564,8 @@ class SelectedPost extends React.Component {
                     auth={this.props.auth}
                     post={this.props.retrievedPost} 
                     sendCommentQuery={this.props.sendCommentQuery}
+                    retrieveCommentLikes={this.props.retrieveCommentLikes}
+                    likeComment={this.props.likeComment}
                   />              
                 </List>
               </div>
@@ -490,5 +615,7 @@ export default connect(mapStateToProps, {
   likePost, 
   sharePost, 
   createComment, 
-  retrieveCommentList
+  retrieveCommentList,
+  retrieveCommentLikes,
+  likeComment,
 })(withRouter(SelectedPost));
