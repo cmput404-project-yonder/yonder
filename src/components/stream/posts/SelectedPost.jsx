@@ -14,7 +14,7 @@ import EditPostForm from "./EditPostForm";
 import SharingPostPrompt from "./SharingPostPrompt";
 import { updatePost, deletePost, likePost, sharePost } from '../StreamActions';
 
-import { retrievePost, createComment, retrieveCommentList,updateRetrivedPost, sendCommentQuery } from "./PostActions";
+import { retrievePost, createComment, retrieveCommentList,updateRetrivedPost, sendCommentQuery,likeComment,retrieveCommentLikes } from "./PostActions";
 import { Redirect } from "react-router-dom";
 
 import { DetailedPostIcon,PostCommentsIcon } from "../../../styling/svgIcons";
@@ -113,45 +113,72 @@ class PostLikeButtonPolling extends React.Component {
 
 }
 
-// class CommentLikeNoPolling extends React.Component {
-//   constructor(props) {
-//     super(props);
-//     this.state = {
-//       likeCount: 0,
-//     }
-//   }
+class CommentLikeNoPolling extends React.Component {
+  // props.comment
+  // props.post
+  // props.likeComment()
+  // props.retrieveCommentLikes()
 
-//   setLikeCount = (s) => {
-//     this.setState({likeCount: s});
-//   }
+  constructor(props) {
+    super(props);
+    this.state = {
+      likeCount: 0,
+    }
+  }
 
-//   likeCommentCall = (comment) => {
-//     // like a comment, then return the newest like count
+  likeCommentCall = () => {
+    // like a comment, then return the newest like count
 
-//     if ((this.props.auth !== undefined)&&(this.props.auth.isAuthenticated)) {
-//       // call the action here
+    if ((this.props.auth !== undefined)&&(this.props.auth.isAuthenticated)) {
+      // call the action here
+      this.props.likeComment(
+        this.props.post, 
+        this.props.comment,
+        ()=>{
+          this.props.retrieveCommentLikes(
+            this.props.comment,
+            (dataList)=> {
+              this.setState({likeCount: dataList.items.length});
+            }
+          )
+        }
+      )
+    }
+  }
 
-//       // request(comment, (length)=>setLikeCount)
+  likeButtonAction = () => {
+    // like a post, and trigger a event to retrive likes after backend responded.
+    this.likeCommentCall();
+  }
 
-//     }
-//   }
+  componentDidMount() {
+    this.props.retrieveCommentLikes(
+      this.props.comment,
+      (dataList)=> {
+        this.setState({likeCount: dataList.items.length});
+      }
+    )
+  }
+
+  componentDidUpdate(prevProps) {
+    if (prevProps.comment.id !== this.props.comment.id) {
+      this.props.retrieveCommentLikes(
+        this.props.comment,
+        (dataList)=> {
+          this.setState({likeCount: dataList.items.length});
+        }
+      )
+    }
+  }
+
+  render() {
+    return (
+      <LikedButton count={this.state.likeCount} action={() => this.likeButtonAction()}/>
+    )
+  }
 
 
-
-//   commentLikeSetter = (likeList) => {
-//     this.setLikeCount(likeList.items.length);
-//   }
-
-//   likedToggle = () => {
-//     // like a post, and trigger a event to retrive likes after backend responded.
-//     this.likeCommentCall(this.props.comment, () => this.likeCommentCall(this.props.comment, this.commentLikeSetter));
-//   }
-
-//   componentDidMount() {
-//     this.likeCommentCall
-//   }
-
-// }
+}
 
 function DetailedPostList(props) {
 
@@ -295,7 +322,6 @@ function DetailedPostList(props) {
 
 }
 
-
 class CommentCard extends React.Component {
   constructor(props) {
     super(props);
@@ -353,6 +379,13 @@ class CommentCard extends React.Component {
             <p style={postContentStyle}><Markdown>{props.content}</Markdown></p>
             
           </Container>
+          <CommentLikeNoPolling
+            retrieveCommentLikes={this.props.retrieveCommentLikes}
+            likeComment={this.props.likeComment}
+            comment={props.comment}
+            post={this.props.post}
+            auth={this.props.auth}
+          />
         </Container>
       )
     }
@@ -367,6 +400,7 @@ class CommentCard extends React.Component {
             authorName={acomment.author.displayName}
             published={acomment.published}
             content={acomment.comment}
+            comment={acomment}
           />
       );
   
@@ -481,6 +515,8 @@ class SelectedPost extends React.Component {
                     auth={this.props.auth}
                     post={this.props.retrievedPost} 
                     sendCommentQuery={this.props.sendCommentQuery}
+                    retrieveCommentLikes={this.props.retrieveCommentLikes}
+                    likeComment={this.props.likeComment}
                   />              
                 </List>
               </div>
@@ -530,5 +566,7 @@ export default connect(mapStateToProps, {
   likePost, 
   sharePost, 
   createComment, 
-  retrieveCommentList
+  retrieveCommentList,
+  retrieveCommentLikes,
+  likeComment,
 })(withRouter(SelectedPost));

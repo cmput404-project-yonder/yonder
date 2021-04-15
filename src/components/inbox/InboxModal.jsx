@@ -86,7 +86,7 @@ function InboxModal (props){
     }  
 
     return (
-        <Card style={{...cardStyle, backgroundColor: color.backgroundCreamLighter, width: "420pt", height: "462pt"}} className="animate__animated animate__slideInDown">
+        <Card style={{...cardStyle, backgroundColor: color.backgroundCreamLighter, width: "420pt", height: "47.5em"}} className="animate__animated animate__slideInDown">
             
             {/* <Container style={inboxIconStyle}>
                 <InboxModalIcon svgScale={"75"}/>

@@ -193,3 +193,90 @@ export const retrievePostLikes = (post, setterFunction) => (dispatch, getState) 
       }
     });
 }
+
+export const likeComment = (post, comment, chainFunc=null) => (dispatch, getState) => {
+  const state = getState();
+  const requestAuthor = state.auth.author;
+
+  const commentLike = {
+    type: "like",
+    author: {
+      ...requestAuthor,
+      type: "author",
+      id: requestAuthor.id,
+      url: requestAuthor.host + "api/author/" + requestAuthor.id,
+    },
+    object: post.author.host + "api/author/" + post.author.id + "/posts/" + post.id + "/comments/" + comment.id + "/",
+    host: post.author.host,
+  }
+
+  setAxiosAuthToken(state.auth.token);
+  axios
+  .post("/author/" + post.author.id + "/inbox/", commentLike)
+    .then((response) => {
+      chainFunc();
+    })
+    .catch((error) => {
+      if (error.response) {
+
+        // handles specific status code
+        switch (error.response.status) {
+          case 409:
+            toast.error("You already liked this comment");
+            break;
+          case 404:
+            break;
+          case 401:
+            // too deep in the rabbit hole
+            // like polling is handled by post.jsx
+            // if 401 happends, then we just ignore it, this error will eventually cought by navigationbar
+            // and redirect user to login.
+            break;
+          default:
+            toast.error(JSON.stringify(error.response.data));
+            break;
+        }
+      } else if (error.message) {
+        toast.error(JSON.stringify(error.message));
+      } else {
+        toast.error(JSON.stringify(error));
+      }
+    });
+}
+
+export const retrieveCommentLikes = (comment, setter) => (dispatch, getState) => {
+  const state = getState();
+
+  const requestAuthor = state.auth.author;
+
+  setAxiosAuthToken(state.auth.token);
+  axios
+    .get("/author/" + requestAuthor.id + "/posts/" + comment.post + "/comments/" + comment.id + "/likes/")
+    .then((response) => {
+      console.log("THIS");
+      console.log(response.data);
+      setter(response.data);
+    })
+    .catch((error) => {
+      if (error.response) {
+        // handles specific status code
+        switch (error.response.status) {
+          case 404:
+            break;
+          case 401:
+            // too deep in the rabbit hole
+            // like polling is handled by post.jsx
+            // if 401 happends, then we just ignore it, this error will eventually cought by navigationbar
+            // and redirect user to login.
+            break;
+          default:
+            toast.error(JSON.stringify(error.response.data));
+            break;
+        }
+      } else if (error.message) {
+        toast.error(JSON.stringify(error.message));
+      } else {
+        toast.error(JSON.stringify(error));
+      }
+    });
+}
