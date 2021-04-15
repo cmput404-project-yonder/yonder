@@ -388,7 +388,6 @@ class CommentCard extends React.Component {
       if ((this.props.auth !== undefined)&&(this.props.auth.isAuthenticated)) {
 
         this.props.sendCommentQuery(this.props.post, page, this.pageSize, (data)=>{
-          console.log(data)
           if (data) {
             this.setState({
               comments: data.items,

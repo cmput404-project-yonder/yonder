@@ -8,7 +8,7 @@ import {color} from "../../styling/ColorFontConfig";
 
 // local styling
 var buttonStyle = {
-    scale: "26",
+    scale: "31",
     style: {
       fill: color.buttonRed,
       paddingTop: "3pt",

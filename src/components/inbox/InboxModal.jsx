@@ -97,7 +97,9 @@ function InboxModal (props){
             <hr style={{...shadowDividorStyle, marginTop: "-1.2em", backgroundColor: "transparent"}}></hr>
             
             <Card.Content style={{marginTop: "0.8em", marginBottom: "3.2em"}}>
-                <Inbox selectedTab={tabSelected}/> 
+                <Container className="animate__animated animate__headShake" key={tabSelected}>
+                <Inbox selectedTab={tabSelected} /> 
+                </Container>
             </Card.Content>
             <hr style={{...shadowDividorStyle, transform: "rotate(180deg)", backgroundColor: "transparent"}}></hr>
             <div style={{marginTop: "-3.7em"}}>

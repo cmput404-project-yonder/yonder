@@ -133,22 +133,32 @@ export const deleteFollow = (otherAuthor) => (dispatch, getState) => {
     });
 };
 
-export const checkFollowing = (otherAuthorId) => (dispatch, getState) => {
+export const checkFollowing = (otherAuthorId, setter=null) => (dispatch, getState) => {
   const state = getState();
   const author = state.auth.author;
 
   setAxiosAuthToken(state.auth.token);
-  dispatch({ type: CHECK_FOLLOW_SUBMITTED });
+  if (setter===null) {
+    dispatch({ type: CHECK_FOLLOW_SUBMITTED });
+  }
   axios
     .get("/author/" + otherAuthorId + "/followers/" + author.id + "/")
     .then((response) => {
-      if (response.status === 200) {
-        dispatch({ type: CHECK_FOLLOW_SUCCESS, payload: true });
+
+      if (setter===null) {
+        dispatch({ type: CHECK_FOLLOW_SUCCESS, payload: true }); 
+      } else {
+        setter(true);
       }
+
+
     })
     .catch((error) => {
-      dispatch({ type: CHECK_FOLLOW_SUCCESS, payload: false });
-      // console.log(error.message);
+      if (setter===null) {
+        dispatch({ type: CHECK_FOLLOW_SUCCESS, payload: false });
+      }else {
+        setter(false);
+      }
     });
 };
 

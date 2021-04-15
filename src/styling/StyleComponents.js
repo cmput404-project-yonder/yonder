@@ -44,7 +44,7 @@ export const cardStyle = {
     borderRadius: "8pt",
     width: "450pt",
     height: "auto",
-    boxShadow: "0pt 0pt 8pt rgb(0,0,0,0.5)",
+    boxShadow: "0pt 0pt 8pt rgb(0,0,0,0.4)",
     backgroundColor: color.backgroundCream,
   }
 
