@@ -44,12 +44,12 @@ class Command(BaseCommand):
             data["source"] = authorJSON["host"]
             data["origin"] = authorJSON["host"]
             data["description"] = "Auto created by Yonder :)"
-            data["contentType"] = "text/plain"
+            data["contentType"] = "text/markdown"
             data["categories"] = ["github"]
             data["unlisted"] = False
             data["visibility"] = "PUBLIC"
             repoUrl = "https://github.com/" + event["repo"]["name"]
-            data["content"] = "Check it out here " + repoUrl
+            data["content"] = "[Check it out here]" + "(" + repoUrl + ")"
 
             if event["type"] == "WatchEvent":
                 data["title"] = "I starred " + event["repo"]["name"] + random.choice(RANDOM_TITLE)
