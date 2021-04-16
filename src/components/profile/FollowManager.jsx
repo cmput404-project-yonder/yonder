@@ -89,6 +89,9 @@ class FollowManager extends React.Component {
       if (followers.length === 0) {
         return (
           <Container style={{textAlign: "center", marginRight: "1em", marginTop: "40%"}}>
+            <Container style={{fill: color.baseLightGrey}}>
+              <InboxEmptyIcon svgScale={"80"}/>  
+            </Container>
             <p style={{fontSize: "2em", color: color.baseLightGrey}}>Empty</p>
           </Container>
         );
