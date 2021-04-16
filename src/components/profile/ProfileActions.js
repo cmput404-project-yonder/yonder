@@ -14,7 +14,6 @@ import {
   DELETE_FOLLOW_ERROR,
   DELETE_FOLLOW_SUCCESS,
   CHECK_FOLLOW_SUBMITTED,
-  CHECK_FOLLOW_ERROR,
   CHECK_FOLLOW_SUCCESS,
   CHANGE_PROFILE_SUBMITTED,
   CHANGE_PROFILE_ERROR,
@@ -72,7 +71,7 @@ export const retrieveAuthorPosts = (authorId) => (dispatch, getState) => {
     });
 };
 
-export const sendFollow = (otherAuthor) => (dispatch, getState) => {
+export const sendFollow = (otherAuthor, chainFunc=null) => (dispatch, getState) => {
   const state = getState();
   const author = state.auth.author;
   const data = {"actor": author, "object": otherAuthor, "type": "follow"}
@@ -84,7 +83,9 @@ export const sendFollow = (otherAuthor) => (dispatch, getState) => {
     .then((response) => {
       dispatch({ type: SEND_FOLLOW_SUCCESS });
       toast.success("You are now following " + otherAuthor.displayName);
-
+      if (chainFunc !== null) {
+        chainFunc();
+      }
       return response.status;
     })
     .catch((error) => {
@@ -103,7 +104,7 @@ export const sendFollow = (otherAuthor) => (dispatch, getState) => {
     });
 };
 
-export const deleteFollow = (otherAuthor) => (dispatch, getState) => {
+export const deleteFollow = (otherAuthor, chainFunc=null) => (dispatch, getState) => {
   const state = getState();
   const author = state.auth.author;
 
@@ -114,7 +115,9 @@ export const deleteFollow = (otherAuthor) => (dispatch, getState) => {
     .then((response) => {
       dispatch({ type: DELETE_FOLLOW_SUCCESS });
       toast.success("You are no longer following " + otherAuthor.displayName);
-
+      if (chainFunc !==null) {
+        chainFunc();
+      }
       return response.status;
     })
     .catch((error) => {
@@ -196,6 +199,7 @@ export const editProfile = (newProfile, chainFunc=null) => (dispatch, getState) 
 };
 
 export const getFollowers = (authorID, setter) => (dispatch, getState) => {
+  // 
   const state = getState();
   
   setAxiosAuthToken(state.auth.token);
@@ -208,8 +212,12 @@ export const getFollowers = (authorID, setter) => (dispatch, getState) => {
     })
     .catch((error) => {
       if (error.response) {
-        // 
-        setter(null);
+        if (error.response.status === 404) {
+          setter([]);   // no one is following you
+        } else {
+          setter(null);
+        }
+        
       }
     });
 }
@@ -223,7 +231,12 @@ export const getFriends = (authorID, setter) => (dispatch, getState) => {
     .then((response) => {
       // console.log("friends");
       // console.log(response.data);
+      if (response.status === 204) {
+        setter([]);
+      } else {
         setter(response.data);
+      }
+        
     })
     .catch((error) => {
       if (error.response) {

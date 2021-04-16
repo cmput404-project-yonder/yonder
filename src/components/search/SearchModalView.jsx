@@ -7,7 +7,6 @@ import { sendFollow, deleteFollow, checkFollowing } from "../profile/ProfileActi
 import { connect } from "react-redux";
 
 import { SearchAuthorIcon } from "../../styling/svgIcons";
-import Dividor from "../profile/Dividor";
 import FollowButton from "./FollowButton";
 import UnfollowFollowButton from "./UnfollowButton";
 import { color } from "../../styling/ColorFontConfig";
@@ -66,13 +65,13 @@ function ProfileCard(props) {
 
   const followButton = () => {
     return (
-      <FollowButton onClick={()=>props.follow(props.author)} style={{float: "right", marginTop: "-8pt", marginRight: "-8pt"}}/>
+      <FollowButton onClick={()=>props.follow(props.author, ()=> window.location.pathname = window.location.pathname)} style={{float: "right", marginTop: "-8pt", marginRight: "-8pt"}}/>
     )
   }
 
   const unfollowButton = () => {
     return (
-      <UnfollowFollowButton onClick={()=>props.unfollow(props.author)} style={{float: "right", marginTop: "-8pt", marginRight: "-8pt"}}/>
+      <UnfollowFollowButton onClick={()=>props.unfollow(props.author, ()=> window.location.pathname = window.location.pathname)} style={{float: "right", marginTop: "-8pt", marginRight: "-8pt"}}/>
     )
   }
 
