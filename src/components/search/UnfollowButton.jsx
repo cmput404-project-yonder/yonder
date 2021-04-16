@@ -17,7 +17,7 @@ var buttonStyle = {
     button: {
       height: "2.5em",
       width: "2.5em",
-      borderRadius: "100%",
+      borderRadius: "6pt",
       backgroundColor: "transparent",
       border: "none",
     }

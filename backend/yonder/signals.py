@@ -1,8 +1,9 @@
 from .models import Author, AuthorFollower, AuthorFriend, Post, Inbox, RemoteNode, Like
 from .serializers import AuthorSerializer, AuthorFriendSerializer, PostSerializer, LikeSerializer
-from django.db.models.signals import post_save, pre_save
+from django.db.models.signals import post_save, pre_save, post_delete
 from django.dispatch import receiver
 from django.contrib.auth.models import User
+from django.shortcuts import get_object_or_404
 import uuid
 import requests
 import re
@@ -120,3 +121,20 @@ def create_inbox(sender, instance, **kwargs):
 def set_inactive(sender, instance, **kwargs):
     if instance.pk == None and not instance.is_staff and not instance.is_superuser:
         instance.is_active = False
+
+@receiver(post_delete, sender=AuthorFollower)
+def delete_friend(sender, instance, **kwargs):
+    
+    try:
+        authorA_friend = AuthorFriend.objects.get(author_id = instance.author_id, friend = instance.follower)
+        authorA_friend.delete()
+        authorA = Author.objects.get(id=instance.author_id)
+        authorA_JSON = AuthorSerializer(instance=authorA).data
+        authorB_friend = AuthorFriend.objects.get(author_id = instance.follower["id"], friend = authorA_JSON)
+        authorB_friend.delete()
+
+    except AuthorFriend.DoesNotExist:
+        print("Users are already not friends")
+
+    except Author.DoesNotExist:
+        print("Author does not exist in database")

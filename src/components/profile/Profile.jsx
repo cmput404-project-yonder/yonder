@@ -14,13 +14,11 @@ import UnfollowButton from "./buttons/UnfollowButton";
 import EditProfileButton from "./buttons/EditButton";
 import FollowManagerButton from "./buttons/FollowManagerButton";
 import ProfileEdit from "./ProfileEdit";
-import FollwoManager from "./FollowManager";
 // import FriendButton from "./buttons/FriendButton";
 
 import { color } from "../../styling/ColorFontConfig";
 import { postStyle } from "../../styling/StyleComponents";
 import { ProfileIconBoy } from "../../styling/svgIcons";
-import { Redirect } from "react-router-dom";
 
 import {updatePost, sharePost, likePost, deletePost} from "../stream/StreamActions";
 import FollowManager from "./FollowManager";
@@ -141,16 +139,12 @@ class Profile extends React.Component {
         // redirect to login
         window.location.href = '/login'
       } else {
-        const status_code = this.props.sendFollow(this.props.retrievedAuthor);
-        if (status_code === 201) {
-          this.setState({ isFollowing: true });
-        }
+        this.props.sendFollow(this.props.retrievedAuthor, ()=> window.location.pathname = window.location.pathname);
       }
     };
 
     const clickUnfollow = () => {
-      this.props.deleteFollow(this.props.retrievedAuthor);
-      this.setState({ isFollowing: false });
+      this.props.deleteFollow(this.props.retrievedAuthor, ()=> window.location.pathname = window.location.pathname);
     }
 
     const showEditModal = (modalState) => {

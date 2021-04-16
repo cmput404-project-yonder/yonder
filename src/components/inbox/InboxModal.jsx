@@ -2,23 +2,15 @@ import React, { useState } from "react";
 import { connect } from "react-redux";
 import { withRouter } from "react-router-dom";
 import { Card, Container } from "react-bulma-components";
-import { color, font } from "../../styling/ColorFontConfig";
+import { color } from "../../styling/ColorFontConfig";
 import Inbox from "./Inbox";
-import { cardStyle, tabStyle, panelStyle, checkBoxStyle } from "../../styling/StyleComponents";
+import { cardStyle, tabStyle, panelStyle } from "../../styling/StyleComponents";
 
 import PostTab from "../stream/posts/PostTab";
 import DeleteButton from "./DeleteButton";
 import { clearInbox } from "../NavigationActions";
 
 // local styling
-var shadowDividorStyle = {
-    border:"none",
-    width: "100%",
-    height: "50px",
-    boxShadow:"0 10pt 10pt -15pt rgb(0,0,0,0.8)",
-    margin: "-40pt auto -15pt",
-    backgroundColor: color.backgroundCreamLighter,
-}
 
 var menuDropDownStyle = {
     borderRadius: "5pt",
@@ -53,10 +45,11 @@ function InboxModal (props){
         // custom selection tab
         // text, markdown, image
         return (
-            <Container style={{...panelStyle, paddingBottom: "0.25em", marginRight: "5.5em"}}>
+            <Container style={{...panelStyle, paddingBottom: "0em"}}>
                 <PostTab style={tabStyle} text="Like" active={tabSelected === "like"} action={() => selectTab("like")}/>
                 <PostTab style={tabStyle} text="Follow" active={tabSelected === "follow"} action={() => selectTab("follow")}/>
                 <PostTab style={tabStyle} text="Post"active={tabSelected === "post"} action={() => selectTab("post")}/>
+                <div style={{fontSize: "0.65em", marginTop: "0.2em"}}><ToolTip/></div>
             </Container>  
         )
     }
@@ -64,7 +57,6 @@ function InboxModal (props){
     
     const ToolTip = () => {
         return (
-          <Container style={checkBoxStyle}>
           <div class="dropdown is-hoverable is-up is-right" >
             <div class="dropdown-trigger" >
               <span
@@ -80,36 +72,34 @@ function InboxModal (props){
                 </p>
               </div>
             </div>
-          </div>    
-          </Container>  
+          </div> 
         )
     }  
 
     return (
-        <Card style={{...cardStyle, backgroundColor: color.backgroundCreamLighter, width: "420pt", height: "47.5em"}} className="animate__animated animate__slideInDown">
-            
-            {/* <Container style={inboxIconStyle}>
-                <InboxModalIcon svgScale={"75"}/>
-            </Container>
-            <Container>
-                <p style={inboxTitleStyle}>Inbox</p>
-            </Container> */}
-            <hr style={{...shadowDividorStyle, marginTop: "-1.2em", backgroundColor: "transparent"}}></hr>
-            
-            <Card.Content style={{marginTop: "0.8em", marginBottom: "3.2em"}}>
-                <Container className="animate__animated animate__headShake" key={tabSelected}>
-                <Inbox selectedTab={tabSelected} /> 
+        <Card style={{...cardStyle, borderRadius: "12pt",backgroundColor: color.backgroundCreamLighter, width: "430pt", height: "auto", padding: "1em"}} className="animate__animated animate__slideInDown">
+            <Card style={{...cardStyle, margin: "auto", backgroundColor: "#FFF8EA", height: "48em"}} >
+
+
+                {/* <Container style={inboxIconStyle}>
+                    <InboxModalIcon svgScale={"75"}/>
                 </Container>
-            </Card.Content>
-            <hr style={{...shadowDividorStyle, transform: "rotate(180deg)", backgroundColor: "transparent"}}></hr>
-            <div style={{marginTop: "-3.7em"}}>
-            <Container>
+                <Container>
+                    <p style={inboxTitleStyle}>Inbox</p>
+                </Container> */}
+                {/* <hr style={{...shadowDividorStyle, marginTop: "-2em", backgroundColor: "transparent"}}></hr> */}
+                
+                <Card.Content>
+                    <Container className="animate__animated animate__headShake" key={tabSelected}>
+                        <Inbox selectedTab={tabSelected} /> 
+                    </Container>
+                </Card.Content>
+                {/* <hr style={{...shadowDividorStyle, transform: "rotate(180deg)", backgroundColor: "transparent"}}></hr> */}
+
+            </Card>
+            <Container style={{height: "4em", marginTop: "1.4em"}}>
                 <SelectionPanel/>
             </Container>
-            <Container style={{float: "right", marginTop: "-18pt", marginRight: "3em"}}>
-                <ToolTip/>
-            </Container>
-            </div>
         </Card>
     )
 }

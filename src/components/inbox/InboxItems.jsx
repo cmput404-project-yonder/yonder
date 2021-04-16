@@ -1,11 +1,8 @@
 import React from "react";
 import PropTypes from "prop-types";
-import { Card, Heading, Container } from "react-bulma-components";
+import { Card } from "react-bulma-components";
 
-import { cardStyle, dividorStyle, postStyle, signatureStyle } from "../../styling/StyleComponents";
 import { color } from "../../styling/ColorFontConfig";
-
-import Dividor from "../stream/posts/Dividor";
 
 var itemCardStyle = {
   marginLeft: "0.6em",
