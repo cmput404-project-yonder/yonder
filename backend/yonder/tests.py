@@ -595,7 +595,6 @@ class SignalTests(TestCase):
         user2.save()
         self.author2 = Author.objects.create(**self.testAuthor2, user=user2)
         self.authorJSON2 = AuthorSerializer(instance=self.author2).data
-        
 
         self.post = {
             "title": "A post testing post save signal",
@@ -673,11 +672,11 @@ class SignalTests(TestCase):
         friendship = AuthorFriend.objects.filter(author_id = self.author1.id).count()
         self.assertEqual(friendship, 0)
 
-
-
-
-
-
+        #check if author1 has no followers
+        url = reverse('follower_list', args=[self.author1.id])
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 404)
+        
 
         
 

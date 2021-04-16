@@ -124,18 +124,17 @@ def set_inactive(sender, instance, **kwargs):
 
 @receiver(post_delete, sender=AuthorFollower)
 def delete_friend(sender, instance, **kwargs):
-    foreignHost = instance.follower["host"]
+    
     try:
         authorA_friend = AuthorFriend.objects.get(author_id = instance.author_id, friend = instance.follower)
-        if authorA_friend:
-            authorA_friend.delete()
+        authorA_friend.delete()
         authorA = Author.objects.get(id=instance.author_id)
         authorA_JSON = AuthorSerializer(instance=authorA).data
         authorB_friend = AuthorFriend.objects.get(author_id = instance.follower["id"], friend = authorA_JSON)
-        if authorB_friend:
-            authorB_friend.delete()
+        authorB_friend.delete()
+
     except AuthorFriend.DoesNotExist:
-        print("hm?")
+        print("Users are already not friends")
 
     except Author.DoesNotExist:
-        print("hm?")
+        print("Author does not exist in database")
