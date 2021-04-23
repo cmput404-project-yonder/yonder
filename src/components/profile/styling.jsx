@@ -63,7 +63,7 @@ var style = {
 };
 
 var font = {
-  segoeUI: "Arial",
+  segoeUI: "Server Font Rising Sun",
 }
 
 export { color, style,font };

@@ -13,6 +13,6 @@ var color = {
 }
 
 var font = {
-    segoeUI: "Arial",
+    segoeUI: "Server Font Rising Sun",
 }
 export {color, font};

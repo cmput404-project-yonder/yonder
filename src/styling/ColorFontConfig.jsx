@@ -18,7 +18,7 @@ var color = {
 }
 
 var font = {
-    segoeUI: "Arial",                       // was using segoeUI, but some browser, os doesnt support it. Our design heavily use "em" for sizing. therefore, 
+    segoeUI: "Server Font Rising Sun",                       // was using segoeUI, but some browser, os doesnt support it. Our design heavily use "em" for sizing. therefore, 
                                             //for consistency. i changed it to Arial only (which should be supported by almost all broswer/os).
 }
 export {color, font};
