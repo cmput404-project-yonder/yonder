@@ -1,14 +1,6 @@
 # Yonder
 Yonder is the distributed social network that connects you with everyone over there. 
 
-## Team Members
-
--   Luke Kim
--   Anas Mohamed
--   Gengyuan Huang
--   Ji Heon (Jamie) Kim
--   Jerwyn Alqueza
-
 # Showcase
 
 ![Showcase 1](https://github.com/aghnu/yonder/blob/main/github_res/pngs/UI1.png "Yonder UI Showcase 1")
@@ -17,6 +9,14 @@ Yonder is the distributed social network that connects you with everyone over th
 ![Showcase 4](https://github.com/aghnu/yonder/blob/main/github_res/pngs/UI4.png "Yonder UI Showcase 4")
 ![Showcase 5](https://github.com/aghnu/yonder/blob/main/github_res/pngs/UI5.png "Yonder UI Showcase 5")
 ![Showcase 6](https://github.com/aghnu/yonder/blob/main/github_res/pngs/UI6.png "Yonder UI Showcase 6")
+
+## Team Members
+
+-   Luke Kim
+-   Anas Mohamed
+-   Gengyuan Huang
+-   Ji Heon (Jamie) Kim
+-   Jerwyn Alqueza
 
 ## Instructions
 
