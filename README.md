@@ -1,5 +1,5 @@
 # Yonder
-[![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy)
+Yonder is the distributed social network that connects you with everyone over there. 
 
 ## Team Members
 
@@ -11,12 +11,12 @@
 
 # Showcase
 
-![Showcase 1](https://github.com/aghnu/MoodSwing/blob/master/UI_mockup/uishowcase1.png "MoodSwing UI Showcase 1")
-![Showcase 2](https://github.com/aghnu/MoodSwing/blob/master/UI_mockup/uishowcase1.png "MoodSwing UI Showcase 1")
-![Showcase 3](https://github.com/aghnu/MoodSwing/blob/master/UI_mockup/uishowcase1.png "MoodSwing UI Showcase 1")
-![Showcase 4](https://github.com/aghnu/MoodSwing/blob/master/UI_mockup/uishowcase1.png "MoodSwing UI Showcase 1")
-![Showcase 5](https://github.com/aghnu/MoodSwing/blob/master/UI_mockup/uishowcase1.png "MoodSwing UI Showcase 1")
-![Showcase 6](https://github.com/aghnu/MoodSwing/blob/master/UI_mockup/uishowcase1.png "MoodSwing UI Showcase 1")
+![Showcase 1](https://github.com/aghnu/yonder/blob/main/github_res/pngs/UI1.png "Yonder UI Showcase 1")
+![Showcase 2](https://github.com/aghnu/yonder/blob/main/github_res/pngs/UI2.png "Yonder UI Showcase 2")
+![Showcase 3](https://github.com/aghnu/yonder/blob/main/github_res/pngs/UI3.png "Yonder UI Showcase 3")
+![Showcase 4](https://github.com/aghnu/yonder/blob/main/github_res/pngs/UI4.png "Yonder UI Showcase 4")
+![Showcase 5](https://github.com/aghnu/yonder/blob/main/github_res/pngs/UI5.png "Yonder UI Showcase 5")
+![Showcase 6](https://github.com/aghnu/yonder/blob/main/github_res/pngs/UI6.png "Yonder UI Showcase 6")
 
 ## Instructions
 
