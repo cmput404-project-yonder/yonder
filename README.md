@@ -9,6 +9,15 @@
 -   Ji Heon (Jamie) Kim
 -   Jerwyn Alqueza
 
+# Showcase
+
+![Showcase 1](https://github.com/aghnu/MoodSwing/blob/master/UI_mockup/uishowcase1.png "MoodSwing UI Showcase 1")
+![Showcase 2](https://github.com/aghnu/MoodSwing/blob/master/UI_mockup/uishowcase1.png "MoodSwing UI Showcase 1")
+![Showcase 3](https://github.com/aghnu/MoodSwing/blob/master/UI_mockup/uishowcase1.png "MoodSwing UI Showcase 1")
+![Showcase 4](https://github.com/aghnu/MoodSwing/blob/master/UI_mockup/uishowcase1.png "MoodSwing UI Showcase 1")
+![Showcase 5](https://github.com/aghnu/MoodSwing/blob/master/UI_mockup/uishowcase1.png "MoodSwing UI Showcase 1")
+![Showcase 6](https://github.com/aghnu/MoodSwing/blob/master/UI_mockup/uishowcase1.png "MoodSwing UI Showcase 1")
+
 ## Instructions
 
 -   To run both backend & frontend use `start.sh`.
