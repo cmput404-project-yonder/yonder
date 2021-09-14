@@ -4,11 +4,6 @@ body {
   font-size: 0.9em;
 }
 
-@font-face {
-  font-family: "Server Font Rising Sun";
-  src: url("./fonts/rising-sun/RisingSun-Regular.ttf");
-}
-
 /* Navigation bar */
 .navbar {
   border-bottom: 1px solid grey;
