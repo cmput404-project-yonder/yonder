@@ -117,10 +117,10 @@ def create_inbox(sender, instance, **kwargs):
     if kwargs["created"]:
         Inbox.objects.create(author=instance)
 
-@receiver(pre_save, sender=User)
-def set_inactive(sender, instance, **kwargs):
-    if instance.pk == None and not instance.is_staff and not instance.is_superuser:
-        instance.is_active = False
+# @receiver(pre_save, sender=User)
+# def set_inactive(sender, instance, **kwargs):
+#     if instance.pk == None and not instance.is_staff and not instance.is_superuser:
+#         instance.is_active = False
 
 @receiver(post_delete, sender=AuthorFollower)
 def delete_friend(sender, instance, **kwargs):
